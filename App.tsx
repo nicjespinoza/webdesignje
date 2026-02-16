@@ -935,8 +935,21 @@ const Projects = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000);
-    return () => clearTimeout(timer);
+    const preloadImages = async () => {
+        const imagePromises = projects.map((project) => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = project.imageUrl;
+                img.onload = resolve;
+                img.onerror = resolve;
+            });
+        });
+        
+        await Promise.all(imagePromises);
+        setIsLoading(false);
+    };
+
+    preloadImages();
   }, []);
 
   const selectedProject = projects.find(p => p.id === selectedId);
