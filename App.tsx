@@ -28,15 +28,14 @@ import {
   Zap,
   Wind,
   Flame,
-  Bot,            // AI
-  Brain,          // AI
-  Sparkles,       // AI
-  Workflow,       // AI
+  Bot,            // AI - Agents
+  Brain,          // AI - Orchestration
+  Sparkles,       // AI - Generative UI
   Container,      // Docker
   Braces,         // JS
   LayoutTemplate, // HTML/Layout
   DatabaseZap,    // Supabase/Vector
-  Network,        // Neural Net
+  Network,        // Neural Net/RAG
   Blocks,         // Next.js
   CheckCircle,    // RAG section
   ClipboardList,  // React Hook Form
@@ -51,7 +50,9 @@ import {
   Award,          // New for About
   Briefcase,      // New for About
   Terminal,       // New for About
-  User            // New for About
+  User,           // New for About
+  Monitor,        // New for Services
+  Rocket          // New for Services
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -175,6 +176,7 @@ const Navbar = ({
 
   const navLinks = [
     { name: lang === 'EN' ? 'Stack' : 'Tecnologías', href: '#stack' },
+    { name: lang === 'EN' ? 'Services' : 'Servicios', href: '#services' },
     { name: lang === 'EN' ? 'AI & Agents' : 'IA & Agentes', href: '#ai' },
     { name: lang === 'EN' ? 'Projects' : 'Proyectos', href: '#projects' },
     { name: lang === 'EN' ? 'About' : 'Sobre mí', href: '#about' },
@@ -264,6 +266,7 @@ const Navbar = ({
 const Hero = ({ lang }: { lang: Language }) => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <ParticleBackground />
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -574,11 +577,15 @@ const TechStack = () => {
                               href={skill.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              initial={{ opacity: 0, x: -20 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ delay: (catIndex * 0.1) + (index * 0.05) }}
-                              whileHover={{ x: 5, scale: 1.02 }}
+                              initial={{ opacity: 0, y: 30 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true, margin: "-50px" }}
+                              transition={{ 
+                                duration: 0.5,
+                                delay: (catIndex * 0.1) + (index * 0.05),
+                                ease: "easeOut"
+                              }}
+                              whileHover={{ y: -5, scale: 1.02 }}
                               className="glass-panel p-4 rounded-xl border border-white/5 hover:border-brand-indigo/30 transition-all group flex items-start gap-4 relative cursor-pointer"
                           >
                                {/* Tooltip */}
@@ -609,12 +616,134 @@ const TechStack = () => {
   );
 };
 
+const Services = ({ lang }: { lang: Language }) => {
+    const services = [
+        {
+            title: { EN: "Full-Stack Development", ES: "Desarrollo Full-Stack" },
+            desc: { 
+                EN: "Scalable web applications built with Next.js, React, and Node.js. Optimized for performance and SEO.",
+                ES: "Aplicaciones web escalables construidas con Next.js, React y Node.js. Optimizadas para rendimiento y SEO."
+            },
+            icon: Monitor,
+            color: "text-brand-cyan",
+            bg: "bg-brand-cyan/10",
+            border: "hover:border-brand-cyan/50"
+        },
+        {
+            title: { EN: "Mobile Solutions", ES: "Soluciones Móviles" },
+            desc: { 
+                EN: "Native-like experiences using React Native and PWAs. Offline capabilities and smooth animations.",
+                ES: "Experiencias nativas usando React Native y PWAs. Capacidades offline y animaciones fluidas."
+            },
+            icon: Smartphone,
+            color: "text-brand-purple",
+            bg: "bg-brand-purple/10",
+            border: "hover:border-brand-purple/50"
+        },
+        {
+            title: { EN: "AI Integration", ES: "Integración de IA" },
+            desc: { 
+                EN: "Custom LLM agents, chatbots, and RAG systems tailored to your business data and workflows.",
+                ES: "Agentes LLM personalizados, chatbots y sistemas RAG adaptados a los datos y flujos de su negocio."
+            },
+            icon: Bot,
+            color: "text-brand-gold",
+            bg: "bg-brand-gold/10",
+            border: "hover:border-brand-gold/50"
+        },
+        {
+            title: { EN: "3D & Interactive Web", ES: "Web 3D e Interactiva" },
+            desc: { 
+                EN: "Immersive experiences with Three.js and WebGL. Product configurators and creative storytelling.",
+                ES: "Experiencias inmersivas con Three.js y WebGL. Configuradores de productos y narrativa creativa."
+            },
+            icon: Box,
+            color: "text-brand-indigo",
+            bg: "bg-brand-indigo/10",
+            border: "hover:border-brand-indigo/50"
+        },
+    ];
+
+    return (
+        <section id="services" className="py-20 relative">
+            <div className="container mx-auto px-6">
+                 <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-16"
+                 >
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-slate-300 text-xs font-bold mb-4">
+                        <Rocket size={14} className="text-brand-gold" />
+                        {lang === 'EN' ? "What I Offer" : "Lo Que Ofrezco"}
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                        {lang === 'EN' ? "Premium" : "Servicios"} <span className="gradient-text">{lang === 'EN' ? "Services" : "Premium"}</span>
+                    </h2>
+                    <p className="text-slate-400 max-w-2xl mx-auto text-lg leading-relaxed">
+                        {lang === 'EN' 
+                            ? "Transforming ideas into digital reality. I deliver high-end software solutions tailored to scale your business."
+                            : "Transformando ideas en realidad digital. Entrego soluciones de software de alta gama adaptadas para escalar su negocio."
+                        }
+                    </p>
+                 </motion.div>
+
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {services.map((service, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
+                            whileHover={{ y: -10 }}
+                            className={`glass-panel p-8 rounded-3xl border border-white/5 ${service.border} transition-all duration-300 group cursor-default relative overflow-hidden`}
+                        >
+                            {/* Background Glow */}
+                            <div className={`absolute top-0 right-0 w-32 h-32 ${service.bg} blur-[60px] rounded-full -z-10 group-hover:scale-150 transition-transform duration-700`}></div>
+
+                            <div className={`w-14 h-14 ${service.bg} rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform duration-300`}>
+                                <service.icon size={28} className={service.color} />
+                            </div>
+
+                            <h3 className="text-xl font-bold text-white mb-3">{service.title[lang]}</h3>
+                            <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                                {service.desc[lang]}
+                            </p>
+
+                            <div className={`flex items-center gap-2 text-xs font-bold ${service.color} opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0`}>
+                                {lang === 'EN' ? "Learn More" : "Saber Más"} <ArrowRight size={14} />
+                            </div>
+                        </motion.div>
+                    ))}
+                 </div>
+            </div>
+        </section>
+    );
+};
+
 const AIRevolution = () => {
     const aiSkills = [
-        { name: 'Autonomous Agents', icon: Bot, desc: 'Self-governing systems that plan, critique, and execute complex workflows without human intervention.' },
-        { name: 'LLM Orchestration', icon: Brain, desc: 'Advanced pipelines combining Gemini 1.5 & open-source models for optimal performance.' },
-        { name: 'Knowledge Networks', icon: Network, desc: 'RAG systems integrated with vector databases for infinite context and memory.' },
-        { name: 'Generative UI', icon: Sparkles, desc: 'Fluid interfaces that evolve and adapt layout based on conversation context.' },
+        { 
+            name: 'Autonomous Agents', 
+            icon: Bot, 
+            desc: 'Self-governing intelligent entities that perceive, reason, and act to execute complex workflows without human intervention.' 
+        },
+        { 
+            name: 'LLM Orchestration', 
+            icon: Brain, 
+            desc: 'Advanced architectural patterns chaining multiple language models to optimize reasoning capabilities and computational cost.' 
+        },
+        { 
+            name: 'Knowledge Networks', 
+            icon: Network, 
+            desc: 'RAG systems integrated with high-dimensional vector databases for infinite context window and memory retention.' 
+        },
+        { 
+            name: 'Generative UI', 
+            icon: Sparkles, 
+            desc: 'Fluid, component-based interfaces that evolve and adapt their layout dynamically based on conversation context.' 
+        },
     ];
 
     return (
@@ -656,9 +785,10 @@ const AIRevolution = () => {
                             transition={{ delay: 0.2 }}
                             className="text-lg text-slate-400 mb-8 leading-relaxed"
                         >
-                            Moving beyond simple chatbots. I build intelligent multi-agent systems capable of planning, 
-                            executing, and reviewing complex tasks autonomously. Leveraging the latest in LLM orchestration
-                            to create software that thinks, adapts, and evolves.
+                            The future of software is agentic. I build intelligent multi-agent systems capable of 
+                            <strong> autonomous planning</strong> and <strong>LLM orchestration</strong>. 
+                            By leveraging advanced reasoning chains, these agents can critique their own work, 
+                            adapt to new information, and execute complex tasks with precision.
                         </motion.p>
                         
                         <motion.button 
@@ -683,9 +813,9 @@ const AIRevolution = () => {
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
                                 whileHover={{ y: -5 }}
-                                className="glass-panel p-6 rounded-2xl border-t border-t-brand-cyan/20 hover:border-brand-cyan/40 transition-all hover:shadow-[0_0_30px_rgba(34,211,238,0.1)]"
+                                className="glass-panel p-6 rounded-2xl border-t border-t-brand-cyan/20 hover:border-brand-cyan/40 transition-all hover:shadow-[0_0_30px_rgba(34,211,238,0.1)] group"
                             >
-                                <div className="bg-brand-cyan/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                                <div className="bg-brand-cyan/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                     <skill.icon className="w-6 h-6 text-brand-cyan" />
                                 </div>
                                 <h3 className="font-bold text-lg text-white mb-2">{skill.name}</h3>
@@ -985,146 +1115,163 @@ const Projects = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-20 relative">
-      <div className="container mx-auto px-6 max-w-5xl">
-        {/* Existing Philosophy Section */}
-        <div className="glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden mb-32">
-          {/* Decorative glow */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-purple/20 blur-[80px] -z-10"></div>
-
-          <h2 className="text-3xl font-bold mb-6">Philosophy & Approach</h2>
-          <div className="space-y-6 text-lg text-slate-300">
-            <p>
-              My development philosophy centers on <span className="text-brand-cyan font-bold">Performance First</span>. 
-              Using tools like React 19 and Tailwind v4, I build applications that are not just visually stunning but lightning fast.
-            </p>
-            <p>
-              I believe in <span className="text-brand-gold font-bold">Strict Typing</span>. TypeScript isn't optional; 
-              it's the backbone of scalable, maintainable codebases that resist bugs as they grow.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-            {[
-              { label: 'Type Safety', val: '100%' },
-              { label: 'Performance', val: '98/100' },
-              { label: 'Uptime', val: '99.9%' },
-              { label: 'Satisfaction', val: '100%' }
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl font-bold text-white mb-1">{stat.val}</div>
-                <div className="text-xs text-slate-500 uppercase tracking-wider">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* NEW GOLD & BLACK ABOUT SECTION */}
-        <div className="mt-32">
-          <div className="flex flex-col md:flex-row gap-16 items-center">
+    <section id="about" className="py-24 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-brand-gold/5 rounded-full blur-[120px] -z-10"></div>
+      
+      <div className="container mx-auto px-6 max-w-6xl">
+        
+        <div className="flex flex-col md:flex-row gap-16 items-center">
              
-             {/* Visual Profile Column */}
-             <div className="relative w-full md:w-5/12">
-                <div className="absolute inset-0 bg-brand-gold/10 blur-[80px] rounded-full -z-10"></div>
+             {/* Visual Profile Column - Updated for Slide Up Animation */}
+             <motion.div 
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="relative w-full md:w-5/12 group"
+             >
+                <div className="absolute inset-0 bg-gradient-to-tr from-brand-gold/20 to-transparent blur-[60px] rounded-full -z-10 opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
                 
                 <div className="relative z-10">
-                   <div className="border border-brand-gold/30 p-2 rounded-2xl bg-black/40 backdrop-blur-sm relative">
+                   <div className="glass-panel p-2 rounded-3xl border border-white/10 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 to-transparent opacity-20"></div>
                       {/* Image Placeholder */}
-                      <img 
-                        src="https://picsum.photos/seed/joseph/800/800" 
-                        alt="Profile" 
-                        className="w-full aspect-square object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
-                      />
-                      
-                      {/* Floating 'Experience' Badge */}
-                      <motion.div 
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.5 }}
-                        className="absolute -bottom-6 -right-6 bg-brand-gold text-black p-6 rounded-xl shadow-[0_10px_30px_rgba(251,191,36,0.3)] border border-white/20"
+                      <motion.div
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.4 }}
+                        className="rounded-2xl overflow-hidden"
                       >
-                         <div className="text-3xl font-bold leading-none mb-1">10+</div>
-                         <div className="text-xs font-bold uppercase tracking-wider opacity-80">Years Exp.</div>
+                        <img 
+                            src="https://picsum.photos/seed/joseph/800/800" 
+                            alt="Profile" 
+                            className="w-full aspect-[4/5] object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                        />
+                      </motion.div>
+                      
+                      {/* Floating 'Experience' Badge - Dark Themed with Gold Accent */}
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5, type: "spring" }}
+                        className="absolute bottom-6 right-6 glass-panel p-5 rounded-xl border border-brand-gold/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+                      >
+                         <div className="text-4xl font-bold leading-none mb-1 text-brand-gold">10+</div>
+                         <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Years Exp.</div>
                       </motion.div>
                    </div>
                 </div>
 
-                {/* Decorative lines */}
-                <div className="absolute -top-10 -left-10 w-24 h-24 border-t-2 border-l-2 border-brand-gold/20 rounded-tl-3xl"></div>
-                <div className="absolute -bottom-10 -left-10 w-full h-px bg-gradient-to-r from-transparent via-brand-gold/30 to-transparent"></div>
-             </div>
+                {/* Decorative elements */}
+                <div className="absolute -top-8 -left-8 w-24 h-24 border-t border-l border-brand-gold/20 rounded-tl-3xl"></div>
+                <div className="absolute -bottom-8 -right-8 w-24 h-24 border-b border-r border-brand-gold/20 rounded-br-3xl"></div>
+             </motion.div>
 
-             {/* Text Content Column */}
+             {/* Text Content Column - Updated for consistent Slide Up */}
              <div className="w-full md:w-7/12">
-                <div className="flex items-center gap-3 mb-6">
-                   <div className="h-px w-12 bg-brand-gold"></div>
-                   <span className="text-brand-gold font-mono text-sm tracking-widest uppercase">Sobre Mí</span>
-                </div>
+                <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="flex items-center gap-3 mb-6"
+                >
+                   <div className="h-px w-12 bg-brand-gold/50"></div>
+                   <span className="text-brand-gold font-mono text-sm tracking-widest uppercase">About Me</span>
+                </motion.div>
 
-                <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                <motion.h2 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1, duration: 0.6 }}
+                    className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
+                >
                    Crafting Digital <br/>
-                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-yellow-200 to-brand-gold">Masterpieces</span>
-                </h2>
+                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-yellow-100 to-brand-gold">Masterpieces</span>
+                </motion.h2>
 
-                <p className="text-slate-300 text-lg leading-relaxed mb-8">
-                   Beyond the code, I am a digital architect obsessed with precision. My journey started not just with syntax, 
-                   but with a desire to build systems that feel <span className="text-white font-medium">alive</span>. 
-                   I blend technical rigor with an artist's eye, ensuring every pixel serves a purpose and every function runs with elegant efficiency.
-                </p>
+                <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2, duration: 0.6 }}
+                    className="space-y-6 text-lg text-slate-300 mb-8 leading-relaxed"
+                >
+                    <p>
+                        Beyond the code, I am a digital architect obsessed with precision. My journey started not just with syntax, 
+                        but with a desire to build systems that feel <span className="text-white font-medium border-b border-brand-gold/30 pb-0.5">alive</span>. 
+                    </p>
+                    <p>
+                        I blend technical rigor with an artist's eye, ensuring every pixel serves a purpose and every function runs with elegant efficiency. 
+                        My philosophy is simple: <span className="text-brand-gold/90">Performance is the ultimate luxury.</span>
+                    </p>
+                </motion.div>
 
                 {/* Stats / Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                   <div className="bg-white/5 border border-brand-gold/10 p-4 rounded-lg flex items-center gap-4 hover:border-brand-gold/30 transition-colors">
-                      <div className="bg-brand-gold/10 p-3 rounded-full text-brand-gold">
-                         <Briefcase size={20} />
-                      </div>
-                      <div>
-                         <div className="text-white font-bold">50+ Projects</div>
-                         <div className="text-xs text-slate-500">Delivered Globally</div>
-                      </div>
-                   </div>
-
-                   <div className="bg-white/5 border border-brand-gold/10 p-4 rounded-lg flex items-center gap-4 hover:border-brand-gold/30 transition-colors">
-                      <div className="bg-brand-gold/10 p-3 rounded-full text-brand-gold">
-                         <Award size={20} />
-                      </div>
-                      <div>
-                         <div className="text-white font-bold">Award Winning</div>
-                         <div className="text-xs text-slate-500">Design Excellence</div>
-                      </div>
-                   </div>
-
-                   <div className="bg-white/5 border border-brand-gold/10 p-4 rounded-lg flex items-center gap-4 hover:border-brand-gold/30 transition-colors">
-                      <div className="bg-brand-gold/10 p-3 rounded-full text-brand-gold">
-                         <Terminal size={20} />
-                      </div>
-                      <div>
-                         <div className="text-white font-bold">Full Stack</div>
-                         <div className="text-xs text-slate-500">End-to-End Control</div>
-                      </div>
-                   </div>
-
-                   <div className="bg-white/5 border border-brand-gold/10 p-4 rounded-lg flex items-center gap-4 hover:border-brand-gold/30 transition-colors">
-                      <div className="bg-brand-gold/10 p-3 rounded-full text-brand-gold">
-                         <User size={20} />
-                      </div>
-                      <div>
-                         <div className="text-white font-bold">Leadership</div>
-                         <div className="text-xs text-slate-500">Team Mentoring</div>
-                      </div>
-                   </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                   {[
+                        { icon: Briefcase, title: "50+ Projects", subtitle: "Delivered Globally" },
+                        { icon: Award, title: "Award Winning", subtitle: "Design Excellence" },
+                        { icon: Terminal, title: "Full Stack", subtitle: "End-to-End Control" },
+                        { icon: User, title: "Leadership", subtitle: "Team Mentoring" }
+                   ].map((item, index) => (
+                       <motion.div 
+                            key={index}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 + (index * 0.1), duration: 0.5 }}
+                            className="glass-panel p-4 rounded-xl border border-white/5 hover:border-brand-gold/20 transition-colors flex items-center gap-4 group"
+                       >
+                          <div className="bg-brand-gold/10 p-3 rounded-lg text-brand-gold group-hover:scale-110 transition-transform duration-300">
+                             <item.icon size={20} />
+                          </div>
+                          <div>
+                             <div className="text-white font-bold text-sm">{item.title}</div>
+                             <div className="text-xs text-slate-500 group-hover:text-slate-400 transition-colors">{item.subtitle}</div>
+                          </div>
+                       </motion.div>
+                   ))}
                 </div>
 
-                <div className="flex gap-6 items-center">
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6 }}
+                    className="flex gap-6 items-center"
+                >
                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Signature_sample.svg" className="h-12 opacity-50 invert" alt="Signature" />
-                   <div className="h-px flex-1 bg-white/10"></div>
-                </div>
+                   <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
+                </motion.div>
              </div>
 
           </div>
-        </div>
 
+          {/* Philosophy Cards moved to bottom for better flow */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-24">
+            {[
+              { label: 'Type Safety', val: '100%', color: 'text-brand-cyan' },
+              { label: 'Performance', val: '98/100', color: 'text-brand-purple' },
+              { label: 'Uptime', val: '99.9%', color: 'text-brand-indigo' },
+              { label: 'Satisfaction', val: '100%', color: 'text-brand-gold' }
+            ].map((stat, index) => (
+              <motion.div 
+                key={stat.label} 
+                className="glass-panel p-6 rounded-2xl text-center border border-white/5 hover:border-white/10 transition-all hover:-translate-y-1"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 + (index * 0.1), duration: 0.6 }}
+              >
+                <div className={`text-3xl font-bold mb-2 ${stat.color}`}>{stat.val}</div>
+                <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        
       </div>
     </section>
   );
@@ -1140,7 +1287,13 @@ const Blog = () => {
 
   return (
     <section id="blog" className="py-20 container mx-auto px-6">
-      <div className="flex flex-col items-center mb-12">
+      <motion.div 
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="flex flex-col items-center mb-12"
+      >
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan text-xs font-bold mb-4">
           <BookOpen size={14} /> Technical Writing
         </div>
@@ -1150,7 +1303,7 @@ const Blog = () => {
         <p className="text-slate-400 mt-4 max-w-xl text-center">
           Thoughts on software architecture, modern frontend development, and the future of the web.
         </p>
-      </div>
+      </motion.div>
 
       <div className="grid md:grid-cols-3 gap-8">
         {isLoading ? (
@@ -1181,10 +1334,10 @@ const Blog = () => {
             blogPosts.map((post, index) => (
             <motion.article 
                 key={post.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
                 className="glass-panel p-6 rounded-2xl flex flex-col h-full hover:border-brand-indigo/50 transition-colors group cursor-pointer"
             >
                 <div className="flex items-center gap-4 text-xs text-slate-500 mb-4">
@@ -1314,13 +1467,12 @@ const App = () => {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-slate-950 text-slate-200' : 'bg-slate-50 text-slate-900'} font-sans`}>
-      <ParticleBackground />
-      
       <Navbar isDark={isDark} toggleTheme={toggleTheme} lang={lang} toggleLang={toggleLang} />
       
       <main>
         <Hero lang={lang} />
         <TechStack />
+        <Services lang={lang} />
         <AIRevolution />
         <Projects />
         <About />

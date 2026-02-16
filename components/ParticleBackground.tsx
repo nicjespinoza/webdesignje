@@ -13,14 +13,6 @@ const ParticleBackground: React.FC = () => {
     let particles: Particle[] = [];
     let animationFrameId: number;
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
     class Particle {
       x: number;
       y: number;
@@ -82,18 +74,34 @@ const ParticleBackground: React.FC = () => {
 
     const init = () => {
       particles = [];
-      const numberOfParticles = Math.min(100, (window.innerWidth * window.innerHeight) / 9000);
+      const numberOfParticles = Math.min(100, (canvas.width * canvas.height) / 9000);
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }
     };
 
+    const resizeCanvas = () => {
+      const parent = canvas.parentElement;
+      if (parent) {
+          canvas.width = parent.clientWidth;
+          canvas.height = parent.clientHeight;
+      } else {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+      }
+      init();
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas(); // Initial call
+
     let mouseX = 0;
     let mouseY = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.x;
-      mouseY = e.y;
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -108,7 +116,6 @@ const ParticleBackground: React.FC = () => {
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    init();
     animate();
 
     return () => {
@@ -121,7 +128,7 @@ const ParticleBackground: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"
+      className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none"
     />
   );
 };

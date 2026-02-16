@@ -2,28 +2,6 @@ import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Sphere, MeshDistortMaterial, Float } from '@react-three/drei';
 
-// Augment global JSX namespace
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      ambientLight: any;
-      directionalLight: any;
-      pointLight: any;
-    }
-  }
-}
-
-// Augment React's JSX namespace (often needed for React 18+ setups)
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      ambientLight: any;
-      directionalLight: any;
-      pointLight: any;
-    }
-  }
-}
-
 const AnimatedSphere = () => {
   const meshRef = useRef<any>(null);
 
