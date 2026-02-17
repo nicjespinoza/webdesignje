@@ -1,7 +1,13 @@
+// ============================================================
+// Configuración de Next.js — Medical AI Demo
+// transpilePackages: necesario para Three.js y postprocessing
+// (paquetes ESM que requieren transpilación en SSR)
+// ============================================================
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  transpilePackages: ["three", "postprocessing", "@react-three/postprocessing"],
 };
 
 export default nextConfig;
