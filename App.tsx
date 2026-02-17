@@ -596,7 +596,7 @@ const TechStack = () => {
   ];
 
   return (
-    <section id="stack" className="py-24 relative">
+    <section id="stack" className="py-24 relative scroll-mt-24">
         <div className="container mx-auto px-6 mb-12">
             <motion.div
               initial="hidden"
@@ -745,7 +745,7 @@ const Services = ({ lang }: { lang: Language }) => {
     ];
 
     return (
-        <section id="services" className="py-20 relative">
+        <section id="services" className="py-20 relative scroll-mt-24">
             <div className="container mx-auto px-6">
                  <motion.div 
                     initial="hidden"
@@ -831,7 +831,7 @@ const AIRevolution = () => {
     ];
 
     return (
-        <section id="ai" className="py-24 relative overflow-hidden">
+        <section id="ai" className="py-24 relative overflow-hidden scroll-mt-24">
             <div className="absolute inset-0 bg-brand-indigo/5 pointer-events-none"></div>
             {/* Ambient background glow */}
             <div className="absolute top-1/4 left-0 w-96 h-96 bg-brand-cyan/10 rounded-full blur-[100px] -z-10"></div>
@@ -1047,7 +1047,7 @@ const Projects = () => {
   }, [selectedId]);
 
   return (
-    <section id="projects" className="py-20 container mx-auto px-6">
+    <section id="projects" className="py-20 container mx-auto px-6 scroll-mt-24">
       <motion.h2 
         initial="hidden"
         whileInView="visible"
@@ -1216,7 +1216,7 @@ const Projects = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-24 relative overflow-hidden">
+    <section id="about" className="py-24 relative overflow-hidden scroll-mt-24">
       {/* Background decoration */}
       <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-brand-gold/5 rounded-full blur-[120px] -z-10"></div>
       
@@ -1388,7 +1388,7 @@ const Blog = () => {
   }, []);
 
   return (
-    <section id="blog" className="py-20 container mx-auto px-6">
+    <section id="blog" className="py-20 container mx-auto px-6 scroll-mt-24">
       <motion.div 
         initial="hidden"
         whileInView="visible"
@@ -1487,7 +1487,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 relative">
+    <section id="contact" className="py-20 relative scroll-mt-24">
       <div className="container mx-auto px-6 max-w-4xl">
         <motion.div 
             initial="hidden"
