@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, Variants } from 'framer-motion';
 import { 
   Code2, 
   Layers, 
@@ -59,8 +59,40 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import ParticleBackground from './components/ParticleBackground';
+import FooterParticles from './components/FooterParticles';
 import Scene3D from './components/Scene3D';
 import { Project, Language } from './types';
+
+// --- Animation Variants ---
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
+
+const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const scaleIn: Variants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: { duration: 0.5, ease: "easeOut" }
+  }
+};
 
 // --- Configuration & Data ---
 
@@ -184,7 +216,7 @@ const Navbar = ({
   ];
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-3' : 'py-5 bg-transparent'}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-3 shadow-lg backdrop-blur-md' : 'py-6 bg-transparent'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
         <a href="#" className="flex items-center gap-2 group">
           <div className="bg-brand-indigo/20 p-2 rounded-lg group-hover:bg-brand-indigo/40 transition-colors">
@@ -232,7 +264,7 @@ const Navbar = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-panel border-t border-white/10"
+            className="md:hidden glass-panel border-t border-white/10 overflow-hidden"
           >
             <div className="flex flex-col p-6 gap-4">
               {navLinks.map((link) => (
@@ -269,14 +301,12 @@ const Hero = ({ lang }: { lang: Language }) => {
       <ParticleBackground />
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
         >
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            variants={fadeInUp}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold text-xs font-bold mb-6"
           >
             <span className="relative flex h-2 w-2">
@@ -286,19 +316,25 @@ const Hero = ({ lang }: { lang: Language }) => {
             Available for new projects
           </motion.div>
 
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+          <motion.h1 
+            variants={fadeInUp}
+            className="text-5xl md:text-7xl font-bold leading-tight mb-6"
+          >
             Joseph Espinoza <br />
             <span className="gradient-text">Full-Stack & AI Engineer</span>
-          </h1>
+          </motion.h1>
           
-          <p className="text-slate-400 text-lg md:text-xl max-w-lg mb-8 leading-relaxed">
+          <motion.p 
+            variants={fadeInUp}
+            className="text-slate-400 text-lg md:text-xl max-w-lg mb-8 leading-relaxed"
+          >
             {lang === 'EN' 
               ? "Architecting the web of tomorrow with Next.js 15, AI Agents, and immersive 3D interfaces."
               : "Arquitectando la web del mañana con Next.js 15, Agentes de IA e interfaces 3D inmersivas."
             }
-          </p>
+          </motion.p>
 
-          <div className="flex flex-wrap gap-4">
+          <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
             <motion.a 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -316,9 +352,9 @@ const Hero = ({ lang }: { lang: Language }) => {
               <Github size={20} />
               GitHub
             </motion.a>
-          </div>
+          </motion.div>
 
-          <div className="mt-12 flex items-center gap-4 text-sm text-slate-500 font-mono">
+          <motion.div variants={fadeInUp} className="mt-12 flex items-center gap-4 text-sm text-slate-500 font-mono">
             <span>Next.js 15</span>
             <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
             <span>AI Agents</span>
@@ -326,13 +362,13 @@ const Hero = ({ lang }: { lang: Language }) => {
             <span>RAG</span>
             <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
             <span>Three.js</span>
-          </div>
+          </motion.div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
           className="relative hidden lg:block"
         >
             <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-brand-indigo/20 rounded-full blur-[100px] animate-pulse"></div>
@@ -553,23 +589,46 @@ const TechStack = () => {
     }
   ];
 
+  const proficiency = [
+    { name: "Frontend Ecosystem (React, Next.js, Vite)", level: 98, color: "from-brand-cyan to-brand-indigo" },
+    { name: "Backend Infrastructure (Node.js, Postgres, AWS)", level: 92, color: "from-brand-purple to-brand-indigo" },
+    { name: "AI Engineering (LLMs, Agents, RAG)", level: 85, color: "from-brand-cyan to-green-400" },
+  ];
+
   return (
     <section id="stack" className="py-24 relative">
         <div className="container mx-auto px-6 mb-12">
-            <h2 className="text-3xl font-bold mb-8 flex items-center gap-3">
-              <Layers className="text-brand-purple" />
-              <span className="gradient-text">2026 Production Stack</span>
-            </h2>
-            <p className="text-slate-400 mb-12 max-w-2xl">
-              Foundational mastery meets cutting-edge frameworks. A robust toolkit designed for the modern web ecosystem.
-            </p>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
+            >
+              <h2 className="text-3xl font-bold mb-8 flex items-center gap-3">
+                <Layers className="text-brand-purple" />
+                <span className="gradient-text">2026 Production Stack</span>
+              </h2>
+              <p className="text-slate-400 mb-12 max-w-2xl">
+                Foundational mastery meets cutting-edge frameworks. A robust toolkit designed for the modern web ecosystem.
+              </p>
+            </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {categories.map((category, catIndex) => (
-                <div key={category.title} className="flex flex-col gap-6">
-                  <h3 className="text-xl font-semibold text-slate-200 border-l-4 border-brand-indigo pl-4">
+                <motion.div 
+                  key={category.title} 
+                  className="flex flex-col gap-6"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-50px" }}
+                  variants={staggerContainer}
+                >
+                  <motion.h3 
+                    variants={fadeInUp}
+                    className="text-xl font-semibold text-slate-200 border-l-4 border-brand-indigo pl-4"
+                  >
                     {category.title}
-                  </h3>
+                  </motion.h3>
                   <div className="flex flex-col gap-4">
                       {category.items.map((skill, index) => (
                           <motion.a
@@ -577,16 +636,9 @@ const TechStack = () => {
                               href={skill.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              initial={{ opacity: 0, y: 30 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true, margin: "-50px" }}
-                              transition={{ 
-                                duration: 0.5,
-                                delay: (catIndex * 0.1) + (index * 0.05),
-                                ease: "easeOut"
-                              }}
-                              whileHover={{ y: -5, scale: 1.02 }}
-                              className="glass-panel p-4 rounded-xl border border-white/5 hover:border-brand-indigo/30 transition-all group flex items-start gap-4 relative cursor-pointer"
+                              variants={fadeInUp}
+                              whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
+                              className="glass-panel p-4 rounded-xl border border-white/5 hover:border-brand-indigo/30 transition-colors group flex items-start gap-4 relative cursor-pointer"
                           >
                                {/* Tooltip */}
                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-4 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none z-50">
@@ -608,9 +660,48 @@ const TechStack = () => {
                           </motion.a>
                       ))}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
+
+            {/* NEW SKILLS PROGRESS BARS */}
+            <motion.div 
+              className="mt-24 max-w-3xl mx-auto"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+               <motion.h3 variants={fadeInUp} className="text-2xl font-bold text-center mb-10 flex items-center justify-center gap-3">
+                  <Activity className="text-brand-gold" />
+                  <span className="text-white">Proficiency Metrics</span>
+               </motion.h3>
+               
+               <div className="space-y-8">
+                  {proficiency.map((skill, index) => (
+                    <motion.div key={skill.name} variants={fadeInUp}>
+                       <div className="flex justify-between mb-2 text-sm font-bold text-slate-300">
+                          <span>{skill.name}</span>
+                          <span className="text-white">{skill.level}%</span>
+                       </div>
+                       <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                          <motion.div 
+                             variants={{
+                               hidden: { width: 0 },
+                               visible: { 
+                                 width: `${skill.level}%`,
+                                 transition: { duration: 1.2, ease: "easeOut", delay: 0.2 }
+                               }
+                             }}
+                             className={`h-full rounded-full bg-gradient-to-r ${skill.color} relative`}
+                          >
+                             <div className="absolute top-0 right-0 bottom-0 w-1 bg-white/50 shadow-[0_0_10px_white]"></div>
+                          </motion.div>
+                       </div>
+                    </motion.div>
+                  ))}
+               </div>
+            </motion.div>
         </div>
     </section>
   );
@@ -651,26 +742,16 @@ const Services = ({ lang }: { lang: Language }) => {
             bg: "bg-brand-gold/10",
             border: "hover:border-brand-gold/50"
         },
-        {
-            title: { EN: "3D & Interactive Web", ES: "Web 3D e Interactiva" },
-            desc: { 
-                EN: "Immersive experiences with Three.js and WebGL. Product configurators and creative storytelling.",
-                ES: "Experiencias inmersivas con Three.js y WebGL. Configuradores de productos y narrativa creativa."
-            },
-            icon: Box,
-            color: "text-brand-indigo",
-            bg: "bg-brand-indigo/10",
-            border: "hover:border-brand-indigo/50"
-        },
     ];
 
     return (
         <section id="services" className="py-20 relative">
             <div className="container mx-auto px-6">
                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={fadeInUp}
                     className="text-center mb-16"
                  >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-slate-300 text-xs font-bold mb-4">
@@ -688,16 +769,19 @@ const Services = ({ lang }: { lang: Language }) => {
                     </p>
                  </motion.div>
 
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                 <motion.div 
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={staggerContainer}
+                 >
                     {services.map((service, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-                            whileHover={{ y: -10 }}
-                            className={`glass-panel p-8 rounded-3xl border border-white/5 ${service.border} transition-all duration-300 group cursor-default relative overflow-hidden`}
+                            variants={fadeInUp}
+                            whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                            className={`glass-panel p-8 rounded-3xl border border-white/5 ${service.border} transition-colors duration-300 group cursor-default relative overflow-hidden`}
                         >
                             {/* Background Glow */}
                             <div className={`absolute top-0 right-0 w-32 h-32 ${service.bg} blur-[60px] rounded-full -z-10 group-hover:scale-150 transition-transform duration-700`}></div>
@@ -716,7 +800,7 @@ const Services = ({ lang }: { lang: Language }) => {
                             </div>
                         </motion.div>
                     ))}
-                 </div>
+                 </motion.div>
             </div>
         </section>
     );
@@ -755,21 +839,22 @@ const AIRevolution = () => {
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row gap-16 items-center">
-                    <div className="flex-1">
+                    <motion.div 
+                        className="flex-1"
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        variants={staggerContainer}
+                    >
                         <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
+                            variants={fadeInUp}
                             className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan text-xs font-bold mb-6"
                         >
                             <Network size={14} /> Artificial Intelligence
                         </motion.div>
                         
                         <motion.h2 
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.1 }}
+                            variants={fadeInUp}
                             className="text-4xl md:text-5xl font-bold mb-6 leading-tight"
                         >
                             The Age of <br />
@@ -779,10 +864,7 @@ const AIRevolution = () => {
                         </motion.h2>
                         
                         <motion.p 
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
+                            variants={fadeInUp}
                             className="text-lg text-slate-400 mb-8 leading-relaxed"
                         >
                             The future of software is agentic. I build intelligent multi-agent systems capable of 
@@ -792,26 +874,26 @@ const AIRevolution = () => {
                         </motion.p>
                         
                         <motion.button 
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.3 }}
+                            variants={fadeInUp}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="px-8 py-4 bg-white/5 border border-brand-cyan/30 hover:bg-brand-cyan/10 text-brand-cyan rounded-full font-bold transition-all flex items-center gap-2 group"
                         >
                              Explore AI Solutions <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
-                    </div>
+                    </motion.div>
 
-                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <motion.div 
+                        className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6"
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
+                        variants={staggerContainer}
+                    >
                         {aiSkills.map((skill, index) => (
                             <motion.div
                                 key={skill.name}
-                                initial={{ opacity: 0, x: 20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
+                                variants={scaleIn}
                                 whileHover={{ y: -5 }}
                                 className="glass-panel p-6 rounded-2xl border-t border-t-brand-cyan/20 hover:border-brand-cyan/40 transition-all hover:shadow-[0_0_30px_rgba(34,211,238,0.1)] group"
                             >
@@ -822,15 +904,15 @@ const AIRevolution = () => {
                                 <p className="text-sm text-slate-400 leading-relaxed">{skill.desc}</p>
                             </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* RAG Subsection */}
                 <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.4 }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={fadeInUp}
                     className="mt-20 glass-panel p-8 md:p-12 rounded-3xl border border-white/5 relative overflow-hidden"
                 >
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-cyan via-white to-brand-purple opacity-30"></div>
@@ -966,13 +1048,19 @@ const Projects = () => {
 
   return (
     <section id="projects" className="py-20 container mx-auto px-6">
-      <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center">
+      <motion.h2 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+        className="text-3xl md:text-4xl font-bold mb-16 text-center"
+      >
         Featured <span className="gradient-text">Projects</span>
-      </h2>
+      </motion.h2>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {isLoading ? (
-            // Skeleton Loaders for Projects
+            // Skeleton Loaders
             [1, 2, 3].map((i) => (
                 <div key={i} className="glass-panel rounded-2xl overflow-hidden h-[400px] animate-pulse border border-white/5">
                     <div className="h-48 bg-white/5 w-full" />
@@ -996,10 +1084,10 @@ const Projects = () => {
                 key={project.id}
                 onClick={() => setSelectedId(project.id)}
                 className={`glass-panel rounded-2xl overflow-hidden group hover:border-brand-indigo/50 transition-colors cursor-pointer ${project.featured ? 'md:col-span-2 lg:col-span-2' : ''}`}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
                 whileHover={{ y: -5 }}
             >
                 <motion.div layoutId={`image-wrapper-${project.id}`} className={`relative overflow-hidden ${project.featured ? 'h-64 md:h-80' : 'h-48'}`}>
@@ -1136,7 +1224,7 @@ const About = () => {
         
         <div className="flex flex-col md:flex-row gap-16 items-center">
              
-             {/* Visual Profile Column - Updated for Slide Up Animation */}
+             {/* Visual Profile Column */}
              <motion.div 
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -1181,49 +1269,50 @@ const About = () => {
                 <div className="absolute -bottom-8 -right-8 w-24 h-24 border-b border-r border-brand-gold/20 rounded-br-3xl"></div>
              </motion.div>
 
-             {/* Text Content Column - Updated for consistent Slide Up */}
+             {/* Text Content Column */}
              <div className="w-full md:w-7/12">
                 <motion.div 
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial="hidden"
+                    whileInView="visible"
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="flex items-center gap-3 mb-6"
+                    variants={staggerContainer}
                 >
-                   <div className="h-px w-12 bg-brand-gold/50"></div>
-                   <span className="text-brand-gold font-mono text-sm tracking-widest uppercase">About Me</span>
-                </motion.div>
+                    <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6">
+                       <div className="h-px w-12 bg-brand-gold/50"></div>
+                       <span className="text-brand-gold font-mono text-sm tracking-widest uppercase">About Me</span>
+                    </motion.div>
 
-                <motion.h2 
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1, duration: 0.6 }}
-                    className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
-                >
-                   Crafting Digital <br/>
-                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-yellow-100 to-brand-gold">Masterpieces</span>
-                </motion.h2>
+                    <motion.h2 
+                        variants={fadeInUp}
+                        className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
+                    >
+                       Crafting Digital <br/>
+                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-yellow-100 to-brand-gold">Masterpieces</span>
+                    </motion.h2>
 
-                <motion.div 
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2, duration: 0.6 }}
-                    className="space-y-6 text-lg text-slate-300 mb-8 leading-relaxed"
-                >
-                    <p>
-                        Beyond the code, I am a digital architect obsessed with precision. My journey started not just with syntax, 
-                        but with a desire to build systems that feel <span className="text-white font-medium border-b border-brand-gold/30 pb-0.5">alive</span>. 
-                    </p>
-                    <p>
-                        I blend technical rigor with an artist's eye, ensuring every pixel serves a purpose and every function runs with elegant efficiency. 
-                        My philosophy is simple: <span className="text-brand-gold/90">Performance is the ultimate luxury.</span>
-                    </p>
+                    <motion.div 
+                        variants={fadeInUp}
+                        className="space-y-6 text-lg text-slate-300 mb-8 leading-relaxed"
+                    >
+                        <p>
+                            Beyond the code, I am a digital architect obsessed with precision. My journey started not just with syntax, 
+                            but with a desire to build systems that feel <span className="text-white font-medium border-b border-brand-gold/30 pb-0.5">alive</span>. 
+                        </p>
+                        <p>
+                            I blend technical rigor with an artist's eye, ensuring every pixel serves a purpose and every function runs with elegant efficiency. 
+                            My philosophy is simple: <span className="text-brand-gold/90">Performance is the ultimate luxury.</span>
+                        </p>
+                    </motion.div>
                 </motion.div>
 
                 {/* Stats / Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                <motion.div 
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={staggerContainer}
+                >
                    {[
                         { icon: Briefcase, title: "50+ Projects", subtitle: "Delivered Globally" },
                         { icon: Award, title: "Award Winning", subtitle: "Design Excellence" },
@@ -1232,10 +1321,7 @@ const About = () => {
                    ].map((item, index) => (
                        <motion.div 
                             key={index}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.3 + (index * 0.1), duration: 0.5 }}
+                            variants={fadeInUp}
                             className="glass-panel p-4 rounded-xl border border-white/5 hover:border-brand-gold/20 transition-colors flex items-center gap-4 group"
                        >
                           <div className="bg-brand-gold/10 p-3 rounded-lg text-brand-gold group-hover:scale-110 transition-transform duration-300">
@@ -1247,7 +1333,7 @@ const About = () => {
                           </div>
                        </motion.div>
                    ))}
-                </div>
+                </motion.div>
 
                 <motion.div 
                     initial={{ opacity: 0 }}
@@ -1264,7 +1350,13 @@ const About = () => {
           </div>
 
           {/* Philosophy Cards moved to bottom for better flow */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-24">
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-24"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
             {[
               { label: 'Type Safety', val: '100%', color: 'text-brand-cyan' },
               { label: 'Performance', val: '98/100', color: 'text-brand-purple' },
@@ -1272,18 +1364,15 @@ const About = () => {
               { label: 'Satisfaction', val: '100%', color: 'text-brand-gold' }
             ].map((stat, index) => (
               <motion.div 
-                key={stat.label} 
+                key={stat.label}
+                variants={fadeInUp} 
                 className="glass-panel p-6 rounded-2xl text-center border border-white/5 hover:border-white/10 transition-all hover:-translate-y-1"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 + (index * 0.1), duration: 0.6 }}
               >
                 <div className={`text-3xl font-bold mb-2 ${stat.color}`}>{stat.val}</div>
                 <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">{stat.label}</div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         
       </div>
     </section>
@@ -1301,10 +1390,10 @@ const Blog = () => {
   return (
     <section id="blog" className="py-20 container mx-auto px-6">
       <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
+        variants={fadeInUp}
         className="flex flex-col items-center mb-12"
       >
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan text-xs font-bold mb-4">
@@ -1318,9 +1407,15 @@ const Blog = () => {
         </p>
       </motion.div>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <motion.div 
+        className="grid md:grid-cols-3 gap-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={staggerContainer}
+      >
         {isLoading ? (
-            // Skeleton Loaders for Blog
+            // Skeleton Loaders
             [1, 2, 3].map((i) => (
                 <div key={i} className="glass-panel p-6 rounded-2xl h-80 flex flex-col animate-pulse border border-white/5">
                     <div className="flex items-center gap-4 mb-6">
@@ -1333,24 +1428,14 @@ const Blog = () => {
                     <div className="h-4 bg-white/5 rounded w-full mb-3" />
                     <div className="h-4 bg-white/5 rounded w-full mb-3" />
                     <div className="h-4 bg-white/5 rounded w-3/4 mb-auto" />
-
-                    <div className="flex justify-between items-center mt-6">
-                        <div className="flex gap-2">
-                             <div className="h-5 w-12 bg-white/5 rounded" />
-                             <div className="h-5 w-12 bg-white/5 rounded" />
-                        </div>
-                        <div className="h-6 w-6 bg-white/10 rounded-full" />
-                    </div>
                 </div>
             ))
         ) : (
             blogPosts.map((post, index) => (
             <motion.article 
                 key={post.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
+                variants={fadeInUp}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 className="glass-panel p-6 rounded-2xl flex flex-col h-full hover:border-brand-indigo/50 transition-colors group cursor-pointer"
             >
                 <div className="flex items-center gap-4 text-xs text-slate-500 mb-4">
@@ -1379,7 +1464,7 @@ const Blog = () => {
             </motion.article>
             ))
         )}
-      </div>
+      </motion.div>
     </section>
   );
 };
@@ -1404,7 +1489,13 @@ const Contact = () => {
   return (
     <section id="contact" className="py-20 relative">
       <div className="container mx-auto px-6 max-w-4xl">
-        <div className="glass-panel p-8 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden">
+        <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="glass-panel p-8 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden"
+        >
              <div className="absolute top-0 right-0 w-64 h-64 bg-brand-indigo/10 blur-[80px] -z-10"></div>
              
              <div className="text-center mb-12">
@@ -1465,9 +1556,53 @@ const Contact = () => {
                  <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
                  <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={24} /></a>
              </div>
-        </div>
+        </motion.div>
       </div>
     </section>
+  );
+};
+
+const Footer = ({ lang }: { lang: Language }) => {
+  const links = [
+    { name: lang === 'EN' ? 'Stack' : 'Tecnologías', href: '#stack' },
+    { name: lang === 'EN' ? 'Services' : 'Servicios', href: '#services' },
+    { name: lang === 'EN' ? 'AI & Agents' : 'IA & Agentes', href: '#ai' },
+    { name: lang === 'EN' ? 'Projects' : 'Proyectos', href: '#projects' },
+    { name: lang === 'EN' ? 'About' : 'Sobre mí', href: '#about' },
+    { name: lang === 'EN' ? 'Blog' : 'Blog', href: '#blog' },
+  ];
+
+  return (
+    <footer className="py-12 relative z-10 border-t border-white/5 bg-slate-950 overflow-hidden">
+      <FooterParticles />
+      <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+        <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+                <Code2 className="text-brand-indigo w-5 h-5" />
+                <span className="text-lg font-bold tracking-tight text-slate-200">
+                    WebDesign<span className="text-brand-indigo">JE</span>
+                </span>
+            </div>
+            <p className="text-slate-500 text-sm">
+                &copy; {new Date().getFullYear()} Joseph Espinoza.
+            </p>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+            {links.map(link => (
+                <a key={link.name} href={link.href} className="text-sm text-slate-400 hover:text-brand-cyan transition-colors">
+                    {link.name}
+                </a>
+            ))}
+        </div>
+
+        <div className="flex gap-4">
+             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={20} /></a>
+             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
+             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+        </div>
+      </div>
+    </footer>
   );
 };
 
@@ -1493,9 +1628,7 @@ const App = () => {
         <Contact />
       </main>
 
-      <footer className="py-8 text-center text-slate-600 text-sm relative z-10">
-        <p>&copy; {new Date().getFullYear()} Joseph Espinoza. Built with React 19, Tailwind v4 & Love.</p>
-      </footer>
+      <Footer lang={lang} />
     </div>
   );
 };

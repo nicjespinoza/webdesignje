@@ -17,7 +17,9 @@
     "zod": "^4.3.6",
     "@react-three/fiber": "^9.5.0",
     "@hookform/resolvers": "^5.2.2",
-    "react-hook-form": "^7.71.1"
+    "react-hook-form": "^7.71.1",
+    "three": "^0.182.0",
+    "@react-three/postprocessing": "^3.0.4"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
