@@ -5,7 +5,9 @@
    Portafolio Joseph Espinoza - Paleta de marca
    ============================================================ */
 @theme inline {
-  --font-sans: var(--font-open-sans);
+  --font-sans: var(--font-inter);
+  --font-headings: var(--font-manrope);
+  --font-serif: var(--font-playfair);
 
   /* Paleta de marca del portafolio */
   --color-brand-indigo: #6366f1;
@@ -75,7 +77,18 @@ body {
   background-attachment: fixed;
   color: var(--foreground);
   overflow-x: hidden;
-  font-family: var(--font-open-sans), sans-serif;
+  font-family: var(--font-inter), sans-serif;
+}
+
+h1,
+h2,
+h3,
+.font-headings {
+  font-family: var(--font-manrope), sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-playfair), serif;
 }
 
 .liquid-black {
@@ -98,55 +111,123 @@ body {
   }
 }
 
-.glass-panel,
-.premium-border {
-  background: rgba(0, 0, 0, 0.8) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid #C69320 !important;
-  /* Dorado por defecto */
-  box-shadow: 0 0 20px rgba(198, 147, 32, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-panel:hover,
-.premium-border:hover {
-  box-shadow: 0 0 30px rgba(198, 147, 32, 0.25);
-  border-color: #FBE18D !important;
-  border-width: 2px !important;
-  /* Tamaño 2 al pasar el mouse */
-  transform: translateY(-5px);
-}
-
-/* Button Styling: Liquid black background, gold on click */
-button:not([class*="bg-transparent"]),
-.btn-premium,
-a[class*="premium-border"],
-a[class*="glass-panel"] {
-  background: #050505 !important;
-  color: #C69320 !important;
-  border: 1px solid #C69320 !important;
-  transition: all 0.2s ease-in-out !important;
+/* Liquid Gold Moving Border Effect */
+.liquid-gold-card {
   position: relative;
+  border-radius: 1.5rem;
   overflow: hidden;
+  background: #000000;
+  padding: 1.5px;
+  /* Thinner Border */
+  height: 100%;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
 
-button:active,
-.btn-premium:active,
-a[class*="premium-border"]:active,
-a[class*="glass-panel"]:active {
-  background: #C69320 !important;
-  color: #000000 !important;
-  transform: scale(0.95);
+.liquid-gold-card:hover {
+  transform: translateY(-10px) rotateX(4deg) rotateY(2deg);
+  box-shadow: 0 20px 40px rgba(198, 147, 32, 0.2);
+}
+
+.liquid-gold-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300vmax;
+  /* Large enough for any aspect ratio */
+  height: 300vmax;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg,
+      transparent 0%,
+      transparent 25%,
+      #C69320 40%,
+      #FBE18D 50%,
+      #C69320 60%,
+      transparent 75%,
+      transparent 100%);
+  animation: gold-sweep 8s linear infinite;
+}
+
+.liquid-gold-card:hover::before {
+  animation-play-state: paused;
+  background: linear-gradient(135deg, #C69320 0%, #FBE18D 50%, #C69320 100%);
+  filter: brightness(1.2) saturate(1.2);
+}
+
+@keyframes gold-sweep {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Internal content to mask the center */
+.liquid-gold-content {
+  position: relative;
+  z-index: 10;
+  background: #050505;
+  border-radius: calc(1.5rem - 1px);
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s ease;
+}
+
+.liquid-gold-card:hover::before {
+  animation-play-state: paused;
+  background: conic-gradient(from 0deg,
+      #C69320 0%,
+      #FBE18D 25%,
+      #C69320 50%,
+      #FBE18D 75%,
+      #C69320 100%);
+  filter: brightness(1.2);
+}
+
+/* Internal content to mask the center */
+.liquid-gold-content {
+  position: relative;
+  z-index: 10;
+  background: #050505;
+  border-radius: calc(1.5rem - 1px);
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s ease;
+}
+
+.liquid-gold-card:hover .liquid-gold-content {
+  background: #020202;
+}
+
+/* Restore glass panel visibility basics */
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(10px);
+}
+
+.premium-border {
+  border: 1px solid rgba(198, 147, 32, 0.2) !important;
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #C69320 0%, #FBE18D 50%, #C69320 100%) !important;
+  background: linear-gradient(to bottom, #FBE18D 0%, #C69320 25%, #FBE18D 50%, #C69320 75%, #FBE18D 100%) !important;
+  background-size: 100% 200% !important;
   background-clip: text !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
-  filter: drop-shadow(0 0 8px rgba(198, 147, 32, 0.3));
+  filter: drop-shadow(0 2px 4px rgba(198, 147, 32, 0.3)) !important;
 }
 
 /* ============================================================

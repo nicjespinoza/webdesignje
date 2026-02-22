@@ -5,12 +5,22 @@
 // ============================================================
 
 import type { Metadata } from "next";
-import { Open_Sans } from "next/font/google";
+import { Inter, Manrope, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-const openSans = Open_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-open-sans",
+  variable: "--font-inter",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
@@ -29,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body
-        className={`${openSans.variable} font-sans antialiased min-h-screen`}
+        className={`${inter.variable} ${manrope.variable} ${playfair.variable} font-sans antialiased min-h-screen`}
         suppressHydrationWarning
       >
         <ThemeProvider>

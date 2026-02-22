@@ -1,12 +1,13 @@
 // ============================================================
 // Scene3D Component - Portafolio Joseph Espinoza
-// Neural Network 3D con partículas y conexiones animadas
+// Neural Network 3D MEJORADA - Partículas, conexiones y animaciones
 // ============================================================
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState } from 'react';
 import {
   Canvas,
   useFrame,
+  useThree,
 } from '@react-three/fiber';
 import {
   Stars,
@@ -20,112 +21,224 @@ import { EffectComposer, Bloom, ChromaticAberration } from '@react-three/postpro
 
 // --- Neural Network Logic ---
 
-const NeuralNetwork = ({ count = 60, radius = 4 }) => {
+interface Neuron {
+  position: THREE.Vector3;
+  baseSize: number;
+  pulseOffset: number;
+  layer: number;
+}
+
+const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
   const pointsRef = useRef<THREE.Points>(null!);
   const linesRef = useRef<THREE.Group>(null!);
   const groupRef = useRef<THREE.Group>(null!);
+  const [hoveredNeuron, setHoveredNeuron] = useState<number | null>(null);
+  const { viewport } = useThree();
 
-  // Generate random nodes (Neurons)
-  const particles = useMemo(() => {
-    const temp = [];
+  // Generate neurons with layers (core, middle, outer)
+  const neurons = useMemo<Neuron[]>(() => {
+    const temp: Neuron[] = [];
     for (let i = 0; i < count; i++) {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const r = radius * Math.cbrt(Math.random()); // Even distribution inside sphere
+      
+      // Layered distribution for more organic brain-like structure
+      const layerRoll = Math.random();
+      let r: number;
+      let layer: number;
+      
+      if (layerRoll < 0.3) {
+        // Core layer (dense)
+        r = radius * 0.3 * Math.cbrt(Math.random());
+        layer = 0;
+      } else if (layerRoll < 0.7) {
+        // Middle layer
+        r = radius * (0.3 + 0.4 * Math.random());
+        layer = 1;
+      } else {
+        // Outer layer (sparse)
+        r = radius * (0.7 + 0.3 * Math.random());
+        layer = 2;
+      }
+      
       const x = r * Math.sin(phi) * Math.cos(theta);
       const y = r * Math.sin(phi) * Math.sin(theta);
       const z = r * Math.cos(phi);
-      temp.push(new THREE.Vector3(x, y, z));
+      
+      temp.push({
+        position: new THREE.Vector3(x, y, z),
+        baseSize: layer === 0 ? 0.25 : layer === 1 ? 0.18 : 0.12,
+        pulseOffset: Math.random() * Math.PI * 2,
+        layer
+      });
     }
     return temp;
   }, [count, radius]);
 
-  // Generate connections (Synapses) based on distance
+  // Generate connections based on distance and layer
   const connections = useMemo(() => {
-    const lines: THREE.Vector3[][] = [];
-    const threshold = 2.5;
-
-    particles.forEach((p1, i) => {
-      particles.forEach((p2, j) => {
+    const lines: { points: [THREE.Vector3, THREE.Vector3]; strength: number; layer: number }[] = [];
+    
+    neurons.forEach((n1, i) => {
+      neurons.forEach((n2, j) => {
         if (i !== j) {
-          const dist = p1.distanceTo(p2);
+          const dist = n1.position.distanceTo(n2.position);
+          // Different thresholds per layer
+          const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
+          
           if (dist < threshold) {
-            lines.push([p1, p2]);
+            // Strength based on layer (core connections stronger)
+            const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
+            lines.push({
+              points: [n1.position, n2.position],
+              strength,
+              layer: n1.layer
+            });
           }
         }
       });
     });
     return lines;
-  }, [particles]);
+  }, [neurons]);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
+    
     if (groupRef.current) {
-      // Rotate the entire brain
-      groupRef.current.rotation.y = t * 0.05;
-      groupRef.current.rotation.z = t * 0.01;
+      // Rotate the entire brain with subtle easing
+      groupRef.current.rotation.y = t * 0.08;
+      groupRef.current.rotation.z = Math.sin(t * 0.03) * 0.1;
+      groupRef.current.rotation.x = Math.cos(t * 0.02) * 0.05;
+    }
+    
+    // Pulse animation for neurons
+    if (pointsRef.current) {
+      const scale = 1 + Math.sin(t * 2) * 0.15;
+      pointsRef.current.scale.setScalar(scale);
     }
   });
 
-  // Convert particles to positions array for Points component
+  // Convert particles to positions array
   const positions = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    particles.forEach((p, i) => {
-      pos[i * 3] = p.x;
-      pos[i * 3 + 1] = p.y;
-      pos[i * 3 + 2] = p.z;
+    const pos = new Float32Array(neurons.length * 3);
+    neurons.forEach((n, i) => {
+      pos[i * 3] = n.position.x;
+      pos[i * 3 + 1] = n.position.y;
+      pos[i * 3 + 2] = n.position.z;
     });
     return pos;
-  }, [particles, count]);
+  }, [neurons]);
+
+  // Colors per layer
+  const getNeuronColor = (layer: number) => {
+    switch (layer) {
+      case 0: return '#FFEBAA'; // Core - Ultra bright gold
+      case 1: return '#FBE18D'; // Middle - Bright gold
+      case 2: return '#C69320'; // Outer - Primary gold
+      default: return '#FBE18D';
+    }
+  };
 
   return (
     <group ref={groupRef}>
-      {/* The Neurons (Nodes) */}
+      {/* The Neurons (Nodes) with pulsing effect */}
       <Points positions={positions} stride={3} ref={pointsRef}>
         <PointMaterial
           transparent
-          color="#FBE18D" // Bright Gold Nodes
-          size={0.15}
+          color="#FBE18D"
+          size={0.2}
           sizeAttenuation={true}
           depthWrite={false}
-          opacity={0.9}
+          opacity={0.95}
+          blending={THREE.AdditiveBlending}
         />
       </Points>
 
-      {/* The Synapses (Lines) */}
-      {/* Note: Rendering individual lines is expensive, but for < 200 lines perfectly fine for modern GPUs */}
-      {/* We use a Group to hold lines, or better, use LineSegments if we manually built geometry, but Drei Line is convenient here for "glowing" effect */}
+      {/* Individual neuron meshes for hover effect */}
+      {neurons.map((neuron, i) => (
+        <mesh
+          key={`neuron-${i}`}
+          position={neuron.position}
+          onPointerOver={() => setHoveredNeuron(i)}
+          onPointerOut={() => setHoveredNeuron(null)}
+        >
+          <sphereGeometry args={[neuron.baseSize * 1.5, 16, 16]} />
+          <meshStandardMaterial
+            color={getNeuronColor(neuron.layer)}
+            emissive={getNeuronColor(neuron.layer)}
+            emissiveIntensity={hoveredNeuron === i ? 3 : 1.5}
+            transparent
+            opacity={0.8}
+          />
+        </mesh>
+      ))}
+
+      {/* The Synapses (Lines) with animated opacity */}
       <group ref={linesRef}>
-        {connections.map((line, index) => (
-          // Optimizing: Only render a fraction of lines to avoid clutter if too dense
-          Math.random() > 0.4 ? (
-            <Line
-              key={index}
-              points={line}
-              color="#C69320" // Primary Gold Connections
-              opacity={0.25}
-              transparent
-              lineWidth={1.2}
-            />
-          ) : null
+        {connections.map((conn, index) => (
+          <AnimatedLine
+            key={index}
+            points={conn.points}
+            color={conn.layer === 0 ? '#FFEBAA' : conn.layer === 1 ? '#FBE18D' : '#C69320'}
+            baseOpacity={conn.strength}
+            index={index}
+          />
         ))}
       </group>
 
       {/* Floating Data Bits moving through the system */}
-      <DataPulses radius={radius} />
+      <DataPulses radius={radius} count={35} />
+      
+      {/* Energy waves emanating from core */}
+      <EnergyWaves count={5} />
     </group>
   );
 };
 
+// Animated line with pulsing opacity
+const AnimatedLine = ({ 
+  points, 
+  color, 
+  baseOpacity, 
+  index 
+}: { 
+  points: [THREE.Vector3, THREE.Vector3]; 
+  color: string; 
+  baseOpacity: number;
+  index: number;
+}) => {
+  const ref = useRef<THREE.Line>(null!);
+  
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (ref.current) {
+      // Pulsing opacity with phase offset based on index
+      const opacity = baseOpacity * (0.6 + 0.4 * Math.sin(t * 3 + index * 0.1));
+      (ref.current.material as THREE.Material).opacity = opacity;
+    }
+  });
+
+  return (
+    <Line
+      ref={ref}
+      points={points}
+      color={color}
+      opacity={baseOpacity}
+      transparent
+      lineWidth={1.5}
+      blending={THREE.AdditiveBlending}
+    />
+  );
+};
+
 // Simulates data moving through the network
-const DataPulses = ({ radius }: { radius: number }) => {
-  const count = 20;
+const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
   const tempObj = new THREE.Object3D();
+  const color = new THREE.Color();
 
-  // Initial random positions
   const agents = useMemo(() => {
-    return new Array(count).fill(0).map(() => ({
+    return new Array(count).fill(0).map((_, i) => ({
       pos: new THREE.Vector3(
         (Math.random() - 0.5) * radius * 2,
         (Math.random() - 0.5) * radius * 2,
@@ -136,20 +249,24 @@ const DataPulses = ({ radius }: { radius: number }) => {
         (Math.random() - 0.5) * radius * 2,
         (Math.random() - 0.5) * radius * 2
       ),
-      speed: Math.random() * 0.06 + 0.03
-    }))
-  }, [radius]);
+      speed: Math.random() * 0.08 + 0.04,
+      phase: Math.random() * Math.PI * 2,
+      colorOffset: i / count
+    }));
+  }, [radius, count]);
 
-  useFrame(() => {
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    
     if (!meshRef.current) return;
 
     agents.forEach((agent, i) => {
-      // Move agent towards destination
+      // Move agent towards destination with easing
       const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.5) {
+      if (agent.pos.distanceTo(agent.dest) < 0.3) {
         agent.dest.set(
           (Math.random() - 0.5) * radius * 2,
           (Math.random() - 0.5) * radius * 2,
@@ -158,17 +275,82 @@ const DataPulses = ({ radius }: { radius: number }) => {
       }
 
       tempObj.position.copy(agent.pos);
-      tempObj.scale.setScalar(1);
+      
+      // Pulsing scale
+      const scale = 0.08 + 0.04 * Math.sin(t * 5 + agent.phase);
+      tempObj.scale.setScalar(scale);
+      
       tempObj.updateMatrix();
       meshRef.current.setMatrixAt(i, tempObj.matrix);
+      
+      // Color variation from gold to white
+      color.setHSL(0.12 + agent.colorOffset * 0.05, 0.9, 0.7 + Math.random() * 0.3);
+      meshRef.current.setColorAt(i, color);
     });
+    
+    meshRef.current.instanceMatrix.needsUpdate = true;
+    meshRef.current.instanceColor!.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+      <sphereGeometry args={[0.1, 12, 12]} />
+      <meshBasicMaterial transparent opacity={0.9} />
+    </instancedMesh>
+  );
+};
+
+// Energy waves emanating from the core
+const EnergyWaves = ({ count }: { count: number }) => {
+  const meshRef = useRef<THREE.InstancedMesh>(null!);
+  const tempObj = new THREE.Object3D();
+
+  const waves = useMemo(() => {
+    return new Array(count).fill(0).map((_, i) => ({
+      angle: (i / count) * Math.PI * 2,
+      radius: 0,
+      speed: Math.random() * 0.5 + 0.3,
+      maxRadius: 4 + Math.random() * 2,
+      opacity: 0,
+      phase: Math.random() * Math.PI * 2
+    }));
+  }, [count]);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    
+    if (!meshRef.current) return;
+
+    waves.forEach((wave, i) => {
+      // Expand wave
+      wave.radius += wave.speed;
+      
+      if (wave.radius > wave.maxRadius) {
+        wave.radius = 0;
+        wave.opacity = 0;
+      } else {
+        wave.opacity = Math.sin((wave.radius / wave.maxRadius) * Math.PI) * 0.4;
+      }
+
+      const x = Math.cos(wave.angle) * wave.radius;
+      const y = Math.sin(wave.angle) * wave.radius;
+      const z = Math.sin(t + wave.phase) * 0.5;
+
+      tempObj.position.set(x, y, z);
+      tempObj.scale.setScalar(wave.radius * 0.3 + 0.1);
+      tempObj.rotation.z = wave.angle;
+      tempObj.updateMatrix();
+      
+      meshRef.current.setMatrixAt(i, tempObj.matrix);
+    });
+    
     meshRef.current.instanceMatrix.needsUpdate = true;
   });
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-      <sphereGeometry args={[0.07, 12, 12]} />
-      <meshBasicMaterial color="#FFEBAA" /> {/* Ultra Bright Reflective Gold data packets */}
+      <torusGeometry args={[1, 0.02, 8, 32]} />
+      <meshBasicMaterial color="#FBE18D" transparent opacity={0.3} />
     </instancedMesh>
   );
 };
@@ -177,35 +359,35 @@ const Scene3D: React.FC = () => {
   return (
     <div
       className="
-        h-[400px] w-full max-w-[500px] mx-auto 
+        h-[500px] w-full max-w-[600px] mx-auto 
         opacity-100
         relative overflow-hidden
         rounded-2xl 
-        border border-[#C69320]/30
-        bg-black/60
-        shadow-[0_0_50px_rgba(198,147,32,0.2)]
+        border border-[#C69320]/40
+        bg-black/80
+        shadow-[0_0_80px_rgba(198,147,32,0.3)]
       "
     >
-      <Canvas camera={{ position: [0, 0, 8], fov: 60 }} gl={{ alpha: true, antialias: false }}>
-        <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={60} />
+      <Canvas camera={{ position: [0, 0, 10], fov: 55 }} gl={{ alpha: true, antialias: false }}>
+        <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={55} />
 
         {/* Deep Space Background */}
-        <color attach="background" args={['#050505']} />
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={1} fade speed={1} />
+        <color attach="background" args={['#020202']} />
+        <Stars radius={150} depth={70} count={8000} factor={6} saturation={1} fade speed={2} />
 
         {/* Lights */}
-        <ambientLight intensity={0.6} />
-        <pointLight position={[10, 10, 10]} intensity={2} color="#FBE18D" />
-        <pointLight position={[-10, -10, -10]} intensity={1.5} color="#C69320" />
+        <ambientLight intensity={0.8} />
+        <pointLight position={[15, 15, 15]} intensity={3} color="#FBE18D" />
+        <pointLight position={[-15, -15, -15]} intensity={2} color="#C69320" />
+        <pointLight position={[0, 0, 0]} intensity={1.5} color="#FFEBAA" distance={8} />
 
         {/* The Brain/Network */}
-        <NeuralNetwork count={80} radius={4.5} />
+        <NeuralNetwork count={120} radius={5} />
 
         {/* Post-Processing for the "Glow" */}
         <EffectComposer enableNormalPass={false}>
-          <Bloom luminanceThreshold={0.1} mipmapBlur intensity={2.5} radius={0.7} />
-          {/* Subtle glitchy effect for realism */}
-          <ChromaticAberration offset={[0.001, 0.001]} />
+          <Bloom luminanceThreshold={0.15} mipmapBlur intensity={3} radius={0.8} />
+          <ChromaticAberration offset={[0.0015, 0.0015]} />
         </EffectComposer>
       </Canvas>
     </div>

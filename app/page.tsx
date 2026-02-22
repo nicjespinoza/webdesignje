@@ -65,19 +65,17 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import ParticleBackground from '@/src/components/landing/ParticleBackground';
-import FooterParticles from '@/src/components/landing/FooterParticles';
-import Scene3D from '@/src/components/landing/Scene3D';
+import GlobalParticles from '@/src/components/landing/GlobalParticles';
 import { Project, Language, BlogPost, ContactFormValues } from '@/src/components/landing/types';
 import Logo from '../components/ui/Logo';
 
 // --- Animation Variants ---
 const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: { duration: 0.8, ease: "easeOut" }
   }
 };
 
@@ -416,8 +414,8 @@ const Navbar = ({
         <a href="#" className="flex items-center gap-3 group">
           <Logo isDark={isDark} size={64} />
           <div className="leading-none flex flex-col">
-            <span className="text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125">Joseph Espinoza</span>
-            <span className="text-xs font-medium tracking-[0.2em] text-slate-300">Web Design</span>
+            <span className="text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125 font-serif">Joseph Espinoza</span>
+            <span className="text-xs font-medium tracking-[0.2em] text-slate-300 font-serif lowercase italic opacity-80">Web Design</span>
           </div>
         </a>
 
@@ -440,10 +438,12 @@ const Navbar = ({
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <a href="#contact" className="premium-border px-6 py-2.5 rounded-full font-bold hover:scale-105 transition-all text-sm group">
-            <span className="gradient-text group-hover:brightness-125 transition-all">
-              {lang === 'EN' ? "Let's Talk" : 'Contáctame'}
-            </span>
+          <a href="#contact" className="liquid-gold-card !rounded-full !h-auto">
+            <div className="liquid-gold-content !py-2 !px-6 !rounded-full">
+              <span className="gradient-text font-bold text-sm whitespace-nowrap">
+                {lang === 'EN' ? "Let's Talk" : 'Contáctame'}
+              </span>
+            </div>
           </a>
         </div>
 
@@ -493,54 +493,69 @@ const Navbar = ({
 const Hero = ({ lang, router }: { lang: Language; router: any }) => {
   return (
     <section className="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden bg-transparent pointer-events-none">
-      {/* Fondo absoluto para el 3D total */}
-      <div className="absolute inset-0 z-0 opacity-80 mix-blend-screen overflow-visible pointer-events-none">
-        <Scene3D />
-      </div>
+
 
       <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center mt-12 pointer-events-auto">
 
         <motion.h1
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 1 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.06 } }
+          initial={{
+            opacity: 0,
+            scale: 0.1,
+            filter: "blur(50px)",
+            z: -1000,
+            rotateX: 60,
+            y: 100
           }}
-          className="text-5xl md:text-7xl lg:text-[5.5rem] font-black leading-tight mb-6 tracking-tight flex justify-center flex-wrap"
+          animate={{
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            z: 0,
+            rotateX: 0,
+            y: 0
+          }}
+          transition={{
+            duration: 2,
+            type: "spring",
+            damping: 20,
+            stiffness: 50,
+            delay: 0.5
+          }}
+          className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-tight mb-6 tracking-tight font-serif italic relative z-10 gradient-text px-4 pb-4 overflow-visible"
         >
-          {"Full-Stack & AI Engineer".split("").map((char, index) => (
-            <motion.span
-              key={index}
-              variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
-              className="gradient-text pb-2 drop-shadow-[0_0_25px_rgba(255,184,0,0.5)]"
-            >
-              {char === " " ? "\u00A0" : char}
-            </motion.span>
-          ))}
+          {lang === 'EN' ? "Full-Stack & AI Engineer" : "Ingeniero Full-Stack y AI"}
         </motion.h1>
 
         <motion.p
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 1 },
-            visible: { opacity: 1, transition: { delayChildren: 1.8, staggerChildren: 0.03 } }
+          initial={{
+            opacity: 0,
+            filter: "blur(40px)",
+            scale: 0.2,
+            z: -800,
+            y: 50,
+            rotateX: 45
           }}
-          className="text-slate-300 font-light text-xl md:text-2xl lg:text-3xl max-w-4xl mb-14 leading-relaxed drop-shadow-lg flex justify-center flex-wrap"
+          animate={{
+            opacity: 1,
+            filter: "blur(0px)",
+            scale: 1,
+            z: 0,
+            y: 0,
+            rotateX: 0
+          }}
+          transition={{
+            duration: 1.5,
+            delay: 1.2,
+            type: "spring",
+            damping: 25,
+            stiffness: 70
+          }}
+          className="text-slate-300 font-light text-xl md:text-2xl lg:text-3xl max-w-4xl mb-14 leading-relaxed drop-shadow-lg text-center"
         >
-          {(lang === 'EN'
+          {lang === 'EN'
             ? "Architecting the web of tomorrow with Next.js 15, AI Agents, and immersive 3D interfaces."
             : "Arquitectando la web del mañana con Next.js 15, Agentes de IA e interfaces 3D inmersivas."
-          ).split("").map((char, index) => (
-            <motion.span
-              key={index}
-              variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1 } }}
-              className="inline-block"
-            >
-              {char === " " ? "\u00A0" : char}
-            </motion.span>
-          ))}
+          }
         </motion.p>
 
         <motion.div
@@ -550,42 +565,91 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
           className="flex flex-wrap justify-center gap-6 mb-20"
         >
           <motion.a
-            whileHover={{ scale: 1.05 }}
+            initial={{ opacity: 0, scale: 0.1, z: -1000, filter: "blur(60px)", rotateX: 30 }}
+            animate={{ opacity: 1, scale: 1, z: 0, filter: "blur(0px)", rotateX: 0 }}
+            transition={{ duration: 1.5, delay: 2.8, type: "spring", damping: 20 }}
+            whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
             href="#projects"
-            className="px-10 py-5 glass-panel border border-[#C69320]/40 text-[#C69320] hover:bg-[#C69320]/15 rounded-full font-bold transition-all shadow-[0_0_30px_rgba(198,147,32,0.25)] text-lg"
+            className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group relative overflow-hidden"
           >
-            {lang === 'EN' ? "View Work" : "Ver Proyectos"}
+            <div className="liquid-gold-content !py-2 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
+              <Briefcase size={18} className="text-[#C69320] group-hover:scale-110 transition-transform" />
+              <span className="gradient-text font-bold text-sm whitespace-nowrap">
+                {lang === 'EN' ? "View Work" : "Ver Proyectos"}
+              </span>
+            </div>
+            <motion.div
+              className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
+              style={{ skewX: "-20deg" }}
+            />
           </motion.a>
 
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            initial={{ opacity: 0, scale: 0.1, z: -1000, filter: "blur(60px)", rotateX: 30 }}
+            animate={{ opacity: 1, scale: 1, z: 0, filter: "blur(0px)", rotateX: 0 }}
+            transition={{ duration: 1.5, delay: 3, type: "spring", damping: 20 }}
+            whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.push('/portal')}
-            className="px-10 py-5 premium-border rounded-full font-bold transition-all flex items-center gap-2 shadow-[0_0_40px_rgba(255,184,0,0.3)] text-lg group hover:scale-105"
+            className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group relative overflow-hidden"
           >
-            <Sparkles size={24} />
-            {lang === 'EN' ? "Access Demo" : "Acceder a Demo"}
+            <div className="liquid-gold-content !py-2 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
+              <Sparkles size={18} className="text-[#C69320] transition-transform group-hover:rotate-12" />
+              <span className="gradient-text font-bold text-sm whitespace-nowrap">
+                {lang === 'EN' ? "Access Demo" : "Acceder a Demo"}
+              </span>
+            </div>
+            <motion.div
+              className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
+              style={{ skewX: "-20deg" }}
+            />
           </motion.button>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.15, delayChildren: 3.2 }
+            }
+          }}
           className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-sm md:text-base lg:text-lg text-slate-400 font-mono tracking-[0.2em] uppercase font-bold"
         >
-          <span className="hover:text-[#FBE18D] transition-colors">Next.js</span>
-          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
-          <span className="hover:text-[#FBE18D] transition-colors">React.js</span>
-          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
-          <span className="hover:text-[#FBE18D] transition-colors">Node.js</span>
-          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
-          <span className="hover:text-[#FBE18D] transition-colors">Tailwind CSS</span>
-          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
-          <span className="hover:text-[#FBE18D] transition-colors">JavaScript</span>
-          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
-          <span className="hover:text-[#FBE18D] transition-colors">AI Agents</span>
+          {[
+            "Next.js", "React.js", "Node.js", "Tailwind CSS", "JavaScript", "AI Agents"
+          ].map((tech, i) => (
+            <React.Fragment key={tech}>
+              <motion.span
+                variants={{
+                  hidden: { opacity: 0, scale: 0.1, z: -800, filter: "blur(40px)", y: 30 },
+                  visible: {
+                    opacity: 1,
+                    scale: 1,
+                    z: 0,
+                    filter: "blur(0px)",
+                    y: 0,
+                    transition: { type: "spring", damping: 20 }
+                  }
+                }}
+                className="hover:text-[#FBE18D] transition-colors cursor-default"
+              >
+                {tech}
+              </motion.span>
+              {i < 5 && (
+                <motion.span
+                  variants={{
+                    hidden: { opacity: 0, scale: 0 },
+                    visible: { opacity: 1, scale: 1 }
+                  }}
+                  className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"
+                ></motion.span>
+              )}
+            </React.Fragment>
+          ))}
         </motion.div>
       </div>
     </section>
@@ -602,7 +666,8 @@ export default function PortfolioPage() {
   const toggleLang = () => setLang(lang === 'ES' ? 'EN' : 'ES');
 
   return (
-    <div className="min-h-screen bg-transparent text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#020202] text-white overflow-x-hidden relative">
+      <GlobalParticles />
       <style jsx>{`
         .glass-panel {
           background: rgba(255, 255, 255, 0.03);
@@ -622,107 +687,92 @@ export default function PortfolioPage() {
 
       {/* 2026 Production Stack */}
       <section id="stack" className="py-20 container mx-auto px-6">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
-          className="flex flex-col items-center mb-16"
+        <div
+          className="flex flex-col items-center mb-16 relative z-10"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4 shadow-[0_0_20px_rgba(198,147,32,0.2)]">
             <Layers size={14} /> Technology
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-center">
+          <h2 className="text-4xl md:text-5xl font-black text-center text-white tracking-tight">
             2026 <span className="gradient-text">Production Stack</span>
           </h2>
-          <p className="text-slate-400 mt-4 max-w-xl text-center">
+          <p className="text-slate-400 mt-4 max-w-xl text-center text-lg">
             Cutting-edge tools and frameworks for building scalable, performant applications.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {categories.map((category, categoryIndex) => (
             <motion.div
               key={category.title}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="premium-border p-6 rounded-2xl gold-liquid"
+              variants={fadeInUp}
+              className="liquid-gold-card"
             >
-              <motion.h3 variants={fadeInUp} className="text-xl font-bold text-slate-200 mb-6">
-                {category.title}
-              </motion.h3>
-              <div className="space-y-4">
-                {category.items.map((item, itemIndex) => (
-                  <motion.a
-                    key={item.name}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variants={fadeInUp}
-                    whileHover={{ x: 5 }}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-all group"
-                  >
-                    <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center text-white flex-shrink-0"
-                      style={{ backgroundColor: item.color }}
+              <div className="liquid-gold-content">
+                <motion.h3 variants={fadeInUp} className="text-xl font-bold text-slate-200 mb-6">
+                  {category.title}
+                </motion.h3>
+                <div className="space-y-4">
+                  {category.items.map((item, itemIndex) => (
+                    <motion.a
+                      key={item.name}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variants={fadeInUp}
+                      whileHover={{ x: 5 }}
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-all group"
                     >
-                      <item.icon size={16} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-white text-sm group-hover:text-[#FBE18D] transition-colors truncate">
-                        {item.name}
-                      </h4>
-                      <p className="text-xs text-slate-400 truncate">{item.desc}</p>
-                    </div>
-                  </motion.a>
-                ))}
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-white flex-shrink-0"
+                        style={{ backgroundColor: item.color }}
+                      >
+                        <item.icon size={16} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-white text-sm group-hover:text-[#FBE18D] transition-colors truncate">
+                          {item.name}
+                        </h4>
+                        <p className="text-xs text-slate-400 truncate">{item.desc}</p>
+                      </div>
+                    </motion.a>
+                  ))}
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
 
         {/* Proficiency Metrics */}
-        <motion.div
-          className="mt-12 mb-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-        >
-          <motion.div variants={fadeInUp} className="premium-border p-6 rounded-2xl max-w-2xl mx-auto gold-liquid">
-            <motion.h3 variants={fadeInUp} className="text-lg font-bold text-center mb-6 flex items-center justify-center gap-2">
-              <Activity className="text-[#FBE18D]" size={18} />
-              <span className="text-white">Proficiency Metrics</span>
-            </motion.h3>
+        <div className="mt-12 mb-8 relative z-20 opacity-100 visible">
+          <div className="liquid-gold-card max-w-2xl mx-auto !opacity-100 !block">
+            <div className="liquid-gold-content">
+              <h3 className="text-lg font-bold text-center mb-6 flex items-center justify-center gap-2">
+                <Activity className="text-[#FBE18D]" size={18} />
+                <span className="gradient-text">Proficiency Metrics</span>
+              </h3>
 
-            <div className="space-y-4">
-              {proficiency.map((skill, index) => (
-                <motion.div key={skill.name} variants={fadeInUp}>
-                  <div className="flex justify-between mb-1 text-xs font-bold text-slate-300">
-                    <span className="text-xs">{skill.name}</span>
-                    <span className="text-white text-xs">{skill.level}%</span>
+              <div className="space-y-4">
+                {proficiency.map((skill, index) => (
+                  <div key={skill.name}>
+                    <div className="flex justify-between mb-1 text-xs font-bold text-slate-300">
+                      <span className="text-xs">{skill.name}</span>
+                      <span className="text-white text-xs">{skill.level}%</span>
+                    </div>
+                    <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                      <div
+                        className={`h-full rounded-full bg-gradient-to-r ${skill.color} relative transition-all duration-1000`}
+                        style={{ width: `${skill.level}%` }}
+                      >
+                        <div className="absolute top-0 right-0 bottom-0 w-0.5 bg-white/50 shadow-[0_0_5px_white]"></div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-                    <motion.div
-                      variants={{
-                        hidden: { width: 0 },
-                        visible: {
-                          width: `${skill.level}%`,
-                          transition: { duration: 1.2, ease: "easeOut", delay: 0.2 }
-                        }
-                      }}
-                      className={`h-full rounded-full bg-gradient-to-r ${skill.color} relative`}
-                    >
-                      <div className="absolute top-0 right-0 bottom-0 w-0.5 bg-white/50 shadow-[0_0_5px_white]"></div>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* Premium Services */}
@@ -736,13 +786,13 @@ export default function PortfolioPage() {
             className="flex flex-col items-center mb-16"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
-              <Star size={14} /> Premium Services
+              <Star size={14} /> Proficiency Metrics
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
-              Premium <span className="gradient-text">Services</span>
+              Core <span className="gradient-text">Services</span>
             </h2>
             <p className="text-slate-400 mt-4 max-w-xl text-center">
-              Enterprise-grade solutions tailored to your specific needs.
+              Specialized in building high-performance applications with cutting-edge architectures.
             </p>
           </motion.div>
 
@@ -791,22 +841,23 @@ export default function PortfolioPage() {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                whileHover={{ y: -5 }}
-                className="premium-border p-8 rounded-2xl transition-all group gold-liquid"
+                className="liquid-gold-card"
               >
-                <div className="bg-[#FBE18D]/10 p-3 rounded-xl text-[#FBE18D] w-fit mb-6 group-hover:scale-110 transition-transform">
-                  <service.icon size={24} />
+                <div className="liquid-gold-content">
+                  <div className="bg-[#FBE18D]/10 p-3 rounded-xl text-[#FBE18D] w-fit mb-6 group-hover:scale-110 transition-transform">
+                    <service.icon size={24} />
+                  </div>
+                  <h3 className="text-xl font-bold mb-4">{service.title}</h3>
+                  <p className="text-slate-400 mb-6 flex-grow">{service.description}</p>
+                  <ul className="space-y-2 mt-auto">
+                    {service.features.map((feature, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-slate-300">
+                        <div className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full shadow-[0_0_8px_#FBE18D]"></div>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-xl font-bold mb-4">{service.title}</h3>
-                <p className="text-slate-400 mb-6">{service.description}</p>
-                <ul className="space-y-2">
-                  {service.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-slate-300">
-                      <div className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full"></div>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
               </motion.div>
             ))}
           </motion.div>
@@ -838,103 +889,102 @@ export default function PortfolioPage() {
             {[
               {
                 icon: Brain,
-                title: "Natural Language Processing",
-                description: "Advanced text understanding and generation capabilities.",
+                title: "NLP",
+                description: "Advanced text understanding.",
                 level: 95
               },
               {
                 icon: Bot,
                 title: "Autonomous Agents",
-                description: "Self-directed AI systems that can execute complex tasks.",
+                description: "Self-directed AI systems.",
                 level: 88
               },
               {
                 icon: Sparkles,
                 title: "Machine Learning",
-                description: "Predictive models and pattern recognition systems.",
+                description: "Predictive patterns.",
                 level: 92
               },
               {
                 icon: Network,
                 title: "Neural Networks",
-                description: "Deep learning architectures for complex problem solving.",
+                description: "Deep learning architect.",
                 level: 85
               }
             ].map((skill, index) => (
               <motion.div
                 key={index}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
                 variants={fadeInUp}
-                className="premium-border p-6 rounded-2xl text-center transition-all gold-liquid"
+                className="liquid-gold-card"
               >
-                <div className="bg-[#FBE18D]/10 p-3 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
-                  <skill.icon size={24} />
+                <div className="liquid-gold-content text-center items-center">
+                  <div className="bg-[#FBE18D]/10 p-3 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
+                    <skill.icon size={24} />
+                  </div>
+                  <h4 className="font-bold mb-2">{skill.title}</h4>
+                  <p className="text-sm text-slate-400 mb-4">{skill.description}</p>
+                  <div className="relative h-2 w-full bg-white/10 rounded-full overflow-hidden mb-2">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.level}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: 0.2 }}
+                      className="absolute h-full bg-gradient-to-r from-[#C69320] to-[#FBE18D] rounded-full shadow-[0_0_10px_#C69320]"
+                    />
+                  </div>
+                  <span className="text-xs text-slate-400">{skill.level}%</span>
                 </div>
-                <h4 className="font-bold mb-2">{skill.title}</h4>
-                <p className="text-sm text-slate-400 mb-4">{skill.description}</p>
-                <div className="relative h-2 bg-white/10 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.level}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: 0.2 }}
-                    className="absolute h-full bg-gradient-to-r from-[#C69320] to-yellow-500 rounded-full"
-                  />
-                </div>
-                <span className="text-xs text-slate-400 mt-1">{skill.level}%</span>
               </motion.div>
             ))}
           </div>
 
           <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
             variants={fadeInUp}
-            className="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden"
+            initial="visible"
+            animate="visible"
+            className="liquid-gold-card relative z-10"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FBE18D]/10 blur-[80px] -z-10"></div>
-            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-[#C69320] to-yellow-500 bg-clip-text text-transparent">AI-Powered Solutions for Web & Apps</h3>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h4 className="font-bold mb-4 text-[#FBE18D] flex items-center gap-2">
-                  <Smartphone size={18} /> Web & App Features
-                </h4>
-                <ul className="space-y-3">
-                  {[
-                    "Chatbots inteligentes para atención al cliente 24/7",
-                    "Recomendaciones personalizadas basadas en comportamiento",
-                    "Análisis predictivo para optimización de servicios",
-                    "Asistentes virtuales para guiar al usuario",
-                    "Procesamiento automático de formularios y datos"
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle className="text-[#FBE18D] mt-0.5" size={16} />
-                      <span className="text-sm text-slate-300">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-bold mb-4 text-[#FBE18D] flex items-center gap-2">
-                  <Cpu size={18} /> Service Technologies
-                </h4>
-                <ul className="space-y-3">
-                  {[
-                    "Integración con OpenAI GPT-4 y Claude",
-                    "Sistemas RAG para bases de conocimiento",
-                    "Modelos de lenguaje personalizados",
-                    "APIs RESTful para servicios AI",
-                    "Procesamiento en tiempo real y escalable"
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle className="text-[#FBE18D] mt-0.5" size={16} />
-                      <span className="text-sm text-slate-300">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+            <div className="liquid-gold-content p-8 md:p-12">
+              <h3 className="text-2xl font-bold mb-6 gradient-text">AI-Powered Solutions for Web & Apps</h3>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-bold mb-4 text-[#FBE18D] flex items-center gap-2">
+                    <Smartphone size={18} /> Web & App Features
+                  </h4>
+                  <ul className="space-y-3">
+                    {[
+                      "Chatbots inteligentes para atención al cliente 24/7",
+                      "Recomendaciones personalizadas basadas en comportamiento",
+                      "Análisis predictivo para optimización de servicios",
+                      "Asistentes virtuales para guiar al usuario",
+                      "Procesamiento automático de formularios y datos"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <CheckCircle className="text-[#FBE18D] mt-0.5" size={16} />
+                        <span className="text-sm text-slate-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-bold mb-4 text-[#FBE18D] flex items-center gap-2">
+                    <Cpu size={18} /> Service Technologies
+                  </h4>
+                  <ul className="space-y-3">
+                    {[
+                      "Integración con OpenAI GPT-4 y Claude",
+                      "Sistemas RAG para bases de conocimiento",
+                      "Modelos de lenguaje personalizados",
+                      "APIs RESTful para servicios AI",
+                      "Procesamiento en tiempo real y escalable"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <CheckCircle className="text-[#FBE18D] mt-0.5" size={16} />
+                        <span className="text-sm text-slate-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -963,59 +1013,58 @@ export default function PortfolioPage() {
           </motion.div>
 
           <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden"
+            variants={fadeInUp}
+            initial="visible"
+            animate="visible"
+            className="liquid-gold-card relative z-10"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FBE18D]/10 blur-[80px] -z-10"></div>
-
-            <div className="grid md:grid-cols-3 gap-8 mb-8">
-              <motion.div variants={fadeInUp} className="text-center">
-                <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
-                  <Database size={32} />
+            <div className="liquid-gold-content p-8 md:p-12">
+              <div className="grid md:grid-cols-3 gap-8 mb-8">
+                <div className="text-center">
+                  <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
+                    <Database size={32} />
+                  </div>
+                  <h4 className="font-bold mb-2">Knowledge Base</h4>
+                  <p className="text-sm text-slate-400">Vectorized documents and structured data for efficient retrieval</p>
                 </div>
-                <h4 className="font-bold mb-2">Knowledge Base</h4>
-                <p className="text-sm text-slate-400">Vectorized documents and structured data for efficient retrieval</p>
-              </motion.div>
 
-              <motion.div variants={fadeInUp} className="text-center">
-                <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
-                  <Search size={32} />
+                <div className="text-center">
+                  <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
+                    <Search size={32} />
+                  </div>
+                  <h4 className="font-bold mb-2">Semantic Search</h4>
+                  <p className="text-sm text-slate-400">Advanced embedding-based search for relevant context</p>
                 </div>
-                <h4 className="font-bold mb-2">Semantic Search</h4>
-                <p className="text-sm text-slate-400">Advanced embedding-based search for relevant context</p>
-              </motion.div>
 
-              <motion.div variants={fadeInUp} className="text-center">
-                <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
-                  <Sparkles size={32} />
+                <div className="text-center">
+                  <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
+                    <Sparkles size={32} />
+                  </div>
+                  <h4 className="font-bold mb-2">Generation</h4>
+                  <p className="text-sm text-slate-400">Context-aware responses using retrieved information</p>
                 </div>
-                <h4 className="font-bold mb-2">Generation</h4>
-                <p className="text-sm text-slate-400">Context-aware responses using retrieved information</p>
-              </motion.div>
-            </div>
-
-            <div className="relative h-32 bg-black/20 rounded-2xl p-6 overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center">
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="absolute w-3 h-3 bg-[#FBE18D] rounded-full"
-                    style={{
-                      left: `${20 + i * 10}%`,
-                      top: `${50 + Math.sin(i) * 30}%`
-                    }}
-                  />
-                ))}
               </div>
-              <div className="relative z-10 text-center text-slate-400 text-sm">
-                RAG Architecture Visualization
+
+              <div className="relative h-32 bg-black/40 rounded-2xl p-6 overflow-hidden border border-[#C69320]/20">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {[...Array(8)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ scale: 0, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      className="absolute w-2 h-2 bg-[#FBE18D] rounded-full shadow-[0_0_8px_#FBE18D]"
+                      style={{
+                        left: `${20 + i * 10}%`,
+                        top: `${50 + Math.sin(i) * 20}%`
+                      }}
+                    />
+                  ))}
+                </div>
+                <div className="relative z-10 text-center text-slate-500 text-xs font-mono tracking-widest uppercase">
+                  RAG Architecture Pipeline
+                </div>
               </div>
             </div>
           </motion.div>
@@ -1028,17 +1077,17 @@ export default function PortfolioPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.3 }}
             variants={fadeInUp}
-            className="flex flex-col items-center mb-16"
+            className="flex flex-col items-center mb-16 relative z-10"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4 shadow-[0_0_20px_rgba(198,147,32,0.2)]">
               <Code2 size={14} /> Portfolio
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-center">
+            <h2 className="text-3xl md:text-5xl font-bold text-center text-white">
               Featured <span className="gradient-text">Projects</span>
             </h2>
-            <p className="text-slate-400 mt-4 max-w-xl text-center">
+            <p className="text-slate-400 mt-4 max-w-xl text-center text-lg">
               Real-world applications showcasing modern development practices.
             </p>
           </motion.div>
@@ -1047,50 +1096,38 @@ export default function PortfolioPage() {
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
+                variants={fadeInUp}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={fadeInUp}
-                whileHover={{ y: -5 }}
-                className="premium-border rounded-2xl overflow-hidden group cursor-pointer gold-liquid"
+                className="liquid-gold-card cursor-pointer group"
                 onClick={() => window.open(project.demoUrl || '#', '_blank')}
               >
-                <div className="h-48 bg-gradient-to-br from-[#C69320]/20 to-[#FBE18D]/20 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ExternalLink className="text-white" size={32} />
+                <div className="liquid-gold-content p-0">
+                  <div
+                    className="h-48 bg-cover bg-center relative group overflow-hidden"
+                    style={{ backgroundImage: `url(${project.imageUrl})` }}
+                  >
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                      <ExternalLink className="text-[#FBE18D]" size={32} />
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-[#FBE18D] transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-slate-400 text-sm mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.techStack.map((tech) => (
-                      <span key={tech} className="text-xs px-2 py-1 bg-white/10 text-slate-300 rounded-full">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex gap-4">
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-slate-400 hover:text-white transition-colors"
-                      >
-                        <Github size={20} />
-                      </a>
-                    )}
-                    {project.demoUrl && (
-                      <a
-                        href={project.demoUrl}
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-slate-400 hover:text-white transition-colors"
-                      >
-                        <ExternalLink size={20} />
-                      </a>
-                    )}
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2 text-[#FBE18D] transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-slate-400 text-sm mb-4">{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.techStack.map((tech) => (
+                        <span key={tech} className="text-xs px-2 py-1 border border-[#C69320]/30 text-[#C69320] rounded-full">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-4">
+                      <ExternalLink className="text-[#FBE18D]" size={18} />
+                      <span className="text-xs text-slate-500 font-mono">LIVE DEMO</span>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -1105,48 +1142,43 @@ export default function PortfolioPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.3 }}
             variants={fadeInUp}
-            className="flex flex-col items-center mb-16"
+            className="relative z-10 flex flex-col items-center mb-12"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-6">
               <User size={14} /> About
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-center">
-              About <span className="gradient-text">Me</span>
-            </h2>
-            <p className="text-slate-400 mt-4 max-w-xl text-center">
-              Passionate developer crafting digital experiences with precision and creativity.
-            </p>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white text-center">About <span className="gradient-text">Me</span></h2>
+            <p className="text-xl text-[#FBE18D] mb-6 font-medium text-center max-w-2xl">Passionate developer crafting digital experiences with precision and creativity</p>
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="space-y-6"
+            <div
+              className="space-y-6 relative z-10"
             >
-              <motion.div variants={fadeInUp} className="glass-panel p-8 rounded-2xl">
-                <h3 className="text-2xl font-bold mb-4">Joseph Espinoza</h3>
-                <p className="text-slate-300 mb-4">
-                  Full-stack developer specializing in modern web technologies and AI-powered solutions.
-                  With a passion for creating exceptional user experiences and robust backend systems.
-                </p>
-                <p className="text-slate-300">
-                  Beyond the code, I am a digital architect obsessed with precision. My journey started not just with syntax,
-                  but with a desire to build systems that feel <span className="text-white font-medium border-b border-[#FBE18D]/30 pb-0.5">alive</span>.
-                </p>
-                <p className="text-slate-300 mt-4">
-                  I blend technical rigor with an artist's eye, ensuring every pixel serves a purpose and every function runs with elegant efficiency.
-                  My philosophy is simple: <span className="text-[#FBE18D]/90">Performance is the ultimate luxury.</span>
-                </p>
+              <motion.div variants={fadeInUp} className="liquid-gold-card">
+                <div className="liquid-gold-content">
+                  <h3 className="text-2xl font-bold mb-4">Joseph Espinoza</h3>
+                  <p className="text-slate-300 mb-4">
+                    Full-stack developer specializing in modern web technologies and AI-powered solutions.
+                    With a passion for creating exceptional user experiences and robust backend systems.
+                  </p>
+                  <p className="text-slate-300">
+                    Beyond the code, I am a digital architect obsessed with precision. My journey started not just with syntax,
+                    but with a desire to build systems that feel <span className="text-white font-medium border-b border-[#FBE18D]/30 pb-0.5">alive</span>.
+                  </p>
+                  <p className="text-slate-300 mt-4">
+                    I blend technical rigor with an artist's eye, ensuring every pixel serves a purpose and every function runs with elegant efficiency.
+                    My philosophy is simple: <span className="text-[#FBE18D]/90">Performance is the ultimate luxury.</span>
+                  </p>
+                </div>
               </motion.div>
 
               <motion.div
                 className="grid grid-cols-2 gap-4"
-                variants={staggerContainer}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
               >
                 {[
                   { icon: Briefcase, title: "50+ Projects", subtitle: "Delivered Globally" },
@@ -1157,25 +1189,26 @@ export default function PortfolioPage() {
                   <motion.div
                     key={index}
                     variants={fadeInUp}
-                    className="glass-panel p-4 rounded-xl border border-white/5 hover:border-[#FBE18D]/20 transition-colors flex items-center gap-4 group"
+                    className="liquid-gold-card"
                   >
-                    <div className="bg-[#FBE18D]/10 p-3 rounded-lg text-[#FBE18D] group-hover:scale-110 transition-transform duration-300">
-                      <item.icon size={20} />
-                    </div>
-                    <div>
-                      <div className="text-white font-bold text-sm">{item.title}</div>
-                      <div className="text-xs text-slate-500 group-hover:text-slate-400 transition-colors">{item.subtitle}</div>
+                    <div className="liquid-gold-content !p-4 flex-row items-center gap-4">
+                      <div className="bg-[#FBE18D]/10 p-3 rounded-lg text-[#FBE18D] group-hover:scale-110 transition-transform duration-300">
+                        <item.icon size={20} />
+                      </div>
+                      <div>
+                        <div className="text-white font-bold text-sm">{item.title}</div>
+                        <div className="text-xs text-slate-500 group-hover:text-slate-400 transition-colors">{item.subtitle}</div>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </motion.div>
-            </motion.div>
+            </div>
 
             <motion.div
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 1 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              variants={fadeInUp}
               className="relative"
             >
               <div className="glass-panel p-8 rounded-2xl">
@@ -1186,12 +1219,8 @@ export default function PortfolioPage() {
             </motion.div>
           </div>
 
-          <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
+          <div
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 relative z-10"
           >
             {[
               { label: 'Type Safety', val: '100%', color: 'text-[#FBE18D]' },
@@ -1208,7 +1237,7 @@ export default function PortfolioPage() {
                 <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">{stat.label}</div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -1220,149 +1249,128 @@ export default function PortfolioPage() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="flex flex-col items-center mb-16"
+            className="flex flex-col items-center mb-16 relative z-10"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4 shadow-[0_0_20px_rgba(198,147,32,0.2)]">
               <BookOpen size={14} /> Technical Writing
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-center">
+            <h2 className="text-4xl md:text-5xl font-black text-center text-white tracking-tight">
               Latest <span className="gradient-text">Insights</span>
             </h2>
-            <p className="text-slate-400 mt-4 max-w-xl text-center">
+            <p className="text-slate-400 mt-4 max-w-xl text-center text-lg">
               Thoughts on software architecture, modern frontend development, and the future of the web.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "The Future of AI in Web Development",
-                excerpt: "Exploring how artificial intelligence is reshaping the way we build and interact with web applications.",
-                date: "Dec 15, 2024",
-                readTime: "5 min read",
-                tags: ["AI", "Web Dev"]
-              },
-              {
-                title: "Mastering React Server Components",
-                excerpt: "Deep dive into the new paradigm of React Server Components and their impact on performance.",
-                date: "Dec 10, 2024",
-                readTime: "8 min read",
-                tags: ["React", "Performance"]
-              },
-              {
-                title: "Building Scalable Microservices",
-                excerpt: "Best practices for designing and implementing microservices architecture in modern applications.",
-                date: "Dec 5, 2024",
-                readTime: "6 min read",
-                tags: ["Architecture", "Backend"]
-              }
-            ].map((post, index) => (
+            {blogPosts.map((post, index) => (
               <motion.article
-                key={index}
+                key={post.id}
+                variants={fadeInUp}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={fadeInUp}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="glass-panel p-6 rounded-2xl flex flex-col h-full hover:border-[#FBE18D]/50 transition-colors group cursor-pointer"
+                className="liquid-gold-card cursor-pointer group"
               >
-                <div className="flex items-center gap-4 text-xs text-slate-500 mb-4">
-                  <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
-                  <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
-                </div>
-
-                <h3 className="text-xl font-bold mb-3 group-hover:text-[#FBE18D] transition-colors">{post.title}</h3>
-
-                <p className="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">
-                  {post.excerpt}
-                </p>
-
-                <div className="flex items-center justify-between mt-auto">
-                  <div className="flex gap-2">
-                    {post.tags.map(tag => (
-                      <span key={tag} className="text-[10px] uppercase tracking-wider px-2 py-1 rounded bg-white/5 text-slate-400">
-                        {tag}
-                      </span>
-                    ))}
+                <div className="liquid-gold-content h-full">
+                  <div className="flex items-center gap-4 text-xs text-slate-500 mb-4">
+                    <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
+                    <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
                   </div>
-                  <button className="text-[#FBE18D] hover:text-white transition-colors">
-                    <ArrowRight size={20} />
-                  </button>
+
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-[#FBE18D] transition-colors">{post.title}</h3>
+
+                  <p className="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">
+                    {post.excerpt}
+                  </p>
+
+                  <div className="flex items-center justify-between mt-auto">
+                    <div className="flex gap-2">
+                      {post.tags.map(tag => (
+                        <span key={tag} className="text-[10px] uppercase tracking-wider px-2 py-1 border border-[#C69320]/30 text-[#C69320] rounded">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <button className="text-[#FBE18D] hover:text-white transition-colors">
+                      <ArrowRight size={20} />
+                    </button>
+                  </div>
                 </div>
               </motion.article>
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Get In Touch */}
-      <section id="contact" className="py-20 relative">
+      < section id="contact" className="py-20 relative" >
         <div className="container mx-auto px-6 max-w-4xl">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="glass-panel p-8 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden"
+          <div
+            className="liquid-gold-card relative z-10"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FBE18D]/10 blur-[80px] -z-10"></div>
+            <div className="liquid-gold-content p-8 md:p-12">
+              <div className="text-center mb-12">
+                <h2 className="text-4xl md:text-5xl font-black mb-4 text-white">Get In <span className="gradient-text">Touch</span></h2>
+                <p className="text-slate-400 text-lg">Have a project in mind? Let's build something extraordinary together.</p>
+              </div>
 
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In <span className="gradient-text">Touch</span></h2>
-              <p className="text-slate-400">Have a project in mind? Let's build something extraordinary together.</p>
-            </div>
+              <form className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-300">Tu Nombre</label>
+                    <input
+                      type="text"
+                      className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors"
+                      placeholder="Ej: Juan Pérez"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-300">Tu Email</label>
+                    <input
+                      type="email"
+                      className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors"
+                      placeholder="juan@tuempresa.com"
+                    />
+                  </div>
+                </div>
 
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-300">Name</label>
-                  <input
-                    type="text"
-                    className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D]/50 transition-colors"
-                    placeholder="John Doe"
+                  <label className="text-sm font-bold text-slate-300">¿Qué necesitas?</label>
+                  <textarea
+                    rows={5}
+                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors resize-none"
+                    placeholder="Cuéntame sobre tu proyecto: tipo de negocio, funcionalidades que necesitas, timeline estimado..."
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-300">Email</label>
-                  <input
-                    type="email"
-                    className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D]/50 transition-colors"
-                    placeholder="john@example.com"
-                  />
+
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                  <p className="text-sm text-slate-400 flex items-center gap-2">
+                    <CheckCircle className="text-[#FBE18D]" size={16} />
+                    Respuesta en menos de 2 horas
+                  </p>
+                  <button
+                    type="submit"
+                    className="px-10 py-4 bg-gradient-to-r from-[#C69320] to-[#FBE18D] hover:brightness-110 text-black rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-[#C69320]/40 text-lg group"
+                  >
+                    🚀 Recibir Cotización Gratis
+                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
                 </div>
-              </div>
+              </form>
 
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-300">Message</label>
-                <textarea
-                  rows={5}
-                  className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D]/50 transition-colors resize-none"
-                  placeholder="Tell me about your project..."
-                />
+              <div className="mt-12 flex justify-center gap-8 border-t border-[#C69320]/20 pt-8">
+                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Github size={24} /></a>
+                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Linkedin size={24} /></a>
+                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Twitter size={24} /></a>
               </div>
-
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="px-8 py-4 bg-gradient-to-r from-[#C69320] to-[#FBE18D] hover:brightness-110 text-black rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-[#C69320]/40"
-                >
-                  Send Message <Send size={18} />
-                </button>
-              </div>
-            </form>
-
-            <div className="mt-12 flex justify-center gap-8 border-t border-white/10 pt-8">
-              <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={24} /></a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={24} /></a>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="py-12 relative z-10 border-t border-white/5 bg-slate-950 overflow-hidden">
-        <FooterParticles />
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">

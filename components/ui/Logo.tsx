@@ -18,7 +18,7 @@ export default function Logo({ isDark = true, size = 64, className = '' }: LogoP
             width={size}
             height={size}
             className={`drop-shadow-[0_0_20px_rgba(198,147,32,0.6)] rounded-sm ${className}`}
-            style={{ width: 'auto', height: 'auto', maxHeight: `${size}px` }}
+            style={{ width: `${size}px`, height: 'auto' }}
             priority
         />
     );
