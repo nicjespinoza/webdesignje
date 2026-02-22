@@ -104,6 +104,7 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid #C69320 !important;
+  /* Dorado por defecto */
   box-shadow: 0 0 20px rgba(198, 147, 32, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -112,6 +113,9 @@ body {
 .premium-border:hover {
   box-shadow: 0 0 30px rgba(198, 147, 32, 0.25);
   border-color: #FBE18D !important;
+  border-width: 2px !important;
+  /* Tamaño 2 al pasar el mouse */
+  transform: translateY(-5px);
 }
 
 /* Button Styling: Liquid black background, gold on click */

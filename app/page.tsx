@@ -629,7 +629,7 @@ export default function PortfolioPage() {
           variants={fadeInUp}
           className="flex flex-col items-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
             <Layers size={14} /> Technology
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -735,7 +735,7 @@ export default function PortfolioPage() {
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <Star size={14} /> Premium Services
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -823,7 +823,7 @@ export default function PortfolioPage() {
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <Cpu size={14} /> AI Revolution
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -951,7 +951,7 @@ export default function PortfolioPage() {
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <DatabaseZap size={14} /> Architecture
             </div>
             <h3 className="text-3xl md:text-4xl font-bold text-center">
@@ -1032,7 +1032,7 @@ export default function PortfolioPage() {
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <Code2 size={14} /> Portfolio
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -1109,7 +1109,7 @@ export default function PortfolioPage() {
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <User size={14} /> About
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -1222,7 +1222,7 @@ export default function PortfolioPage() {
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <BookOpen size={14} /> Technical Writing
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
