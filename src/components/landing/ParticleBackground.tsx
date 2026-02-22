@@ -36,9 +36,13 @@ const ParticleBackground: React.FC = () => {
         this.size = Math.random() * 2 + 0.5;
         this.speedX = Math.random() * 1 - 0.5;
         this.speedY = Math.random() * 1 - 0.5;
-        
-        // Brand colors for particles
-        const colors = ['rgba(99, 102, 241, 0.5)', 'rgba(34, 211, 238, 0.5)', 'rgba(251, 191, 36, 0.3)'];
+
+        // Gold brand colors for particles
+        const colors = [
+          'rgba(198, 147, 32, 0.4)', // Primary Gold
+          'rgba(251, 225, 141, 0.3)', // Bright Gold
+          'rgba(255, 184, 0, 0.25)'   // Pure Gold
+        ];
         this.color = colors[Math.floor(Math.random() * colors.length)];
       }
 
@@ -57,14 +61,14 @@ const ParticleBackground: React.FC = () => {
         const maxDistance = 150;
 
         if (distance < maxDistance) {
-            const forceDirectionX = dx / distance;
-            const forceDirectionY = dy / distance;
-            const force = (maxDistance - distance) / maxDistance;
-            const directionX = forceDirectionX * force * 3; 
-            const directionY = forceDirectionY * force * 3;
+          const forceDirectionX = dx / distance;
+          const forceDirectionY = dy / distance;
+          const force = (maxDistance - distance) / maxDistance;
+          const directionX = forceDirectionX * force * 3;
+          const directionY = forceDirectionY * force * 3;
 
-            this.x -= directionX;
-            this.y -= directionY;
+          this.x -= directionX;
+          this.y -= directionY;
         }
       }
 
@@ -88,11 +92,11 @@ const ParticleBackground: React.FC = () => {
     const resizeCanvas = () => {
       const parent = canvas.parentElement;
       if (parent) {
-          canvas.width = parent.clientWidth;
-          canvas.height = parent.clientHeight;
+        canvas.width = parent.clientWidth;
+        canvas.height = parent.clientHeight;
       } else {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
       }
       init();
     };

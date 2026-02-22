@@ -7,14 +7,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, Variants } from 'framer-motion';
-import { 
-  Github, 
-  ExternalLink, 
-  Menu, 
-  X, 
-  Sun, 
-  Moon, 
-  Code2, 
+import { useRouter } from 'next/navigation';
+import {
+  Github,
+  ExternalLink,
+  Menu,
+  X,
+  Sun,
+  Moon,
+  Code2,
   ChevronDown,
   ArrowRight,
   Calendar,
@@ -68,12 +69,13 @@ import ParticleBackground from '@/src/components/landing/ParticleBackground';
 import FooterParticles from '@/src/components/landing/FooterParticles';
 import Scene3D from '@/src/components/landing/Scene3D';
 import { Project, Language, BlogPost, ContactFormValues } from '@/src/components/landing/types';
+import Logo from '../components/ui/Logo';
 
 // --- Animation Variants ---
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.6, ease: "easeOut" }
   }
@@ -92,8 +94,8 @@ const staggerContainer: Variants = {
 
 const scaleIn: Variants = {
   hidden: { opacity: 0, scale: 0.9 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     scale: 1,
     transition: { duration: 0.5, ease: "easeOut" }
   }
@@ -104,192 +106,192 @@ const categories = [
   {
     title: "Frontend Core",
     items: [
-      { 
-          name: 'React 19', 
-          icon: Atom, 
-          color: '#61DAFB', 
-          desc: 'Component Architecture',
-          url: 'https://react.dev',
-          details: 'The library for web and native user interfaces. v19 introduces Actions, useFormStatus, and optimistic updates.'
+      {
+        name: 'React 19',
+        icon: Atom,
+        color: '#61DAFB',
+        desc: 'Component Architecture',
+        url: 'https://react.dev',
+        details: 'The library for web and native user interfaces. v19 introduces Actions, useFormStatus, and optimistic updates.'
       },
-      { 
-          name: 'Next.js 15', 
-          icon: Blocks, 
-          color: '#FFFFFF', 
-          desc: 'App Router & Server Actions', 
-          url: 'https://nextjs.org',
-          details: 'The React Framework for production. Features hybrid static & server rendering, smart bundling, and route pre-fetching.'
+      {
+        name: 'Next.js 15',
+        icon: Blocks,
+        color: '#FFFFFF',
+        desc: 'App Router & Server Actions',
+        url: 'https://nextjs.org',
+        details: 'The React Framework for production. Features hybrid static & server rendering, smart bundling, and route pre-fetching.'
       },
-      { 
-          name: 'Vite', 
-          icon: Zap, 
-          color: '#646CFF', // Brand Purple
-          desc: 'Next Gen Tooling',
-          url: 'https://vitejs.dev',
-          details: 'Get ready for a development environment that can finally keep up with you. Lightning fast HMR and optimized builds.'
+      {
+        name: 'Vite',
+        icon: Zap,
+        color: '#646CFF', // Brand Purple
+        desc: 'Next Gen Tooling',
+        url: 'https://vitejs.dev',
+        details: 'Get ready for a development environment that can finally keep up with you. Lightning fast HMR and optimized builds.'
       },
-      { 
-          name: 'React Three Fiber', 
-          icon: Box, 
-          color: '#FFFFFF', 
-          desc: 'Declarative 3D Scenes',
-          url: 'https://docs.pmnd.rs/react-three-fiber',
-          details: 'A React renderer for Three.js. Build interactive 3D scenes declaratively with re-usable components.'
+      {
+        name: 'React Three Fiber',
+        icon: Box,
+        color: '#FFFFFF',
+        desc: 'Declarative 3D Scenes',
+        url: 'https://docs.pmnd.rs/react-three-fiber',
+        details: 'A React renderer for Three.js. Build interactive 3D scenes declaratively with re-usable components.'
       },
-      { 
-          name: 'Tailwind v4', 
-          icon: Wind, 
-          color: '#38BDF8', 
-          desc: 'Utility-First Design',
-          url: 'https://tailwindcss.com',
-          details: 'A utility-first CSS framework packed with classes that can be composed to build any design, directly in your markup.'
+      {
+        name: 'Tailwind v4',
+        icon: Wind,
+        color: '#38BDF8',
+        desc: 'Utility-First Design',
+        url: 'https://tailwindcss.com',
+        details: 'A utility-first CSS framework packed with classes that can be composed to build any design, directly in your markup.'
       },
-      { 
-          name: 'Framer Motion', 
-          icon: Layers, 
-          color: '#E6007A', 
-          desc: 'Interactive UI',
-          url: 'https://www.framer.com/motion/',
-          details: 'A production-ready motion library for React. Utilize the power of declarative animations and gestures.'
+      {
+        name: 'Framer Motion',
+        icon: Layers,
+        color: '#E6007A',
+        desc: 'Interactive UI',
+        url: 'https://www.framer.com/motion/',
+        details: 'A production-ready motion library for React. Utilize the power of declarative animations and gestures.'
       },
-      { 
-          name: 'PostCSS', 
-          icon: Hash, 
-          color: '#DD3A0A', 
-          desc: 'CSS Transformation',
-          url: 'https://postcss.org',
-          details: 'A tool for transforming CSS with JavaScript. Used for Autoprefixer, nesting, and more.'
+      {
+        name: 'PostCSS',
+        icon: Hash,
+        color: '#DD3A0A',
+        desc: 'CSS Transformation',
+        url: 'https://postcss.org',
+        details: 'A tool for transforming CSS with JavaScript. Used for Autoprefixer, nesting, and more.'
       },
     ]
   },
   {
     title: "Data, Forms & Utils",
     items: [
-      { 
-          name: 'TypeScript', 
-          icon: FileCode, 
-          color: '#3178C6', 
-          desc: 'Strict Type Safety',
-          url: 'https://www.typescriptlang.org',
-          details: 'TypeScript extends JavaScript by adding types. It saves you time catching errors and providing fixes before you run code.'
+      {
+        name: 'TypeScript',
+        icon: FileCode,
+        color: '#3178C6',
+        desc: 'Strict Type Safety',
+        url: 'https://www.typescriptlang.org',
+        details: 'TypeScript extends JavaScript by adding types. It saves you time catching errors and providing fixes before you run code.'
       },
-      { 
-          name: 'React Hook Form', 
-          icon: ClipboardList, 
-          color: '#EC5990', 
-          desc: 'Performant Forms',
-          url: 'https://react-hook-form.com',
-          details: 'Performant, flexible and extensible forms with easy-to-use validation.'
+      {
+        name: 'React Hook Form',
+        icon: ClipboardList,
+        color: '#EC5990',
+        desc: 'Performant Forms',
+        url: 'https://react-hook-form.com',
+        details: 'Performant, flexible and extensible forms with easy-to-use validation.'
       },
-      { 
-          name: 'Zod', 
-          icon: ShieldCheck, 
-          color: '#3E67B1', 
-          desc: 'Schema Validation',
-          url: 'https://zod.dev',
-          details: 'TypeScript-first schema declaration and validation library. The perfect companion for forms and API responses.'
+      {
+        name: 'Zod',
+        icon: ShieldCheck,
+        color: '#3E67B1',
+        desc: 'Schema Validation',
+        url: 'https://zod.dev',
+        details: 'TypeScript-first schema declaration and validation library. The perfect companion for forms and API responses.'
       },
-      { 
-          name: 'Recharts', 
-          icon: BarChart3, 
-          color: '#22B5BF', 
-          desc: 'React Charting Library',
-          url: 'https://recharts.org',
-          details: 'A composable charting library built on React components. Reliable, flexible, and easy to customize.'
+      {
+        name: 'Recharts',
+        icon: BarChart3,
+        color: '#22B5BF',
+        desc: 'React Charting Library',
+        url: 'https://recharts.org',
+        details: 'A composable charting library built on React components. Reliable, flexible, and easy to customize.'
       },
-      { 
-          name: 'jsPDF', 
-          icon: FileText, 
-          color: '#E03534', 
-          desc: 'Client-side PDF',
-          url: 'https://github.com/parallax/jsPDF',
-          details: 'A library to generate PDFs in client-side JavaScript. Create reports, invoices, and tickets dynamically.'
+      {
+        name: 'jsPDF',
+        icon: FileText,
+        color: '#E03534',
+        desc: 'Client-side PDF',
+        url: 'https://github.com/parallax/jsPDF',
+        details: 'A library to generate PDFs in client-side JavaScript. Create reports, invoices, and tickets dynamically.'
       },
-      { 
-          name: 'tsconfig.json', 
-          icon: FileCog, 
-          color: '#3178C6', 
-          desc: 'TS Configuration',
-          url: 'https://www.typescriptlang.org/tsconfig',
-          details: 'The root of a TypeScript project. Configures strictness, paths, and compiler options for robust code.'
+      {
+        name: 'tsconfig.json',
+        icon: FileCog,
+        color: '#3178C6',
+        desc: 'TS Configuration',
+        url: 'https://www.typescriptlang.org/tsconfig',
+        details: 'The root of a TypeScript project. Configures strictness, paths, and compiler options for robust code.'
       },
-      { 
-          name: 'TanStack Query', 
-          icon: Activity, 
-          color: '#FF4154', 
-          desc: 'Async State',
-          url: 'https://tanstack.com/query',
-          details: 'Powerful asynchronous state management for TS/JS. Handles caching, background updates and stale data out of the box.'
+      {
+        name: 'TanStack Query',
+        icon: Activity,
+        color: '#FF4154',
+        desc: 'Async State',
+        url: 'https://tanstack.com/query',
+        details: 'Powerful asynchronous state management for TS/JS. Handles caching, background updates and stale data out of the box.'
       }
     ]
   },
   {
     title: "Backend & DevOps",
     items: [
-      { 
-          name: 'Node.js', 
-          icon: Server, 
-          color: '#339933', 
-          desc: 'Edge Runtime',
-          url: 'https://nodejs.org',
-          details: 'JavaScript runtime built on Chrome\'s V8 JavaScript engine. Efficient, lightweight, and perfect for real-time apps.'
+      {
+        name: 'Node.js',
+        icon: Server,
+        color: '#339933',
+        desc: 'Edge Runtime',
+        url: 'https://nodejs.org',
+        details: 'JavaScript runtime built on Chrome\'s V8 JavaScript engine. Efficient, lightweight, and perfect for real-time apps.'
       },
-      { 
-          name: 'Supabase', 
-          icon: DatabaseZap, 
-          color: '#3ECF8E', 
-          desc: 'Postgres & Auth',
-          url: 'https://supabase.com',
-          details: 'The open source Firebase alternative. Start your project with a Postgres database, Authentication, instant APIs, and Realtime subscriptions.'
+      {
+        name: 'Supabase',
+        icon: DatabaseZap,
+        color: '#3ECF8E',
+        desc: 'Postgres & Auth',
+        url: 'https://supabase.com',
+        details: 'The open source Firebase alternative. Start your project with a Postgres database, Authentication, instant APIs, and Realtime subscriptions.'
       },
-      { 
-          name: 'Firebase', 
-          icon: Flame, 
-          color: '#FFCA28', 
-          desc: 'App Platform',
-          url: 'https://firebase.google.com',
-          details: 'Backed by Google. Provides authentication, database (Firestore), analytics, and hosting out of the box.'
+      {
+        name: 'Firebase',
+        icon: Flame,
+        color: '#FFCA28',
+        desc: 'App Platform',
+        url: 'https://firebase.google.com',
+        details: 'Backed by Google. Provides authentication, database (Firestore), analytics, and hosting out of the box.'
       },
-      { 
-          name: 'PostgreSQL', 
-          icon: Database, 
-          color: '#336791', // Official Blue
-          desc: 'Advanced Relational DB',
-          url: 'https://www.postgresql.org',
-          details: 'The World\'s Most Advanced Open Source Relational Database. Robust, reliable, and performance-driven.'
+      {
+        name: 'PostgreSQL',
+        icon: Database,
+        color: '#336791', // Official Blue
+        desc: 'Advanced Relational DB',
+        url: 'https://www.postgresql.org',
+        details: 'The World\'s Most Advanced Open Source Relational Database. Robust, reliable, and performance-driven.'
       },
-      { 
-          name: 'MySQL', 
-          icon: Table, 
-          color: '#00758F', // Official Blue
-          desc: 'Relational Database',
-          url: 'https://www.mysql.com',
-          details: 'The world\'s most popular open source database. Reliable, scalable, and fast.'
+      {
+        name: 'MySQL',
+        icon: Table,
+        color: '#00758F', // Official Blue
+        desc: 'Relational Database',
+        url: 'https://www.mysql.com',
+        details: 'The world\'s most popular open source database. Reliable, scalable, and fast.'
       },
-      { 
-          name: 'Docker', 
-          icon: Container, 
-          color: '#2496ED', 
-          desc: 'Containerization',
-          url: 'https://www.docker.com',
-          details: 'A platform designed to help developers build, share, and run modern applications in isolated environments.'
+      {
+        name: 'Docker',
+        icon: Container,
+        color: '#2496ED',
+        desc: 'Containerization',
+        url: 'https://www.docker.com',
+        details: 'A platform designed to help developers build, share, and run modern applications in isolated environments.'
       },
-      { 
-          name: 'npm / pnpm', 
-          icon: Package, 
-          color: '#CB3837', 
-          desc: 'Package Management',
-          url: 'https://pnpm.io',
-          details: 'Fast, disk space efficient package manager. Installs packages into a shared store and links them to projects.'
+      {
+        name: 'npm / pnpm',
+        icon: Package,
+        color: '#CB3837',
+        desc: 'Package Management',
+        url: 'https://pnpm.io',
+        details: 'Fast, disk space efficient package manager. Installs packages into a shared store and links them to projects.'
       }
     ]
   }
 ];
 
 const proficiency = [
-  { name: "Frontend Ecosystem (React, Next.js, Vite)", level: 98, color: "from-brand-cyan to-brand-indigo" },
-  { name: "Backend Infrastructure (Node.js, Postgres, AWS)", level: 92, color: "from-brand-purple to-brand-indigo" },
-  { name: "AI Engineering (LLMs, Agents, RAG)", level: 85, color: "from-brand-cyan to-green-400" },
+  { name: "Frontend Ecosystem (React, Next.js, Vite)", level: 98, color: "from-[#C69320] to-yellow-500" },
+  { name: "Backend Infrastructure (Node.js, Postgres, AWS)", level: 92, color: "from-[#C69320] to-yellow-500" },
+  { name: "AI Engineering (LLMs, Agents, RAG)", level: 85, color: "from-[#C69320] to-green-400" },
 ];
 
 const projects: Project[] = [
@@ -299,11 +301,11 @@ const projects: Project[] = [
     description: 'Comprehensive medical record system for multi-specialty clinics. Features real-time sync, interactive 3D anatomy visualization, and dynamic PDF report generation.',
     longDescription: "A production-grade SaaS platform built for scale. It allows clinics to manage patient data securely with HIPAA-compliant architecture. The standout feature is the 3D interactive human model which doctors can rotate and annotate to visualize patient injuries or surgical sites. The system also handles appointment scheduling, billing, and pharmacy inventory.",
     features: [
-        'Real-time data synchronization with Firebase Firestore',
-        'Interactive 3D Anatomy using React Three Fiber',
-        'Role-Based Access Control (RBAC) for Doctors/Staff',
-        'Automated PDF prescription & report generation',
-        'Secure Patient Portal'
+      'Real-time data synchronization with Firebase Firestore',
+      'Interactive 3D Anatomy using React Three Fiber',
+      'Role-Based Access Control (RBAC) for Doctors/Staff',
+      'Automated PDF prescription & report generation',
+      'Secure Patient Portal'
     ],
     techStack: ['React 19', 'Firebase', 'Three.js', 'jsPDF', 'Zod'],
     imageUrl: 'https://picsum.photos/seed/medtech/600/400',
@@ -317,11 +319,11 @@ const projects: Project[] = [
     description: 'High-performance admin panel with complex data visualization, inventory management, and real-time analytics using Server Actions.',
     longDescription: "An analytical powerhouse for e-commerce managers. This dashboard aggregates data from multiple sales channels into a unified view. It features optimistic UI updates for instant feedback and heavy data caching for lightning-fast navigation. The backend processes millions of events daily to provide actionable insights.",
     features: [
-        'Server Actions for mutation without API endpoints',
-        'Complex Recharts visualizations with drill-down capability',
-        'Optimistic UI updates for inventory management',
-        'Dark mode first design system',
-        'Automated daily revenue reports'
+      'Server Actions for mutation without API endpoints',
+      'Complex Recharts visualizations with drill-down capability',
+      'Optimistic UI updates for inventory management',
+      'Dark mode first design system',
+      'Automated daily revenue reports'
     ],
     techStack: ['TypeScript', 'Tailwind v4', 'Recharts', 'Node.js'],
     imageUrl: 'https://picsum.photos/seed/dashboard/600/400',
@@ -333,11 +335,11 @@ const projects: Project[] = [
     description: 'PWA for fitness tracking with geolocation, offline capabilities, and motion-based activity detection.',
     longDescription: "A mobile-first Progressive Web App that rivals native fitness applications. It uses the Geolocation API and Device Motion API to track runs and workouts, storing data locally in IndexedDB when offline and syncing when connection is restored. Gamification elements keep users engaged.",
     features: [
-        'Offline-first architecture using Service Workers',
-        'Geolocation tracking with map visualization',
-        'PWA installability for native-like experience',
-        'Motion detection for step counting',
-        'Social sharing integration'
+      'Offline-first architecture using Service Workers',
+      'Geolocation tracking with map visualization',
+      'PWA installability for native-like experience',
+      'Motion detection for step counting',
+      'Social sharing integration'
     ],
     techStack: ['React', 'Vite', 'Framer Motion', 'PWA'],
     imageUrl: 'https://picsum.photos/seed/fitness/600/400',
@@ -379,16 +381,16 @@ const contactSchema = z.object({
 });
 
 // --- Components ---
-const Navbar = ({ 
-  isDark, 
-  toggleTheme, 
-  lang, 
-  toggleLang 
-}: { 
-  isDark: boolean; 
-  toggleTheme: () => void; 
-  lang: Language; 
-  toggleLang: () => void; 
+const Navbar = ({
+  isDark,
+  toggleTheme,
+  lang,
+  toggleLang
+}: {
+  isDark: boolean;
+  toggleTheme: () => void;
+  lang: Language;
+  toggleLang: () => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -411,36 +413,37 @@ const Navbar = ({
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-3 shadow-lg backdrop-blur-md' : 'py-6 bg-transparent'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <a href="#" className="flex items-center gap-2 group">
-          <div className="bg-brand-indigo/20 p-2 rounded-lg group-hover:bg-brand-indigo/40 transition-colors">
-            <Code2 className="text-brand-indigo w-6 h-6" />
+        <a href="#" className="flex items-center gap-3 group">
+          <Logo isDark={isDark} size={64} />
+          <div className="leading-none flex flex-col">
+            <span className="text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125">Joseph Espinoza</span>
+            <span className="text-xs font-medium tracking-[0.2em] text-slate-300">Web Design</span>
           </div>
-          <span className="text-xl font-bold tracking-tight">
-            WebDesign<span className="text-brand-indigo">JE</span>
-          </span>
         </a>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a key={link.name} href={link.href} className="relative text-sm font-medium hover:text-brand-cyan transition-colors group">
+            <a key={link.name} href={link.href} className="relative text-sm font-medium hover:text-[#FBE18D] transition-colors group">
               {link.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-cyan transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#FBE18D] transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
-          
+
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
           <button onClick={toggleLang} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors">
             {lang}
           </button>
-          
+
           <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <a href="#contact" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
-            {lang === 'EN' ? "Let's Talk" : 'Contáctame'}
+          <a href="#contact" className="premium-border px-6 py-2.5 rounded-full font-bold hover:scale-105 transition-all text-sm group">
+            <span className="gradient-text group-hover:brightness-125 transition-all">
+              {lang === 'EN' ? "Let's Talk" : 'Contáctame'}
+            </span>
           </a>
         </div>
 
@@ -461,9 +464,9 @@ const Navbar = ({
           >
             <div className="flex flex-col p-6 gap-4">
               {navLinks.map((link) => (
-                <a 
-                  key={link.name} 
-                  href={link.href} 
+                <a
+                  key={link.name}
+                  href={link.href}
                   onClick={() => setIsOpen(false)}
                   className="text-lg font-medium"
                 >
@@ -475,7 +478,7 @@ const Navbar = ({
                   {lang === 'EN' ? 'Español' : 'English'}
                 </button>
                 <button onClick={toggleTheme} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded">
-                  {isDark ? <Sun size={14}/> : <Moon size={14} />} Theme
+                  {isDark ? <Sun size={14} /> : <Moon size={14} />} Theme
                 </button>
               </div>
             </div>
@@ -487,109 +490,102 @@ const Navbar = ({
 };
 
 // --- Sections ---
-const Hero = ({ lang }: { lang: Language }) => {
+const Hero = ({ lang, router }: { lang: Language; router: any }) => {
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      <ParticleBackground />
-      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-        <motion.div
+    <section className="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden bg-transparent pointer-events-none">
+      {/* Fondo absoluto para el 3D total */}
+      <div className="absolute inset-0 z-0 opacity-80 mix-blend-screen overflow-visible pointer-events-none">
+        <Scene3D />
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center mt-12 pointer-events-auto">
+
+        <motion.h1
           initial="hidden"
           animate="visible"
-          variants={staggerContainer}
+          variants={{
+            hidden: { opacity: 1 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.06 } }
+          }}
+          className="text-5xl md:text-7xl lg:text-[5.5rem] font-black leading-tight mb-6 tracking-tight flex justify-center flex-wrap"
         >
-          <motion.div 
-            variants={fadeInUp}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold text-xs font-bold mb-6"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-gold"></span>
-            </span>
-            Available for new projects
-          </motion.div>
-
-          <motion.h1 
-            variants={fadeInUp}
-            className="text-5xl md:text-7xl font-bold leading-tight mb-6"
-          >
-            Joseph Espinoza <br />
-            <span className="gradient-text">Full-Stack & AI Engineer</span>
-          </motion.h1>
-          
-          <motion.p 
-            variants={fadeInUp}
-            className="text-slate-400 text-lg md:text-xl max-w-lg mb-8 leading-relaxed"
-          >
-            {lang === 'EN' 
-              ? "Architecting the web of tomorrow with Next.js 15, AI Agents, and immersive 3D interfaces."
-              : "Arquitectando la web del mañana con Next.js 15, Agentes de IA e interfaces 3D inmersivas."
-            }
-          </motion.p>
-
-          <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
-            <motion.a 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              href="#projects" 
-              className="px-8 py-4 bg-brand-indigo hover:bg-brand-purple rounded-full font-bold text-white shadow-lg shadow-brand-indigo/30 transition-all"
+          {"Full-Stack & AI Engineer".split("").map((char, index) => (
+            <motion.span
+              key={index}
+              variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+              className="gradient-text pb-2 drop-shadow-[0_0_25px_rgba(255,184,0,0.5)]"
             >
-              {lang === 'EN' ? "View Work" : "Ver Proyectos"}
-            </motion.a>
-            <motion.a 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              href="https://github.com/nicjespinoza" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 glass-panel rounded-full font-bold hover:bg-white/10 transition-all flex items-center gap-2"
-            >
-              <Github size={20} />
-              GitHub
-            </motion.a>
-          </motion.div>
+              {char === " " ? "\u00A0" : char}
+            </motion.span>
+          ))}
+        </motion.h1>
 
-          <motion.div variants={fadeInUp} className="mt-12 flex items-center gap-4 text-sm text-slate-500 font-mono">
-            <span>Next.js 15</span>
-            <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
-            <span>AI Agents</span>
-            <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
-            <span>RAG</span>
-            <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
-            <span>Three.js</span>
-          </motion.div>
+        <motion.p
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 1 },
+            visible: { opacity: 1, transition: { delayChildren: 1.8, staggerChildren: 0.03 } }
+          }}
+          className="text-slate-300 font-light text-xl md:text-2xl lg:text-3xl max-w-4xl mb-14 leading-relaxed drop-shadow-lg flex justify-center flex-wrap"
+        >
+          {(lang === 'EN'
+            ? "Architecting the web of tomorrow with Next.js 15, AI Agents, and immersive 3D interfaces."
+            : "Arquitectando la web del mañana con Next.js 15, Agentes de IA e interfaces 3D inmersivas."
+          ).split("").map((char, index) => (
+            <motion.span
+              key={index}
+              variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1 } }}
+              className="inline-block"
+            >
+              {char === " " ? "\u00A0" : char}
+            </motion.span>
+          ))}
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="flex flex-wrap justify-center gap-6 mb-20"
+        >
+          <motion.a
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            href="#projects"
+            className="px-10 py-5 glass-panel border border-[#C69320]/40 text-[#C69320] hover:bg-[#C69320]/15 rounded-full font-bold transition-all shadow-[0_0_30px_rgba(198,147,32,0.25)] text-lg"
+          >
+            {lang === 'EN' ? "View Work" : "Ver Proyectos"}
+          </motion.a>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => router.push('/portal')}
+            className="px-10 py-5 premium-border rounded-full font-bold transition-all flex items-center gap-2 shadow-[0_0_40px_rgba(255,184,0,0.3)] text-lg group hover:scale-105"
+          >
+            <Sparkles size={24} />
+            {lang === 'EN' ? "Access Demo" : "Acceder a Demo"}
+          </motion.button>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="relative hidden lg:block"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-sm md:text-base lg:text-lg text-slate-400 font-mono tracking-[0.2em] uppercase font-bold"
         >
-            <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-brand-indigo/20 rounded-full blur-[100px] animate-pulse"></div>
-            <Scene3D />
-            
-            {/* Floating Tech Icons Decor */}
-            <motion.div 
-              animate={{ y: [0, -15, 0] }} 
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-10 left-10 p-4 glass-panel rounded-2xl"
-            >
-              <Bot className="text-brand-cyan w-8 h-8" />
-            </motion.div>
-            <motion.div 
-              animate={{ y: [0, 20, 0] }} 
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-20 right-10 p-4 glass-panel rounded-2xl"
-            >
-              <Brain className="text-brand-purple w-8 h-8" />
-            </motion.div>
-            <motion.div 
-              animate={{ y: [0, -10, 0] }} 
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="absolute top-1/2 right-0 p-3 glass-panel rounded-xl"
-            >
-              <Blocks className="text-brand-gold w-6 h-6" />
-            </motion.div>
+          <span className="hover:text-[#FBE18D] transition-colors">Next.js</span>
+          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
+          <span className="hover:text-[#FBE18D] transition-colors">React.js</span>
+          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
+          <span className="hover:text-[#FBE18D] transition-colors">Node.js</span>
+          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
+          <span className="hover:text-[#FBE18D] transition-colors">Tailwind CSS</span>
+          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
+          <span className="hover:text-[#FBE18D] transition-colors">JavaScript</span>
+          <span className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full drop-shadow-[0_0_8px_rgba(255,184,0,1)]"></span>
+          <span className="hover:text-[#FBE18D] transition-colors">AI Agents</span>
         </motion.div>
       </div>
     </section>
@@ -598,6 +594,7 @@ const Hero = ({ lang }: { lang: Language }) => {
 
 // Main App Component
 export default function PortfolioPage() {
+  const router = useRouter();
   const [isDark, setIsDark] = useState(true);
   const [lang, setLang] = useState<Language>('ES');
 
@@ -605,34 +602,34 @@ export default function PortfolioPage() {
   const toggleLang = () => setLang(lang === 'ES' ? 'EN' : 'ES');
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-transparent text-white overflow-x-hidden">
       <style jsx>{`
         .glass-panel {
           background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(217, 119, 6, 0.2);
+          box-shadow: 0 0 30px rgba(217, 119, 6, 0.1);
         }
         .gradient-text {
-          background: linear-gradient(to right, #818cf8, #22d3ee, #fbbf24);
+          background: linear-gradient(to right, #C69320, #FBE18D, #C69320);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
       `}</style>
 
       <Navbar isDark={isDark} toggleTheme={toggleTheme} lang={lang} toggleLang={toggleLang} />
-      <Hero lang={lang} />
-      
+      <Hero lang={lang} router={router} />
+
       {/* 2026 Production Stack */}
       <section id="stack" className="py-20 container mx-auto px-6">
-        <motion.div 
+        <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
           className="flex flex-col items-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan text-xs font-bold mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
             <Layers size={14} /> Technology
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -645,13 +642,13 @@ export default function PortfolioPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {categories.map((category, categoryIndex) => (
-            <motion.div 
+            <motion.div
               key={category.title}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={staggerContainer}
-              className="glass-panel p-6 rounded-2xl"
+              className="premium-border p-6 rounded-2xl gold-liquid"
             >
               <motion.h3 variants={fadeInUp} className="text-xl font-bold text-slate-200 mb-6">
                 {category.title}
@@ -667,14 +664,14 @@ export default function PortfolioPage() {
                     whileHover={{ x: 5 }}
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-all group"
                   >
-                    <div 
+                    <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center text-white flex-shrink-0"
                       style={{ backgroundColor: item.color }}
                     >
                       <item.icon size={16} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-white text-sm group-hover:text-brand-cyan transition-colors truncate">
+                      <h4 className="font-bold text-white text-sm group-hover:text-[#FBE18D] transition-colors truncate">
                         {item.name}
                       </h4>
                       <p className="text-xs text-slate-400 truncate">{item.desc}</p>
@@ -687,19 +684,19 @@ export default function PortfolioPage() {
         </div>
 
         {/* Proficiency Metrics */}
-        <motion.div 
+        <motion.div
           className="mt-12 mb-8"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
         >
-          <motion.div variants={fadeInUp} className="glass-panel p-6 rounded-2xl max-w-2xl mx-auto">
+          <motion.div variants={fadeInUp} className="premium-border p-6 rounded-2xl max-w-2xl mx-auto gold-liquid">
             <motion.h3 variants={fadeInUp} className="text-lg font-bold text-center mb-6 flex items-center justify-center gap-2">
-              <Activity className="text-brand-gold" size={18} />
+              <Activity className="text-[#FBE18D]" size={18} />
               <span className="text-white">Proficiency Metrics</span>
             </motion.h3>
-            
+
             <div className="space-y-4">
               {proficiency.map((skill, index) => (
                 <motion.div key={skill.name} variants={fadeInUp}>
@@ -708,10 +705,10 @@ export default function PortfolioPage() {
                     <span className="text-white text-xs">{skill.level}%</span>
                   </div>
                   <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-                    <motion.div 
+                    <motion.div
                       variants={{
                         hidden: { width: 0 },
-                        visible: { 
+                        visible: {
                           width: `${skill.level}%`,
                           transition: { duration: 1.2, ease: "easeOut", delay: 0.2 }
                         }
@@ -731,14 +728,14 @@ export default function PortfolioPage() {
       {/* Premium Services */}
       <section id="services" className="py-20 relative">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <Star size={14} /> Premium Services
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -749,7 +746,7 @@ export default function PortfolioPage() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             initial="hidden"
             whileInView="visible"
@@ -763,7 +760,7 @@ export default function PortfolioPage() {
                 description: "Aplicaciones web modernas y escalables con las últimas tecnologías del mercado.",
                 features: [
                   "React, Next.js y TypeScript",
-                  "Diseño responsive y UX/UI optimizada", 
+                  "Diseño responsive y UX/UI optimizada",
                   "Integración con APIs y bases de datos",
                   "SEO y rendimiento optimizado"
                 ]
@@ -795,9 +792,9 @@ export default function PortfolioPage() {
                 key={index}
                 variants={fadeInUp}
                 whileHover={{ y: -5 }}
-                className="glass-panel p-8 rounded-2xl hover:border-brand-gold/30 transition-all group"
+                className="premium-border p-8 rounded-2xl transition-all group gold-liquid"
               >
-                <div className="bg-brand-gold/10 p-3 rounded-xl text-brand-gold w-fit mb-6 group-hover:scale-110 transition-transform">
+                <div className="bg-[#FBE18D]/10 p-3 rounded-xl text-[#FBE18D] w-fit mb-6 group-hover:scale-110 transition-transform">
                   <service.icon size={24} />
                 </div>
                 <h3 className="text-xl font-bold mb-4">{service.title}</h3>
@@ -805,7 +802,7 @@ export default function PortfolioPage() {
                 <ul className="space-y-2">
                   {service.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-slate-300">
-                      <div className="w-1.5 h-1.5 bg-brand-gold rounded-full"></div>
+                      <div className="w-1.5 h-1.5 bg-[#FBE18D] rounded-full"></div>
                       {feature}
                     </li>
                   ))}
@@ -819,14 +816,14 @@ export default function PortfolioPage() {
       {/* The Age of AI Agents */}
       <section id="ai" className="py-20 relative">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-purple/30 bg-brand-purple/10 text-brand-purple text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <Cpu size={14} /> AI Revolution
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -870,9 +867,9 @@ export default function PortfolioPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="glass-panel p-6 rounded-2xl text-center hover:border-brand-purple/50 transition-all"
+                className="premium-border p-6 rounded-2xl text-center transition-all gold-liquid"
               >
-                <div className="bg-brand-purple/10 p-3 rounded-xl text-brand-purple w-fit mx-auto mb-4">
+                <div className="bg-[#FBE18D]/10 p-3 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
                   <skill.icon size={24} />
                 </div>
                 <h4 className="font-bold mb-2">{skill.title}</h4>
@@ -883,7 +880,7 @@ export default function PortfolioPage() {
                     whileInView={{ width: `${skill.level}%` }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.2 }}
-                    className="absolute h-full bg-gradient-to-r from-brand-purple to-brand-cyan rounded-full"
+                    className="absolute h-full bg-gradient-to-r from-[#C69320] to-yellow-500 rounded-full"
                   />
                 </div>
                 <span className="text-xs text-slate-400 mt-1">{skill.level}%</span>
@@ -898,11 +895,11 @@ export default function PortfolioPage() {
             variants={fadeInUp}
             className="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-purple/10 blur-[80px] -z-10"></div>
-            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-brand-cyan to-brand-purple bg-clip-text text-transparent">AI-Powered Solutions for Web & Apps</h3>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FBE18D]/10 blur-[80px] -z-10"></div>
+            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-[#C69320] to-yellow-500 bg-clip-text text-transparent">AI-Powered Solutions for Web & Apps</h3>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h4 className="font-bold mb-4 text-brand-cyan flex items-center gap-2">
+                <h4 className="font-bold mb-4 text-[#FBE18D] flex items-center gap-2">
                   <Smartphone size={18} /> Web & App Features
                 </h4>
                 <ul className="space-y-3">
@@ -914,14 +911,14 @@ export default function PortfolioPage() {
                     "Procesamiento automático de formularios y datos"
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <CheckCircle className="text-brand-gold mt-0.5" size={16} />
+                      <CheckCircle className="text-[#FBE18D] mt-0.5" size={16} />
                       <span className="text-sm text-slate-300">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold mb-4 text-brand-purple flex items-center gap-2">
+                <h4 className="font-bold mb-4 text-[#FBE18D] flex items-center gap-2">
                   <Cpu size={18} /> Service Technologies
                 </h4>
                 <ul className="space-y-3">
@@ -933,7 +930,7 @@ export default function PortfolioPage() {
                     "Procesamiento en tiempo real y escalable"
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <CheckCircle className="text-brand-gold mt-0.5" size={16} />
+                      <CheckCircle className="text-[#FBE18D] mt-0.5" size={16} />
                       <span className="text-sm text-slate-300">{item}</span>
                     </li>
                   ))}
@@ -947,14 +944,14 @@ export default function PortfolioPage() {
       {/* Retrieval-Augmented Generation */}
       <section id="rag" className="py-20 relative">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-indigo/30 bg-brand-indigo/10 text-brand-indigo text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <DatabaseZap size={14} /> Architecture
             </div>
             <h3 className="text-3xl md:text-4xl font-bold text-center">
@@ -972,27 +969,27 @@ export default function PortfolioPage() {
             variants={staggerContainer}
             className="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-indigo/10 blur-[80px] -z-10"></div>
-            
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FBE18D]/10 blur-[80px] -z-10"></div>
+
             <div className="grid md:grid-cols-3 gap-8 mb-8">
               <motion.div variants={fadeInUp} className="text-center">
-                <div className="bg-brand-cyan/10 p-4 rounded-xl text-brand-cyan w-fit mx-auto mb-4">
+                <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
                   <Database size={32} />
                 </div>
                 <h4 className="font-bold mb-2">Knowledge Base</h4>
                 <p className="text-sm text-slate-400">Vectorized documents and structured data for efficient retrieval</p>
               </motion.div>
-              
+
               <motion.div variants={fadeInUp} className="text-center">
-                <div className="bg-brand-purple/10 p-4 rounded-xl text-brand-purple w-fit mx-auto mb-4">
+                <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
                   <Search size={32} />
                 </div>
                 <h4 className="font-bold mb-2">Semantic Search</h4>
                 <p className="text-sm text-slate-400">Advanced embedding-based search for relevant context</p>
               </motion.div>
-              
+
               <motion.div variants={fadeInUp} className="text-center">
-                <div className="bg-brand-gold/10 p-4 rounded-xl text-brand-gold w-fit mx-auto mb-4">
+                <div className="bg-[#FBE18D]/10 p-4 rounded-xl text-[#FBE18D] w-fit mx-auto mb-4">
                   <Sparkles size={32} />
                 </div>
                 <h4 className="font-bold mb-2">Generation</h4>
@@ -1009,7 +1006,7 @@ export default function PortfolioPage() {
                     whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="absolute w-3 h-3 bg-brand-cyan rounded-full"
+                    className="absolute w-3 h-3 bg-[#FBE18D] rounded-full"
                     style={{
                       left: `${20 + i * 10}%`,
                       top: `${50 + Math.sin(i) * 30}%`
@@ -1028,14 +1025,14 @@ export default function PortfolioPage() {
       {/* Featured Projects */}
       <section id="projects" className="py-20">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-indigo/30 bg-brand-indigo/10 text-brand-indigo text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <Code2 size={14} /> Portfolio
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -1055,16 +1052,16 @@ export default function PortfolioPage() {
                 viewport={{ once: true }}
                 variants={fadeInUp}
                 whileHover={{ y: -5 }}
-                className="glass-panel rounded-2xl overflow-hidden group cursor-pointer"
+                className="premium-border rounded-2xl overflow-hidden group cursor-pointer gold-liquid"
                 onClick={() => window.open(project.demoUrl || '#', '_blank')}
               >
-                <div className="h-48 bg-gradient-to-br from-brand-indigo/20 to-brand-purple/20 relative overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-[#C69320]/20 to-[#FBE18D]/20 relative overflow-hidden">
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <ExternalLink className="text-white" size={32} />
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-brand-cyan transition-colors">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-[#FBE18D] transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-slate-400 text-sm mb-4">{project.description}</p>
@@ -1077,8 +1074,8 @@ export default function PortfolioPage() {
                   </div>
                   <div className="flex gap-4">
                     {project.githubUrl && (
-                      <a 
-                        href={project.githubUrl} 
+                      <a
+                        href={project.githubUrl}
                         onClick={(e) => e.stopPropagation()}
                         className="text-slate-400 hover:text-white transition-colors"
                       >
@@ -1086,8 +1083,8 @@ export default function PortfolioPage() {
                       </a>
                     )}
                     {project.demoUrl && (
-                      <a 
-                        href={project.demoUrl} 
+                      <a
+                        href={project.demoUrl}
                         onClick={(e) => e.stopPropagation()}
                         className="text-slate-400 hover:text-white transition-colors"
                       >
@@ -1105,14 +1102,14 @@ export default function PortfolioPage() {
       {/* About Me */}
       <section id="about" className="py-20">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <User size={14} /> About
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -1138,16 +1135,16 @@ export default function PortfolioPage() {
                   With a passion for creating exceptional user experiences and robust backend systems.
                 </p>
                 <p className="text-slate-300">
-                  Beyond the code, I am a digital architect obsessed with precision. My journey started not just with syntax, 
-                  but with a desire to build systems that feel <span className="text-white font-medium border-b border-brand-gold/30 pb-0.5">alive</span>. 
+                  Beyond the code, I am a digital architect obsessed with precision. My journey started not just with syntax,
+                  but with a desire to build systems that feel <span className="text-white font-medium border-b border-[#FBE18D]/30 pb-0.5">alive</span>.
                 </p>
                 <p className="text-slate-300 mt-4">
-                  I blend technical rigor with an artist's eye, ensuring every pixel serves a purpose and every function runs with elegant efficiency. 
-                  My philosophy is simple: <span className="text-brand-gold/90">Performance is the ultimate luxury.</span>
+                  I blend technical rigor with an artist's eye, ensuring every pixel serves a purpose and every function runs with elegant efficiency.
+                  My philosophy is simple: <span className="text-[#FBE18D]/90">Performance is the ultimate luxury.</span>
                 </p>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 className="grid grid-cols-2 gap-4"
                 variants={staggerContainer}
               >
@@ -1157,12 +1154,12 @@ export default function PortfolioPage() {
                   { icon: Terminal, title: "Full Stack", subtitle: "End-to-End Control" },
                   { icon: User, title: "Leadership", subtitle: "Team Mentoring" }
                 ].map((item, index) => (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     variants={fadeInUp}
-                    className="glass-panel p-4 rounded-xl border border-white/5 hover:border-brand-gold/20 transition-colors flex items-center gap-4 group"
+                    className="glass-panel p-4 rounded-xl border border-white/5 hover:border-[#FBE18D]/20 transition-colors flex items-center gap-4 group"
                   >
-                    <div className="bg-brand-gold/10 p-3 rounded-lg text-brand-gold group-hover:scale-110 transition-transform duration-300">
+                    <div className="bg-[#FBE18D]/10 p-3 rounded-lg text-[#FBE18D] group-hover:scale-110 transition-transform duration-300">
                       <item.icon size={20} />
                     </div>
                     <div>
@@ -1182,14 +1179,14 @@ export default function PortfolioPage() {
               className="relative"
             >
               <div className="glass-panel p-8 rounded-2xl">
-                <div className="aspect-square bg-gradient-to-br from-brand-indigo/20 to-brand-purple/20 rounded-xl flex items-center justify-center">
-                  <User className="text-brand-cyan" size={128} />
+                <div className="aspect-square bg-gradient-to-br from-[#C69320]/20 to-[#FBE18D]/20 rounded-xl flex items-center justify-center">
+                  <User className="text-[#FBE18D]" size={128} />
                 </div>
               </div>
             </motion.div>
           </div>
 
-          <motion.div 
+          <motion.div
             className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16"
             initial="hidden"
             whileInView="visible"
@@ -1197,14 +1194,14 @@ export default function PortfolioPage() {
             variants={staggerContainer}
           >
             {[
-              { label: 'Type Safety', val: '100%', color: 'text-brand-cyan' },
-              { label: 'Performance', val: '98/100', color: 'text-brand-purple' },
-              { label: 'Uptime', val: '99.9%', color: 'text-brand-indigo' },
-              { label: 'Satisfaction', val: '100%', color: 'text-brand-gold' }
+              { label: 'Type Safety', val: '100%', color: 'text-[#FBE18D]' },
+              { label: 'Performance', val: '98/100', color: 'text-[#FBE18D]' },
+              { label: 'Uptime', val: '99.9%', color: 'text-[#FBE18D]' },
+              { label: 'Satisfaction', val: '100%', color: 'text-[#FBE18D]' }
             ].map((stat, index) => (
-              <motion.div 
+              <motion.div
                 key={stat.label}
-                variants={fadeInUp} 
+                variants={fadeInUp}
                 className="glass-panel p-6 rounded-2xl text-center border border-white/5 hover:border-white/10 transition-all hover:-translate-y-1"
               >
                 <div className={`text-3xl font-bold mb-2 ${stat.color}`}>{stat.val}</div>
@@ -1218,14 +1215,14 @@ export default function PortfolioPage() {
       {/* Latest Insights */}
       <section id="blog" className="py-20">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
             className="flex flex-col items-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FBE18D]/30 bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4">
               <BookOpen size={14} /> Technical Writing
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-center">
@@ -1267,15 +1264,15 @@ export default function PortfolioPage() {
                 viewport={{ once: true }}
                 variants={fadeInUp}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="glass-panel p-6 rounded-2xl flex flex-col h-full hover:border-brand-indigo/50 transition-colors group cursor-pointer"
+                className="glass-panel p-6 rounded-2xl flex flex-col h-full hover:border-[#FBE18D]/50 transition-colors group cursor-pointer"
               >
                 <div className="flex items-center gap-4 text-xs text-slate-500 mb-4">
                   <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
                   <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
                 </div>
 
-                <h3 className="text-xl font-bold mb-3 group-hover:text-brand-cyan transition-colors">{post.title}</h3>
-                
+                <h3 className="text-xl font-bold mb-3 group-hover:text-[#FBE18D] transition-colors">{post.title}</h3>
+
                 <p className="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">
                   {post.excerpt}
                 </p>
@@ -1288,7 +1285,7 @@ export default function PortfolioPage() {
                       </span>
                     ))}
                   </div>
-                  <button className="text-brand-indigo hover:text-white transition-colors">
+                  <button className="text-[#FBE18D] hover:text-white transition-colors">
                     <ArrowRight size={20} />
                   </button>
                 </div>
@@ -1308,8 +1305,8 @@ export default function PortfolioPage() {
             variants={fadeInUp}
             className="glass-panel p-8 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-indigo/10 blur-[80px] -z-10"></div>
-            
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FBE18D]/10 blur-[80px] -z-10"></div>
+
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In <span className="gradient-text">Touch</span></h2>
               <p className="text-slate-400">Have a project in mind? Let's build something extraordinary together.</p>
@@ -1319,17 +1316,17 @@ export default function PortfolioPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-300">Name</label>
-                  <input 
+                  <input
                     type="text"
-                    className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-indigo/50 transition-colors"
+                    className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D]/50 transition-colors"
                     placeholder="John Doe"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-300">Email</label>
-                  <input 
+                  <input
                     type="email"
-                    className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-indigo/50 transition-colors"
+                    className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D]/50 transition-colors"
                     placeholder="john@example.com"
                   />
                 </div>
@@ -1337,17 +1334,17 @@ export default function PortfolioPage() {
 
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-300">Message</label>
-                <textarea 
+                <textarea
                   rows={5}
-                  className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-brand-indigo/50 transition-colors resize-none"
+                  className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D]/50 transition-colors resize-none"
                   placeholder="Tell me about your project..."
                 />
               </div>
 
               <div className="flex justify-end">
-                <button 
-                  type="submit" 
-                  className="px-8 py-4 bg-brand-indigo hover:bg-brand-purple text-white rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-brand-indigo/25"
+                <button
+                  type="submit"
+                  className="px-8 py-4 bg-gradient-to-r from-[#C69320] to-[#FBE18D] hover:brightness-110 text-black rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-[#C69320]/40"
                 >
                   Send Message <Send size={18} />
                 </button>
@@ -1369,9 +1366,9 @@ export default function PortfolioPage() {
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
-              <Code2 className="text-brand-indigo w-5 h-5" />
+              <Code2 className="text-[#FBE18D] w-5 h-5" />
               <span className="text-lg font-bold tracking-tight text-slate-200">
-                WebDesign<span className="text-brand-indigo">JE</span>
+                WebDesign<span className="text-[#FBE18D]">JE</span>
               </span>
             </div>
             <p className="text-slate-500 text-sm">
@@ -1388,7 +1385,7 @@ export default function PortfolioPage() {
               { name: 'About', href: '#about' },
               { name: 'Blog', href: '#blog' },
             ].map(link => (
-              <a key={link.name} href={link.href} className="text-sm text-slate-400 hover:text-brand-cyan transition-colors">
+              <a key={link.name} href={link.href} className="text-sm text-slate-400 hover:text-[#FBE18D] transition-colors">
                 {link.name}
               </a>
             ))}

@@ -1,7 +1,7 @@
 // ============================================================
 // Configuración de Firebase
 // Servicios: Auth (autenticación), Firestore (base de datos),
-//            Storage (archivos/imágenes)
+//            Storage (archivos/imágenes), Functions (backend)
 // Las credenciales se leen de variables de entorno (.env.local)
 //
 // NOTA: La inicialización está envuelta en try-catch para que
@@ -14,6 +14,7 @@ import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
+import { getFunctions, type Functions } from "firebase/functions";
 
 // Configuración usando variables de entorno públicas de Next.js
 const firebaseConfig = {
@@ -30,12 +31,14 @@ let app: FirebaseApp | undefined;
 let auth: Auth;
 let db: Firestore;
 let storage: FirebaseStorage;
+let functions: Functions;
 
 try {
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   auth = getAuth(app);
   db = getFirestore(app);
   storage = getStorage(app);
+  functions = getFunctions(app);
 } catch (error) {
   // Durante el build estático de Next.js, las env vars pueden no existir.
   // Esto permite que el build termine correctamente.
@@ -45,7 +48,8 @@ try {
   auth = {} as Auth;
   db = {} as Firestore;
   storage = {} as FirebaseStorage;
+  functions = {} as Functions;
 }
 
-export { auth, db, storage };
+export { auth, db, storage, functions };
 export default app;

@@ -47,10 +47,10 @@ export function HeaderNav() {
           ) : !loading ? (
             // Usuario no autenticado: botón de login
             <Link
-              href="/doctor/login"
+              href="/portal"
               className="rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-cyan-500/25"
             >
-              Iniciar Sesión
+              Portal Médico
             </Link>
           ) : null}
         </nav>

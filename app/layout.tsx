@@ -5,12 +5,12 @@
 // ============================================================
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const openSans = Open_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-open-sans",
 });
 
 export const metadata: Metadata = {
@@ -19,18 +19,22 @@ export const metadata: Metadata = {
     "Architecting the web of tomorrow with Next.js 15, AI Agents, and immersive 3D interfaces.",
 };
 
+import { ThemeProvider } from "@/context/ThemeContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="dark" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body
-        className={`${inter.variable} font-sans antialiased min-h-screen bg-slate-950 text-white`}
+        className={`${openSans.variable} font-sans antialiased min-h-screen`}
         suppressHydrationWarning
       >
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -19,10 +19,10 @@ const FooterParticles: React.FC = () => {
     let animationFrameId: number;
 
     // Configuration
-    const PARTICLE_COLOR = 'rgba(34, 211, 238, 1)'; // Brand Cyan
-    const LINE_COLOR = 'rgba(99, 102, 241,'; // Brand Indigo (alpha will be dynamic)
-    const CONNECTION_DISTANCE = 100;
-    const MOUSE_DISTANCE = 150;
+    const PARTICLE_COLOR = 'rgba(251, 225, 141, 1)'; // Bright gold
+    const LINE_COLOR = 'rgba(198, 147, 32,'; // Primary gold
+    const CONNECTION_DISTANCE = 110;
+    const MOUSE_DISTANCE = 160;
 
     class Particle {
       x: number;
@@ -67,12 +67,12 @@ const FooterParticles: React.FC = () => {
     };
 
     const resizeCanvas = () => {
-        const parent = canvas.parentElement;
-        if (parent) {
-            canvas.width = parent.clientWidth;
-            canvas.height = parent.clientHeight;
-        }
-        init();
+      const parent = canvas.parentElement;
+      if (parent) {
+        canvas.width = parent.clientWidth;
+        canvas.height = parent.clientHeight;
+      }
+      init();
     };
 
     window.addEventListener('resize', resizeCanvas);
@@ -82,9 +82,9 @@ const FooterParticles: React.FC = () => {
     let mouseY = -1000;
 
     const handleMouseMove = (e: MouseEvent) => {
-        const rect = canvas.getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
-        mouseY = e.clientY - rect.top;
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -93,7 +93,7 @@ const FooterParticles: React.FC = () => {
     const animate = () => {
       if (!ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       // Update and draw particles
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
@@ -101,19 +101,19 @@ const FooterParticles: React.FC = () => {
 
         // Draw connections to other particles (Synapses)
         for (let j = i; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < CONNECTION_DISTANCE) {
-                ctx.beginPath();
-                const opacity = 1 - (distance / CONNECTION_DISTANCE);
-                ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`; // Faint network lines
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.stroke();
-            }
+          if (distance < CONNECTION_DISTANCE) {
+            ctx.beginPath();
+            const opacity = 1 - (distance / CONNECTION_DISTANCE);
+            ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`; // Faint network lines
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
         }
 
         // Draw connections to Mouse (Interactive Node)
@@ -122,16 +122,16 @@ const FooterParticles: React.FC = () => {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < MOUSE_DISTANCE) {
-            ctx.beginPath();
-            const opacity = 1 - (distance / MOUSE_DISTANCE);
-            ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`; // Cyan highlight for interaction
-            ctx.lineWidth = 1;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(mouseX, mouseY);
-            ctx.stroke();
+          ctx.beginPath();
+          const opacity = 1 - (distance / MOUSE_DISTANCE);
+          ctx.strokeStyle = `rgba(251, 225, 141, ${opacity})`; // Gold highlight for interaction
+          ctx.lineWidth = 1;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(mouseX, mouseY);
+          ctx.stroke();
         }
       }
-      
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
@@ -149,7 +149,7 @@ const FooterParticles: React.FC = () => {
       ref={canvasRef}
       className="absolute inset-0 pointer-events-none"
       // Blend mode creates a nice glowing effect over dark backgrounds
-      style={{ mixBlendMode: 'screen', opacity: 0.6 }} 
+      style={{ mixBlendMode: 'screen', opacity: 0.6 }}
     />
   );
 };

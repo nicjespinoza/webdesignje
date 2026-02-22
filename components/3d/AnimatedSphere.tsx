@@ -12,9 +12,10 @@
 //   5. PostProcessing   → Bloom (glow) + ChromaticAberration
 // ============================================================
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { MeshDistortMaterial, Float, Stars } from "@react-three/drei";
+import { MeshDistortMaterial, Float, Stars, Html, Line } from "@react-three/drei";
+import { Globe, Smartphone, Brain, Search, Code, Cpu } from "lucide-react";
 import {
   EffectComposer,
   Bloom,
@@ -39,12 +40,12 @@ function CyberSphere() {
 
   return (
     <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.8}>
-      <mesh ref={meshRef} scale={1.8}>
+      <mesh ref={meshRef} scale={3.5}>
         <icosahedronGeometry args={[1, 64]} />
         <MeshDistortMaterial
-          color="#00f5ff"
-          emissive="#0066ff"
-          emissiveIntensity={0.4}
+          color="#C69320"
+          emissive="#FBE18D"
+          emissiveIntensity={0.25}
           roughness={0.15}
           metalness={0.9}
           distort={0.35}
@@ -62,7 +63,6 @@ function CyberSphere() {
 function WireframeShell() {
   const meshRef = useRef<THREE.Mesh>(null!);
 
-  // Rotación inversa para contraste visual
   useFrame(({ clock }) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = -clock.getElapsedTime() * 0.08;
@@ -71,10 +71,10 @@ function WireframeShell() {
   });
 
   return (
-    <mesh ref={meshRef} scale={2.2}>
+    <mesh ref={meshRef} scale={4.5}>
       <icosahedronGeometry args={[1, 3]} />
       <meshBasicMaterial
-        color="#00f5ff"
+        color="#C69320"
         wireframe
         transparent
         opacity={0.15}
@@ -85,16 +85,15 @@ function WireframeShell() {
 
 // ---- Partículas que orbitan alrededor de la esfera ----
 
-function OrbitingParticles({ count = 300 }: { count?: number }) {
+function OrbitingParticles({ count = 400 }: { count?: number }) {
   const pointsRef = useRef<THREE.Points>(null!);
 
-  // Generar posiciones en una distribución esférica aleatoria
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const r = 2.5 + Math.random() * 1.5; // Radio entre 2.5 y 4.0
+      const r = 5.0 + Math.random() * 4.0; // Radio muy amplio para llenar pantalla
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
@@ -120,7 +119,7 @@ function OrbitingParticles({ count = 300 }: { count?: number }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        color="#00f5ff"
+        color="#FBE18D"
         size={0.03}
         transparent
         opacity={0.8}
@@ -152,8 +151,71 @@ function OrbitalRing({
   return (
     <mesh ref={ringRef} rotation={[tilt, 0, 0]}>
       <torusGeometry args={[radius, 0.005, 16, 100]} />
-      <meshBasicMaterial color="#00f5ff" transparent opacity={0.3} />
+      <meshBasicMaterial color="#C69320" transparent opacity={0.25} />
     </mesh>
+  );
+}
+
+// ---- Red de Nodos Conectados (Iconos Flotantes) ----
+
+function NodeNetwork() {
+  const groupRef = useRef<THREE.Group>(null!);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 4500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useFrame(({ clock }) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = clock.getElapsedTime() * 0.15;
+      groupRef.current.rotation.z = Math.sin(clock.getElapsedTime() * 0.1) * 0.1;
+    }
+  });
+
+  const nodes = [
+    { pos: [12, 6, -3], icon: Globe, color: "#FBE18D" },
+    { pos: [-10, -8, 5], icon: Smartphone, color: "#C69320" },
+    { pos: [8, -9, -4], icon: Brain, color: "#FBE18D" },
+    { pos: [-13, 7, -6], icon: Search, color: "#C69320" },
+    { pos: [14, -2, 3], icon: Code, color: "#FBE18D" },
+    { pos: [-8, 10, 2], icon: Cpu, color: "#C69320" },
+  ];
+
+  if (!visible) return null;
+
+  return (
+    <group ref={groupRef}>
+      {nodes.map((n, i) => (
+        <group key={i}>
+          {/* Línea conectora desde el centro de la esfera */}
+          <Line
+            points={[[0, 0, 0], n.pos as [number, number, number]]}
+            color={n.color}
+            lineWidth={1.5}
+            transparent
+            opacity={0.4}
+          />
+          {/* Punto de conexión dorado */}
+          <mesh position={n.pos as [number, number, number]}>
+            <sphereGeometry args={[0.06, 16, 16]} />
+            <meshBasicMaterial color="#FBE18D" />
+          </mesh>
+          {/* Nodo / Icono HTML */}
+          <group position={n.pos as [number, number, number]}>
+            {/* Animación local para que el ícono pulse sutilmente */}
+            <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+              <Html transform center zIndexRange={[100, 0]} style={{ pointerEvents: "none" }}>
+                <div className="p-3 rounded-xl border border-[#C69320]/30 bg-[#05050a]/70 backdrop-blur-md shadow-[0_0_20px_rgba(198,147,32,0.3)]">
+                  <n.icon className="w-6 h-6 text-[#FBE18D]" />
+                </div>
+              </Html>
+            </Float>
+          </group>
+        </group>
+      ))}
+    </group>
   );
 }
 
@@ -167,31 +229,31 @@ export default function AnimatedSphere() {
   );
 
   return (
-    <div className="h-full w-full">
+    <div className="absolute inset-0 w-full h-full pointer-events-none">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 45 }}
+        camera={{ position: [0, 0, 15], fov: 60 }}
         gl={{ antialias: true, alpha: true }}
-        style={{ background: "transparent" }}
+        style={{ background: "transparent", width: '100vw', height: '100vh' }}
       >
-        {/* Iluminación: ambiental suave + dos puntos de luz de color */}
-        <ambientLight intensity={0.3} />
-        <pointLight position={[10, 10, 10]} intensity={1} color="#00f5ff" />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#7b2ff7" />
+        <ambientLight intensity={0.2} />
+        <pointLight position={[20, 20, 20]} intensity={1.5} color="#C69320" />
+        <pointLight position={[-20, -20, -10]} intensity={0.8} color="#FBE18D" />
 
-        {/* Escena principal */}
+        {/* Escena principal escalada */}
         <CyberSphere />
         <WireframeShell />
-        <OrbitingParticles count={300} />
+        <OrbitingParticles count={500} />
+        <NodeNetwork />
 
-        {/* Tres anillos orbitales en diferentes inclinaciones */}
-        <OrbitalRing radius={2.8} speed={0.2} tilt={Math.PI / 3} />
-        <OrbitalRing radius={3.2} speed={-0.15} tilt={-Math.PI / 4} />
-        <OrbitalRing radius={3.6} speed={0.1} tilt={Math.PI / 6} />
+        {/* Tres anillos orbitales expansivos en diferentes inclinaciones */}
+        <OrbitalRing radius={7.5} speed={0.2} tilt={Math.PI / 3} />
+        <OrbitalRing radius={8.5} speed={-0.15} tilt={-Math.PI / 4} />
+        <OrbitalRing radius={9.5} speed={0.1} tilt={Math.PI / 6} />
 
         {/* Estrellas de fondo para ambiente espacial */}
         <Stars
-          radius={50}
-          depth={50}
+          radius={120}
+          depth={80}
           count={1500}
           factor={3}
           saturation={0}
@@ -202,9 +264,9 @@ export default function AnimatedSphere() {
         {/* Post-procesado: Bloom (glow neón) + ChromaticAberration (efecto cyber) */}
         <EffectComposer>
           <Bloom
-            luminanceThreshold={0.2}
+            luminanceThreshold={0.3}
             luminanceSmoothing={0.9}
-            intensity={1.5}
+            intensity={0.8}
             mipmapBlur
           />
           <ChromaticAberration

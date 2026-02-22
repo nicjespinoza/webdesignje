@@ -5,69 +5,180 @@
    Portafolio Joseph Espinoza - Paleta de marca
    ============================================================ */
 @theme inline {
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-open-sans);
 
   /* Paleta de marca del portafolio */
   --color-brand-indigo: #6366f1;
   --color-brand-purple: #a855f7;
   --color-brand-cyan: #06b6d4;
-  --color-brand-gold: #fbbf24;
+  --color-brand-gold: #FBE18D;
   --color-brand-dark: #0f172a;
 }
 
-/* ============================================================
-   Estilos base - Portafolio Joseph Espinoza
-   ============================================================ */
-body {
-  background-color: #020617; /* Slate 950 */
-  color: #f8fafc;
-  overflow-x: hidden;
-  font-family: var(--font-inter), sans-serif;
+:root {
+  --background: #fdfdfe;
+  --foreground: #1a1b1e;
+  --card: #ffffff;
+  --card-foreground: #1a1b1e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1b1e;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f8fafc;
+  --secondary-foreground: #1a1b1e;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #1a1b1e;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #ffffff;
+  --ring: #2563eb;
+  --radius: 2rem;
 }
 
-.glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.dark {
+  --background: #0a0b0d;
+  --foreground: #f8fafc;
+  --card: #14151a;
+  --card-foreground: #f8fafc;
+  --popover: #14151a;
+  --popover-foreground: #f8fafc;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1b1e;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e1f26;
+  --muted-foreground: #94a3b8;
+  --accent: #1e1f26;
+  --accent-foreground: #f8fafc;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #26272e;
+  --input: #1a1b1e;
+  --ring: #3b82f6;
+}
+
+@utility shadow-soft {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05), 0 10px 15px -3px rgb(0 0 0 / 0.02);
+}
+
+@utility shadow-xl {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+}
+
+body {
+  background-color: #000000;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(10, 10, 10, 1) 0%, #000000 100%);
+  background-attachment: fixed;
+  color: var(--foreground);
+  overflow-x: hidden;
+  font-family: var(--font-open-sans), sans-serif;
+}
+
+.liquid-black {
+  background: linear-gradient(135deg, #050505 0%, #0a0a0a 50%, #050505 100%);
+  background-size: 200% 200%;
+  animation: liquid-move 15s ease infinite;
+}
+
+@keyframes liquid-move {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.glass-panel,
+.premium-border {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid #C69320 !important;
+  box-shadow: 0 0 20px rgba(198, 147, 32, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover,
+.premium-border:hover {
+  box-shadow: 0 0 30px rgba(198, 147, 32, 0.25);
+  border-color: #FBE18D !important;
+}
+
+/* Button Styling: Liquid black background, gold on click */
+button:not([class*="bg-transparent"]),
+.btn-premium,
+a[class*="premium-border"],
+a[class*="glass-panel"] {
+  background: #050505 !important;
+  color: #C69320 !important;
+  border: 1px solid #C69320 !important;
+  transition: all 0.2s ease-in-out !important;
+  position: relative;
+  overflow: hidden;
+}
+
+button:active,
+.btn-premium:active,
+a[class*="premium-border"]:active,
+a[class*="glass-panel"]:active {
+  background: #C69320 !important;
+  color: #000000 !important;
+  transform: scale(0.95);
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #818cf8, #22d3ee, #fbbf24);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  background: linear-gradient(135deg, #C69320 0%, #FBE18D 50%, #C69320 100%) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  filter: drop-shadow(0 0 8px rgba(198, 147, 32, 0.3));
 }
 
 /* ============================================================
    Animaciones personalizadas
    ============================================================ */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
 }
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
 
-/* ============================================================
-   Scrollbar personalizada para tema dark
-   ============================================================ */
+/* Custom Scrollbar Gold */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 4px;
+  background: #C69320;
+  border-radius: 5px;
+  border: 2px solid #000000;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #FBE18D;
 }
