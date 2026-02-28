@@ -402,7 +402,10 @@ const Hero = ({ lang }: { lang: Language }) => {
   );
 };
 
-const TechStack = () => {
+// ⚡ Bolt: Wrapped static sections with React.memo()
+// 🎯 Why: These sections don't depend on `lang` or `isDark` props but were re-rendering.
+// 📊 Impact: Prevents unnecessary virtual DOM diffing of large component trees when language or theme toggles.
+const TechStack = React.memo(() => {
   const categories = [
     {
       title: "Frontend Core",
@@ -705,7 +708,7 @@ const TechStack = () => {
         </div>
     </section>
   );
-};
+});
 
 const Services = ({ lang }: { lang: Language }) => {
     const services = [
@@ -806,7 +809,8 @@ const Services = ({ lang }: { lang: Language }) => {
     );
 };
 
-const AIRevolution = () => {
+// ⚡ Bolt: Memoized static component to skip re-renders on parent state change
+const AIRevolution = React.memo(() => {
     const aiSkills = [
         { 
             name: 'Autonomous Agents', 
@@ -1010,9 +1014,10 @@ const AIRevolution = () => {
             </div>
         </section>
     );
-};
+});
 
-const Projects = () => {
+// ⚡ Bolt: Memoized static component to skip re-renders on parent state change
+const Projects = React.memo(() => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -1212,9 +1217,10 @@ const Projects = () => {
       </AnimatePresence>
     </section>
   );
-};
+});
 
-const About = () => {
+// ⚡ Bolt: Memoized static component to skip re-renders on parent state change
+const About = React.memo(() => {
   return (
     <section id="about" className="py-24 relative overflow-hidden scroll-mt-24">
       {/* Background decoration */}
@@ -1377,9 +1383,10 @@ const About = () => {
       </div>
     </section>
   );
-};
+});
 
-const Blog = () => {
+// ⚡ Bolt: Memoized static component to skip re-renders on parent state change
+const Blog = React.memo(() => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -1467,9 +1474,10 @@ const Blog = () => {
       </motion.div>
     </section>
   );
-};
+});
 
-const Contact = () => {
+// ⚡ Bolt: Memoized static component to skip re-renders on parent state change
+const Contact = React.memo(() => {
   const {
     register,
     handleSubmit,
@@ -1560,7 +1568,7 @@ const Contact = () => {
       </div>
     </section>
   );
-};
+});
 
 const Footer = ({ lang }: { lang: Language }) => {
   const links = [

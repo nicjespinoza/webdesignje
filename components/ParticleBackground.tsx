@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-const ParticleBackground: React.FC = () => {
+// ⚡ Bolt: Wrapped ParticleBackground with React.memo()
+// 🎯 Why: Canvas initialization and animation loops are expensive.
+// 📊 Impact: Prevents re-running the extensive setup and teardown effect
+//    when parent App.tsx re-renders (e.g., on language or theme change), saving CPU cycles.
+const ParticleBackground: React.FC = React.memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -131,6 +135,6 @@ const ParticleBackground: React.FC = () => {
       className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none"
     />
   );
-};
+});
 
 export default ParticleBackground;
