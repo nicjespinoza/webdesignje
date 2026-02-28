@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-const FooterParticles: React.FC = () => {
+// ⚡ Bolt: Wrapped FooterParticles with React.memo()
+// 🎯 Why: Re-initializing canvas context and event listeners is costly.
+// 📊 Impact: Prevents tearing down the canvas context and re-registering
+//    event listeners when unrelated App.tsx state changes.
+const FooterParticles: React.FC = React.memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -147,6 +151,6 @@ const FooterParticles: React.FC = () => {
       style={{ mixBlendMode: 'screen', opacity: 0.6 }} 
     />
   );
-};
+});
 
 export default FooterParticles;

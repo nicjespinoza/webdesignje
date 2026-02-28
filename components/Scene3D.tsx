@@ -168,7 +168,11 @@ const DataPulses = ({ radius }: { radius: number }) => {
     );
 };
 
-const Scene3D: React.FC = () => {
+// ⚡ Bolt: Wrapped Scene3D with React.memo()
+// 🎯 Why: Re-creating Three.js WebGL contexts and scenes on parent re-renders is a huge bottleneck.
+// 📊 Impact: Prevents destruction and recreation of deep 3D hierarchy and shaders
+//    when parent App state changes, keeping the framerate stable.
+const Scene3D: React.FC = React.memo(() => {
   return (
     <div
       className="
@@ -205,6 +209,6 @@ const Scene3D: React.FC = () => {
       </Canvas>
     </div>
   );
-};
+});
 
 export default Scene3D;
