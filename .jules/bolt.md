@@ -1,0 +1,4 @@
+## 2024-03-20 - Math.sqrt() in Animation Loops
+**Learning:** `Math.sqrt()` in canvas `requestAnimationFrame` loops, especially `O(N^2)` particle/node connections, causes significant frame drops. In `components/FooterParticles.tsx`, computing the square root for every pair of particles on every frame was a major bottleneck. Furthermore, standard nested `O(N^2)` loops often mistakenly check connections for `j = i` (self), executing a pointless, expensive drawing path (`beginPath`, `moveTo`, `lineTo`, `stroke`).
+
+**Action:** Replace `distance < threshold` with `distSq < threshold * threshold` and only compute `Math.sqrt()` inside the conditional block when needed for opacity or force calculation. Ensure inner loops in pairwise connections start at `j = i + 1` to halve operations and skip self-connections.
