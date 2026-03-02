@@ -1,0 +1,3 @@
+## 2026-03-02 - Form Accessibility with React Hook Form
+**Learning:** Custom form integrations using React Hook Form sometimes miss standard HTML accessibility attributes because `register()` only binds form state, not semantic relationships. Inputs lack `id` linking to their `<label htmlFor="...">`, and missing `aria-invalid` or `role="alert"` for error states reduces screen reader usability.
+**Action:** Always manually ensure `<label>` and `<input>` are linked via `id`/`htmlFor`, specify `type` attributes (like `type="email"`), and apply ARIA attributes (`aria-invalid` and `role="alert"`) when rendering dynamic form components or validation errors.
