@@ -316,7 +316,7 @@ const projects: Project[] = [
   },
   {
     id: '2',
-    title: 'POS Tienda Zapatos',
+    title: 'POS Tienda e Inventario',
     description: 'Cloud-based Point of Sale specifically designed for footwear retail. Real-time inventory tracking by size, color, and model.',
     longDescription: "A specialized POS system for the footwear industry. It manages complex inventory with multiple variants, handles multi-store synchronization, and provides detailed sales analytics. Integrated with local payment gateways and automated invoice generation.",
     features: [
@@ -1659,8 +1659,8 @@ export default function PortfolioPage() {
       <Navbar isDark={isDark} toggleTheme={toggleTheme} lang={lang} toggleLang={toggleLang} />
       <Hero lang={lang} router={router} />
 
-      <StackSection />
       <ServicesSection />
+      <StackSection />
       <AISection />
       <RAGSection />
       <ProjectsSection />
