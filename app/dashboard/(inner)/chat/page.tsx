@@ -1,6 +1,7 @@
+// app/dashboard/(inner)/chat/page.tsx
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import {
     MessageCircle,
     Search,
@@ -9,7 +10,11 @@ import {
     ChevronLeft,
     Trash2,
     Check,
-    CheckCheck
+    CheckCheck,
+    Loader2,
+    ShieldCheck,
+    Sparkles,
+    Users
 } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import {
@@ -27,6 +32,8 @@ import {
 import { toast } from 'react-hot-toast';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { getSpecialtyById, Specialty } from '@/lib/specialties';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
     id: string;
@@ -46,14 +53,61 @@ interface ChatSession {
     isRegistered?: boolean;
 }
 
+type ChatState = {
+    activeChats: ChatSession[];
+    currentChat: ChatSession | null;
+    messages: Message[];
+    searchTerm: string;
+    inputText: string;
+    loading: boolean;
+};
+
+type ChatAction =
+    | { type: 'setActiveChats'; payload: ChatSession[] }
+    | { type: 'setCurrentChat'; payload: ChatSession | null }
+    | { type: 'setMessages'; payload: Message[] }
+    | { type: 'setSearchTerm'; payload: string }
+    | { type: 'setInputText'; payload: string }
+    | { type: 'setLoading'; payload: boolean };
+
+const initialState: ChatState = {
+    activeChats: [],
+    currentChat: null,
+    messages: [],
+    searchTerm: '',
+    inputText: '',
+    loading: true,
+};
+
+function chatReducer(state: ChatState, action: ChatAction): ChatState {
+    switch (action.type) {
+        case 'setActiveChats':
+            return { ...state, activeChats: action.payload };
+        case 'setCurrentChat':
+            return { ...state, currentChat: action.payload };
+        case 'setMessages':
+            return { ...state, messages: action.payload };
+        case 'setSearchTerm':
+            return { ...state, searchTerm: action.payload };
+        case 'setInputText':
+            return { ...state, inputText: action.payload };
+        case 'setLoading':
+            return { ...state, loading: action.payload };
+        default:
+            return state;
+    }
+}
+
 export default function ChatPage() {
-    const [activeChats, setActiveChats] = useState<ChatSession[]>([]);
-    const [currentChat, setCurrentChat] = useState<ChatSession | null>(null);
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [inputText, setInputText] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [state, dispatch] = useReducer(chatReducer, initialState);
+    const [specialty, setSpecialty] = useState<Specialty | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Load Specialty
+    useEffect(() => {
+        const specId = typeof window !== 'undefined' ? localStorage.getItem('selectedSpecialty') || 'gastroenterology' : 'gastroenterology';
+        setSpecialty(getSpecialtyById(specId));
+    }, []);
 
     // Sidebar Listener: List of Chats
     useEffect(() => {
@@ -64,8 +118,8 @@ export default function ChatPage() {
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const chats = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as ChatSession[];
-            setActiveChats(chats);
-            setLoading(false);
+            dispatch({ type: 'setActiveChats', payload: chats });
+            dispatch({ type: 'setLoading', payload: false });
         });
 
         return () => unsubscribe();
@@ -73,20 +127,20 @@ export default function ChatPage() {
 
     // Messages Listener: Current Chat Messages
     useEffect(() => {
-        if (!currentChat) {
-            setMessages([]);
+        if (!state.currentChat) {
+            dispatch({ type: 'setMessages', payload: [] });
             return;
         }
 
         const q = query(
-            collection(db, 'chats', currentChat.id, 'messages'),
+            collection(db, 'chats', state.currentChat.id, 'messages'),
             orderBy('timestamp', 'asc'),
             limit(50)
         );
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const msgs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Message[];
-            setMessages(msgs);
+            dispatch({ type: 'setMessages', payload: msgs });
 
             // Auto scroll to bottom
             setTimeout(() => {
@@ -97,7 +151,7 @@ export default function ChatPage() {
         // Mark as read when opening chat
         const markAsRead = async () => {
             try {
-                const chatRef = doc(db, 'chats', currentChat.id);
+                const chatRef = doc(db, 'chats', state.currentChat!.id);
                 await updateDoc(chatRef, { unreadCount: 0 });
             } catch (error) {
                 console.error("Error marking as read:", error);
@@ -106,24 +160,24 @@ export default function ChatPage() {
         markAsRead();
 
         return () => unsubscribe();
-    }, [currentChat]);
+    }, [state.currentChat]);
 
     const handleSend = async (e?: React.FormEvent) => {
         e?.preventDefault();
-        if (!inputText.trim() || !currentChat) return;
+        if (!state.inputText.trim() || !state.currentChat) return;
 
-        const text = inputText;
-        setInputText('');
+        const text = state.inputText;
+        dispatch({ type: 'setInputText', payload: '' });
 
         try {
-            await addDoc(collection(db, 'chats', currentChat.id, 'messages'), {
+            await addDoc(collection(db, 'chats', state.currentChat.id, 'messages'), {
                 text,
                 sender: 'doctor',
                 timestamp: serverTimestamp(),
                 read: false
             });
 
-            const chatRef = doc(db, 'chats', currentChat.id);
+            const chatRef = doc(db, 'chats', state.currentChat.id);
             await updateDoc(chatRef, {
                 lastMessage: text,
                 lastMessageTime: serverTimestamp()
@@ -137,151 +191,214 @@ export default function ChatPage() {
         if (!confirm("¿Desea eliminar este chat?")) return;
         try {
             await deleteDoc(doc(db, 'chats', id));
-            if (currentChat?.id === id) setCurrentChat(null);
+            if (state.currentChat?.id === id) dispatch({ type: 'setCurrentChat', payload: null });
             toast.success("Chat eliminado");
         } catch (error) {
             toast.error("Error al eliminar");
         }
     };
 
-    const filteredChats = activeChats.filter(chat =>
-        chat.visitorName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        chat.lastMessage?.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredChats = state.activeChats.filter(chat =>
+        chat.visitorName?.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+        chat.lastMessage?.toLowerCase().includes(state.searchTerm.toLowerCase())
+    );
+
+    if (state.loading && state.activeChats.length === 0) return (
+        <div className="flex h-screen items-center justify-center bg-background">
+            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        </div>
     );
 
     return (
-        <div className="flex h-[calc(100vh-120px)] bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-            {/* Sidebar */}
-            <div className={`w-full md:w-85 border-r border-gray-100 flex flex-col bg-gray-50/30 ${currentChat ? 'hidden md:flex' : 'flex'}`}>
-                <div className="p-6 border-b border-gray-100 bg-white">
-                    <h2 className="text-2xl font-bold text-[#083c79] mb-4 flex items-center gap-2">
-                        <MessageCircle size={24} /> Mensajes
-                    </h2>
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+        <div className="flex h-[calc(100vh-140px)] bg-card/40 backdrop-blur-3xl rounded-[2.5rem] shadow-soft border border-border/40 overflow-hidden relative group">
+            {/* Liquid Gold Decor */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -z-10 group-hover:bg-primary/10 transition-all duration-700" />
+
+            {/* Sidebar Explorer */}
+            <div className={`w-full md:w-[400px] border-r border-border/40 flex flex-col bg-muted/20 backdrop-blur-3xl transition-all duration-500 ${state.currentChat ? 'hidden md:flex' : 'flex'}`}>
+                <div className="p-8 border-b border-border/40 bg-card/30">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 className="text-3xl font-black text-foreground tracking-tighter uppercase">Mensajes</h2>
+                            <p className="text-[10px] font-black text-primary/60 uppercase tracking-[0.3em] mt-1 italic">Centro de Comunicación</p>
+                        </div>
+                        <div className="p-3 bg-primary/10 rounded-2xl border border-primary/20">
+                            <MessageCircle className="text-primary" size={24} />
+                        </div>
+                    </div>
+                    <div className="relative group/search">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/search:text-primary transition-colors" size={18} />
                         <input
                             type="text"
-                            placeholder="Buscar chats..."
-                            className="w-full pl-10 pr-4 py-3 bg-gray-100 border-none rounded-2xl text-sm focus:ring-2 focus:ring-[#083c79]/20 outline-none transition-all"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Buscar conversaciones..."
+                            className="w-full pl-12 pr-6 py-4 bg-background/50 border border-border/40 rounded-[1.5rem] text-sm font-bold focus:ring-4 focus:ring-primary/10 focus:border-primary/40 outline-none transition-all shadow-inner"
+                            value={state.searchTerm}
+                            onChange={(e) => dispatch({ type: 'setSearchTerm', payload: e.target.value })}
                         />
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto">
-                    {loading ? (
-                        <div className="p-8 text-center text-gray-400">Cargando...</div>
-                    ) : filteredChats.length === 0 ? (
-                        <div className="p-8 text-center text-gray-400">
-                            <MessageCircle size={48} className="mx-auto mb-2 opacity-20" />
-                            <p>No se encontraron chats</p>
-                        </div>
-                    ) : (
-                        filteredChats.map(chat => (
-                            <button
-                                key={chat.id}
-                                onClick={() => setCurrentChat(chat)}
-                                className={`w-full p-6 flex items-start gap-4 hover:bg-white transition-all text-left border-b border-gray-50 ${currentChat?.id === chat.id ? 'bg-white shadow-md z-10' : ''}`}
-                            >
-                                <div className="relative">
-                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#083c79] to-[#0a4d8c] flex items-center justify-center text-white font-bold text-lg">
-                                        {chat.visitorName?.charAt(0) || 'V'}
-                                    </div>
-                                    {chat.unreadCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
-                                            {chat.unreadCount}
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex justify-between items-start mb-1">
-                                        <h3 className="font-bold text-gray-900 truncate">{chat.visitorName}</h3>
-                                        <span className="text-[10px] text-gray-400">
-                                            {chat.lastMessageTime?.toDate ? format(chat.lastMessageTime.toDate(), 'HH:mm') : ''}
-                                        </span>
-                                    </div>
-                                    <p className="text-xs text-gray-500 truncate">{chat.lastMessage}</p>
-                                </div>
-                            </button>
-                        ))
-                    )}
-                </div>
-            </div>
-
-            {/* Main Area */}
-            <div className={`flex-1 flex flex-col bg-white ${currentChat ? 'flex' : 'hidden md:flex'}`}>
-                {currentChat ? (
-                    <>
-                        {/* Header */}
-                        <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white">
-                            <div className="flex items-center gap-3">
-                                <button onClick={() => setCurrentChat(null)} className="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-full">
-                                    <ChevronLeft size={24} />
-                                </button>
-                                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-[#083c79]">
-                                    <User size={20} />
-                                </div>
-                                <div>
-                                    <h2 className="font-bold text-gray-800">{currentChat.visitorName}</h2>
-                                    <div className="flex items-center gap-1.5 text-[10px] text-green-500 font-bold uppercase tracking-wider">
-                                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                        En línea
-                                    </div>
-                                </div>
-                            </div>
-                            <button onClick={() => handleDeleteChat(currentChat.id)} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
-                                <Trash2 size={20} />
-                            </button>
-                        </div>
-
-                        {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-6 bg-slate-50 space-y-4">
-                            {messages.map((msg, idx) => {
-                                const isMe = msg.sender === 'doctor';
-                                return (
-                                    <div key={msg.id || idx} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                                        <div className={`max-w-[75%] p-4 rounded-3xl shadow-sm ${isMe ? 'bg-[#083c79] text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'}`}>
-                                            <p className="text-sm">{msg.text}</p>
-                                            <div className={`flex items-center justify-end gap-1 mt-1 text-[9px] ${isMe ? 'text-blue-200' : 'text-gray-400'}`}>
-                                                <span>{msg.timestamp?.toDate ? format(msg.timestamp.toDate(), 'HH:mm') : '...'}</span>
-                                                {isMe && (msg.read ? <CheckCheck size={12} /> : <Check size={12} />)}
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                            <div ref={messagesEndRef} />
-                        </div>
-
-                        {/* Input */}
-                        <div className="p-6 bg-white border-t border-gray-100">
-                            <form onSubmit={handleSend} className="flex items-center gap-4 bg-gray-50 p-2 pl-4 rounded-2xl border border-gray-200">
-                                <input
-                                    type="text"
-                                    value={inputText}
-                                    onChange={(e) => setInputText(e.target.value)}
-                                    placeholder="Escribe un mensaje..."
-                                    className="flex-1 bg-transparent border-none outline-none text-sm py-2"
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={!inputText.trim()}
-                                    className="p-3 bg-[#083c79] text-white rounded-xl hover:bg-[#0a4d8c] transition-all disabled:opacity-50"
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
+                    <AnimatePresence>
+                        {filteredChats.length === 0 ? (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-12 text-center text-muted-foreground/30 flex flex-col items-center">
+                                <Users size={64} className="mb-4 opacity-10" />
+                                <p className="text-[10px] font-black uppercase tracking-widest">No hay chats activos</p>
+                            </motion.div>
+                        ) : (
+                            filteredChats.map((chat, idx) => (
+                                <motion.button
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: idx * 0.05 }}
+                                    key={chat.id}
+                                    onClick={() => dispatch({ type: 'setCurrentChat', payload: chat })}
+                                    className={`w-full p-6 flex items-start gap-5 hover:bg-card/40 transition-all text-left rounded-[2rem] mb-2 pointer group/chat-btn ${state.currentChat?.id === chat.id ? 'bg-card shadow-lg border border-primary/20 scale-[0.98]' : 'border border-transparent'}`}
                                 >
-                                    <Send size={20} />
-                                </button>
-                            </form>
-                        </div>
-                    </>
-                ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center text-gray-400">
-                        <MessageCircle size={64} className="mb-4 opacity-10" />
-                        <h3 className="text-xl font-bold text-gray-700">Canal de Chat</h3>
-                        <p>Selecciona una conversación para comenzar</p>
+                                    <div className="relative">
+                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-indigo-500/20 flex items-center justify-center text-primary font-black text-xl border border-primary/20 group-hover/chat-btn:scale-110 transition-transform">
+                                            {chat.visitorName?.charAt(0) || 'V'}
+                                        </div>
+                                        {chat.unreadCount > 0 && (
+                                            <span className="absolute -top-2 -right-2 w-7 h-7 bg-primary text-white text-[10px] font-black rounded-full flex items-center justify-center border-4 border-card shadow-lg">
+                                                {chat.unreadCount}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <h3 className="font-black text-foreground tracking-tight truncate uppercase text-sm">{chat.visitorName}</h3>
+                                            <span className="text-[9px] font-black text-muted-foreground/40 uppercase tracking-widest">
+                                                {chat.lastMessageTime?.toDate ? format(chat.lastMessageTime.toDate(), 'HH:mm') : ''}
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-muted-foreground line-clamp-1 group-hover/chat-btn:text-foreground/80 transition-colors">{chat.lastMessage}</p>
+                                    </div>
+                                </motion.button>
+                            ))
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Specialty Banner at bottom of sidebar */}
+                {specialty && (
+                    <div className="p-6 bg-primary/5 border-t border-primary/10 flex items-center justify-center gap-2">
+                        <span className="text-[9px] font-black text-primary uppercase tracking-[0.4em] opacity-60">Filtro: {specialty.nameEs}</span>
                     </div>
                 )}
             </div>
+
+            {/* Conversation Area */}
+            <div className={`flex-1 flex flex-col bg-background/30 backdrop-blur-3xl ${state.currentChat ? 'flex' : 'hidden md:flex'}`}>
+                {state.currentChat ? (
+                    <>
+                        {/* Header Explorer */}
+                        <div className="p-6 border-b border-border/40 flex justify-between items-center bg-card/20">
+                            <div className="flex items-center gap-5">
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => dispatch({ type: 'setCurrentChat', payload: null })}
+                                    className="md:hidden p-3 text-muted-foreground hover:bg-muted rounded-2xl transition-all"
+                                >
+                                    <ChevronLeft size={24} />
+                                </motion.button>
+                                <div className="w-14 h-14 rounded-2xl bg-muted/50 flex items-center justify-center text-primary border border-border/40 shadow-inner">
+                                    <User size={28} />
+                                </div>
+                                <div>
+                                    <h2 className="font-black text-2xl text-foreground tracking-tighter uppercase">{state.currentChat.visitorName}</h2>
+                                    <div className="flex items-center gap-2 text-[10px] text-emerald-500 font-black uppercase tracking-[0.2em] mt-1">
+                                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                                        En comunicación activa
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => handleDeleteChat(state.currentChat.id)}
+                                className="p-4 text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 rounded-2xl transition-all border border-transparent hover:border-destructive/20"
+                            >
+                                <Trash2 size={24} />
+                            </button>
+                        </div>
+
+                        {/* Liquid Message Stream */}
+                        <div className="flex-1 overflow-y-auto p-10 space-y-8 custom-scrollbar bg-slate-500/5">
+                            <AnimatePresence>
+                                {state.messages.map((msg, idx) => {
+                                    const isMe = msg.sender === 'doctor';
+                                    return (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            key={msg.id}
+                                            className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
+                                        >
+                                            <div className={`max-w-[70%] p-6 rounded-[2.5rem] shadow-xl relative group/msg transition-all hover:shadow-2xl ${isMe ? 'bg-primary text-primary-foreground rounded-tr-none shadow-primary/10' : 'bg-card text-foreground rounded-tl-none border border-border/40'}`}>
+                                                <p className="text-sm font-medium leading-relaxed">{msg.text}</p>
+                                                <div className={`flex items-center justify-end gap-2 mt-3 text-[9px] font-black uppercase tracking-widest ${isMe ? 'text-primary-foreground/60' : 'text-muted-foreground/40'}`}>
+                                                    <span>{msg.timestamp?.toDate ? format(msg.timestamp.toDate(), 'HH:mm') : '...'}</span>
+                                                    {isMe && (msg.read ? <CheckCheck size={12} className="text-white" /> : <Check size={12} />)}
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </AnimatePresence>
+                            <div ref={messagesEndRef} />
+                        </div>
+
+                        {/* Neo Input Field */}
+                        <div className="p-10 bg-card/40 border-t border-border/40">
+                            <form onSubmit={handleSend} className="flex items-center gap-6 bg-background/80 p-3 pl-6 rounded-[2.5rem] border border-border/40 shadow-2xl focus-within:border-primary/40 transition-all group/input">
+                                <Sparkles size={20} className="text-primary/20 group-focus-within/input:text-primary transition-colors" />
+                                <input
+                                    type="text"
+                                    value={state.inputText}
+                                    onChange={(e) => dispatch({ type: 'setInputText', payload: e.target.value })}
+                                    placeholder="Escribe tu respuesta profesional..."
+                                    className="flex-1 bg-transparent border-none outline-none text-sm font-bold py-4 placeholder:text-muted-foreground/30 text-foreground"
+                                />
+                                <motion.button
+                                    whileHover={{ scale: 1.05, rotate: 5 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    type="submit"
+                                    disabled={!state.inputText.trim()}
+                                    className="p-5 bg-primary text-primary-foreground rounded-[2rem] hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 disabled:opacity-20"
+                                >
+                                    <Send size={24} />
+                                </motion.button>
+                            </form>
+                            <div className="flex justify-center mt-6">
+                                <p className="text-[9px] font-black text-muted-foreground/20 uppercase tracking-[0.5em] italic flex items-center gap-2">
+                                    <ShieldCheck size={10} /> Canal de Comunicación Cifrado JEE-PRO v4.2
+                                </p>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center text-center p-20">
+                        <div className="w-32 h-32 rounded-[3rem] bg-muted/30 flex items-center justify-center mb-10 border-2 border-dashed border-border/60 animate-pulse">
+                            <MessageCircle size={64} className="opacity-10 text-primary" />
+                        </div>
+                        <h3 className="text-3xl font-black text-foreground tracking-tighter uppercase mb-4">Canal Directo JE</h3>
+                        <p className="text-muted-foreground/40 font-black text-[10px] uppercase tracking-[0.4em] max-w-sm leading-relaxed">Selecciona una conversación del panel lateral para iniciar la comunicación clínica.</p>
+                    </div>
+                )}
+            </div>
+
+            <style jsx global>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(var(--primary), 0.1);
+                    border-radius: 20px;
+                }
+            `}</style>
         </div>
     );
 }

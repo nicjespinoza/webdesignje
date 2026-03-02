@@ -5,6 +5,37 @@
 
 import React, { useEffect, useRef } from 'react';
 
+class FooterParticle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+
+  constructor(width: number, height: number) {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = (Math.random() - 0.5) * 0.5;
+    this.size = Math.random() * 1.5 + 0.5;
+  }
+
+  update(width: number, height: number) {
+    this.x += this.vx;
+    this.y += this.vy;
+
+    if (this.x < 0 || this.x > width) this.vx *= -1;
+    if (this.y < 0 || this.y > height) this.vy *= -1;
+  }
+
+  draw(ctx: CanvasRenderingContext2D, particleColor: string) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = particleColor;
+    ctx.fill();
+  }
+}
+
 const FooterParticles: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -15,7 +46,7 @@ const FooterParticles: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let particles: Particle[] = [];
+    let particles: FooterParticle[] = [];
     let animationFrameId: number;
 
     // Configuration
@@ -24,45 +55,12 @@ const FooterParticles: React.FC = () => {
     const CONNECTION_DISTANCE = 110;
     const MOUSE_DISTANCE = 160;
 
-    class Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-
-      constructor() {
-        this.x = Math.random() * canvas!.width;
-        this.y = Math.random() * canvas!.height;
-        this.vx = (Math.random() - 0.5) * 0.5; // Slow, calculated movement
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.size = Math.random() * 1.5 + 0.5;
-      }
-
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        // Bounce off edges to keep network contained
-        if (this.x < 0 || this.x > canvas!.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas!.height) this.vy *= -1;
-      }
-
-      draw() {
-        if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = PARTICLE_COLOR;
-        ctx.fill();
-      }
-    }
-
     const init = () => {
       particles = [];
       // Calculate density based on screen size
       const numberOfParticles = Math.floor((canvas.width * canvas.height) / 9000);
       for (let i = 0; i < numberOfParticles; i++) {
-        particles.push(new Particle());
+        particles.push(new FooterParticle(canvas.width, canvas.height));
       }
     };
 
@@ -96,8 +94,8 @@ const FooterParticles: React.FC = () => {
 
       // Update and draw particles
       for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
+        particles[i].update(canvas.width, canvas.height);
+        particles[i].draw(ctx, PARTICLE_COLOR);
 
         // Draw connections to other particles (Synapses)
         for (let j = i; j < particles.length; j++) {

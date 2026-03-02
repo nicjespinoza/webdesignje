@@ -1,118 +1,83 @@
+// medical-ai-demo/components/profile/HistoryList.tsx
 "use client";
 
 import React from 'react';
-import { FileText, Eye, Plus, Edit, Trash2, ClipboardList } from 'lucide-react';
-import { ActionButtonSmall } from './SharedComponents';
+import { History, FileText, CheckCircle, ChevronRight, Trash2, Eye } from 'lucide-react';
 import { InitialHistory, Patient } from '@/types';
-import { useAuth } from '@/context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface HistoryListProps {
     patient: Patient;
     histories: InitialHistory[];
-    onNavigate: (path: string, options?: any) => void;
+    onNavigate: (path: string) => void;
     onDelete: (id: string) => void;
-    onViewOrders?: (item: any) => void;
 }
 
-import { motion } from 'framer-motion';
-
-export const HistoryList: React.FC<HistoryListProps> = ({ patient, histories, onNavigate, onDelete, onViewOrders }) => {
-    const { user } = useAuth();
-    const isAssistant = user?.email === 'asistente@je.com';
-
+export const HistoryList: React.FC<HistoryListProps> = ({ histories, onNavigate, onDelete }) => {
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div className="flex flex-wrap items-center gap-4">
-                    <div className="bg-primary/10 p-2.5 rounded-2xl border border-primary/20">
-                        <FileText className="text-primary" size={24} />
-                    </div>
-                    <div>
-                        <h3 className="font-black text-foreground text-xl tracking-tight">Historias Clínicas</h3>
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest leading-none">Antecedentes y Evolución</p>
-                    </div>
-
-                    {(patient.legacyIdSistema) && (
-                        <button
-                            onClick={() => onNavigate(`/dashboard/patients/${patient.id}/history/legacy`)}
-                            className="flex items-center gap-2 text-[10px] font-black tracking-widest uppercase text-emerald-600 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-xl hover:bg-emerald-500/20 transition-all"
-                        >
-                            <Eye size={14} /> Historia 2025
-                        </button>
-                    )}
+        <div className="w-full">
+            <header className="flex items-center justify-between mb-12">
+                <div className="flex flex-col gap-1">
+                    <h3 className="text-[10px] tracking-[0.8em] font-light text-white uppercase">Historia Clínica Primaria</h3>
+                    <div className="w-12 h-[1px] bg-primary/20" />
                 </div>
+                <span className="text-[8px] tracking-[0.4em] text-white/20 uppercase font-thin">
+                    {histories.length} Entradas
+                </span>
+            </header>
 
-                <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => onNavigate(`/dashboard/patients/${patient.id}/history/new`)}
-                    className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-2 hover:bg-primary/90 transition-all border border-primary/20"
-                >
-                    <Plus size={16} /> Crear Historia
-                </motion.button>
+            <div className="space-y-4">
+                {histories.map((history, idx) => (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        key={history.id}
+                        onClick={() => onNavigate(`/dashboard/patients/${history.patientId}/history/${history.id}`)}
+                        className="group relative bg-[#0a0a0a]/40 backdrop-blur-xl border border-white/5 rounded-2xl p-6 flex items-center justify-between cursor-pointer transition-all duration-700 hover:border-primary/20 hover:bg-[#0a0a0a]/60"
+                    >
+                        <div className="flex items-center gap-8">
+                            <div className="text-center min-w-[80px]">
+                                <p className="text-[14px] font-thin text-white tracking-widest">{history.date.split('-')[2]}</p>
+                                <p className="text-[7px] tracking-[0.5em] text-white/20 uppercase font-light">{new Date(history.date).toLocaleDateString('es-ES', { month: 'short' })}</p>
+                            </div>
+
+                            <div className="h-6 w-[1px] bg-white/5" />
+
+                            <div className="flex flex-col gap-1">
+                                <h4 className="text-[11px] font-thin text-white/60 tracking-[0.2em] uppercase line-clamp-1 group-hover:text-white transition-colors">
+                                    {history.motives.principalMotive || "EXAMEN GENERAL"}
+                                </h4>
+                                <div className="flex items-center gap-4">
+                                    <span className="text-[7px] tracking-[0.3em] text-white/20 uppercase">ID: {history.id.slice(0, 8)}</span>
+                                    <CheckCircle size={10} className="text-emerald-500/40" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-700">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); onDelete(history.id); }}
+                                className="p-2 text-white/10 hover:text-destructive transition-colors"
+                            >
+                                <Trash2 size={14} strokeWidth={1} />
+                            </button>
+                            <div className="p-2.5 rounded-full border border-primary/10 text-primary group-hover:scale-110 transition-transform">
+                                <Eye size={14} strokeWidth={1} />
+                            </div>
+                        </div>
+
+                        {/* Liquid Background Accent */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rounded-2xl" />
+                    </motion.div>
+                ))}
+
+                {histories.length === 0 && (
+                    <div className="py-20 text-center border border-dashed border-white/5 rounded-3xl">
+                        <p className="text-[8px] tracking-[0.5em] text-white/10 uppercase font-thin italic">Sin registros clínicos primarios</p>
+                    </div>
+                )}
             </div>
-
-            {histories.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4">
-                    {histories.map((h, idx) => (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.05 }}
-                            key={h.id}
-                            className="group relative bg-muted/30 hover:bg-muted/50 p-5 rounded-2xl border border-border shadow-soft hover:shadow-xl transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 overflow-hidden"
-                        >
-                            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-primary/40 group-hover:bg-primary transition-colors" />
-
-                            <div className="flex items-center gap-5 pl-2">
-                                <div className="hidden sm:flex flex-col items-center justify-center bg-card border border-border rounded-xl px-3 py-2 shadow-soft min-w-[70px]">
-                                    <span className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter">{h.date.split('-')[1]}</span>
-                                    <span className="text-xl font-black text-foreground">{h.date.split('-')[2]}</span>
-                                    <span className="text-[10px] font-black uppercase text-primary tracking-tighter">{h.date.split('-')[0]}</span>
-                                </div>
-                                <div>
-                                    <p className="font-black text-foreground text-sm flex items-center gap-2">
-                                        <span className="sm:hidden">{h.date} | </span>
-                                        {h.time}
-                                    </p>
-                                    <p className="text-xs text-muted-foreground mt-1 line-clamp-1 font-bold italic">
-                                        &quot;{Object.keys(h.motives || {}).filter(k => (h.motives as any)[k]).join(', ') || h.otherMotive || 'Consulta General'}&quot;
-                                    </p>
-                                    {h.isValidated === false && (
-                                        <span className="inline-flex mt-2 items-center gap-1.5 text-[9px] font-black bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full uppercase tracking-widest border border-amber-500/20">
-                                            <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
-                                            Borrador
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-2 w-full sm:w-auto justify-end sm:opacity-0 group-hover:opacity-100 transition-all">
-                                <button
-                                    onClick={() => onNavigate(`/dashboard/patients/${patient.id}/history/${h.id}`)}
-                                    className="p-3 rounded-xl bg-card border border-border text-primary hover:bg-primary hover:text-primary-foreground transition-all shadow-soft"
-                                >
-                                    <Eye size={18} />
-                                </button>
-                                <button
-                                    onClick={() => onDelete(h.id)}
-                                    className="p-3 rounded-xl bg-card border border-border text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all shadow-soft"
-                                >
-                                    <Trash2 size={18} />
-                                </button>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-            ) : (
-                <div className="text-center py-12 bg-muted/20 rounded-3xl border-2 border-dashed border-border/50">
-                    <p className="text-muted-foreground font-black text-xs uppercase tracking-[0.2em] px-8">
-                        {isAssistant
-                            ? "Paciente en consulta medica, pendiente historia clinica"
-                            : "No se registran antecedentes clínicos previos"}
-                    </p>
-                </div>
-            )}
         </div>
     );
 };

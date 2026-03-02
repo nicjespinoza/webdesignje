@@ -30,8 +30,8 @@ const GYNECOLOGY_DATA = {
     diagnoses: ["Embarazo normal", "Cervicitis", "Síndrome de ovario poliquístico", "Vaginosis bacteriana", "Amenorrea secundaria", "Dismenorrea", "Miomatosis uterina", "Mastopatía fibroquística"]
 };
 
-function getRandomItem(arr: any[]) {
-    return arr[Math.floor(Math.random() * arr.length)];
+function getRandomItem<T>(arr: readonly T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)]!;
 }
 
 function getRandomDate(start: Date, end: Date) {
@@ -50,8 +50,12 @@ async function seed() {
             const userCred = await signInWithEmailAndPassword(auth, "dr@je.com", "123456");
             currentUser = userCred.user;
             console.log("Logged in successfully.");
-        } catch (error: any) {
-            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+        } catch (error: unknown) {
+            const errorCode = typeof error === 'object' && error !== null && 'code' in error
+                ? (error as { code?: unknown }).code
+                : undefined;
+
+            if (errorCode === 'auth/user-not-found' || errorCode === 'auth/invalid-credential') {
                 console.log("User not found, creating new doctor user...");
                 const userCred = await createUserWithEmailAndPassword(auth, "dr@je.com", "123456");
                 currentUser = userCred.user;

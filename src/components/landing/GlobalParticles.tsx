@@ -5,6 +5,83 @@
 
 import React, { useEffect, useRef } from 'react';
 
+type GlobalParticlesColors = {
+    gold: string;
+    bright: string;
+    white: string;
+};
+
+class GlobalParticle {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    size: number;
+    targetSize: number;
+    baseSize: number;
+    type: 'small' | 'medium' | 'large';
+    pulse: number;
+    pulseSpeed: number;
+    life: number;
+
+    constructor(width: number, height: number) {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+
+        const rand = Math.random();
+        if (rand < 0.7) {
+            this.type = 'small';
+            this.baseSize = 0.5 + Math.random() * 1;
+        } else if (rand < 0.95) {
+            this.type = 'medium';
+            this.baseSize = 2 + Math.random() * 1.5;
+        } else {
+            this.type = 'large';
+            this.baseSize = 4 + Math.random() * 2;
+        }
+
+        this.size = this.baseSize;
+        this.targetSize = this.baseSize;
+        this.pulse = Math.random() * Math.PI * 2;
+        this.pulseSpeed = 0.01 + Math.random() * 0.02;
+        this.life = Math.random();
+    }
+
+    update(width: number, height: number) {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+
+        this.pulse += this.pulseSpeed;
+        this.size = this.baseSize + Math.sin(this.pulse) * (this.baseSize * 0.3);
+    }
+
+    draw(ctx: CanvasRenderingContext2D, scrollFactor: number, colors: GlobalParticlesColors) {
+        const opacity = (0.2 + Math.sin(this.pulse * 0.5) * 0.15 + 0.2) * (1 - scrollFactor * 0.7);
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+        gradient.addColorStop(0, `${colors.bright}${opacity})`);
+        gradient.addColorStop(1, `${colors.gold}${opacity * 0.5})`);
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        if (this.type !== 'small' && scrollFactor < 0.3) {
+            ctx.shadowBlur = this.size * 3 * opacity;
+            ctx.shadowColor = `rgba(251, 225, 141, ${opacity * 0.5})`;
+        } else {
+            ctx.shadowBlur = 0;
+        }
+    }
+}
+
 const GlobalParticles: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const scrollRef = useRef(0);
@@ -18,11 +95,11 @@ const GlobalParticles: React.FC = () => {
         const ctx = canvas.getContext('2d', { alpha: false });
         if (!ctx) return;
 
-        let particles: Particle[] = [];
+        let particles: GlobalParticle[] = [];
         let animationFrameId: number;
 
-        const PARTICLE_COUNT = 100;
-        const CONNECTION_DISTANCE = 180;
+        const PARTICLE_COUNT = 80;
+        const CONNECTION_DISTANCE = 200;
         const MOUSE_RADIUS = 250;
         const COLORS = {
             gold: 'rgba(198, 147, 32,',
@@ -30,83 +107,10 @@ const GlobalParticles: React.FC = () => {
             white: 'rgba(255, 255, 255,'
         };
 
-        class Particle {
-            x: number;
-            y: number;
-            vx: number;
-            vy: number;
-            size: number;
-            targetSize: number;
-            baseSize: number;
-            type: 'small' | 'medium' | 'large';
-            pulse: number;
-            pulseSpeed: number;
-            life: number;
-
-            constructor() {
-                this.x = Math.random() * canvas!.width;
-                this.y = Math.random() * canvas!.height;
-                this.vx = (Math.random() - 0.5) * 0.3;
-                this.vy = (Math.random() - 0.5) * 0.3;
-
-                const rand = Math.random();
-                if (rand < 0.7) {
-                    this.type = 'small';
-                    this.baseSize = 0.5 + Math.random() * 1;
-                } else if (rand < 0.95) {
-                    this.type = 'medium';
-                    this.baseSize = 2 + Math.random() * 1.5;
-                } else {
-                    this.type = 'large';
-                    this.baseSize = 4 + Math.random() * 2;
-                }
-
-                this.size = this.baseSize;
-                this.targetSize = this.baseSize;
-                this.pulse = Math.random() * Math.PI * 2;
-                this.pulseSpeed = 0.01 + Math.random() * 0.02;
-                this.life = Math.random();
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas!.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas!.height) this.vy *= -1;
-
-                this.pulse += this.pulseSpeed;
-                // Breathing effect: size oscillates
-                this.size = this.baseSize + Math.sin(this.pulse) * (this.baseSize * 0.3);
-            }
-
-            draw(scrollFactor: number) {
-                if (!ctx) return;
-                const opacity = (0.2 + Math.sin(this.pulse * 0.5) * 0.15 + 0.2) * (1 - scrollFactor * 0.7);
-
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-
-                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-                gradient.addColorStop(0, `${COLORS.bright}${opacity})`);
-                gradient.addColorStop(1, `${COLORS.gold}${opacity * 0.5})`);
-
-                ctx.fillStyle = gradient;
-                ctx.fill();
-
-                if (this.type !== 'small' && scrollFactor < 0.3) {
-                    ctx.shadowBlur = this.size * 3 * opacity;
-                    ctx.shadowColor = `rgba(251, 225, 141, ${opacity * 0.5})`;
-                } else {
-                    ctx.shadowBlur = 0;
-                }
-            }
-        }
-
         const init = () => {
             particles = [];
             for (let i = 0; i < PARTICLE_COUNT; i++) {
-                particles.push(new Particle());
+                particles.push(new GlobalParticle(canvas.width, canvas.height));
             }
         };
 
@@ -122,7 +126,8 @@ const GlobalParticles: React.FC = () => {
         };
 
         const handleScroll = () => {
-            scrollRef.current = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+            scrollRef.current = scrollable > 0 ? window.scrollY / scrollable : 0;
         };
 
         window.addEventListener('resize', () => {
@@ -151,8 +156,8 @@ const GlobalParticles: React.FC = () => {
 
             for (let i = 0; i < particles.length; i++) {
                 const p1 = particles[i];
-                p1.update();
-                p1.draw(scrollFactor);
+                p1.update(canvas.width, canvas.height);
+                p1.draw(ctx, scrollFactor, COLORS);
 
                 for (let j = i + 1; j < particles.length; j++) {
                     const p2 = particles[j];
@@ -169,7 +174,7 @@ const GlobalParticles: React.FC = () => {
                         // Double interlaced lines for realistic neural network
                         ctx.beginPath();
                         ctx.strokeStyle = `${COLORS.gold}${lineOpacity})`;
-                        ctx.lineWidth = 0.3 + ratio * 0.7;
+                        ctx.lineWidth = 0.2 + ratio * 0.5;
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();

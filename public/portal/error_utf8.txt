@@ -1,0 +1,87 @@
+﻿
+  firebase-debug.log:3445:      "context": 
+{
+  firebase-debug.log:3446:        "body": {
+  firebase-debug.log:3447:          
+"error": {
+  firebase-debug.log:3448:            
+"code": 400,
+  firebase-debug.log:3449:            
+"message": "Validation failed for trigger p
+rojects/web-design-je/locations/nam5/trigge
+rs/onpatientcreated-940332: Invalid 
+resource state for \"\": Permission denied 
+while using the Eventarc Service Agent. If 
+you recently started to use Eventarc, it 
+may take a few minutes before all 
+necessary permissions are propagated to 
+the Service Agent. Otherwise, verify that 
+it has Eventarc Service Agent role.",
+  firebase-debug.log:3450:            
+"status": "FAILED_PRECONDITION"
+  firebase-debug.log:3451:          }
+  firebase-debug.log:3452:        },
+  firebase-debug.log:3453:        
+"response": {
+  firebase-debug.log:3454:          
+"statusCode": 400
+  firebase-debug.log:3455:        }
+  firebase-debug.log:3456:      },
+  firebase-debug.log:3457:      "exit": 1,
+  firebase-debug.log:3458:      "message": 
+"Request to https://cloudfunctions.googleap
+is.com/v2/projects/web-design-je/locations/
+us-central1/functions?functionId=onPatientC
+reated had HTTP Error: 400, Validation 
+failed for trigger projects/web-design-je/l
+ocations/nam5/triggers/onpatientcreated-940
+332: Invalid resource state for \"\": 
+Permission denied while using the Eventarc 
+Service Agent. If you recently started to 
+use Eventarc, it may take a few minutes 
+before all necessary permissions are 
+propagated to the Service Agent. 
+Otherwise, verify that it has Eventarc 
+Service Agent role.",
+  firebase-debug.log:3459:      "status": 
+400
+  firebase-debug.log:3460:    },
+  firebase-debug.log:3461:    "status": 
+400,
+  firebase-debug.log:3462:    "code": 400
+  firebase-debug.log:3463:  }
+  firebase-debug.log:3464:}
+  firebase-debug.log:3465:[error] Error: 
+There was an error deploying functions:
+  firebase-debug.log:3466:[error] - Error 
+Failed to create function onPatientDeleted 
+in region us-central1
+  firebase-debug.log:3467:[error] - Error 
+Failed to create function onConsultCreated 
+in region us-central1
+  firebase-debug.log:3468:[error] - Error 
+Failed to create function onMessageSent in 
+region us-central1
+  firebase-debug.log:3469:[error] - Error 
+Failed to create function onChatCreated in 
+region us-central1
+  firebase-debug.log:3470:[error] - Error 
+Failed to create function onHistoryUpdated 
+in region us-central1
+  firebase-debug.log:3471:[error] - Error 
+Failed to create function onHistoryCreated 
+in region us-central1
+  firebase-debug.log:3472:[error] - Error 
+Failed to create function 
+onAppointmentCreated in region us-central1
+  firebase-debug.log:3473:[error] - Error 
+Failed to create function 
+onAppointmentUpdated in region us-central1
+  firebase-debug.log:3474:[error] - Error 
+Failed to create function onPatientUpdated 
+in region us-central1
+> firebase-debug.log:3475:[error] - Error 
+Failed to create function onPatientCreated 
+in region us-central1
+
+

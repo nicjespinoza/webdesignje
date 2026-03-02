@@ -17,8 +17,7 @@ export default function Logo({ isDark = true, size = 64, className = '' }: LogoP
             alt="JE Web Design - Joseph Espinoza"
             width={size}
             height={size}
-            className={`drop-shadow-[0_0_20px_rgba(198,147,32,0.6)] rounded-sm ${className}`}
-            style={{ width: `${size}px`, height: 'auto' }}
+            className={`drop-shadow-[0_0_10px_rgba(198,147,32,0.4)] rounded-sm ${className}`}
             priority
         />
     );

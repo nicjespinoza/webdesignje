@@ -17,7 +17,29 @@ import {
   Line,
 } from '@react-three/drei';
 import * as THREE from 'three';
+import type { Line2 } from 'three-stdlib';
 import { EffectComposer, Bloom, ChromaticAberration } from '@react-three/postprocessing';
+
+const fract = (n: number) => n - Math.floor(n);
+
+const mulberry32 = (seed: number) => {
+  let t = seed >>> 0;
+  return () => {
+    t += 0x6D2B79F5;
+    let x = t;
+    x = Math.imul(x ^ (x >>> 15), x | 1);
+    x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
+const stableSeedFromNumbers = (...values: number[]) => {
+  const s = values.reduce((acc, v, idx) => {
+    const n = Number.isFinite(v) ? v : 0;
+    return acc + (n + 1) * (idx + 1) * 9973;
+  }, 0);
+  return Math.floor(fract(Math.sin(s) * 100000) * 2 ** 32);
+};
 
 // --- Neural Network Logic ---
 
@@ -33,42 +55,43 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
   const linesRef = useRef<THREE.Group>(null!);
   const groupRef = useRef<THREE.Group>(null!);
   const [hoveredNeuron, setHoveredNeuron] = useState<number | null>(null);
-  const { viewport } = useThree();
+  useThree();
 
   // Generate neurons with layers (core, middle, outer)
   const neurons = useMemo<Neuron[]>(() => {
+    const rand = mulberry32(stableSeedFromNumbers(count, radius));
     const temp: Neuron[] = [];
     for (let i = 0; i < count; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      
+      const theta = rand() * Math.PI * 2;
+      const phi = Math.acos(2 * rand() - 1);
+
       // Layered distribution for more organic brain-like structure
-      const layerRoll = Math.random();
+      const layerRoll = rand();
       let r: number;
       let layer: number;
-      
+
       if (layerRoll < 0.3) {
         // Core layer (dense)
-        r = radius * 0.3 * Math.cbrt(Math.random());
+        r = radius * 0.3 * Math.cbrt(rand());
         layer = 0;
       } else if (layerRoll < 0.7) {
         // Middle layer
-        r = radius * (0.3 + 0.4 * Math.random());
+        r = radius * (0.3 + 0.4 * rand());
         layer = 1;
       } else {
         // Outer layer (sparse)
-        r = radius * (0.7 + 0.3 * Math.random());
+        r = radius * (0.7 + 0.3 * rand());
         layer = 2;
       }
-      
+
       const x = r * Math.sin(phi) * Math.cos(theta);
       const y = r * Math.sin(phi) * Math.sin(theta);
       const z = r * Math.cos(phi);
-      
+
       temp.push({
         position: new THREE.Vector3(x, y, z),
         baseSize: layer === 0 ? 0.25 : layer === 1 ? 0.18 : 0.12,
-        pulseOffset: Math.random() * Math.PI * 2,
+        pulseOffset: rand() * Math.PI * 2,
         layer
       });
     }
@@ -78,14 +101,14 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
   // Generate connections based on distance and layer
   const connections = useMemo(() => {
     const lines: { points: [THREE.Vector3, THREE.Vector3]; strength: number; layer: number }[] = [];
-    
+
     neurons.forEach((n1, i) => {
       neurons.forEach((n2, j) => {
         if (i !== j) {
           const dist = n1.position.distanceTo(n2.position);
           // Different thresholds per layer
           const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
-          
+
           if (dist < threshold) {
             // Strength based on layer (core connections stronger)
             const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
@@ -103,14 +126,14 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    
+
     if (groupRef.current) {
       // Rotate the entire brain with subtle easing
       groupRef.current.rotation.y = t * 0.08;
       groupRef.current.rotation.z = Math.sin(t * 0.03) * 0.1;
       groupRef.current.rotation.x = Math.cos(t * 0.02) * 0.05;
     }
-    
+
     // Pulse animation for neurons
     if (pointsRef.current) {
       const scale = 1 + Math.sin(t * 2) * 0.15;
@@ -188,7 +211,7 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
 
       {/* Floating Data Bits moving through the system */}
       <DataPulses radius={radius} count={35} />
-      
+
       {/* Energy waves emanating from core */}
       <EnergyWaves count={5} />
     </group>
@@ -196,19 +219,19 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
 };
 
 // Animated line with pulsing opacity
-const AnimatedLine = ({ 
-  points, 
-  color, 
-  baseOpacity, 
-  index 
-}: { 
-  points: [THREE.Vector3, THREE.Vector3]; 
-  color: string; 
+const AnimatedLine = ({
+  points,
+  color,
+  baseOpacity,
+  index
+}: {
+  points: [THREE.Vector3, THREE.Vector3];
+  color: string;
   baseOpacity: number;
   index: number;
 }) => {
-  const ref = useRef<THREE.Line>(null!);
-  
+  const ref = useRef<Line2>(null!);
+
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
     if (ref.current) {
@@ -237,27 +260,34 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const tempObj = new THREE.Object3D();
   const color = new THREE.Color();
 
+  const nextRand = (agent: { seed: number }) => {
+    agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
+    return agent.seed / 4294967296;
+  };
+
   const agents = useMemo(() => {
+    const seeded = mulberry32(stableSeedFromNumbers(radius, count, 202));
     return new Array(count).fill(0).map((_, i) => ({
       pos: new THREE.Vector3(
-        (Math.random() - 0.5) * radius * 2,
-        (Math.random() - 0.5) * radius * 2,
-        (Math.random() - 0.5) * radius * 2
+        (seeded() - 0.5) * radius * 2,
+        (seeded() - 0.5) * radius * 2,
+        (seeded() - 0.5) * radius * 2
       ),
       dest: new THREE.Vector3(
-        (Math.random() - 0.5) * radius * 2,
-        (Math.random() - 0.5) * radius * 2,
-        (Math.random() - 0.5) * radius * 2
+        (seeded() - 0.5) * radius * 2,
+        (seeded() - 0.5) * radius * 2,
+        (seeded() - 0.5) * radius * 2
       ),
-      speed: Math.random() * 0.08 + 0.04,
-      phase: Math.random() * Math.PI * 2,
-      colorOffset: i / count
+      speed: seeded() * 0.08 + 0.04,
+      phase: seeded() * Math.PI * 2,
+      colorOffset: i / count,
+      seed: Math.floor(seeded() * 2 ** 32) >>> 0
     }));
   }, [radius, count]);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    
+
     if (!meshRef.current) return;
 
     agents.forEach((agent, i) => {
@@ -267,27 +297,31 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
       // If close to destination, pick new destination
       if (agent.pos.distanceTo(agent.dest) < 0.3) {
+        const r1 = nextRand(agent);
+        const r2 = nextRand(agent);
+        const r3 = nextRand(agent);
         agent.dest.set(
-          (Math.random() - 0.5) * radius * 2,
-          (Math.random() - 0.5) * radius * 2,
-          (Math.random() - 0.5) * radius * 2
+          (r1 - 0.5) * radius * 2,
+          (r2 - 0.5) * radius * 2,
+          (r3 - 0.5) * radius * 2
         );
       }
 
       tempObj.position.copy(agent.pos);
-      
+
       // Pulsing scale
       const scale = 0.08 + 0.04 * Math.sin(t * 5 + agent.phase);
       tempObj.scale.setScalar(scale);
-      
+
       tempObj.updateMatrix();
       meshRef.current.setMatrixAt(i, tempObj.matrix);
-      
+
       // Color variation from gold to white
-      color.setHSL(0.12 + agent.colorOffset * 0.05, 0.9, 0.7 + Math.random() * 0.3);
+      const flicker = 0.5 + 0.5 * Math.sin(t * 3 + agent.phase + agent.colorOffset * 12);
+      color.setHSL(0.12 + agent.colorOffset * 0.05, 0.9, 0.7 + flicker * 0.3);
       meshRef.current.setColorAt(i, color);
     });
-    
+
     meshRef.current.instanceMatrix.needsUpdate = true;
     meshRef.current.instanceColor!.needsUpdate = true;
   });
@@ -306,25 +340,26 @@ const EnergyWaves = ({ count }: { count: number }) => {
   const tempObj = new THREE.Object3D();
 
   const waves = useMemo(() => {
+    const rand = mulberry32(stableSeedFromNumbers(count, 303));
     return new Array(count).fill(0).map((_, i) => ({
       angle: (i / count) * Math.PI * 2,
       radius: 0,
-      speed: Math.random() * 0.5 + 0.3,
-      maxRadius: 4 + Math.random() * 2,
+      speed: rand() * 0.5 + 0.3,
+      maxRadius: 4 + rand() * 2,
       opacity: 0,
-      phase: Math.random() * Math.PI * 2
+      phase: rand() * Math.PI * 2
     }));
   }, [count]);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    
+
     if (!meshRef.current) return;
 
     waves.forEach((wave, i) => {
       // Expand wave
       wave.radius += wave.speed;
-      
+
       if (wave.radius > wave.maxRadius) {
         wave.radius = 0;
         wave.opacity = 0;
@@ -340,10 +375,10 @@ const EnergyWaves = ({ count }: { count: number }) => {
       tempObj.scale.setScalar(wave.radius * 0.3 + 0.1);
       tempObj.rotation.z = wave.angle;
       tempObj.updateMatrix();
-      
+
       meshRef.current.setMatrixAt(i, tempObj.matrix);
     });
-    
+
     meshRef.current.instanceMatrix.needsUpdate = true;
   });
 

@@ -1,10 +1,9 @@
-
+// medical-ai-demo/components/profile/PatientHeader.tsx
 "use client";
 
 import React from 'react';
-import { ArrowLeft, Brain, Calendar, StickyNote, Activity, PenTool, Eye } from 'lucide-react';
+import { ArrowLeft, Brain, Calendar, StickyNote, Activity, PenTool, Eye, ChevronRight, ChevronLeft } from 'lucide-react';
 import { calculateAge } from '@/lib/helpers';
-import { ActionButton } from './SharedComponents';
 import { Patient } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
@@ -39,88 +38,87 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
     const isAssistant = user?.email === 'asistente@je.com';
 
     return (
-        <div className="sticky top-6 z-40 px-4 md:px-8 mb-12 transition-all duration-700">
-            <motion.div
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="max-w-7xl mx-auto bg-card/60 backdrop-blur-3xl rounded-[3rem] border border-border/50 shadow-soft p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-8 group hover:shadow-2xl transition-all duration-500"
-            >
-                <div className="flex items-center gap-8 w-full md:w-auto">
-                    <motion.button
-                        whileHover={{ scale: 1.1, x: -5 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={onBack}
-                        className="p-5 rounded-[1.5rem] bg-background border border-border/60 text-muted-foreground hover:text-primary transition-all shadow-inner group/back"
-                    >
-                        <ArrowLeft size={22} className="group-hover/back:-translate-x-1 transition-transform" />
-                    </motion.button>
+        <div className="w-full relative z-40">
+            <div className="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-10 gap-10">
 
-                    <div className="overflow-hidden">
-                        <div className="flex items-center gap-4 flex-wrap">
-                            <h1 className="text-3xl md:text-4xl font-black text-foreground tracking-tighter truncate">
-                                {patient.firstName} {patient.lastName}
+                {/* Left: Patient Name Luxury */}
+                <div className="flex flex-col gap-5">
+                    <button
+                        onClick={onBack}
+                        className="flex items-center gap-3 text-white/20 hover:text-primary transition-all text-[8px] tracking-[0.5em] uppercase font-light group"
+                    >
+                        <ChevronLeft size={14} strokeWidth={1} className="group-hover:-translate-x-1 transition-transform" />
+                        Regresar
+                    </button>
+
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-4">
+                            <h1 className="text-3xl md:text-5xl font-thin tracking-[0.1em] text-white uppercase leading-none">
+                                {patient.firstName} <br /> {patient.lastName}
                             </h1>
                             {patient.isOnline && (
-                                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-sm shadow-emerald-500/10">
-                                    <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                                    <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Activo</span>
-                                </div>
+                                <span className="w-1 h-1 bg-primary rounded-full animate-pulse mt-3" />
                             )}
                         </div>
-                        <div className="flex items-center gap-6 mt-2">
-                            <div className="flex items-center gap-2 bg-muted/40 px-4 py-1.5 rounded-full border border-border/40">
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">Paciente ID:</span>
-                                <span className="text-[11px] font-black text-primary/80 font-mono">{patient.id.slice(0, 8).toUpperCase()}</span>
-                            </div>
-                            <div className="flex items-center gap-3 text-xs font-black text-muted-foreground uppercase tracking-widest opacity-60">
-                                <span>{calculateAge(patient.birthDate)} Años</span>
-                                <div className="w-1.5 h-1.5 bg-border rounded-full" />
-                                <span>{patient.sex}</span>
-                            </div>
+
+                        <div className="flex items-center gap-6 text-[8px] font-thin text-white/20 uppercase tracking-[0.4em]">
+                            <span className="text-primary/60">EXPEDIENTE #{patient.id.slice(-6).toUpperCase()}</span>
+                            <span className="w-1 h-1 bg-white/5 rounded-full" />
+                            <span>{calculateAge(patient.birthDate)} AÑOS</span>
+                            <span className="w-1 h-1 bg-white/5 rounded-full" />
+                            <span>GÉNERO: {patient.sex}</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center p-2 rounded-[2.5rem] bg-background/50 border border-border/40 shadow-inner backdrop-blur-xl">
-                    <div className="flex items-center px-2 gap-1">
-                        {!isAssistant && (
-                            <>
-                                <ActionButton icon={<Brain size={20} />} label="IA Analysis" onClick={onAIAnalysis} color="indigo" />
-                                <div className="w-px h-10 bg-border/40 mx-2" />
-                            </>
-                        )}
-                        <ActionButton icon={<Calendar size={20} />} label="Agenda" onClick={onShowAppointment} color="blue" />
-                    </div>
+                {/* Right: Premium Actions Filtered */}
+                <div className="flex flex-wrap items-center gap-3">
+                    {!isAssistant && (
+                        <button onClick={onAIAnalysis} className="px-6 py-2.5 rounded-full border border-primary/10 hover:border-primary/40 text-primary text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 group">
+                            <Brain size={14} strokeWidth={1} />
+                            Análisis IA
+                        </button>
+                    )}
 
-                    <div className="w-px h-10 bg-border/40 mx-2" />
+                    <button onClick={onShowAppointment} className="px-6 py-2.5 rounded-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3">
+                        <Calendar size={14} strokeWidth={1} />
+                        Cita
+                    </button>
 
-                    <div className="flex items-center px-2 gap-2">
-                        {!isAssistant && (
-                            <div className="flex items-center gap-1 group/notes">
-                                <ActionButton icon={<StickyNote size={20} />} label="Nueva Nota" onClick={onShowNotes} color="amber" />
-                                <ActionButton icon={<Eye size={20} />} onClick={onViewNotes} color="amber" variant="ghost" />
-                            </div>
-                        )}
-                        <div className="w-px h-10 bg-border/40 mx-2" />
-                        <div className="flex items-center gap-1 group/endo">
-                            <ActionButton icon={<Activity size={20} />} label="Evolución" onClick={onShowEndoscopic} color="teal" />
-                            <ActionButton icon={<Eye size={20} />} onClick={onViewEndoscopic} color="teal" variant="ghost" />
+                    {!isAssistant && (
+                        <div className="flex items-center gap-2">
+                            <button onClick={onShowNotes} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
+                                <StickyNote size={14} strokeWidth={1} /> Notas
+                            </button>
+                            <button onClick={onViewNotes} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                                <Eye size={12} strokeWidth={1} />
+                            </button>
                         </div>
+                    )}
+
+                    <div className="flex items-center gap-2">
+                        <button onClick={onShowEndoscopic} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
+                            <Activity size={14} strokeWidth={1} /> Endo
+                        </button>
+                        <button onClick={onViewEndoscopic} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                            <Eye size={12} strokeWidth={1} />
+                        </button>
                     </div>
 
-                    <div className="w-px h-10 bg-border/40 mx-2" />
-
-                    <div className="px-2">
-                        <ActionButton
-                            icon={<PenTool size={20} />}
-                            label="Firmas"
-                            onClick={() => setActiveTab(activeTab === 'general' ? 'consents' : 'general')}
-                            active={activeTab === 'consents'}
-                            color="gray"
-                        />
-                    </div>
+                    <button
+                        onClick={() => setActiveTab(activeTab === 'general' ? 'consents' : 'general')}
+                        className={cn(
+                            "px-6 py-2.5 rounded-full text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3",
+                            activeTab === 'consents'
+                                ? "bg-primary text-black font-black"
+                                : "border border-white/5 hover:border-white/20 text-white/40 hover:text-white"
+                        )}
+                    >
+                        <PenTool size={14} strokeWidth={1} />
+                        {activeTab === 'consents' ? 'General' : 'Firmas'}
+                    </button>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 };

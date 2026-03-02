@@ -1,0 +1,51 @@
+﻿app/dashboard/(inner)/patients/[id]/consult/new/page.tsx(115,34): error TS2304: Cannot find name 'Activity'.
+app/dashboard/(inner)/patients/[id]/consult/new/page.tsx(183,34): error TS2304: Cannot find name 'Activity'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(43,9): error TS2719: Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/react-hook-form/dist/types/resolvers").Resolver<{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | undefin...' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/react-hook-form/dist/types/resolvers").Resolver<{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | undefin...'. Two different types with this name exist, but they are unrelated.
+  Types of parameters 'options' and 'options' are incompatible.
+    Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/react-hook-form/dist/types/resolvers").ResolverOptions<{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | ...' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/react-hook-form/dist/types/resolvers").ResolverOptions<{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | ...'. Two different types with this name exist, but they are unrelated.
+      Type '{ yes?: boolean | undefined; no?: boolean | undefined; details?: string | undefined; conditions?: Record<PropertyKey, unknown> | undefined; list?: Record<PropertyKey, unknown> | undefined; other?: string | undefined; cancerDetails?: string | undefined; } | undefined' is not assignable to type '{ yes: boolean; no: boolean; details?: string | undefined; conditions?: Record<string | number | symbol, unknown> | undefined; list?: Record<string | number | symbol, unknown> | undefined; other?: string | undefined; cancerDetails?: string | undefined; } | undefined'.
+        Type '{ yes?: boolean | undefined; no?: boolean | undefined; details?: string | undefined; conditions?: Record<PropertyKey, unknown> | undefined; list?: Record<PropertyKey, unknown> | undefined; other?: string | undefined; cancerDetails?: string | undefined; }' is not assignable to type '{ yes: boolean; no: boolean; details?: string | undefined; conditions?: Record<string | number | symbol, unknown> | undefined; list?: Record<string | number | symbol, unknown> | undefined; other?: string | undefined; cancerDetails?: string | undefined; }'.
+          Types of property 'yes' are incompatible.
+            Type 'boolean | undefined' is not assignable to type 'boolean'.
+              Type 'undefined' is not assignable to type 'boolean'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(85,122): error TS2339: Property 'cancerDetails' does not exist on type '{ yes: boolean; no: boolean; }'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(86,54): error TS2339: Property 'surgicalHistory' does not exist on type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(86,93): error TS2339: Property 'surgicalHistory' does not exist on type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(87,52): error TS2551: Property 'transfusionHistory' does not exist on type 'InitialHistory'. Did you mean 'transfusions'?
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(88,49): error TS2339: Property 'allergicHistory' does not exist on type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(89,45): error TS2339: Property 'drugHistory' does not exist on type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(90,104): error TS2339: Property 'cancerDetails' does not exist on type '{ yes: boolean; no: boolean; list: CheckboxData; other: string; }'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(91,56): error TS2339: Property 'nonPathologicalHistory' does not exist on type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(92,56): error TS2339: Property 'gynecoObstetricHistory' does not exist on type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(115,17): error TS2353: Object literal may only specify known properties, and 'specialtyId' does not exist in type 'Omit<InitialHistory, "id">'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(119,41): error TS2345: Argument of type 'Omit<InitialHistory, "id">' is not assignable to parameter of type 'InitialHistory'.
+  Property 'id' is missing in type 'Omit<InitialHistory, "id">' but required in type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(123,41): error TS2345: Argument of type 'Omit<InitialHistory, "id">' is not assignable to parameter of type 'InitialHistory'.
+  Property 'id' is missing in type 'Omit<InitialHistory, "id">' but required in type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(188,46): error TS2345: Argument of type '(data: InitialHistoryFormData) => Promise<void>' is not assignable to parameter of type 'SubmitHandler<TFieldValues>'.
+  Types of parameters 'data' and 'data' are incompatible.
+    Type 'TFieldValues' is not assignable to type '{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | undefined; evolutionTime?: string | undefined; ... 13 more ...; specialtyId?: string | undefined; }'.
+      Type 'FieldValues' is missing the following properties from type '{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | undefined; evolutionTime?: string | undefined; ... 13 more ...; specialtyId?: string | undefined; }': id, patientId, date, time
+app/dashboard/(inner)/patients/[id]/history/new/page.tsx(194,34): error TS2322: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ReactNode'.
+app/dashboard/(inner)/patients/[id]/page.tsx(55,23): error TS2554: Expected 2 arguments, but got 1.
+app/dashboard/(inner)/patients/[id]/page.tsx(66,23): error TS2554: Expected 2 arguments, but got 1.
+app/dashboard/(inner)/patients/[id]/page.tsx(121,25): error TS2322: Type '{ patient: Patient; onEdit: () => void; fileInputRef: RefObject<HTMLInputElement | null>; onImageUpload: (e: ChangeEvent<HTMLInputElement, Element>) => void; uploadingImage: boolean; }' is not assignable to type 'IntrinsicAttributes & PatientInfoCardProps'.
+  Property 'onEdit' does not exist on type 'IntrinsicAttributes & PatientInfoCardProps'.
+app/dashboard/(inner)/patients/register/page.tsx(33,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: readonly ["Masculino", "Femenino"], params?: string | { error?: string | $ZodErrorMap<$ZodIssueInvalidValue<unknown>> | undefined; message?: string | undefined; } | undefined): ZodEnum<...>', gave the following error.
+    Object literal may only specify known properties, and 'errorMap' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidValue<unknown>> | undefined; message?: string | undefined; }'.
+  Overload 2 of 2, '(entries: Readonly<Record<string, EnumValue>>, params?: string | { error?: string | $ZodErrorMap<$ZodIssueInvalidValue<unknown>> | undefined; message?: string | undefined; } | undefined): ZodEnum<...>', gave the following error.
+    Argument of type 'string[]' is not assignable to parameter of type 'Readonly<Record<string, EnumValue>>'.
+      Index signature for type 'string' is missing in type 'string[]'.
+app/dashboard/(inner)/patients/register/page.tsx(70,19): error TS2739: Type '{ createdAt: string; registrationSource: any; registrationStatus: any; firstName: string; lastName: string; birthDate: string; sex: "Masculino" | "Femenino"; email?: string | undefined; phone?: string | undefined; address?: string | undefined; nationality?: string | undefined; profession?: string | undefined; }' is missing the following properties from type 'Omit<Patient, "id">': ageDetails, initialReason
+components/profile/PatientInfoCard.tsx(39,42): error TS2339: Property 'photoUrl' does not exist on type 'Patient'.
+components/profile/PatientInfoCard.tsx(40,55): error TS2339: Property 'photoUrl' does not exist on type 'Patient'.
+components/profile/PatientInfoCard.tsx(81,81): error TS2339: Property 'bloodType' does not exist on type 'Patient'.
+components/profile/PatientInfoCard.tsx(105,74): error TS2339: Property 'idCard' does not exist on type 'Patient'.
+components/profile/PatientInfoCard.tsx(106,75): error TS2339: Property 'civilStatus' does not exist on type 'Patient'.
+components/profile/PatientInfoCard.tsx(122,72): error TS2339: Property 'occupation' does not exist on type 'Patient'.
+components/profile/PatientInfoCard.tsx(136,70): error TS2339: Property 'insurance' does not exist on type 'Patient'.
+components/profile/PatientInfoCard.tsx(137,75): error TS2339: Property 'policyNumber' does not exist on type 'Patient'.
+context/AuthContext.tsx(18,15): error TS2305: Module '"@/types"' has no exported member 'AuthContextType'.
+lib/validations/history.ts(8,19): error TS2554: Expected 2-3 arguments, but got 1.
+lib/validations/history.ts(9,13): error TS2554: Expected 2-3 arguments, but got 1.

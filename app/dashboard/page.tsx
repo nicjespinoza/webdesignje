@@ -1,81 +1,107 @@
+// app/dashboard/page.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Users,
   Calendar,
   MessageCircle,
   FileText,
-  Lock,
-  CheckCircle,
-  RefreshCw,
   X,
-  KeyRound,
-  LogOut,
   Moon,
-  Sun
+  Sun,
+  ArrowRight
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { updatePassword, getAuth } from "firebase/auth";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
+import { getSpecialtyById } from "@/lib/specialties";
+import GlobalParticles from "@/src/components/landing/GlobalParticles";
+import Logo from "@/components/ui/Logo";
 
-export default function DashboardPage() {
+function DashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [specialtyId, setSpecialtyId] = useState<string | null>(null);
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const auth = getAuth();
 
-  const unreadChatsCount = 0;
+  useEffect(() => {
+    const urlSpecialty = searchParams.get('specialty');
+    const storedSpecialty = localStorage.getItem('selectedSpecialty');
+    const finalId = urlSpecialty || storedSpecialty || 'gastroenterology';
+
+    setSpecialtyId(finalId);
+    localStorage.setItem('selectedSpecialty', finalId);
+  }, [searchParams]);
+
+  const specialty = getSpecialtyById(specialtyId || 'gastroenterology');
+
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [assistantPassword, setAssistantPassword] = useState("");
-  const [confirmAssistantPassword, setConfirmAssistantPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [loadingAssistant, setLoadingAssistant] = useState(false);
+  const [clientIp, setClientIp] = useState("N/A");
+  const [latency, setLatency] = useState(0);
+  const [isOnline, setIsOnline] = useState(true);
 
-  const isDrMilton = user?.email === 'dr@je.com' || user?.email === 'dra@je.com' || user?.email === 'dr@cenlae.com';
+  useEffect(() => {
+    const updateOnlineStatus = () => setIsOnline(window.navigator.onLine);
+    updateOnlineStatus();
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    const interval = setInterval(() => {
+      updateOnlineStatus();
+      if (!window.navigator.onLine) {
+        setLatency(0);
+      }
+    }, 5000);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      clearInterval(interval);
+    };
+  }, []);
+
+  const authLabel = user?.email?.includes('dr') ? 'DOCTOR' : 'ASISTENTE';
 
   const menuItems = [
     {
-      title: "Mis Pacientes",
-      subtitle: "Gestión y Seguimiento",
-      path: "/dashboard/patients",
-      icon: <Users size={48} />,
-      color: "bg-blue-500",
-      iconBg: "bg-blue-500/10",
-      iconColor: "text-blue-500",
+      title: "Pacientes",
+      subtitle: "DIRECTORIO",
+      path: `/dashboard/patients?specialty=${specialtyId || 'gastroenterology'}`,
+      icon: <Users size={40} strokeWidth={1} />,
+      gradient: "from-primary/20 via-transparent to-transparent",
     },
     {
       title: "Agenda",
-      subtitle: "Citas y Horarios",
-      path: "/dashboard/agenda",
-      icon: <Calendar size={48} />,
-      color: "bg-orange-500",
-      iconBg: "bg-orange-500/10",
-      iconColor: "text-orange-500",
+      subtitle: "CALENDARIO",
+      path: `/dashboard/agenda?specialty=${specialtyId || 'gastroenterology'}`,
+      icon: <Calendar size={40} strokeWidth={1} />,
+      gradient: "from-primary/20 via-transparent to-transparent",
     },
     {
-      title: "Chat Médico",
-      subtitle: "Comunicación Directa",
-      path: "/dashboard/chat",
-      icon: <MessageCircle size={48} />,
-      color: "bg-emerald-500",
-      iconBg: "bg-emerald-500/10",
-      iconColor: "text-emerald-500",
-      badge: unreadChatsCount > 0 ? unreadChatsCount : null,
+      title: "Chat",
+      subtitle: "MENSAJES",
+      path: `/dashboard/chat?specialty=${specialtyId || 'gastroenterology'}`,
+      icon: <MessageCircle size={40} strokeWidth={1} />,
+      gradient: "from-primary/20 via-transparent to-transparent",
     },
     {
-      title: "Reportes",
-      subtitle: "Análisis y Datos",
-      path: "/dashboard/reports",
-      icon: <FileText size={48} />,
-      color: "bg-purple-500",
-      iconBg: "bg-purple-500/10",
-      iconColor: "text-purple-500",
+      title: "Analítica",
+      subtitle: "REPORTES",
+      path: `/dashboard/reports?specialty=${specialtyId || 'gastroenterology'}`,
+      icon: <FileText size={40} strokeWidth={1} />,
+      gradient: "from-primary/20 via-transparent to-transparent",
     },
   ];
 
@@ -90,218 +116,197 @@ export default function DashboardPage() {
       const currentUser = auth.currentUser;
       if (currentUser) {
         await updatePassword(currentUser, newPassword);
-        alert("Contraseña personal actualizada");
-        setNewPassword("");
-        setConfirmPassword("");
+        alert("Contraseña actualizada");
         setShowPasswordModal(false);
       }
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      alert(message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-background relative flex flex-col items-center justify-center p-6 md:p-12 overflow-hidden transition-colors duration-700">
-      {/* Minimalist Soft Gradients */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
-        <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[180px]" />
-        <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[180px]" />
-      </div>
+    <div className="min-h-screen bg-[#020202] relative flex flex-col items-center p-6 md:p-12 overflow-hidden selection:bg-primary/30 font-luxury">
 
-      <div className="w-full max-w-7xl relative z-10">
-        {/* Floating Minimalist Header */}
-        <header className="flex flex-col md:flex-row items-center justify-between gap-12 mb-20 bg-card/30 backdrop-blur-2xl p-8 md:p-12 rounded-[3.5rem] border border-border/50 shadow-soft">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center md:text-left space-y-2"
-          >
-            <div className="flex flex-col md:flex-row items-center gap-4">
-              <motion.img
-                key={theme}
-                src={theme === 'light' ? "/images/Logo_trans_dorado.png" : "/images/Logo_trans_blanco.png"}
-                alt="Logo"
-                className="h-16 w-auto object-contain mb-4 md:mb-0"
-              />
-              <div className="h-12 w-px bg-border hidden md:block" />
-              <div className="text-left">
-                <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter">
-                  {user?.displayName || "Dr. Mairena"}
-                </h1>
-                <p className="text-xs font-black text-primary uppercase tracking-[0.4em] mt-1">
-                  {isDrMilton ? "MÉDICO ESPECIALISTA" : "ASISTENTE CLÍNICO"}
-                </p>
+      {/* Red Neuronal Background - Elegant Neural Web */}
+      <GlobalParticles />
+
+      {/* Surface Overlay for better readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#020202]/50 via-transparent to-[#020202]/80 pointer-events-none z-1" />
+
+      <div className="w-full max-w-6xl relative z-10 flex flex-col items-center">
+
+        {/* Luxury Minimalist Header */}
+        <header className="w-full mb-20 flex flex-col md:flex-row items-end justify-between gap-8 border-b border-white/5 pb-10">
+          <div className="flex flex-col md:flex-row items-center md:items-end gap-10">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative group cursor-pointer"
+              onClick={() => router.push('/portal')}
+            >
+              <Logo size={80} />
+            </motion.div>
+
+            <div className="flex flex-col items-center md:items-start space-y-1">
+              <h1 className="text-2xl md:text-4xl font-thin tracking-[0.2em] text-white flex items-center gap-4">
+                {specialty.nameEs.toUpperCase()}
+                <span className="h-0.5 w-0.5 bg-primary/40 rounded-full hidden md:block" />
+              </h1>
+              <div className="flex items-center gap-4 text-[10px] tracking-[0.4em] font-bold uppercase gradient-text">
+                <span>Gold Edition</span>
+                <span>•</span>
+                <span>V. 4.2</span>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          <div className="flex items-center gap-4 bg-background/50 p-2 rounded-[2.5rem] border border-border/40 backdrop-blur-md">
+          <div className="flex items-center gap-6">
             <button
               onClick={toggleTheme}
-              className="p-4 rounded-3xl bg-card hover:bg-muted text-foreground transition-all shadow-soft border border-border/50 group"
+              className="p-3.5 rounded-full border border-white/5 hover:border-primary/20 transition-all text-white/20 hover:text-primary"
             >
-              {theme === 'light' ? <Moon size={22} className="text-muted-foreground group-hover:text-primary transition-colors" /> : <Sun size={22} className="text-amber-400" />}
+              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
-
-            {isDrMilton && (
-              <button
-                onClick={() => setShowPasswordModal(true)}
-                className="p-4 rounded-3xl bg-card hover:bg-muted text-foreground transition-all shadow-soft border border-border/50 group"
-                title="Seguridad"
-              >
-                <KeyRound size={22} className="text-muted-foreground group-hover:text-primary transition-colors" />
-              </button>
-            )}
-
             <button
-              onClick={async () => { await logout(); router.push("/"); }}
-              className="px-8 py-4 rounded-3xl bg-destructive text-destructive-foreground font-black text-[10px] uppercase tracking-widest shadow-lg shadow-destructive/20 hover:scale-105 active:scale-95 transition-all"
+              onClick={async () => { await logout(); router.push("/portal"); }}
+              className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group !bg-transparent"
             >
-              Cerrar Sesión
+              <div className="liquid-gold-content !py-2.5 !px-10 !rounded-full !bg-black hover:!bg-black/40 transition-all flex items-center justify-center">
+                <span className="text-[#C69320] font-bold text-sm tracking-tight">
+                  Cerrar Sesión
+                </span>
+              </div>
             </button>
           </div>
         </header>
 
-        {/* Minimalist Floating Card Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        {/* Shorter Luxury Liquid Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
           {menuItems.map((item, idx) => (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1, duration: 0.6, ease: "easeOut" }}
-              key={idx}
+              transition={{ delay: idx * 0.1, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              key={item.path}
               onClick={() => router.push(item.path)}
-              className="group relative"
+              className="group relative h-[320px] cursor-pointer"
             >
-              {/* Floating Effect Background Shadow */}
-              <div className="absolute inset-4 bg-foreground/5 dark:bg-primary/10 rounded-[3rem] blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-0 group-hover:opacity-100" />
+              {/* Simple Elegant Transparent Card */}
+              <div className="absolute inset-0 bg-transparent border border-white/10 rounded-[2rem] transition-all duration-700 group-hover:border-primary/40 group-hover:bg-white/[0.02] overflow-hidden">
 
-              <div className="relative bg-card/40 backdrop-blur-3xl rounded-[3rem] p-10 flex flex-col items-center gap-10 border border-border/40 cursor-pointer shadow-soft hover:shadow-2xl transition-all duration-500 hover:-translate-y-6">
-
-                {/* Minimalist Animated Icon Container */}
+                {/* Subtle Glow Overlay */}
                 <div className={cn(
-                  "relative p-8 rounded-[2.5rem] transition-all duration-500 overflow-hidden",
-                  "bg-background/80 border border-border shadow-inner group-hover:border-primary/20",
-                  item.iconColor
-                )}>
-                  <div className="relative z-10 group-hover:scale-110 transition-transform duration-500">
-                    {item.icon}
+                  "absolute inset-0 bg-gradient-to-br transition-opacity duration-1000 opacity-0 group-hover:opacity-10",
+                  item.gradient
+                )} />
+
+                {/* Content Layout */}
+                <div className="relative h-full p-10 flex flex-col justify-between z-10">
+                  <div className="space-y-6">
+                    <div className="text-[#C69320] transform transition-all duration-700 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(198,147,32,0.4)]">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-thin text-white tracking-[0.1em] mb-1 uppercase group-hover:text-primary transition-all duration-700">
+                        {item.title}
+                      </h3>
+                      <p className="text-[10px] tracking-[0.4em] text-white/50 uppercase font-bold group-hover:text-white transition-colors duration-500">
+                        {item.subtitle}
+                      </p>
+                    </div>
                   </div>
-                  {/* Subtle Background Glow per Item */}
-                  <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500", item.color)} />
+
+                  <div className="flex items-center justify-between opacity-20 group-hover:opacity-100 transition-all duration-700">
+                    <div className="h-[1px] w-8 bg-primary/40 group-hover:w-16 transition-all duration-700" />
+                    <ArrowRight size={18} className="text-white/40 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  </div>
                 </div>
 
-                <div className="text-center space-y-3">
-                  <h3 className="text-2xl font-black text-foreground tracking-tight transition-colors group-hover:text-primary">
-                    {item.title}
-                  </h3>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground opacity-50">
-                    {item.subtitle}
-                  </p>
-                </div>
-
-                {/* Badge Overlay */}
-                {item.badge && (
-                  <div className="absolute top-8 right-8">
-                    <span className="flex h-10 w-10 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-10 w-10 bg-red-500 text-white text-xs font-black items-center justify-center border-4 border-card shadow-lg">
-                        {item.badge}
-                      </span>
-                    </span>
-                  </div>
-                )}
+                {/* Micro-accent */}
+                <div className="absolute top-6 right-6 w-1 h-1 bg-white/5 rounded-full group-hover:bg-primary/40 transition-colors" />
               </div>
             </motion.div>
           ))}
         </div>
 
-        <footer className="mt-20 flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground/30 font-black text-[9px] uppercase tracking-[0.5em] px-12">
-          <div className="flex items-center gap-6">
-            <span>© 2026 MEDICAL AI</span>
-            <div className="h-1 w-1 bg-border rounded-full" />
-            <span>DR. MILTON MAIRENA VALLE</span>
+        {/* Minimalist Ordered Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="mt-12 w-full flex flex-row justify-between items-center py-6 border-t border-white/5 text-white/40"
+        >
+          <div className="flex gap-12 items-center">
+            <div className="space-y-0.5">
+              <p className="text-[7px] tracking-[0.4em] uppercase font-bold text-white/40">Conexión Sistema</p>
+              <div className="flex items-center gap-2">
+                <p className={cn("text-sm font-thin tracking-widest", !isOnline ? "text-red-500" : "text-white")}>
+                  {isOnline ? `${latency}ms` : "---"}
+                </p>
+                <div className="flex items-center gap-1.5">
+                  <div className={cn("w-1 h-1 rounded-full", isOnline ? "bg-emerald-500" : "bg-red-500")} />
+                  <span className={cn("text-[7px] font-bold uppercase tracking-widest", isOnline ? "text-emerald-500" : "text-red-500")}>
+                    {isOnline ? "Estable" : "Sin conexión"}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="w-[1px] h-6 bg-white/5" />
+            <div className="space-y-0.5">
+              <p className="text-[7px] tracking-[0.4em] uppercase font-bold text-white/40">Status Nodo</p>
+              <div className="flex items-center gap-2">
+                <p className={cn("text-[7px] tracking-[0.2em] uppercase font-bold transition-colors", !isOnline ? "text-red-500" : "text-white")}>
+                  APP ({specialty.nameEs}) v9.6.3
+                </p>
+                <div className={cn("w-1 h-1 rounded-full animate-pulse", isOnline ? "bg-emerald-500" : "bg-red-500")} />
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-6">
-            <span>BUILD PRO-V4.2</span>
-            <div className="h-1 w-1 bg-border rounded-full" />
-            <span className="text-primary/50">PLATINO EDITION</span>
+
+          <div className="flex items-center gap-10">
+            <div className="flex flex-col items-end">
+              <div className="flex items-center gap-2">
+                <span className={cn("text-[7px] tracking-[0.2em] font-bold uppercase transition-colors", isOnline ? "text-emerald-500" : "text-red-500")}>
+                  IP AUTORIZADA {authLabel}:
+                </span>
+                <span className={cn("text-[9px] tracking-[0.2em] uppercase font-black transition-colors", isOnline ? "gradient-text" : "text-red-600")}>
+                  {isOnline ? clientIp : "X.X.X.X.X"}
+                </span>
+              </div>
+              <span className="text-[7px] tracking-[0.8em] uppercase font-thin text-white/20 mt-1">JE. 2026</span>
+            </div>
           </div>
-        </footer>
+        </motion.div>
       </div>
 
-      {/* Password Modal */}
-      <AnimatePresence>
-        {showPasswordModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-background/80 backdrop-blur-xl"
-              onClick={() => setShowPasswordModal(false)}
-            />
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400&display=swap');
+        
+        .font-luxury {
+          font-family: 'Outfit', sans-serif;
+        }
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-card w-full max-w-lg rounded-[3rem] shadow-2xl border border-border p-10 relative z-10"
-            >
-              <div className="flex justify-between items-center mb-10">
-                <div>
-                  <h3 className="text-3xl font-black text-foreground tracking-tighter">Seguridad</h3>
-                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">Gestión de Credenciales</p>
-                </div>
-                <button
-                  onClick={() => setShowPasswordModal(false)}
-                  className="p-3 bg-muted hover:bg-destructive hover:text-white rounded-2xl transition-all"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+        h1, h2, h3 {
+          font-family: 'Outfit', sans-serif;
+        }
 
-              <form onSubmit={handleUpdateMyPassword} className="space-y-6">
-                <div>
-                  <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-3 ml-1">Nueva Contraseña</label>
-                  <div className="relative">
-                    <input
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-6 py-4 rounded-2xl bg-muted border border-border focus:border-primary outline-none transition-all font-bold text-foreground"
-                      placeholder="••••••••"
-                    />
-                    <Lock className="absolute right-6 top-1/2 -translate-y-1/2 text-muted-foreground/30" size={18} />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-3 ml-1">Confirmar Contraseña</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-6 py-4 rounded-2xl bg-muted border border-border focus:border-primary outline-none transition-all font-bold text-foreground"
-                    placeholder="••••••••"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading || !newPassword}
-                  className="w-full mt-4 bg-primary text-primary-foreground font-black text-xs uppercase tracking-widest py-5 rounded-[2rem] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-                >
-                  {loading ? <RefreshCw className="animate-spin" /> : <CheckCircle size={20} />}
-                  Actualizar Ahora
-                </button>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+        body {
+          background-color: #020202;
+          color: white;
+          overflow-x: hidden;
+        }
+      `}</style>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="h-screen bg-black flex items-center justify-center text-primary/20 tracking-[1em] uppercase text-[8px]">Iniciando...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }

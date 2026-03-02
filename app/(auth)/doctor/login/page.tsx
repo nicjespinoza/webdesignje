@@ -5,8 +5,8 @@
 // Adaptado de src/screens/auth/StaffPortalScreen.tsx para Next.js
 // ============================================================
 
-import React, { Suspense, useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense, useEffect, useReducer } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Stethoscope, Users, User, Lock, MapPin, AlertTriangle, ChevronRight, Loader2, Mail, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
@@ -24,19 +24,68 @@ export default function StaffPortalPage() {
 
 function StaffPortalScreen() {
     const router = useRouter();
-    const searchParams = useSearchParams();
 
-    const [accessStatus, setAccessStatus] = useState<'loading' | 'allowed' | 'denied'>('loading');
-    const [clientIp, setClientIp] = useState<string>('');
-    const [errorMsg, setErrorMsg] = useState<string>('');
+    type StaffPortalState = {
+        accessStatus: 'loading' | 'allowed' | 'denied';
+        clientIp: string;
+        errorMsg: string;
+        selectedRole: 'doctor' | 'assistant' | null;
+        email: string;
+        pass: string;
+        showPassword: boolean;
+        loginError: string;
+        isLoggingIn: boolean;
+    };
 
-    // Login State
-    const [selectedRole, setSelectedRole] = useState<'doctor' | 'assistant' | null>(null);
-    const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [loginError, setLoginError] = useState('');
-    const [isLoggingIn, setIsLoggingIn] = useState(false);
+    type StaffPortalAction =
+        | { type: 'setAccessStatus'; payload: StaffPortalState['accessStatus'] }
+        | { type: 'setClientIp'; payload: string }
+        | { type: 'setErrorMsg'; payload: string }
+        | { type: 'setSelectedRole'; payload: StaffPortalState['selectedRole'] }
+        | { type: 'setEmail'; payload: string }
+        | { type: 'setPass'; payload: string }
+        | { type: 'setShowPassword'; payload: boolean }
+        | { type: 'setLoginError'; payload: string }
+        | { type: 'setIsLoggingIn'; payload: boolean };
+
+    const initialState: StaffPortalState = {
+        accessStatus: 'loading',
+        clientIp: '',
+        errorMsg: '',
+        selectedRole: null,
+        email: '',
+        pass: '',
+        showPassword: false,
+        loginError: '',
+        isLoggingIn: false,
+    };
+
+    function staffPortalReducer(state: StaffPortalState, action: StaffPortalAction): StaffPortalState {
+        switch (action.type) {
+            case 'setAccessStatus':
+                return { ...state, accessStatus: action.payload };
+            case 'setClientIp':
+                return { ...state, clientIp: action.payload };
+            case 'setErrorMsg':
+                return { ...state, errorMsg: action.payload };
+            case 'setSelectedRole':
+                return { ...state, selectedRole: action.payload };
+            case 'setEmail':
+                return { ...state, email: action.payload };
+            case 'setPass':
+                return { ...state, pass: action.payload };
+            case 'setShowPassword':
+                return { ...state, showPassword: action.payload };
+            case 'setLoginError':
+                return { ...state, loginError: action.payload };
+            case 'setIsLoggingIn':
+                return { ...state, isLoggingIn: action.payload };
+            default:
+                return state;
+        }
+    }
+
+    const [state, dispatch] = useReducer(staffPortalReducer, initialState);
 
     useEffect(() => {
         checkAccess();
@@ -46,49 +95,54 @@ function StaffPortalScreen() {
         try {
             // Simulación de verificación de IP
             await new Promise(resolve => setTimeout(resolve, 2000));
-            setAccessStatus('allowed');
-            setClientIp('192.168.1.100');
+            dispatch({ type: 'setAccessStatus', payload: 'allowed' });
+            dispatch({ type: 'setClientIp', payload: '192.168.1.100' });
         } catch (error) {
             console.error('Error verifying access:', error);
-            setAccessStatus('denied');
-            setClientIp('Unknown');
-            setErrorMsg('Acceso no autorizado');
+            dispatch({ type: 'setAccessStatus', payload: 'denied' });
+            dispatch({ type: 'setClientIp', payload: 'Unknown' });
+            dispatch({ type: 'setErrorMsg', payload: 'Acceso no autorizado' });
         }
     };
 
     const handleRoleSelect = (role: 'doctor' | 'assistant') => {
-        if (accessStatus !== 'allowed') return;
-        if (selectedRole === role) {
-            setSelectedRole(null);
+        if (state.accessStatus !== 'allowed') return;
+        if (state.selectedRole === role) {
+            dispatch({ type: 'setSelectedRole', payload: null });
         } else {
-            setSelectedRole(role);
-            setEmail('');
-            setPass('');
-            setLoginError('');
+            dispatch({ type: 'setSelectedRole', payload: role });
+            dispatch({ type: 'setEmail', payload: '' });
+            dispatch({ type: 'setPass', payload: '' });
+            dispatch({ type: 'setLoginError', payload: '' });
         }
     };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoginError('');
-        setIsLoggingIn(true);
+        dispatch({ type: 'setLoginError', payload: '' });
+        dispatch({ type: 'setIsLoggingIn', payload: true });
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            if (selectedRole === 'doctor') {
+            const { signInWithEmailAndPassword } = await import('firebase/auth');
+            const { auth } = await import('@/lib/firebase');
+
+            await signInWithEmailAndPassword(auth, state.email, state.pass);
+
+            // Redirect based on selectedRole
+            if (state.selectedRole === 'doctor') {
                 router.push('/dashboard');
-            } else if (selectedRole === 'assistant') {
-                router.push('/dashboard');
+            } else if (state.selectedRole === 'assistant') {
+                router.push('/dashboard?role=assistant');
             }
         } catch (err: any) {
-            console.error(err);
-            setLoginError('Credenciales inválidas');
+            console.error("Login error:", err);
+            dispatch({ type: 'setLoginError', payload: 'Credenciales inválidas o error de conexión' });
         } finally {
-            setIsLoggingIn(false);
+            dispatch({ type: 'setIsLoggingIn', payload: false });
         }
     };
 
-    if (accessStatus === 'loading') {
+    if (state.accessStatus === 'loading') {
         return (
             <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 text-center">
                 <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-6"></div>
@@ -107,7 +161,7 @@ function StaffPortalScreen() {
         );
     }
 
-    if (accessStatus === 'denied') {
+    if (state.accessStatus === 'denied') {
         return (
             <div className="min-h-screen bg-red-50 flex items-center justify-center p-6">
                 <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -120,7 +174,7 @@ function StaffPortalScreen() {
                             <AlertTriangle className="shrink-0 mt-0.5" size={20} />
                             <div>
                                 <p className="font-bold text-sm">Acceso no autorizado</p>
-                                <p className="text-xs mt-1">IP no autorizada: {clientIp}</p>
+                                <p className="text-xs mt-1">IP no autorizada: {state.clientIp}</p>
                             </div>
                         </div>
                         <p className="text-gray-600 text-sm">Uso exclusivo del personal autorizado</p>
@@ -132,7 +186,7 @@ function StaffPortalScreen() {
                             Salir
                         </button>
                         <div className="pt-6 border-t border-gray-100 flex justify-center gap-4 text-xs text-gray-400">
-                            <span>ID: {clientIp || 'Unknown'}</span>
+                            <span>ID: {state.clientIp || 'Unknown'}</span>
                             <span>•</span>
                             <span>V 2.0.1</span>
                         </div>
@@ -170,7 +224,7 @@ function StaffPortalScreen() {
                         <div className="flex items-center gap-3 text-sm font-semibold text-green-700 bg-green-50 border border-green-200 px-6 py-3 rounded-full shadow-sm">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                             <Shield size={16} />
-                            <span>Conexión Segura: {clientIp}</span>
+                            <span>Conexión Segura: {state.clientIp}</span>
                         </div>
                         <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[#083c79] to-transparent opacity-20"></div>
                         <div className="text-center space-y-1">
@@ -203,16 +257,16 @@ function StaffPortalScreen() {
                             title="Personal Médico"
                             subtitle="Acceso para doctores y personal de salud"
                             icon={<Stethoscope size={28} />}
-                            isSelected={selectedRole === 'doctor'}
+                            isSelected={state.selectedRole === 'doctor'}
                             onSelect={() => handleRoleSelect('doctor')}
                             color="blue"
-                            children={selectedRole === 'doctor' && (
+                            children={state.selectedRole === 'doctor' && (
                                 <LoginForm
-                                    email={email} setEmail={setEmail}
-                                    pass={pass} setPass={setPass}
-                                    showPassword={showPassword} setShowPassword={setShowPassword}
-                                    error={loginError} setError={setLoginError}
-                                    loading={isLoggingIn}
+                                    email={state.email} setEmail={(v) => dispatch({ type: 'setEmail', payload: v })}
+                                    pass={state.pass} setPass={(v) => dispatch({ type: 'setPass', payload: v })}
+                                    showPassword={state.showPassword} setShowPassword={(v) => dispatch({ type: 'setShowPassword', payload: v })}
+                                    error={state.loginError} setError={(v) => dispatch({ type: 'setLoginError', payload: v })}
+                                    loading={state.isLoggingIn}
                                     onSubmit={handleLogin}
                                     requiredEmail="dr@cenlae.com"
                                 />
@@ -225,16 +279,16 @@ function StaffPortalScreen() {
                             title="Administración"
                             subtitle="Acceso para personal administrativo"
                             icon={<Users size={28} />}
-                            isSelected={selectedRole === 'assistant'}
+                            isSelected={state.selectedRole === 'assistant'}
                             onSelect={() => handleRoleSelect('assistant')}
                             color="purple"
-                            children={selectedRole === 'assistant' && (
+                            children={state.selectedRole === 'assistant' && (
                                 <LoginForm
-                                    email={email} setEmail={setEmail}
-                                    pass={pass} setPass={setPass}
-                                    showPassword={showPassword} setShowPassword={setShowPassword}
-                                    error={loginError} setError={setLoginError}
-                                    loading={isLoggingIn}
+                                    email={state.email} setEmail={(v) => dispatch({ type: 'setEmail', payload: v })}
+                                    pass={state.pass} setPass={(v) => dispatch({ type: 'setPass', payload: v })}
+                                    showPassword={state.showPassword} setShowPassword={(v) => dispatch({ type: 'setShowPassword', payload: v })}
+                                    error={state.loginError} setError={(v) => dispatch({ type: 'setLoginError', payload: v })}
+                                    loading={state.isLoggingIn}
                                     onSubmit={handleLogin}
                                     requiredEmail="asistente@cenlae.com"
                                 />

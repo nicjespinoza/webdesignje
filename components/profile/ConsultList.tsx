@@ -1,112 +1,83 @@
+// medical-ai-demo/components/profile/ConsultList.tsx
 "use client";
 
 import React from 'react';
-import { Activity, Eye, Plus, Edit, Trash2, ClipboardList } from 'lucide-react';
-import { ActionButtonSmall } from './SharedComponents';
-import { Patient, SubsequentConsult } from '@/types';
-import { useAuth } from '@/context/AuthContext';
-import { cn } from '@/lib/utils';
+import { Activity, Calendar, ChevronRight, Trash2, Eye } from 'lucide-react';
+import { SubsequentConsult, Patient } from '@/types';
+import { motion } from 'framer-motion';
 
 interface ConsultListProps {
     patient: Patient;
     consults: SubsequentConsult[];
-    onNavigate: (path: string, options?: any) => void;
+    onNavigate: (path: string) => void;
     onDelete: (id: string) => void;
-    onCreate?: () => void;
-    onViewOrders?: (item: any) => void;
 }
 
-import { motion } from 'framer-motion';
-
-export const ConsultList: React.FC<ConsultListProps> = ({ patient, consults, onNavigate, onDelete, onCreate, onViewOrders }) => {
-    const { user } = useAuth();
-    const isAssistant = user?.email === 'asistente@je.com';
-
+export const ConsultList: React.FC<ConsultListProps> = ({ consults, onNavigate, onDelete }) => {
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div className="flex items-center gap-4">
-                    <div className="bg-emerald-500/10 p-2.5 rounded-2xl border border-emerald-500/20">
-                        <Activity className="text-emerald-500" size={24} />
-                    </div>
-                    <div>
-                        <h3 className="font-black text-foreground text-xl tracking-tight">Consultas Subsecuentes</h3>
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest leading-none">Seguimiento y Evolución</p>
-                    </div>
+        <div className="w-full">
+            <header className="flex items-center justify-between mb-12">
+                <div className="flex flex-col gap-1">
+                    <h3 className="text-[10px] tracking-[0.8em] font-light text-white uppercase">Consultas Subsecuentes</h3>
+                    <div className="w-12 h-[1px] bg-primary/20" />
                 </div>
+                <span className="text-[8px] tracking-[0.4em] text-white/20 uppercase font-thin">
+                    {consults.length} Seguimientos
+                </span>
+            </header>
 
-                <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => onNavigate(`/dashboard/patients/${patient.id}/consult/new`)}
-                    className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-emerald-500 text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 hover:bg-emerald-600 transition-all border border-emerald-500/20"
-                >
-                    <Plus size={16} /> Nueva Consulta
-                </motion.button>
+            <div className="space-y-4">
+                {consults.map((consult, idx) => (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        key={consult.id}
+                        onClick={() => onNavigate(`/dashboard/patients/${consult.patientId}/consult/${consult.id}`)}
+                        className="group relative bg-[#0a0a0a]/40 backdrop-blur-xl border border-white/5 rounded-2xl p-6 flex items-center justify-between cursor-pointer transition-all duration-700 hover:border-primary/20 hover:bg-[#0a0a0a]/60"
+                    >
+                        <div className="flex items-center gap-8">
+                            <div className="text-center min-w-[80px]">
+                                <p className="text-[14px] font-thin text-white tracking-widest">{consult.date.split('-')[2]}</p>
+                                <p className="text-[7px] tracking-[0.5em] text-white/20 uppercase font-light">{new Date(consult.date).toLocaleDateString('es-ES', { month: 'short' })}</p>
+                            </div>
+
+                            <div className="h-6 w-[1px] bg-white/5" />
+
+                            <div className="flex flex-col gap-1">
+                                <h4 className="text-[11px] font-thin text-white/60 tracking-[0.2em] uppercase line-clamp-1 group-hover:text-white transition-colors">
+                                    {consult.historyOfPresentIllness || "EVOLUCIÓN CLÍNICA"}
+                                </h4>
+                                <div className="flex items-center gap-4">
+                                    <span className="text-[7px] tracking-[0.3em] text-white/20 uppercase">SEGUIMIENTO</span>
+                                    <Activity size={10} className="text-primary/40" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-700">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); onDelete(consult.id); }}
+                                className="p-2 text-white/10 hover:text-destructive transition-colors"
+                            >
+                                <Trash2 size={14} strokeWidth={1} />
+                            </button>
+                            <div className="p-2.5 rounded-full border border-primary/10 text-primary group-hover:scale-110 transition-transform">
+                                <Eye size={14} strokeWidth={1} />
+                            </div>
+                        </div>
+
+                        {/* Liquid Background Accent */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rounded-2xl" />
+                    </motion.div>
+                ))}
+
+                {consults.length === 0 && (
+                    <div className="py-20 text-center border border-dashed border-white/5 rounded-3xl">
+                        <p className="text-[8px] tracking-[0.5em] text-white/10 uppercase font-thin italic">Sin consultas de seguimiento</p>
+                    </div>
+                )}
             </div>
-
-            {consults.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4">
-                    {consults.map((c, idx) => (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: idx * 0.05 }}
-                            key={c.id}
-                            className={cn(
-                                "group relative p-5 rounded-2xl border transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 overflow-hidden shadow-soft hover:shadow-xl",
-                                c.status === 'draft' ? "bg-amber-500/5 border-amber-500/20" : "bg-muted/30 hover:bg-muted/50 border-border"
-                            )}
-                        >
-                            <div className={cn(
-                                "absolute left-0 top-0 bottom-0 w-1.5 transition-colors",
-                                c.status === 'draft' ? "bg-amber-500" : "bg-emerald-500/40 group-hover:bg-emerald-500"
-                            )} />
-
-                            <div className="flex items-center gap-5 pl-2">
-                                <div className="hidden sm:flex flex-col items-center justify-center bg-card border border-border rounded-xl px-3 py-2 shadow-soft min-w-[70px]">
-                                    <span className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter">{c.date.split('-')[1]}</span>
-                                    <span className="text-xl font-black text-foreground">{c.date.split('-')[2]}</span>
-                                    <span className="text-[10px] font-black uppercase text-emerald-500 tracking-tighter">{c.date.split('-')[0]}</span>
-                                </div>
-                                <div>
-                                    <p className="font-black text-foreground text-sm flex items-center gap-2">
-                                        <span className="sm:hidden">{c.date} | </span>
-                                        {c.time}
-                                        {c.status === 'draft' && (
-                                            <span className="text-[9px] bg-amber-500/10 text-amber-700 px-2 py-0.5 rounded-full font-black uppercase tracking-widest border border-amber-500/20">
-                                                Pendiente
-                                            </span>
-                                        )}
-                                    </p>
-                                    <p className="text-xs text-muted-foreground mt-1 line-clamp-1 font-bold italic">
-                                        &quot;{c.otherMotive || Object.keys(c.motives || {}).filter(k => (c.motives as any)[k]).join(', ') || 'Sin motivo especificado'}&quot;
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-2 w-full sm:w-auto justify-end sm:opacity-0 group-hover:opacity-100 transition-all">
-                                <button
-                                    onClick={() => onNavigate(`/dashboard/patients/${patient.id}/consult/${c.id}`)}
-                                    className="p-3 rounded-xl bg-card border border-border text-primary hover:bg-primary hover:text-primary-foreground transition-all shadow-soft"
-                                >
-                                    <Eye size={18} />
-                                </button>
-                                <button
-                                    onClick={() => onDelete(c.id)}
-                                    className="p-3 rounded-xl bg-card border border-border text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all shadow-soft"
-                                >
-                                    <Trash2 size={18} />
-                                </button>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-            ) : (
-                <div className="text-center py-12 bg-muted/20 rounded-3xl border-2 border-dashed border-border/50">
-                    <p className="text-muted-foreground font-black text-xs uppercase tracking-[0.2em]">No se registran visitas de seguimiento</p>
-                </div>
-            )}
         </div>
     );
 };

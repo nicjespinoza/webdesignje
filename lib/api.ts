@@ -22,6 +22,22 @@ export const docToData = <T>(doc: any): T => {
     return { id: doc.id, ...doc.data() } as T;
 };
 
+// Limpiador recursivo de objetos para que Firebase no colapse con 'undefined'
+const removeUndefined = (obj: any): any => {
+    if (obj === undefined) return null;
+    if (Array.isArray(obj)) return obj.map(removeUndefined);
+    if (obj !== null && typeof obj === 'object') {
+        const newObj: any = {};
+        for (const key in obj) {
+            if (obj[key] !== undefined) {
+                newObj[key] = removeUndefined(obj[key]);
+            }
+        }
+        return newObj;
+    }
+    return obj;
+};
+
 export const api = {
     // ==================== PATIENTS ====================
 
@@ -217,6 +233,49 @@ export const api = {
             if (!history.id) {
                 history.id = doc(collection(db, 'initialHistories')).id;
             }
+
+            // --- SHADOW TESTING V2 SCHEMA --- //
+            // Intentamos parsear el payload viejo al nuevo Zod schema sutilmente
+            import('@/lib/validations/historyMaster.schema').then(({ clinicalHistorySubmitSchema }) => {
+                try {
+                    const shadowPayload = {
+                        specialtyId: history.specialtyId || 'general',
+                        patientId: history.patientId,
+                        vitalSigns: history.physicalExam ? {
+                            hr: Number(history.physicalExam.fc) || 80,
+                            rr: Number(history.physicalExam.fr) || 16,
+                            systolic: Number(history.physicalExam.pa?.split('/')[0]) || 120,
+                            diastolic: Number(history.physicalExam.pa?.split('/')[1]) || 80,
+                            temp: Number(history.physicalExam.temp) || 36.5,
+                            spo2: Number(history.physicalExam.sat02) || 98
+                        } : undefined,
+                        motives: {
+                            main: [history.otherMotive || 'Consulta General'],
+                            others: history.historyOfPresentIllness
+                        },
+                        diagnoses: [{
+                            text: history.diagnosis || 'No especificado',
+                            status: 'presumptive' as const
+                        }],
+                        treatmentPlan: {
+                            meds: typeof history.treatment?.meds === 'string' ? [history.treatment.meds] : history.treatment?.meds || [],
+                            instructions: typeof history.treatment?.norms === 'string' ? history.treatment.norms : (history.treatment?.norms?.[0] || '')
+                        },
+                        specialtyData: {} // Blank para legacy por ahora
+                    };
+
+                    const result = clinicalHistorySubmitSchema.safeParse(shadowPayload);
+                    if (!result.success) {
+                        console.warn(`[V2 Shadow Test] Falló la validación para historia ${history.id}:`, result.error.format());
+                    } else {
+                        console.log(`[V2 Shadow Test] OK! Historia ${history.id} lista para el nuevo esquema.`);
+                    }
+                } catch (e) {
+                    // Fail silently
+                }
+            });
+            // -------------------------------- //
+
             // 1. Save to subcollection (Primary)
             const subColRef = doc(db, 'patients', history.patientId, 'histories', history.id);
             await Common.setDoc(subColRef, history);
@@ -297,11 +356,14 @@ export const api = {
             if (!consult.id) {
                 consult.id = doc(collection(db, 'subsequentConsults')).id;
             }
+            // Strip undefineds
+            const cleanConsult = removeUndefined(consult);
+
             const subColRef = doc(db, 'patients', consult.patientId, 'consults', consult.id);
-            await Common.setDoc(subColRef, consult);
+            await Common.setDoc(subColRef, cleanConsult);
 
             const rootDocRef = doc(db, 'subsequentConsults', consult.id);
-            await Common.setDoc(rootDocRef, consult);
+            await Common.setDoc(rootDocRef, cleanConsult);
 
             await logAudit({
                 action: 'CONSULT_CREATE',
@@ -318,11 +380,12 @@ export const api = {
 
     updateConsult: async (id: string, data: Partial<SubsequentConsult>, patientId: string): Promise<void> => {
         try {
+            const cleanData = removeUndefined(data);
             const subColRef = doc(db, 'patients', patientId, 'consults', id);
-            await Common.updateDoc(subColRef, data);
+            await Common.updateDoc(subColRef, cleanData);
 
             const rootDocRef = doc(db, 'subsequentConsults', id);
-            await Common.updateDoc(rootDocRef, data);
+            await Common.updateDoc(rootDocRef, cleanData);
         } catch (error) {
             offlineQueue.enqueueAction('UPDATE_CONSULT', { id, data, patientId }, auth.currentUser?.email || null);
             throw error;

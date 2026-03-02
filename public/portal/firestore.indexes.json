@@ -1,0 +1,117 @@
+{
+    "indexes": [
+        {
+            "collectionGroup": "appointments",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "date",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "time",
+                    "order": "ASCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "appointments",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "patientId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "date",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "patients",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "registrationStatus",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "patients",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "specialtyId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "users",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "role",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "specialtyId",
+                    "order": "ASCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "users",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "clinicId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "role",
+                    "order": "ASCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "histories",
+            "queryScope": "COLLECTION_GROUP",
+            "fields": [
+                {
+                    "fieldPath": "specialtyId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "date",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "notifications",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "userId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        }
+    ],
+    "fieldOverrides": []
+}

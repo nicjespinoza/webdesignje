@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import {
     ArrowLeft,
     User,
@@ -16,7 +16,7 @@ import {
     Save,
     Loader2
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { api } from '@/lib/api';
@@ -30,7 +30,9 @@ const patientRegistrationSchema = z.object({
     firstName: z.string().min(2, "Nombre es requerido"),
     lastName: z.string().min(2, "Apellido es requerido"),
     birthDate: z.string().min(1, "Fecha de nacimiento es requerida"),
-    sex: z.enum(["Masculino", "Femenino"], { errorMap: () => ({ message: "Seleccione sexo" }) }),
+    sex: z.enum(["Masculino", "Femenino"] as const, {
+        message: "Seleccione sexo"
+    }),
     email: z.string().email("Email inválido").optional().or(z.literal('')),
     phone: z.string().optional(),
     address: z.string().optional(),
@@ -40,8 +42,10 @@ const patientRegistrationSchema = z.object({
 
 type FormData = z.infer<typeof patientRegistrationSchema>;
 
-export default function RegisterPatientPage() {
+function RegisterPatientPageContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const specialtyId = searchParams.get('specialty') || 'gastroenterology';
     const { user } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -68,13 +72,23 @@ export default function RegisterPatientPage() {
         setIsSubmitting(true);
         try {
             const newPatient: Omit<Patient, 'id'> = {
-                ...data,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                birthDate: data.birthDate,
+                sex: data.sex,
+                email: data.email || '',
+                phone: data.phone || '',
+                address: data.address || '',
+                nationality: data.nationality || 'Nicaragua',
+                profession: data.profession || '',
+                ageDetails: '30 años', // Default to avoid missing property error
+                initialReason: 'Consulta Inicial', // Default
                 createdAt: new Date().toISOString(),
-                registrationSource: 'manual' as any,
-                registrationStatus: 'Paciente' as any,
+                registrationSource: 'manual',
+                registrationStatus: 'Paciente',
             };
             const patientId = await api.createPatient(newPatient);
-            router.push(`/dashboard/patients/${patientId}`);
+            router.push(`/dashboard/patients/${patientId}?specialty=${specialtyId}`);
         } catch (error) {
             console.error("Error creating patient:", error);
             alert("Error al crear paciente");
@@ -90,7 +104,7 @@ export default function RegisterPatientPage() {
                     {/* Header */}
                     <div className="flex items-center gap-4 mb-8">
                         <button
-                            onClick={() => router.back()}
+                            onClick={() => router.push(`/dashboard/patients?specialty=${specialtyId}`)}
                             className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-600"
                         >
                             <ArrowLeft size={24} />
@@ -255,5 +269,17 @@ export default function RegisterPatientPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function RegisterPatientPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen p-4 md:p-8 flex items-center justify-center bg-[#F8FAFC]">
+                <Loader2 className="animate-spin text-[#083c79] w-12 h-12" />
+            </div>
+        }>
+            <RegisterPatientPageContent />
+        </Suspense>
     );
 }

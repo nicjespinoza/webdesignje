@@ -1,6 +1,7 @@
 
 import React, { memo, useCallback } from 'react';
 import { useFormContext, useWatch, Controller } from 'react-hook-form';
+import { motion } from 'framer-motion';
 import { YesNo, CheckboxList } from '@/components/ui/FormComponents';
 import { FloatingLabelInput } from '@/components/premium-ui/FloatingLabelInput';
 import { InitialHistoryFormData } from '@/schemas/patientSchemas';
@@ -26,46 +27,59 @@ export const FamilyHistorySection: React.FC<FamilyHistorySectionProps> = () => {
     const familyHistory = watch('familyHistory');
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
-            <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">V. ANTECEDENTES MÉDICOS FAMILIARES</h3>
-            <div className="mb-6 pb-4 border-b-2 border-gray-900 last:border-0 last:mb-0 last:pb-0">
-                <YesNo label="Generales" value={familyHistory} onChange={(k, v) => setValue('familyHistory', handleExclusiveChange(familyHistory, k, v), { shouldDirty: true })} />
+        <div className="bg-[#0a0a0a]/40 backdrop-blur-xl p-12 rounded-[3.5rem] border border-white/5 transition-all duration-700 hover:border-primary/20">
+            <div className="flex items-center gap-4 mb-10">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                </div>
+                <h3 className="text-[11px] tracking-[0.5em] font-light text-white uppercase italic">Antecedentes Médicos Familiares</h3>
+            </div>
+
+            <div className="space-y-8">
+                <YesNo label="Antecedentes Generales" value={familyHistory} onChange={(k, v) => setValue('familyHistory', handleExclusiveChange(familyHistory, k, v), { shouldDirty: true })} />
+
                 {familyHistory?.yes && (
-                    <div className="pl-0 mt-4 bg-gray-50/50 p-3 md:p-4 rounded-xl border border-gray-200/50 animate-in fade-in slide-in-from-top-2">
-                        <CheckboxList items={C.FAMILY_LIST} data={familyHistory.list || {}} onChange={(k, v) => {
-                            setValue('familyHistory', {
-                                ...familyHistory,
-                                list: { ...(familyHistory.list || {}), [k]: v }
-                            }, { shouldDirty: true });
-                        }} />
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="space-y-8 pt-8 border-t border-white/5"
+                    >
+                        <div className="p-10 rounded-[2.5rem] bg-black/20 border border-white/5">
+                            <CheckboxList items={C.FAMILY_LIST} data={familyHistory.list || {}} onChange={(k, v) => {
+                                setValue('familyHistory', {
+                                    ...familyHistory,
+                                    list: { ...(familyHistory.list || {}), [k]: v }
+                                }, { shouldDirty: true });
+                            }} />
+                        </div>
 
                         {/* Conditional details for Cáncer */}
                         {(familyHistory.list?.['Cancer'] || familyHistory.list?.['Cáncer']) && (
-                            <div className="mt-4 animate-in zoom-in-95 duration-200">
-                                <Controller
-                                    name="familyHistory.cancerDetails"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FloatingLabelInput
-                                            label="¿Cuáles?"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            wrapperClassName="bg-white border-2 border-orange-200 rounded-xl focus-within:border-[#083C79]"
-                                        />
-                                    )}
-                                />
-                            </div>
+                            <Controller
+                                name="familyHistory.cancerDetails"
+                                control={control}
+                                render={({ field }) => (
+                                    <FloatingLabelInput
+                                        label="¿Cuáles diagnósticos de cáncer? (Familia)"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        wrapperClassName="bg-black/20 border-white/5 focus-within:border-primary/40 rounded-[2rem]"
+                                    />
+                                )}
+                            />
                         )}
 
-                        <div className="mt-4">
+                        <div className="pt-4">
                             <FloatingLabelInput
-                                label="Otra/cual?"
+                                label="Otras especificaciones familiares"
+                                as="textarea"
+                                rows={2}
                                 value={familyHistory.other || ''}
                                 onChange={(e) => setValue('familyHistory', { ...familyHistory, other: e.target.value }, { shouldDirty: true })}
-                                wrapperClassName="bg-white border-2 border-gray-900 rounded-xl"
+                                wrapperClassName="bg-black/20 border-white/5 focus-within:border-primary/40 rounded-[2rem]"
                             />
                         </div>
-                    </div>
+                    </motion.div>
                 )}
             </div>
         </div>

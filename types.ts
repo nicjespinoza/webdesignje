@@ -178,6 +178,15 @@ export interface InitialHistory {
     medicalOrders?: MedicalOrder[]; // Complex orders support
     isValidated?: boolean;
     obesityHistory?: ObesityHistory;
+    specialtyId?: string;
+
+    // Form compatibility fields
+    surgicalHistory?: unknown;
+    transfusionHistory?: unknown;
+    allergicHistory?: unknown;
+    drugHistory?: unknown;
+    nonPathologicalHistory?: unknown;
+    gynecoObstetricHistory?: unknown;
 }
 
 export interface ObesityHistory {

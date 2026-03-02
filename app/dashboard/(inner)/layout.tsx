@@ -1,41 +1,112 @@
+// app/dashboard/(inner)/layout.tsx
 "use client";
 
-import React, { useState } from "react";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import React, { useState, Suspense } from "react";
 import {
-    ArrowLeft,
-    Settings,
-    User,
     Users,
     Calendar,
     FileText,
-    LogOut,
     Home,
     MessageCircle,
     Moon,
     Sun,
-    ChevronDown,
+    Search,
+    Bell
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
-import { SPECIALTIES, getSpecialtyById } from "@/lib/specialties";
+import { getSpecialtyById } from "@/lib/specialties";
+import GlobalParticles from "@/src/components/landing/GlobalParticles";
+import LogoComponent from "@/components/ui/Logo";
 
-export default function InnerDashboardLayout({
+function InnerDashboardLayoutContent({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const [open, setOpen] = useState(false);
-    const [showSpecialtyDropdown, setShowSpecialtyDropdown] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
-    const { user, logout } = useAuth();
+    const { logout } = useAuth();
     const { theme, toggleTheme } = useTheme();
 
-    const currentSpecialtyId = typeof window !== 'undefined' ? localStorage.getItem('selectedSpecialty') || 'gastroenterology' : 'gastroenterology';
+    const [currentSpecialtyId, setCurrentSpecialtyId] = useState('gastroenterology');
+    const [isOnline, setIsOnline] = useState(true);
+    const [clientIp, setClientIp] = useState("Detectando...");
+    const [latency, setLatency] = useState(0);
+    const searchParams = useSearchParams();
+
+    React.useEffect(() => {
+        setIsOnline(window.navigator.onLine);
+        const handleOnline = () => setIsOnline(true);
+        const handleOffline = () => setIsOnline(false);
+
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+
+        const updateIp = () => {
+            fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(data => {
+                    setClientIp(data.ip);
+                    setIsOnline(true);
+                })
+                .catch(() => {
+                    setClientIp("OFFLINE");
+                    setIsOnline(false);
+                    setLatency(0);
+                });
+        };
+
+        updateIp();
+
+        const interval = setInterval(() => {
+            const currentlyOnline = window.navigator.onLine;
+            if (!currentlyOnline) {
+                setIsOnline(false);
+                setLatency(0);
+                setClientIp("OFFLINE");
+                return;
+            }
+
+            const start = Date.now();
+            fetch('https://www.google.com/generate_204', {
+                mode: 'no-cors',
+                cache: 'no-store',
+                method: 'HEAD'
+            })
+                .then(() => {
+                    setLatency(Date.now() - start);
+                    setIsOnline(true);
+                })
+                .catch(() => {
+                    setIsOnline(false);
+                    setLatency(0);
+                    setClientIp("OFFLINE");
+                });
+
+            if (Math.random() > 0.7) updateIp();
+        }, 5000);
+
+        const specialtyFromUrl = searchParams.get('specialty');
+        const specialtyFromStorage = localStorage.getItem('selectedSpecialty');
+        const finalId = specialtyFromUrl || specialtyFromStorage || 'gastroenterology';
+
+        setCurrentSpecialtyId(finalId);
+
+        if (finalId) {
+            localStorage.setItem('selectedSpecialty', finalId);
+        }
+
+        return () => {
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
+            clearInterval(interval);
+        };
+    }, [searchParams, pathname]);
+
     const currentSpecialty = getSpecialtyById(currentSpecialtyId);
 
     const handleLogout = async () => {
@@ -47,191 +118,174 @@ export default function InnerDashboardLayout({
         }
     };
 
-    const handleSpecialtyChange = (id: string) => {
-        localStorage.setItem('selectedSpecialty', id);
-        setShowSpecialtyDropdown(false);
-        window.location.reload(); // Reload to apply specialty-specific logic if any
-    };
-
     const links = [
-        {
-            label: "Inicio",
-            href: "/dashboard",
-            icon: <Home className="h-5 w-5 shrink-0 stroke-[2.5]" />,
-        },
-        {
-            label: "Pacientes",
-            href: "/dashboard/patients",
-            icon: <Users className="h-5 w-5 shrink-0 stroke-[2.5]" />,
-        },
-        {
-            label: "Agenda",
-            href: "/dashboard/agenda",
-            icon: <Calendar className="h-5 w-5 shrink-0 stroke-[2.5]" />,
-        },
-        {
-            label: "Chat",
-            href: "/dashboard/chat",
-            icon: <MessageCircle className="h-5 w-5 shrink-0 stroke-[2.5]" />,
-        },
-        {
-            label: "Reportes",
-            href: "/dashboard/reports",
-            icon: <FileText className="h-5 w-5 shrink-0 stroke-[2.5]" />,
-        },
+        { label: "Hogar", href: "/dashboard", icon: <Home size={16} strokeWidth={1} /> },
+        { label: "Pacientes", href: "/dashboard/patients", icon: <Users size={16} strokeWidth={1} /> },
+        { label: "Agenda", href: "/dashboard/agenda", icon: <Calendar size={16} strokeWidth={1} /> },
+        { label: "Mensajes", href: "/dashboard/chat", icon: <MessageCircle size={16} strokeWidth={1} /> },
+        { label: "Reportes", href: "/dashboard/reports", icon: <FileText size={16} strokeWidth={1} /> },
     ];
 
     return (
-        <div
-            className={cn(
-                "flex flex-col md:flex-row bg-background w-full flex-1 max-w-full mx-auto overflow-hidden text-foreground transition-all duration-700",
-                "h-screen"
-            )}
-        >
-            <Sidebar open={open} setOpen={setOpen}>
-                <SidebarBody className="justify-between gap-10 bg-card border-r border-border/40 shadow-xl">
-                    <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden pt-4">
-                        <div className="px-2 mb-10">
-                            {open ? <Logo theme={theme} /> : <LogoIcon theme={theme} />}
-                        </div>
+        <div className="flex flex-col h-screen bg-[#020202] text-white/80 transition-colors duration-700 overflow-hidden selection:bg-primary/20 font-luxury-sans relative">
 
-                        {/* Minimalist Specialty Badge */}
-                        <div className="px-4">
-                            <div className={cn(
-                                "flex items-center gap-4 p-3 rounded-[1.5rem] bg-muted/40 border border-border/50",
-                                !open && "justify-center px-2"
-                            )}>
-                                <div
-                                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg transition-transform hover:rotate-12"
-                                    style={{ backgroundColor: currentSpecialty.color }}
-                                >
-                                    <currentSpecialty.icon size={20} />
-                                </div>
-                                {open && (
-                                    <div className="text-left overflow-hidden">
-                                        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground opacity-60">Especialidad</p>
-                                        <p className="text-sm font-black text-foreground truncate">{currentSpecialty.nameEs}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+            {/* Elegant Neural Background with Low Opacity */}
+            <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
+                <GlobalParticles />
+            </div>
 
-                        <nav className="mt-12 flex flex-col gap-3 px-2">
-                            {links.map((link, idx) => (
-                                <SidebarLink
+            <style jsx global>{`
+                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400&display=swap');
+                
+                body {
+                    background-color: #020202;
+                    overflow: hidden;
+                }
+                
+                .font-luxury-sans {
+                    font-family: 'Outfit', sans-serif;
+                }
+            `}</style>
+
+            {/* Premium Luxury Sidebar/Header Hybrid */}
+            <header className="w-full bg-[#020202]/80 backdrop-blur-xl border-b border-white/5 z-50">
+                <div className="px-8 md:px-16 h-20 flex items-center justify-between">
+
+                    {/* Left: Refined Branding */}
+                    <div className="flex items-center gap-10">
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            className="relative cursor-pointer"
+                            onClick={() => router.push(`/dashboard?specialty=${currentSpecialtyId}`)}
+                        >
+                            <LogoComponent size={36} />
+                        </motion.div>
+
+                        <div className="hidden lg:flex flex-col gap-0.5 border-l border-white/5 pl-8">
+                            <h2 className="text-[10px] tracking-[0.5em] font-light text-primary uppercase leading-tight">{currentSpecialty?.nameEs}</h2>
+                            <p className="text-[8px] tracking-[0.3em] font-bold text-white/20 uppercase gradient-text">Gold Edition • V. 4.2</p>
+                        </div>
+                    </div>
+
+                    {/* Middle: Minimalist Navigation */}
+                    <nav className="hidden md:flex items-center gap-10">
+                        {links.map((link, idx) => {
+                            const isActive = pathname === link.href || (pathname.startsWith(link.href) && link.href !== "/dashboard");
+                            return (
+                                <button
                                     key={idx}
-                                    link={link}
-                                    isActive={pathname.startsWith(link.href) && link.href !== "/dashboard"}
+                                    onClick={() => router.push(`${link.href}?specialty=${currentSpecialtyId}`)}
                                     className={cn(
-                                        "font-black text-[10px] uppercase tracking-[0.2em] transition-all px-5 py-4 rounded-[1.5rem] group/item",
-                                        pathname.startsWith(link.href) && link.href !== "/dashboard"
-                                            ? "bg-primary text-primary-foreground shadow-xl shadow-primary/10 border border-primary/20"
-                                            : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                                        "text-[9px] tracking-[0.4em] uppercase font-light transition-all duration-500 relative py-2",
+                                        isActive ? "text-primary brightness-125" : "text-white/20 hover:text-white"
                                     )}
-                                />
-                            ))}
-
-                            <div className="h-px bg-border/40 my-6 mx-4" />
-
-                            <div
-                                onClick={toggleTheme}
-                                className="flex items-center gap-4 group/theme py-4 cursor-pointer hover:bg-muted/60 rounded-[1.5rem] px-5 transition-all"
-                            >
-                                <div className="w-6 flex justify-center">
-                                    {theme === 'light' ? <Moon size={18} className="text-muted-foreground group-hover/theme:text-primary transition-colors" /> : <Sun size={18} className="text-amber-400" />}
-                                </div>
-                                <motion.span
-                                    animate={{ display: open ? "inline-block" : "none", opacity: open ? 1 : 0 }}
-                                    className="font-black text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-hover/theme:text-foreground"
                                 >
-                                    Modo {theme === 'light' ? 'Oscuro' : 'Claro'}
-                                </motion.span>
-                            </div>
+                                    {link.label}
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="navIndicator"
+                                            className="absolute bottom-0 left-0 right-0 h-[1px] bg-primary"
+                                        />
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </nav>
 
-                            <div
-                                onClick={handleLogout}
-                                className="flex items-center gap-4 group/logout py-4 cursor-pointer hover:bg-destructive/10 rounded-[1.5rem] px-5 transition-all"
-                            >
-                                <div className="w-6 flex justify-center">
-                                    <LogOut size={18} className="text-muted-foreground group-hover/logout:text-destructive transition-colors" />
-                                </div>
-                                <motion.span
-                                    animate={{ display: open ? "inline-block" : "none", opacity: open ? 1 : 0 }}
-                                    className="font-black text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-hover/logout:text-destructive"
-                                >
-                                    Salir
-                                </motion.span>
-                            </div>
-                        </nav>
+                    {/* Right: Refined Actions */}
+                    <div className="flex items-center gap-6">
+                        <button onClick={toggleTheme} className="text-white/20 hover:text-primary transition-colors">
+                            {theme === 'light' ? <Moon size={16} strokeWidth={1} /> : <Sun size={16} strokeWidth={1} />}
+                        </button>
+
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            onClick={handleLogout}
+                            className="text-[8px] tracking-[0.4em] uppercase font-thin text-white/20 hover:text-destructive border border-white/5 hover:border-destructive/30 px-6 py-2.5 rounded-full transition-all"
+                        >
+                            Finalizar
+                        </motion.button>
                     </div>
-
-                    <div className="px-2 pb-6">
-                        <div className="bg-muted/30 p-1 rounded-[2rem] border border-border/40">
-                            <SidebarLink
-                                link={{
-                                    label: user?.email === 'dr@je.com' ? "Dr. Joseph" : (user?.email === 'asistente@je.com' ? "Asistente JE" : (user?.email?.split("@")[0] || "Usuario")),
-                                    href: "/dashboard/profile",
-                                    icon: (
-                                        <div className="h-10 w-10 shrink-0 rounded-2xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-primary-foreground font-black text-xs shadow-lg shadow-primary/10">
-                                            {(user?.email || "U").charAt(0).toUpperCase()}
-                                        </div>
-                                    ),
-                                }}
-                                className="font-black text-[10px] uppercase tracking-[0.2em] py-3"
-                            />
-                        </div>
-                    </div>
-                </SidebarBody>
-            </Sidebar>
-
-            <main className="flex flex-1 overflow-hidden relative bg-background">
-                {/* Modern Background Decor */}
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20 dark:opacity-40">
-                    <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-primary/10 rounded-full blur-[200px]" />
-                    <div className="absolute bottom-[-20%] right-[-10%] w-[1000px] h-[1000px] bg-indigo-500/10 rounded-full blur-[200px]" />
                 </div>
+            </header>
 
-                <div
-                    className={cn(
-                        "flex flex-col flex-1 w-full h-full overflow-y-auto relative z-10 transition-all duration-700",
-                        "p-6 md:p-12 lg:p-16"
-                    )}
-                >
-                    {children}
+            {/* Main Luxury Content Area */}
+            <main className="flex-1 overflow-x-hidden overflow-y-auto relative z-10">
+                <div className="w-full min-h-full p-8 md:p-16 lg:px-20 lg:py-16 max-w-7xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        {children}
+                    </motion.div>
                 </div>
             </main>
+
+            {/* Bottom Global Status Bar */}
+            <footer className="h-10 border-t border-white/5 bg-[#020202]/80 backdrop-blur-xl z-50 flex items-center justify-between px-16 text-[7px] tracking-[0.4em] uppercase">
+                <div className="flex gap-10 items-center">
+                    <div className="flex items-center gap-3">
+                        <span className="text-white/20">Conexión Sistema:</span>
+                        <div className="flex items-center gap-2">
+                            <p className={cn("text-[8px] font-thin tracking-widest", !isOnline ? "text-red-500" : "text-white")}>
+                                {isOnline ? `${latency}ms` : "---"}
+                            </p>
+                            <div className="flex items-center gap-1.5">
+                                <div className={cn("w-1 h-1 rounded-full", isOnline ? "bg-emerald-500" : "bg-red-500")} />
+                                <span className={cn("text-[7px] font-bold uppercase tracking-widest", isOnline ? "text-emerald-500" : "text-red-500")}>
+                                    {isOnline ? "Estable" : "Sin conexión"}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-[1px] h-3 bg-white/5" />
+                    <div className="flex items-center gap-3">
+                        <span className="text-white/20">Status Nodo:</span>
+                        <div className="flex items-center gap-2">
+                            <span className={cn("font-bold", isOnline ? "text-white/40" : "text-red-500")}>
+                                APP ({currentSpecialty?.nameEs}) v9.6.3
+                            </span>
+                            <div className={cn("w-1 h-1 rounded-full animate-pulse", isOnline ? "bg-emerald-500" : "bg-red-500")} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-2">
+                        <span className={cn("text-[7px] tracking-[0.2em] font-bold uppercase transition-colors", isOnline ? "text-emerald-500/60" : "text-red-500")}>
+                            IP AUTORIZADA:
+                        </span>
+                        <span className={cn("text-white/40 font-black transition-colors", !isOnline && "text-red-600")}>
+                            {isOnline ? clientIp : "X.X.X.X.X"}
+                        </span>
+                    </div>
+                    <span className="gradient-text font-bold opacity-40">Gold Edition</span>
+                    <div className="w-1 h-1 bg-primary/10 rounded-full" />
+                    <span className="text-white/10 tracking-[0.8em]">JE. 2026</span>
+                </div>
+            </footer>
         </div>
     );
 }
 
-export const Logo = ({ theme }: { theme: string }) => {
-    return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center justify-center h-16 w-full"
-        >
-            <img
-                src={theme === 'light' ? "/images/Logo_trans_dorado.png" : "/images/Logo_trans_blanco.png"}
-                alt="Logo"
-                className="h-12 w-auto object-contain"
-            />
-        </motion.div>
-    );
-};
 
-export const LogoIcon = ({ theme }: { theme: string }) => {
+export default function InnerDashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center justify-center h-12 w-full"
-        >
-            <img
-                src={theme === 'light' ? "/images/Logo_trans_dorado.png" : "/images/Logo_trans_blanco.png"}
-                alt="Icon"
-                className="h-8 w-auto object-contain"
-            />
-        </motion.div>
+        <Suspense fallback={null}>
+            <InnerDashboardLayoutContent>{children}</InnerDashboardLayoutContent>
+        </Suspense>
     );
-};
+}
+
+export const Logo = () => (
+    <div className="flex items-center justify-center p-8">
+        <LogoComponent size={40} />
+    </div>
+);
+
+export const LogoIcon = () => (
+    <div className="flex items-center justify-center p-4">
+        <LogoComponent size={28} />
+    </div>
+);

@@ -1,20 +1,29 @@
-
+// medical-ai-demo/components/profile/PatientInfoCard.tsx
 "use client";
 
-import React, { useRef } from 'react';
-import { Camera, User, Phone, Mail, MapPin, Calendar, Heart, Shield, Activity, Hash } from 'lucide-react';
-import { InfoItem } from './SharedComponents';
+import React, { useRef, useState, useEffect } from 'react';
+import { Camera, Edit, User, Phone, Mail, MapPin, Calendar, Activity, Hash, Briefcase, ShieldCheck } from 'lucide-react';
 import { Patient } from '@/types';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { getSpecialtyById, Specialty } from '@/lib/specialties';
 import { cn } from '@/lib/utils';
 
 interface PatientInfoCardProps {
     patient: Patient;
     onUpdateImage: (file: File) => void;
+    onEdit?: () => void;
+    uploadingImage?: boolean;
 }
 
-export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient, onUpdateImage }) => {
+export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient, onUpdateImage, onEdit, uploadingImage }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [specialty, setSpecialty] = useState<Specialty | null>(null);
+
+    useEffect(() => {
+        const specId = typeof window !== 'undefined' ? localStorage.getItem('selectedSpecialty') || 'gastroenterology' : 'gastroenterology';
+        setSpecialty(getSpecialtyById(specId));
+    }, []);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -22,122 +31,106 @@ export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient, onUpd
         }
     };
 
+    const isMigrated = patient.legacyIdSistema;
+    const formattedBirthDate = typeof patient.birthDate === 'object' && patient.birthDate !== null
+        ? new Date((patient.birthDate as any).seconds * 1000).toLocaleDateString()
+        : String(patient.birthDate);
+
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-            {/* Profile Sidebar */}
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="lg:col-span-1 space-y-10"
-            >
-                <div className="bg-card/40 backdrop-blur-3xl rounded-[3rem] p-10 border border-border/40 shadow-soft relative group overflow-hidden">
-                    <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+        <motion.div
+            initial={{ opacity: 0, x: -15 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-[#0a0a0a]/60 backdrop-blur-xl rounded-[2rem] p-10 border border-white/5 relative flex flex-col group/card transition-all duration-1000 hover:border-primary/20"
+        >
+            <div className="flex justify-between items-center mb-10">
+                <div className="flex flex-col gap-1">
+                    <span className="text-[7px] tracking-[0.6em] text-primary/60 uppercase font-light">
+                        FICHA MÉDICA
+                    </span>
+                    <div className="w-6 h-[1px] bg-primary/20" />
+                </div>
+                {onEdit && (
+                    <button
+                        onClick={onEdit}
+                        className="p-2.5 text-white/20 hover:text-primary transition-all rounded-full border border-white/5 hover:border-primary/20"
+                    >
+                        <Edit size={12} strokeWidth={1} />
+                    </button>
+                )}
+            </div>
 
-                    <div className="relative flex flex-col items-center">
-                        <div className="relative group/avatar">
-                            <div className="w-48 h-48 rounded-[3rem] overflow-hidden bg-muted border-4 border-background shadow-2xl transition-all group-hover/avatar:scale-105 duration-500">
-                                {patient.photoUrl ? (
-                                    <img src={patient.photoUrl} alt="Avatar" className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-muted-foreground/30">
-                                        <User size={80} />
-                                    </div>
-                                )}
+            <div className="flex flex-col items-center mb-14 relative group/avatar">
+                <div className="relative">
+                    <div className="w-36 h-36 rounded-2xl overflow-hidden bg-white/5 border border-white/5 mb-6 group-hover/avatar:border-primary/40 transition-all duration-1000 relative">
+                        {patient.profileImage ? (
+                            <Image src={patient.profileImage} alt="Avatar" width={144} height={144} className="w-full h-full object-cover grayscale group-hover/avatar:grayscale-0 transition-all duration-1000" />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                                <User size={40} strokeWidth={1} className="text-white/10" />
                             </div>
-                            <button
-                                onClick={() => fileInputRef.current?.click()}
-                                className="absolute -bottom-4 -right-4 p-5 rounded-full bg-primary text-primary-foreground shadow-2xl hover:scale-110 active:scale-90 transition-all border-4 border-background"
-                            >
-                                <Camera size={24} />
-                            </button>
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                                className="hidden"
-                                accept="image/*"
-                            />
-                        </div>
-
-                        <div className="mt-10 text-center space-y-2">
-                            <h2 className="text-2xl font-black text-foreground tracking-tighter">
-                                {patient.firstName} {patient.lastName}
-                            </h2>
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-black text-primary uppercase tracking-widest">
-                                Paciente Registrado
-                            </div>
-                        </div>
+                        )}
+                        <button type="button" className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                            <Camera className="text-white/60" size={20} strokeWidth={1} />
+                        </button>
                     </div>
                 </div>
 
-                {/* Status Quick Stats */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-card/40 backdrop-blur-3xl p-6 rounded-[2rem] border border-border/40 shadow-soft text-center group hover:bg-card/60 transition-all">
-                        <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Sexo</p>
-                        <p className="text-lg font-black text-foreground">{patient.sex}</p>
-                    </div>
-                    <div className="bg-card/40 backdrop-blur-3xl p-6 rounded-[2rem] border border-border/40 shadow-soft text-center group hover:bg-card/60 transition-all">
-                        <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Sangre</p>
-                        <p className="text-lg font-black text-primary">{patient.bloodType || 'N/A'}</p>
-                    </div>
-                </div>
-            </motion.div>
-
-            {/* Main Information */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="lg:col-span-3 space-y-10"
-            >
-                {/* Information Sections */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Person Information */}
-                    <div className="bg-card/40 backdrop-blur-3xl rounded-[3rem] p-10 border border-border/40 shadow-soft space-y-8">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
-                                <User size={20} />
-                            </div>
-                            <h3 className="text-xl font-black text-foreground tracking-tight uppercase tracking-widest text-xs">Datos Personales</h3>
-                        </div>
-                        <div className="space-y-4">
-                            <InfoItem label="Nombre Completo" value={`${patient.firstName} ${patient.lastName}`} icon={<User size={16} />} />
-                            <InfoItem label="Fecha de Nacimiento" value={patient.birthDate} icon={<Calendar size={16} />} />
-                            <InfoItem label="Cedula / ID" value={patient.idCard || 'No registrado'} icon={<Hash size={16} />} />
-                            <InfoItem label="Estado Civil" value={patient.civilStatus} icon={<Heart size={16} />} />
-                        </div>
-                    </div>
-
-                    {/* Contact Information */}
-                    <div className="bg-card/40 backdrop-blur-3xl rounded-[3rem] p-10 border border-border/40 shadow-soft space-y-8">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                <Phone size={20} />
-                            </div>
-                            <h3 className="text-xl font-black text-foreground tracking-tight uppercase tracking-widest text-xs">Información de Contacto</h3>
-                        </div>
-                        <div className="space-y-4">
-                            <InfoItem label="Teléfono" value={patient.phone} icon={<Phone size={16} />} />
-                            <InfoItem label="Correo Electrónico" value={patient.email} icon={<Mail size={16} />} />
-                            <InfoItem label="Dirección" value={patient.address} icon={<MapPin size={16} />} />
-                            <InfoItem label="Ocupación" value={patient.occupation || 'N/A'} icon={<Activity size={16} />} />
-                        </div>
-                    </div>
+                <div className="text-center space-y-1.5">
+                    <h2 className="text-2xl font-thin text-white tracking-[0.1em] uppercase leading-tight line-clamp-1">
+                        {patient.firstName}
+                    </h2>
+                    <p className="text-[9px] tracking-[0.4em] text-white/20 uppercase font-light">
+                        {patient.lastName}
+                    </p>
                 </div>
 
-                {/* Additional Information (Insurance etc) */}
-                <div className="bg-card/40 backdrop-blur-3xl rounded-[3rem] p-10 border border-border/40 shadow-soft space-y-8">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                            <Shield size={20} />
-                        </div>
-                        <h3 className="text-xl font-black text-foreground tracking-tight uppercase tracking-widest text-xs">Seguro e Información Médica</h3>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <InfoItem label="Aseguradora" value={patient.insurance || 'Particular / Sin Seguro'} icon={<Shield size={16} />} />
-                        <InfoItem label="Número de Poliza" value={patient.policyNumber || 'N/A'} icon={<Hash size={16} />} />
-                    </div>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    className="hidden"
+                    accept="image/*"
+                />
+            </div>
+
+            {isMigrated && (
+                <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10 mb-10 text-center">
+                    <p className="text-[7px] tracking-[0.3em] text-primary uppercase font-bold">LEGACY VALIDATED</p>
+                    <p className="text-[6px] tracking-[0.2em] text-primary/40 uppercase mt-0.5">ID: {patient.legacyIdSistema || patient.id.slice(0, 8)}</p>
                 </div>
-            </motion.div>
-        </div>
+            )}
+
+            <div className="flex flex-col space-y-8 flex-1">
+                {[
+                    { icon: Briefcase, label: "PROFESIÓN", value: patient.profession },
+                    { icon: Phone, label: "TELÉFONO", value: patient.phone },
+                    { icon: Mail, label: "EMAIL", value: patient.email },
+                    { icon: Calendar, label: "NACIMIENTO", value: formattedBirthDate },
+                    { icon: MapPin, label: "MODO", value: patient.address, isLong: true }
+                ].map((item, idx) => (
+                    <div key={idx} className="flex flex-col gap-1.5 px-1 group/item">
+                        <div className="flex items-center gap-3">
+                            <item.icon size={12} strokeWidth={1} className="text-primary/20 group-hover/item:text-primary transition-colors" />
+                            <span className="text-[7px] font-thin uppercase text-white/20 tracking-[0.4em]">{item.label}</span>
+                        </div>
+                        <span className={cn(
+                            "text-[10px] font-light text-white/40 tracking-[0.1em] uppercase pt-0.5 border-white/5 transition-all group-hover:text-white/80",
+                            item.isLong ? 'leading-relaxed' : 'line-clamp-1'
+                        )}>
+                            {item.value || 'N/A'}
+                        </span>
+                    </div>
+                ))}
+            </div>
+
+            {specialty && (
+                <div className="mt-12 pt-6 border-t border-white/5 flex items-center justify-center gap-4 opacity-50">
+                    <div className="w-0.5 h-0.5 bg-primary/20 rounded-full" />
+                    <p className="text-[6px] tracking-[0.6em] text-white/20 uppercase font-light">
+                        {specialty.nameEs}
+                    </p>
+                </div>
+            )}
+        </motion.div>
     );
 };

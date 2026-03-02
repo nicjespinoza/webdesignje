@@ -1,6 +1,6 @@
-
 import React, { memo, useCallback } from 'react';
 import { useFormContext, useWatch, Controller } from 'react-hook-form';
+import { motion } from 'framer-motion';
 import { YesNo, CheckboxList } from '@/components/ui/FormComponents';
 import { FloatingLabelInput } from '@/components/premium-ui/FloatingLabelInput';
 import { InitialHistoryFormData } from '@/schemas/patientSchemas';
@@ -45,26 +45,32 @@ const GroupSectionRHF = memo(({
         }, { shouldDirty: true });
     }, [groupKey, setValue, getValues]);
 
-    const handleOtherChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOtherChange = (e: any) => {
         const current = getValues(groupKey as any) as any;
         setValue(groupKey as any, { ...current, other: e.target.value }, { shouldDirty: true });
-    }, [groupKey, setValue, getValues]);
+    };
 
     return (
-        <div className="mb-6 pb-4 border-b-2 border-gray-900 last:border-0 last:mb-0 last:pb-0">
+        <div className="pt-8 border-t border-white/5">
             <YesNo label={title} value={groupData} onChange={handleYesNoChange} />
             {groupData?.yes && (
-                <div className="pl-0 mt-4 bg-gray-50/50 p-3 md:p-4 rounded-xl border border-gray-200/50 animate-in fade-in slide-in-from-top-2">
-                    <CheckboxList items={list} data={groupData.conditions || groupData.list || {}} onChange={handleListChange} />
-                    <div className="mt-4">
-                        <FloatingLabelInput
-                            label="Otra / Cual?"
-                            value={groupData.other || ''}
-                            onChange={handleOtherChange}
-                            wrapperClassName="bg-white border-2 border-gray-900 rounded-xl"
-                        />
+                <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="mt-8 space-y-8"
+                >
+                    <div className="p-10 rounded-[2.5rem] bg-black/20 border border-white/5">
+                        <CheckboxList items={list} data={groupData.conditions || groupData.list || {}} onChange={handleListChange} />
                     </div>
-                </div>
+                    <FloatingLabelInput
+                        label="Otras observaciones"
+                        as="textarea"
+                        rows={2}
+                        value={groupData.other || ''}
+                        onChange={handleOtherChange}
+                        wrapperClassName="bg-black/20 border-white/5 focus-within:border-primary/40 rounded-[2rem]"
+                    />
+                </motion.div>
             )}
         </div>
     );
@@ -78,119 +84,116 @@ export const NonPathologicalAntecedentsSection: React.FC = () => {
     const transfusions = watch('transfusions') || { yes: false, no: true, reactions: { yes: false, no: true }, which: '' };
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
-            <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">IV. ANTECEDENTES NO PATOLÓGICOS PERSONALES</h3>
+        <div className="bg-[#0a0a0a]/40 backdrop-blur-xl p-12 rounded-[3.5rem] border border-white/5 transition-all duration-700 hover:border-primary/20">
+            <div className="flex items-center gap-4 mb-10">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                </div>
+                <h3 className="text-[11px] tracking-[0.5em] font-light text-white uppercase italic">Antecedentes No Patológicos</h3>
+            </div>
 
-            {/* Habits */}
-            <div className="mb-6 pb-4 border-b-2 border-gray-900 last:border-0 last:mb-0 last:pb-0">
-                <YesNo label="Hábitos / Adicciones" value={habits} onChange={(k, v) => setValue('habits', handleExclusiveChange(habits, k, v), { shouldDirty: true })} />
-                {habits?.yes && (
-                    <div className="pl-0 mt-4 bg-gray-50/50 p-3 md:p-4 rounded-xl border border-gray-200/50 animate-in fade-in slide-in-from-top-2">
-                        <CheckboxList items={C.HABITS_LIST} data={(habits as any).conditions || habits.list || {}} onChange={(k, v) => {
-                            const current = habits as any;
-                            const listKey = current.conditions !== undefined ? 'conditions' : 'list';
-                            setValue('habits', {
-                                ...current,
-                                [listKey]: { ...(current[listKey] || {}), [k]: v }
-                            }, { shouldDirty: true });
-                        }} />
-
-                        {/* Conditional details for specific habits */}
-                        {(habits.list?.['Drogas'] || (habits as any).conditions?.['Drogas']) && (
-                            <div className="mt-4 animate-in zoom-in-95 duration-200">
-                                <Controller
-                                    name="habits.drugsDetails"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FloatingLabelInput
-                                            label="¿Cuáles Drogas?"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            wrapperClassName="bg-white border-2 border-orange-200 rounded-xl focus-within:border-[#083C79]"
-                                        />
-                                    )}
-                                />
+            <div className="space-y-12">
+                {/* Habits */}
+                <div className="space-y-8">
+                    <YesNo label="Hábitos y Adicciones" value={habits} onChange={(k, v) => setValue('habits', handleExclusiveChange(habits, k, v), { shouldDirty: true })} />
+                    {habits?.yes && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            className="space-y-8"
+                        >
+                            <div className="p-10 rounded-[2.5rem] bg-black/20 border border-white/5">
+                                <CheckboxList items={C.HABITS_LIST} data={(habits as any).conditions || habits.list || {}} onChange={(k, v) => {
+                                    const current = habits as any;
+                                    const listKey = current.conditions !== undefined ? 'conditions' : 'list';
+                                    setValue('habits', {
+                                        ...current,
+                                        [listKey]: { ...(current[listKey] || {}), [k]: v }
+                                    }, { shouldDirty: true });
+                                }} />
                             </div>
-                        )}
 
-                        {(habits.list?.['Psicofarmacos'] || (habits as any).conditions?.['Psicofarmacos']) && (
-                            <div className="mt-4 animate-in zoom-in-95 duration-200">
-                                <Controller
-                                    name="habits.psychDetails"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FloatingLabelInput
-                                            label="¿Cuáles Psicofármacos?"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            wrapperClassName="bg-white border-2 border-orange-200 rounded-xl focus-within:border-[#083C79]"
-                                        />
-                                    )}
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {(habits.list?.['Drogas'] || (habits as any).conditions?.['Drogas']) && (
+                                    <Controller
+                                        name="habits.drugsDetails"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <FloatingLabelInput
+                                                label="¿Cuáles Drogas?"
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                wrapperClassName="bg-black/20 border-white/5 focus-within:border-primary/40 rounded-[2rem]"
+                                            />
+                                        )}
+                                    />
+                                )}
+
+                                {(habits.list?.['Psicofarmacos'] || (habits as any).conditions?.['Psicofarmacos']) && (
+                                    <Controller
+                                        name="habits.psychDetails"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <FloatingLabelInput
+                                                label="¿Cuáles Psicofármacos?"
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                wrapperClassName="bg-black/20 border-white/5 focus-within:border-primary/40 rounded-[2rem]"
+                                            />
+                                        )}
+                                    />
+                                )}
                             </div>
-                        )}
 
-                        {(habits.list?.['Medicamentos controlados'] || (habits as any).conditions?.['Medicamentos controlados']) && (
-                            <div className="mt-4 animate-in zoom-in-95 duration-200">
-                                <Controller
-                                    name="habits.controlledDetails"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FloatingLabelInput
-                                            label="¿Cuáles Medicamentos?"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            wrapperClassName="bg-white border-2 border-orange-200 rounded-xl focus-within:border-[#083C79]"
-                                        />
-                                    )}
-                                />
-                            </div>
-                        )}
-
-                        <div className="mt-4">
                             <FloatingLabelInput
-                                label="Otros / Detalles generales"
+                                label="Otros hábitos / Detalles"
+                                as="textarea"
+                                rows={2}
                                 value={habits.other || ''}
                                 onChange={(e) => setValue('habits', { ...habits, other: e.target.value }, { shouldDirty: true })}
-                                wrapperClassName="bg-white border-2 border-gray-900 rounded-xl"
+                                wrapperClassName="bg-black/20 border-white/5 focus-within:border-primary/40 rounded-[2rem]"
                             />
-                        </div>
-                    </div>
-                )}
-            </div>
+                        </motion.div>
+                    )}
+                </div>
 
-            {/* Transfusions */}
-            <div className="py-4 border-b-2 border-gray-900">
-                <YesNo label="Transfusiones Sanguíneas" value={transfusions} onChange={(k, v) => setValue('transfusions', handleExclusiveChange(transfusions, k, v), { shouldDirty: true })} />
-            </div>
+                {/* Transfusions */}
+                <div className="pt-8 border-t border-white/5 space-y-8">
+                    <YesNo label="Transfusiones Sanguíneas" value={transfusions} onChange={(k, v) => setValue('transfusions', handleExclusiveChange(transfusions, k, v), { shouldDirty: true })} />
 
-            {/* Reactions */}
-            <div className="py-4 border-b-2 border-gray-900">
-                <YesNo
-                    label="Reacciones post transfusionales"
-                    value={transfusions.reactions}
-                    onChange={(k, v) => setValue('transfusions.reactions', handleExclusiveChange(transfusions.reactions, k, v), { shouldDirty: true })}
-                />
-                {transfusions.reactions?.yes && (
-                    <div className="mt-4 animate-in fade-in slide-in-from-top-2">
-                        <Controller
-                            name="transfusions.which"
-                            control={control}
-                            render={({ field }) => (
-                                <FloatingLabelInput
-                                    label="¿Cual (es)?"
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    wrapperClassName="bg-white border-2 border-gray-900 rounded-xl"
+                    {transfusions?.yes && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            className="space-y-8"
+                        >
+                            <YesNo
+                                label="Reacciones post-transfusionales"
+                                value={transfusions.reactions}
+                                onChange={(k, v) => setValue('transfusions.reactions', handleExclusiveChange(transfusions.reactions, k, v), { shouldDirty: true })}
+                            />
+                            {transfusions.reactions?.yes && (
+                                <Controller
+                                    name="transfusions.which"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <FloatingLabelInput
+                                            label="Detallar reacciones"
+                                            as="textarea"
+                                            rows={2}
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            wrapperClassName="bg-black/20 border-white/5 focus-within:border-primary/40 rounded-[2rem]"
+                                        />
+                                    )}
                                 />
                             )}
-                        />
-                    </div>
-                )}
+                        </motion.div>
+                    )}
+                </div>
+
+                <GroupSectionRHF title="Exposiciones" list={C.EXPOSURES_LIST} groupKey="exposures" />
             </div>
-
-            <GroupSectionRHF title="Exposiciones" list={C.EXPOSURES_LIST} groupKey="exposures" />
-
         </div>
     );
 };
