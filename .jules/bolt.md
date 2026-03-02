@@ -1,0 +1,3 @@
+## 2026-03-05 - Synchronous Layout Thrashing in High-Frequency Events
+**Learning:** Calling `getBoundingClientRect()` inside high-frequency event listeners like `mousemove` causes forced synchronous layout recalculations (reflows) on every event. This severely degrades rendering performance, especially for canvas animations where 60fps is critical.
+**Action:** Cache the bounding rect result. Only update the cached value when the dimensions change (e.g., using a `resize` listener or `IntersectionObserver`), and use passive event listeners (`{ passive: true }`) for scroll/resize handlers to avoid blocking the main thread.

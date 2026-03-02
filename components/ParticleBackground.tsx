@@ -80,6 +80,12 @@ const ParticleBackground: React.FC = () => {
       }
     };
 
+    let canvasRect = canvas.getBoundingClientRect();
+
+    const updateRect = () => {
+      canvasRect = canvas.getBoundingClientRect();
+    };
+
     const resizeCanvas = () => {
       const parent = canvas.parentElement;
       if (parent) {
@@ -90,21 +96,24 @@ const ParticleBackground: React.FC = () => {
           canvas.height = window.innerHeight;
       }
       init();
+      updateRect();
     };
 
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+    window.addEventListener('scroll', updateRect, { passive: true });
     resizeCanvas(); // Initial call
 
     let mouseX = 0;
     let mouseY = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
+      // ⚡ Bolt Optimization: Cache getBoundingClientRect() and update on resize/scroll
+      // to avoid forced synchronous layout thrashing (reflows) on high-frequency events
+      mouseX = e.clientX - canvasRect.left;
+      mouseY = e.clientY - canvasRect.top;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     const animate = () => {
       if (!ctx) return;
@@ -120,6 +129,7 @@ const ParticleBackground: React.FC = () => {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('scroll', updateRect);
       window.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(animationFrameId);
     };
