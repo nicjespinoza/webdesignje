@@ -1,0 +1,281 @@
+﻿app/auth/page.tsx(42,21): error TS2345: Argument of type '"/patient/login"' is not assignable to parameter of type 'RouteImpl<"/patient/login">'.
+app/dashboard/(inner)/chat/page.tsx(318,65): error TS18047: 'state.currentChat' is possibly 'null'.
+app/dashboard/(inner)/layout.tsx(177,64): error TS2345: Argument of type '`${string}?specialty=${string}`' is not assignable to parameter of type 'RouteImpl<`${string}?specialty=${string}`>'.
+app/dashboard/(inner)/patients/[id]/history/new/InitialHistoryClient.tsx(50,9): error TS2719: Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/react-hook-form/dist/types/resolvers").Resolver<{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | undefin...' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/react-hook-form/dist/types/resolvers").Resolver<{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | undefin...'. Two different types with this name exist, but they are unrelated.
+  Types of parameters 'options' and 'options' are incompatible.
+    Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/react-hook-form/dist/types/resolvers").ResolverOptions<{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | ...' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/react-hook-form/dist/types/resolvers").ResolverOptions<{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | ...'. Two different types with this name exist, but they are unrelated.
+      Type '{ yes?: boolean | undefined; no?: boolean | undefined; details?: string | undefined; conditions?: Record<PropertyKey, unknown> | undefined; list?: Record<PropertyKey, unknown> | undefined; other?: string | undefined; cancerDetails?: string | undefined; } | undefined' is not assignable to type '{ yes: boolean; no: boolean; details?: string | undefined; conditions?: Record<string | number | symbol, unknown> | undefined; list?: Record<string | number | symbol, unknown> | undefined; other?: string | undefined; cancerDetails?: string | undefined; } | undefined'.
+        Type '{ yes?: boolean | undefined; no?: boolean | undefined; details?: string | undefined; conditions?: Record<PropertyKey, unknown> | undefined; list?: Record<PropertyKey, unknown> | undefined; other?: string | undefined; cancerDetails?: string | undefined; }' is not assignable to type '{ yes: boolean; no: boolean; details?: string | undefined; conditions?: Record<string | number | symbol, unknown> | undefined; list?: Record<string | number | symbol, unknown> | undefined; other?: string | undefined; cancerDetails?: string | undefined; }'.
+          Types of property 'yes' are incompatible.
+            Type 'boolean | undefined' is not assignable to type 'boolean'.
+              Type 'undefined' is not assignable to type 'boolean'.
+app/dashboard/(inner)/patients/[id]/history/new/InitialHistoryClient.tsx(109,37): error TS2345: Argument of type 'Omit<InitialHistory, "id">' is not assignable to parameter of type 'InitialHistory'.
+  Property 'id' is missing in type 'Omit<InitialHistory, "id">' but required in type 'InitialHistory'.
+app/dashboard/(inner)/patients/[id]/history/new/InitialHistoryClient.tsx(165,51): error TS2345: Argument of type '(data: InitialHistoryFormData) => Promise<void>' is not assignable to parameter of type 'SubmitHandler<TFieldValues>'.
+  Types of parameters 'data' and 'data' are incompatible.
+    Type 'TFieldValues' is not assignable to type '{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | undefined; evolutionTime?: string | undefined; ... 13 more ...; specialtyId?: string | undefined; }'.
+      Type 'FieldValues' is missing the following properties from type '{ id: string; patientId: string; date: string; time: string; motives?: any; motivesCancerDetails?: string | undefined; otherMotive?: string | undefined; evolutionTime?: string | undefined; ... 13 more ...; specialtyId?: string | undefined; }': id, patientId, date, time
+app/dashboard/(inner)/patients/[id]/PatientProfileClient.tsx(143,71): error TS2345: Argument of type '`${string}?specialty=${string}` | `${string}&specialty=${string}`' is not assignable to parameter of type 'RouteImpl<`${string}?specialty=${string}` | `${string}&specialty=${string}`>'.
+  Type '`${string}?specialty=${string}`' is not assignable to type 'RouteImpl<`${string}?specialty=${string}` | `${string}&specialty=${string}`>'.
+app/dashboard/(inner)/patients/[id]/PatientProfileClient.tsx(155,71): error TS2345: Argument of type '`${string}?specialty=${string}` | `${string}&specialty=${string}`' is not assignable to parameter of type 'RouteImpl<`${string}?specialty=${string}` | `${string}&specialty=${string}`>'.
+  Type '`${string}?specialty=${string}`' is not assignable to type 'RouteImpl<`${string}?specialty=${string}` | `${string}&specialty=${string}`>'.
+app/dashboard/(inner)/reports/page.tsx(49,28): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type '{}' is not assignable to parameter of type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type '{}' is not assignable to parameter of type 'string | number'.
+app/dashboard/page.tsx(194,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'RouteImpl<string>'.
+app/portal/page.tsx(192,35): error TS2345: Argument of type 'string' is not assignable to parameter of type 'RouteImpl<string>'.
+components/history/sections/PathologicalAntecedentsSection.tsx(21,25): error TS2304: Cannot find name 'memo'.
+components/history/sections/PathologicalAntecedentsSection.tsx(30,46): error TS2304: Cannot find name 'useFormContext'.
+components/history/sections/PathologicalAntecedentsSection.tsx(31,23): error TS2304: Cannot find name 'useWatch'.
+components/history/sections/PathologicalAntecedentsSection.tsx(33,31): error TS2304: Cannot find name 'useCallback'.
+components/history/sections/PathologicalAntecedentsSection.tsx(38,30): error TS2304: Cannot find name 'useCallback'.
+components/history/sections/PathologicalAntecedentsSection.tsx(66,26): error TS2552: Cannot find name 'Controller'. Did you mean 'control'?
+components/history/sections/PathologicalAntecedentsSection.tsx(69,40): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(102,42): error TS2304: Cannot find name 'useFormContext'.
+components/history/sections/PathologicalAntecedentsSection.tsx(197,46): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(200,60): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(212,34): error TS2552: Cannot find name 'Controller'. Did you mean 'control'?
+components/history/sections/PathologicalAntecedentsSection.tsx(215,48): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(256,34): error TS2552: Cannot find name 'Controller'. Did you mean 'control'?
+components/history/sections/PathologicalAntecedentsSection.tsx(259,48): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(281,34): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(284,48): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(317,34): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(320,48): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(355,46): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(358,60): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(369,50): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(372,64): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(382,46): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(385,60): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(439,34): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(442,48): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(459,34): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(462,48): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(479,34): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(482,48): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/history/sections/PathologicalAntecedentsSection.tsx(503,34): error TS2304: Cannot find name 'Controller'.
+components/history/sections/PathologicalAntecedentsSection.tsx(506,48): error TS7031: Binding element 'field' implicitly has an 'any' type.
+components/ui/sidebar.tsx(170,13): error TS2322: Type 'string' is not assignable to type 'RouteImpl<string> | UrlObject'.
+context/AuthContext.tsx(18,15): error TS2305: Module '"@/types"' has no exported member 'AuthContextType'.
+lib/validations/history.ts(8,19): error TS2554: Expected 2-3 arguments, but got 1.
+lib/validations/history.ts(9,13): error TS2554: Expected 2-3 arguments, but got 1.
+out/portal/src/components/chat/VisitorChatWidget.tsx(137,61): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+out/portal/src/components/chat/VisitorChatWidget.tsx(138,63): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+out/portal/src/components/ui/PageTransition.tsx(41,13): error TS2322: Type '{ initial: { opacity: number; y: number; filter: string; }; animate: { opacity: number; y: number; filter: string; transition: { duration: number; ease: number[]; }; }; exit: { opacity: number; y: number; filter: string; transition: { ...; }; }; }' is not assignable to type 'Variants'.
+  Property 'animate' is incompatible with index signature.
+    Type '{ opacity: number; y: number; filter: string; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'Variant'.
+      Type '{ opacity: number; y: number; filter: string; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'TargetAndTransition'.
+        Type '{ opacity: number; y: number; filter: string; transition: { duration: number; ease: number[]; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues | undefined; }'.
+          Types of property 'transition' are incompatible.
+            Type '{ duration: number; ease: number[]; }' is not assignable to type 'Transition<any> | undefined'.
+              Type '{ duration: number; ease: number[]; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
+                Type '{ duration: number; ease: number[]; }' is not assignable to type 'ValueAnimationTransition<any>'.
+                  Types of property 'ease' are incompatible.
+                    Type 'number[]' is not assignable to type 'Easing | Easing[] | undefined'.
+                      Type 'number[]' is not assignable to type 'EasingFunction | Easing[]'.
+                        Type 'number[]' is not assignable to type 'Easing[]'.
+                          Type 'number' is not assignable to type 'Easing'.
+out/portal/src/lib/firebase.ts(10,25): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(11,29): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(12,28): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(13,32): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(14,36): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(15,24): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(16,32): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(40,40): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(45,17): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/lib/firebase.ts(55,24): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+out/portal/src/screens/auth/SpecialtyPortalScreen.tsx(189,58): error TS2322: Type 'string' is not assignable to type 'never'.
+out/portal/src/screens/auth/SpecialtyPortalScreen.tsx(189,78): error TS2322: Type '{ color: string; }' is not assignable to type 'never'.
+out/portal/src/screens/auth/SpecialtyPortalScreen.tsx(262,63): error TS2322: Type 'string' is not assignable to type 'never'.
+out/portal/src/screens/auth/SpecialtyPortalScreen.tsx(262,83): error TS2322: Type '{ color: string; }' is not assignable to type 'never'.
+out/portal/src/screens/doctor/AgendaScreen.tsx(830,118): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+out/portal/src/screens/doctor/Body3DDesigner.tsx(51,23): error TS2322: Type 'Vector3' is not assignable to type 'number | Vector3 | [x: number, y: number, z: number] | readonly [x: number, y: number, z: number] | Readonly<Vector3> | undefined'.
+  Type 'Vector3' is not assignable to type 'Vector3 | Readonly<Vector3>'.
+    Type 'Vector3' is not assignable to type 'Readonly<Vector3>'.
+      The types of 'set(...).addScaledVector' are incompatible between these types.
+        Type '(v: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Vector3").Vector3, s: number) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modu...' is not assignable to type '(v: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Vector3").Vector3, s: number) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/m...'.
+          Types of parameters 'v' and 'v' are incompatible.
+            Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Vector3").Vector3' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Vector3").Vector3'.
+              Types of property 'project' are incompatible.
+                Type '(camera: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/cameras/Camera").Camera) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/V...' is not assignable to type '(camera: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/cameras/Camera").Camera) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@...'.
+                  Types of parameters 'camera' and 'camera' are incompatible.
+                    Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/cameras/Camera").Camera' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/cameras/Camera").Camera'.
+                      Types of property 'parent' are incompatible.
+                        Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/core/Object3D").Object3D<import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/...' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/core/Object3D").Object3D<import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/core/Object3D").Ob...'.
+                          Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/core/Object3D").Object3D<import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/...' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/core/Object3D").Object3D<import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/core/Object3D").Ob...'.
+                            Types of property 'customDepthMaterial' are incompatible.
+                              Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/materials/Material").Material | undefined' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/materials/Material").Material | undefined'.
+                                Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/materials/Material").Material' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/materials/Material").Material'.
+                                  Types of property 'onBeforeRender' are incompatible.
+                                    Type '(renderer: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/renderers/WebGLRenderer").WebGLRenderer, scene: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out...' is not assignable to type '(renderer: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/renderers/WebGLRenderer").WebGLRenderer, scene: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@...'.
+                                      Types of parameters 'renderer' and 'renderer' are incompatible.
+                                        Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/renderers/WebGLRenderer").WebGLRenderer' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/renderers/WebGLRenderer").WebGLRenderer'.
+                                          Types of property 'clippingPlanes' are incompatible.
+                                            Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Plane").Plane[]' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Plane").Plane[]'.
+                                              Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Plane").Plane' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Plane").Plane'.
+                                                Types of property 'distanceToSphere' are incompatible.
+                                                  Type '(sphere: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Sphere").Sphere) => number' is not assignable to type '(sphere: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Sphere").Sphere) => number'.
+                                                    Types of parameters 'sphere' and 'sphere' are incompatible.
+                                                      Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Sphere").Sphere' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Sphere").Sphere'.
+                                                        Types of property 'intersectsBox' are incompatible.
+                                                          Type '(box: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Box3").Box3) => boolean' is not assignable to type '(box: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Box3").Box3) => boolean'.
+                                                            Types of parameters 'box' and 'box' are incompatible.
+                                                              Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Box3").Box3' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Box3").Box3'.
+                                                                Types of property 'copy' are incompatible.
+                                                                  Type '(box: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Box3").Box3) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Box3").Box3' is not assignable to type '(box: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Box3").Box3) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/thre...'.
+                                                                    Types of parameters 'box' and 'box' are incompatible.
+                                                                      Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Box3").Box3' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Box3").Box3'.
+                                                                        Types of property 'setFromObject' are incompatible.
+                                                                          Type '(object: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/core/Object3D").Object3D<import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@typ...' is not assignable to type '(object: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/core/Object3D").Object3D<import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/core/Obje...'.
+                                                                            Types of parameters 'object' and 'object' are incompatible.
+                                                                              Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/core/Object3D").Object3D<import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/core/Object3D").Ob...' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/core/Object3D").Object3D<import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/...'.
+                                                                                Types of property 'customDepthMaterial' are incompatible.
+                                                                                  Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/materials/Material").Material | undefined' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/materials/Material").Material | undefined'.
+                                                                                    Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/materials/Material").Material' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/materials/Material").Material'.
+                                                                                      Types of property 'onBeforeRender' are incompatible.
+                                                                                        Type '(renderer: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/renderers/WebGLRenderer").WebGLRenderer, scene: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@...' is not assignable to type '(renderer: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/renderers/WebGLRenderer").WebGLRenderer, scene: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out...'.
+                                                                                          Types of parameters 'renderer' and 'renderer' are incompatible.
+                                                                                            Property 'setEffects' is missing in type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/renderers/WebGLRenderer").WebGLRenderer' but required in type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/renderers/WebGLRenderer").WebGLRenderer'.
+out/portal/src/screens/doctor/ChatScreen.tsx(121,72): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+out/portal/src/screens/doctor/ChatScreen.tsx(122,81): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+out/portal/src/screens/doctor/ChatScreen.tsx(163,63): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+out/portal/src/screens/doctor/ChatScreen.tsx(253,69): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+out/portal/src/screens/doctor/ChatScreen.tsx(254,78): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+out/portal/src/screens/doctor/CreateSubsecuenteScreen.tsx(556,37): error TS2322: Type 'unknown[]' is not assignable to type 'ReactI18NextChildren | Iterable<ReactI18NextChildren>'.
+  Type 'unknown[]' is not assignable to type 'Iterable<ReactI18NextChildren>'.
+    The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+      Type 'IteratorResult<unknown, undefined>' is not assignable to type 'IteratorResult<ReactI18NextChildren, any>'.
+        Type 'IteratorYieldResult<unknown>' is not assignable to type 'IteratorResult<ReactI18NextChildren, any>'.
+          Type 'IteratorYieldResult<unknown>' is not assignable to type 'IteratorYieldResult<ReactI18NextChildren>'.
+            Type 'unknown' is not assignable to type 'ReactI18NextChildren'.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(693,52): error TS7006: Parameter 'd' implicitly has an 'any' type.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(693,72): error TS7006: Parameter 'd' implicitly has an 'any' type.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(693,75): error TS7006: Parameter 'i' implicitly has an 'any' type.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(699,52): error TS7006: Parameter 'd' implicitly has an 'any' type.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(699,72): error TS7006: Parameter 'd' implicitly has an 'any' type.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(699,75): error TS7006: Parameter 'i' implicitly has an 'any' type.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(726,100): error TS7006: Parameter 'm' implicitly has an 'any' type.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(734,102): error TS7006: Parameter 'e' implicitly has an 'any' type.
+out/portal/src/screens/doctor/HistoryViewScreen.tsx(742,102): error TS7006: Parameter 'n' implicitly has an 'any' type.
+out/portal/src/screens/doctor/ProfileScreen.tsx(463,33): error TS2322: Type 'RefObject<HTMLInputElement | null>' is not assignable to type 'RefObject<HTMLInputElement>'.
+  Type 'HTMLInputElement | null' is not assignable to type 'HTMLInputElement'.
+    Type 'null' is not assignable to type 'HTMLInputElement'.
+out/portal/tests/unit/ui_components.test.tsx(36,34): error TS2304: Cannot find name 'vi'.
+out/portal/tests/unit/ui_components.test.tsx(74,34): error TS2304: Cannot find name 'vi'.
+public/portal/src/components/chat/VisitorChatWidget.tsx(137,61): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+public/portal/src/components/chat/VisitorChatWidget.tsx(138,63): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+public/portal/src/components/ui/PageTransition.tsx(41,13): error TS2322: Type '{ initial: { opacity: number; y: number; filter: string; }; animate: { opacity: number; y: number; filter: string; transition: { duration: number; ease: number[]; }; }; exit: { opacity: number; y: number; filter: string; transition: { ...; }; }; }' is not assignable to type 'Variants'.
+  Property 'animate' is incompatible with index signature.
+    Type '{ opacity: number; y: number; filter: string; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'Variant'.
+      Type '{ opacity: number; y: number; filter: string; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'TargetAndTransition'.
+        Type '{ opacity: number; y: number; filter: string; transition: { duration: number; ease: number[]; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues | undefined; }'.
+          Types of property 'transition' are incompatible.
+            Type '{ duration: number; ease: number[]; }' is not assignable to type 'Transition<any> | undefined'.
+              Type '{ duration: number; ease: number[]; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
+                Type '{ duration: number; ease: number[]; }' is not assignable to type 'ValueAnimationTransition<any>'.
+                  Types of property 'ease' are incompatible.
+                    Type 'number[]' is not assignable to type 'Easing | Easing[] | undefined'.
+                      Type 'number[]' is not assignable to type 'EasingFunction | Easing[]'.
+                        Type 'number[]' is not assignable to type 'Easing[]'.
+                          Type 'number' is not assignable to type 'Easing'.
+public/portal/src/lib/firebase.ts(10,25): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(11,29): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(12,28): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(13,32): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(14,36): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(15,24): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(16,32): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(40,40): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(45,17): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/lib/firebase.ts(55,24): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+public/portal/src/screens/auth/SpecialtyPortalScreen.tsx(189,58): error TS2322: Type 'string' is not assignable to type 'never'.
+public/portal/src/screens/auth/SpecialtyPortalScreen.tsx(189,78): error TS2322: Type '{ color: string; }' is not assignable to type 'never'.
+public/portal/src/screens/auth/SpecialtyPortalScreen.tsx(262,63): error TS2322: Type 'string' is not assignable to type 'never'.
+public/portal/src/screens/auth/SpecialtyPortalScreen.tsx(262,83): error TS2322: Type '{ color: string; }' is not assignable to type 'never'.
+public/portal/src/screens/doctor/AgendaScreen.tsx(830,118): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+public/portal/src/screens/doctor/Body3DDesigner.tsx(51,23): error TS2322: Type 'Vector3' is not assignable to type 'number | Vector3 | [x: number, y: number, z: number] | readonly [x: number, y: number, z: number] | Readonly<Vector3> | undefined'.
+  Type 'Vector3' is not assignable to type 'Vector3 | Readonly<Vector3>'.
+    Type 'Vector3' is not assignable to type 'Readonly<Vector3>'.
+      The types of 'set(...).addScaledVector' are incompatible between these types.
+        Type '(v: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Vector3").Vector3, s: number) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modu...' is not assignable to type '(v: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Vector3").Vector3, s: number) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/m...'.
+          Types of parameters 'v' and 'v' are incompatible.
+            Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Vector3").Vector3' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Vector3").Vector3'.
+              Types of property 'applyEuler' are incompatible.
+                Type '(euler: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Euler").Euler) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Vector3...' is not assignable to type '(euler: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Euler").Euler) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/...'.
+                  Types of parameters 'euler' and 'euler' are incompatible.
+                    Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Euler").Euler' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Euler").Euler'.
+                      Types of property 'setFromRotationMatrix' are incompatible.
+                        Type '(m: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Matrix4").Matrix4, order?: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@t...' is not assignable to type '(m: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix4").Matrix4, order?: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Eu...'.
+                          Types of parameters 'm' and 'm' are incompatible.
+                            Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix4").Matrix4' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Matrix4").Matrix4'.
+                              Types of property 'copy' are incompatible.
+                                Type '(m: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix4").Matrix4) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix4...' is not assignable to type '(m: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Matrix4").Matrix4) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/...'.
+                                  Types of parameters 'm' and 'm' are incompatible.
+                                    Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Matrix4").Matrix4' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix4").Matrix4'.
+                                      Types of property 'setFromMatrix3' are incompatible.
+                                        Type '(m: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Matrix3").Matrix3) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/...' is not assignable to type '(m: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix3").Matrix3) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix4...'.
+                                          Types of parameters 'm' and 'm' are incompatible.
+                                            Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix3").Matrix3' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Matrix3").Matrix3'.
+                                              Types of property 'copy' are incompatible.
+                                                Type '(m: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix3").Matrix3) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix3...' is not assignable to type '(m: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Matrix3").Matrix3) => import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/...'.
+                                                  Types of parameters 'm' and 'm' are incompatible.
+                                                    Type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Matrix3").Matrix3' is not assignable to type 'import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix3").Matrix3'.
+                                                      Types of property 'makeTranslation' are incompatible.
+                                                        Type '{ (v: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/three/src/math/Vector2").Vector2): import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/out/portal/node_modules/@types/...' is not assignable to type '{ (v: import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Vector2").Vector2): import("C:/Users/nicje/OneDrive/Documentos/Proyecto 2026/WebDesignJE/Historia-Clinica-DEMO/medical-ai-demo/node_modules/@types/three/src/math/Matrix3...'.
+                                                          Types of parameters 'v' and 'x' are incompatible.
+                                                            Type 'number' is not assignable to type 'Vector2'.
+public/portal/src/screens/doctor/ChatScreen.tsx(121,72): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+public/portal/src/screens/doctor/ChatScreen.tsx(122,81): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+public/portal/src/screens/doctor/ChatScreen.tsx(163,63): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+public/portal/src/screens/doctor/ChatScreen.tsx(253,69): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+public/portal/src/screens/doctor/ChatScreen.tsx(254,78): error TS2339: Property 'toDate' does not exist on type 'Timestamp | FieldValue'.
+  Property 'toDate' does not exist on type 'FieldValue'.
+public/portal/src/screens/doctor/CreateSubsecuenteScreen.tsx(556,37): error TS2322: Type 'unknown[]' is not assignable to type 'ReactI18NextChildren | Iterable<ReactI18NextChildren>'.
+  Type 'unknown[]' is not assignable to type 'Iterable<ReactI18NextChildren>'.
+    The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+      Type 'IteratorResult<unknown, undefined>' is not assignable to type 'IteratorResult<ReactI18NextChildren, any>'.
+        Type 'IteratorYieldResult<unknown>' is not assignable to type 'IteratorResult<ReactI18NextChildren, any>'.
+          Type 'IteratorYieldResult<unknown>' is not assignable to type 'IteratorYieldResult<ReactI18NextChildren>'.
+            Type 'unknown' is not assignable to type 'ReactI18NextChildren'.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(693,52): error TS7006: Parameter 'd' implicitly has an 'any' type.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(693,72): error TS7006: Parameter 'd' implicitly has an 'any' type.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(693,75): error TS7006: Parameter 'i' implicitly has an 'any' type.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(699,52): error TS7006: Parameter 'd' implicitly has an 'any' type.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(699,72): error TS7006: Parameter 'd' implicitly has an 'any' type.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(699,75): error TS7006: Parameter 'i' implicitly has an 'any' type.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(726,100): error TS7006: Parameter 'm' implicitly has an 'any' type.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(734,102): error TS7006: Parameter 'e' implicitly has an 'any' type.
+public/portal/src/screens/doctor/HistoryViewScreen.tsx(742,102): error TS7006: Parameter 'n' implicitly has an 'any' type.
+public/portal/src/screens/doctor/ProfileScreen.tsx(463,33): error TS2322: Type 'RefObject<HTMLInputElement | null>' is not assignable to type 'RefObject<HTMLInputElement>'.
+  Type 'HTMLInputElement | null' is not assignable to type 'HTMLInputElement'.
+    Type 'null' is not assignable to type 'HTMLInputElement'.
+public/portal/tests/unit/ui_components.test.tsx(36,34): error TS2304: Cannot find name 'vi'.
+public/portal/tests/unit/ui_components.test.tsx(74,34): error TS2304: Cannot find name 'vi'.
+src/components/landing/AboutSection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/AISection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/BlogSection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/ContactSection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/FooterSection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/Hero.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/Navbar.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/ProjectsSection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/RAGSection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/ServicesSection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
+src/components/landing/StackSection.tsx(18,18): error TS2307: Cannot find module '@/src/components/ui/Logo' or its corresponding type declarations.
