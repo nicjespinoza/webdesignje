@@ -31,13 +31,13 @@ const ProjectsSection = () => {
           className="flex flex-col items-center mb-16 relative z-10"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4 shadow-[0_0_20px_rgba(198,147,32,0.2)]">
-            <Code2 size={14} /> Portfolio
+            <Code2 size={14} /> Portafolio
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-center text-white">
-            Featured <span className="gradient-text">Projects</span>
+            Proyectos <span className="gradient-text">Destacados</span>
           </h2>
           <p className="text-slate-400 mt-4 max-w-xl text-center text-lg">
-            Real-world applications showcasing modern development practices.
+            Aplicaciones reales que muestran las mejores prácticas del desarrollo moderno.
           </p>
         </motion.div>
 
@@ -75,7 +75,7 @@ const ProjectsSection = () => {
                   </div>
                   <div className="flex gap-4">
                     <ExternalLink className="text-[#FBE18D]" size={18} />
-                    <span className="text-xs text-slate-500 font-mono">LIVE DEMO</span>
+                    <span className="text-xs text-slate-500 font-mono">VER DEMO</span>
                   </div>
                 </div>
               </div>

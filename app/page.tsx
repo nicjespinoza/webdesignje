@@ -81,7 +81,6 @@ import RAGSection from "@/src/components/landing/RAGSection";
 import ProjectsSection from "@/src/components/landing/ProjectsSection";
 import AboutSection from "@/src/components/landing/AboutSection";
 import Hero from "@/src/components/landing/Hero";
-import BlogSection from "@/src/components/landing/BlogSection";
 import ContactSection from "@/src/components/landing/ContactSection";
 import FooterSection from "@/src/components/landing/FooterSection";
 
@@ -116,6 +115,79 @@ export default function PortfolioPage() {
         }
       `}</style>
 
+      {/* Structured Data adicional para Proyectos */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "Historia Clínica SaaS",
+                  "description": "Sistema integral de historias clínicas para clínicas multi-especialidad con sincronización en tiempo real y visualización 3D",
+                  "applicationCategory": "MedicalApplication",
+                  "operatingSystem": "Web",
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "POS Tienda Zapatos",
+                  "description": "Punto de venta en la nube para tiendas de calzado con control de inventario en tiempo real",
+                  "applicationCategory": "BusinessApplication",
+                  "operatingSystem": "Web"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "Hotel Management System",
+                  "description": "Plataforma unificada para reservas hoteleras y gestión de habitaciones",
+                  "applicationCategory": "BusinessApplication",
+                  "operatingSystem": "Web"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "Eve Commerce",
+                  "description": "Plataforma de e-commerce avanzada enfocada en moda de alta gama",
+                  "applicationCategory": "ShoppingApplication",
+                  "operatingSystem": "Web"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "item": {
+                  "@type": "SoftwareApplication",
+                  "name": "Beauty Agenda SaaS",
+                  "description": "Sistema de agenda inteligente para salones de belleza, barberías y spas con IA integrada",
+                  "applicationCategory": "BusinessApplication",
+                  "operatingSystem": "Web"
+                }
+              }
+            ]
+          })
+        }}
+      />
+
       <Navbar isDark={isDark} toggleTheme={toggleTheme} lang={lang} toggleLang={toggleLang} />
       <Hero lang={lang} router={router} />
       <ServicesSection />
@@ -124,7 +196,6 @@ export default function PortfolioPage() {
       <RAGSection />
       <ProjectsSection />
       <AboutSection />
-      <BlogSection />
       <ContactSection />
       <FooterSection />
     </div>

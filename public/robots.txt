@@ -1,0 +1,66 @@
+# Robots.txt para Joseph Espinoza | Full-Stack & AI Engineer
+# https://webdesignje.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Permitir todo el rastreo
+Allow: /#about
+Allow: /#projects
+Allow: /#services
+Allow: /#stack
+Allow: /#ai
+Allow: /#contact
+Allow: /portal
+Allow: /demos/
+
+# Bloquear paths administrativos (si los hubiera en el futuro)
+Disallow: /api/admin/
+Disallow: /dashboard/private/
+
+# Sitemap
+Sitemap: https://webdesignje.com/sitemap.xml
+
+# Crawl-delay para bots agresivos (opcional)
+# Crawl-delay: 1
+
+# Googlebot específico
+User-agent: Googlebot
+Allow: /
+# Sin crawl-delay para Google - queremos indexación rápida
+
+# Googlebot-Image
+User-agent: Googlebot-Image
+Allow: /images/
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+
+# Yandex
+User-agent: Yandex
+Allow: /
+
+# Baiduspider
+User-agent: Baiduspider
+Allow: /
+
+# DuckDuckBot
+User-agent: DuckDuckBot
+Allow: /
+
+# Bloquear bots maliciosos comunes
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: Petrovic
+Disallow: /

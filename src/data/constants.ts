@@ -203,17 +203,17 @@ export const projects: Project[] = [
     {
         id: '1',
         title: 'Historia Clínica SaaS',
-        description: 'Comprehensive medical record system for multi-specialty clinics. Features real-time sync, interactive 3D anatomy visualization, and dynamic PDF report generation.',
-        longDescription: "A production-grade SaaS platform built for scale. It allows clinics to manage patient data securely with HIPAA-compliant architecture. The standout feature is the 3D interactive human model which doctors can rotate and annotate to visualize patient injuries or surgical sites. The system also handles appointment scheduling, billing, and pharmacy inventory.",
+        description: 'Sistema integral de historias clínicas para clínicas multi-especialidad. Incluye sincronización en tiempo real, visualización 3D interactiva de anatomía y generación dinámica de reportes PDF.',
+        longDescription: "Plataforma SaaS de grado profesional construida para escalar. Permite a las clínicas gestionar datos de pacientes de forma segura con arquitectura HIPAA-compliant. La característica destacada es el modelo humano 3D interactivo que los doctores pueden rotar y anotar para visualizar lesiones o sitios quirúrgicos. El sistema también maneja programación de citas, facturación e inventario de farmacia.",
         features: [
-            'Real-time data synchronization with Firebase Firestore',
-            'Interactive 3D Anatomy using React Three Fiber',
-            'Role-Based Access Control (RBAC) for Doctors/Staff',
-            'Automated PDF prescription & report generation',
-            'Secure Patient Portal'
+            'Sincronización de datos en tiempo real con Firebase Firestore',
+            'Anatomía 3D interactiva usando React Three Fiber',
+            'Control de acceso basado en roles (RBAC) para Doctores/Personal',
+            'Generación automática de PDF de prescripciones y reportes',
+            'Portal seguro para pacientes'
         ],
         techStack: ['React 19', 'Firebase', 'Three.js', 'jsPDF', 'Zod'],
-        imageUrl: 'https://picsum.photos/seed/medtech/600/400',
+        imageUrl: '/screenshots/historia-clinica.png',
         featured: true,
         githubUrl: '#',
         demoUrl: '/portal'
@@ -221,53 +221,73 @@ export const projects: Project[] = [
     {
         id: '2',
         title: 'POS Tienda Zapatos',
-        description: 'Cloud-based Point of Sale specifically designed for footwear retail. Real-time inventory tracking by size, color, and model.',
-        longDescription: "A specialized POS system for the footwear industry. It manages complex inventory with multiple variants, handles multi-store synchronization, and provides detailed sales analytics. Integrated with local payment gateways and automated invoice generation.",
+        description: 'Punto de venta en la nube diseñado específicamente para tiendas de calzado. Control de inventario en tiempo real por talla, color y modelo.',
+        longDescription: "Sistema POS especializado para la industria del calzado. Gestiona inventario complejo con múltiples variantes, maneja sincronización entre sucursales y proporciona análisis detallados de ventas. Integrado con pasarelas de pago locales y generación automática de facturas.",
         features: [
-            'Multi-variant inventory management',
-            'Real-time sales reporting and analytics',
-            'Customer loyalty program integration',
-            'Optimized for mobile and tablet devices',
-            'Firebase offline persistence'
+            'Gestión de inventario multi-variante',
+            'Reportes y análisis de ventas en tiempo real',
+            'Integración con programa de lealtad de clientes',
+            'Optimizado para dispositivos móviles y tablets',
+            'Persistencia offline de Firebase'
         ],
         techStack: ['Next.js', 'Firebase', 'Tailwind CSS', 'Cloud Functions'],
-        imageUrl: 'https://picsum.photos/seed/shoes/600/400',
+        imageUrl: '/screenshots/pos-zapatos.png',
         githubUrl: '#',
         demoUrl: '/demos/pos'
     },
     {
         id: '3',
         title: 'Hotel Management System',
-        description: 'Unified platform for hotel bookings, room management, and guest services. Features a premium glassmorphic guest portal.',
-        longDescription: "An all-in-one hospitality engine. From the front desk to the guest's phone, this system streamlines every interaction. It includes a booking engine, housekeeping management, and a guest dashboard for services like room service and spa bookings.",
+        description: 'Plataforma unificada para reservas hoteleras, gestión de habitaciones y servicios al huésped. Incluye un portal de huéspedes premium con diseño glassmorphic.',
+        longDescription: "Un motor de hospitalidad todo-en-uno. Desde la recepción hasta el teléfono del huésped, este sistema optimiza cada interacción. Incluye un motor de reservas, gestión de housekeeping y un dashboard de huéspedes para servicios como room service y reservas de spa.",
         features: [
-            'Real-time room availability calendar',
-            'Interactive Guest Dashboard',
-            'Automated check-in/check-out workflow',
-            'Revenue management analytics',
-            'Multi-language support'
+            'Calendario de disponibilidad de habitaciones en tiempo real',
+            'Dashboard interactivo para huéspedes',
+            'Flujo automatizado de check-in/check-out',
+            'Análisis de gestión de ingresos',
+            'Soporte multi-idioma'
         ],
         techStack: ['TypeScript', 'Framer Motion', 'Figma', 'Stripe'],
-        imageUrl: 'https://picsum.photos/seed/hotel/600/400',
+        imageUrl: '/screenshots/hotel-management.png',
         githubUrl: '#',
         demoUrl: '/demos/hotel'
     },
     {
         id: '4',
         title: 'Eve Commerce',
-        description: 'Advanced E-commerce platform with a focus on high-end fashion and seamless shopping experience.',
-        longDescription: "A luxury e-commerce experience. This project pushes the boundaries of web design with immersive product views, smooth transitions, and a highly optimized checkout flow. Designed to showcase fashion collections with premium aesthetics.",
+        description: 'Plataforma de e-commerce avanzada enfocada en moda de alta gama con una experiencia de compra fluida y elegante.',
+        longDescription: "Una experiencia de e-commerce de lujo. Este proyecto empuja los límites del diseño web con vistas de productos inmersivas, transiciones suaves y un flujo de checkout altamente optimizado. Diseñado para mostrar colecciones de moda con estética premium.",
         features: [
-            'High-performance product gallery',
-            'Animated shopping cart transitions',
-            'Secure payment gateway integration',
-            'Customizable product collections',
-            'SEO and speed optimized'
+            'Galería de productos de alto rendimiento',
+            'Transiciones animadas del carrito de compras',
+            'Integración segura con pasarela de pagos',
+            'Colecciones de productos personalizables',
+            'SEO y velocidad optimizados'
         ],
         techStack: ['Shopify SDK', 'Next.js', 'React 19', 'PostCSS'],
-        imageUrl: 'https://picsum.photos/seed/fashion/600/400',
+        imageUrl: '/screenshots/eve-commerce.png',
         githubUrl: '#',
         demoUrl: '/demos/evecommerce'
+    },
+    {
+        id: '5',
+        title: 'Beauty Agenda SaaS',
+        description: 'Sistema de agenda inteligente para salones de belleza, barberías y spas. Incluye reservas online, recordatorios automáticos por WhatsApp, CRM de clientes y asistente con IA integrado.',
+        longDescription: "Plataforma todo-en-uno para negocios de belleza y bienestar. Gestiona citas, clientes y pagos desde un solo lugar. El asistente con IA responde preguntas frecuentes, sugiere servicios y optimiza la agenda automáticamente. Incluye recordatorios por WhatsApp, historial de clientes y reportes de rendimiento.",
+        features: [
+            'Agenda visual con drag-and-drop',
+            'Reservas online 24/7 desde cualquier dispositivo',
+            'Recordatorios automáticos por WhatsApp y email',
+            'CRM de clientes con historial de servicios',
+            'Asistente con IA para preguntas frecuentes',
+            'Chat inteligente integrado',
+            'Reportes de ocupación y ingresos',
+            'Gestión de múltiples empleados y sucursales'
+        ],
+        techStack: ['Next.js 15', 'Firebase', 'Twilio API', 'Zod', 'Tailwind CSS'],
+        imageUrl: '/screenshots/beauty-agenda.png',
+        githubUrl: '#',
+        demoUrl: '/demos/beauty-agenda'
     }
 ];
 
