@@ -97,6 +97,7 @@ const ParticleBackground: React.FC = () => {
 
     let mouseX = 0;
     let mouseY = 0;
+    let isVisible = true;
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -108,20 +109,37 @@ const ParticleBackground: React.FC = () => {
 
     const animate = () => {
       if (!ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update(mouseX, mouseY);
-        particles[i].draw();
+
+      // Bolt: Only animate when visible to save CPU/GPU cycles
+      if (isVisible) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update(mouseX, mouseY);
+          particles[i].draw();
+        }
       }
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
 
+    // Bolt: Use IntersectionObserver to pause rendering when off-screen
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isVisible = entry.isIntersecting;
+      });
+    }, { threshold: 0 });
+
+    if (canvas) {
+      observer.observe(canvas);
+    }
+
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
     };
   }, []);
 
