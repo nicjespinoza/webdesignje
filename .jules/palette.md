@@ -1,0 +1,3 @@
+## 2024-05-24 - Missing ARIA Labels on Icon-Only Elements
+**Learning:** Found a common pattern where icon-only interactive elements (like theme toggles, modal close buttons, and social links) lack `aria-label` attributes. This makes the UI completely opaque to screen reader users as they encounter interactive elements with no text context.
+**Action:** When adding new icon-only buttons or links, always include an `aria-label` that descriptively explains the action (e.g., "Toggle theme", "Close modal", "GitHub Profile").
