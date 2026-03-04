@@ -40,16 +40,19 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
     const lines: THREE.Vector3[][] = [];
     const threshold = 2.5;
 
-    particles.forEach((p1, i) => {
-      particles.forEach((p2, j) => {
-        if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
-            lines.push([p1, p2]);
-          }
+    // Optimized: O(n^2 / 2) loop prevents duplicate reverse edges and we apply random filter here
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const p1 = particles[i];
+        const p2 = particles[j];
+        const dist = p1.distanceTo(p2);
+
+        // Combine distance check and random filtering to reduce memory and stabilize render
+        if (dist < threshold && Math.random() > 0.5) {
+          lines.push([p1, p2]);
         }
-      });
-    });
+      }
+    }
     return lines;
   }, [particles]);
 
@@ -92,8 +95,6 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
         {/* We use a Group to hold lines, or better, use LineSegments if we manually built geometry, but Drei Line is convenient here for "glowing" effect */}
         <group ref={linesRef}>
             {connections.map((line, index) => (
-                // Optimizing: Only render a fraction of lines to avoid clutter if too dense
-                Math.random() > 0.5 ? (
                 <Line
                     key={index}
                     points={line}
@@ -102,7 +103,6 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
                     transparent
                     lineWidth={1}
                 />
-                ) : null
             ))}
         </group>
         
