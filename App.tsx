@@ -238,21 +238,21 @@ const Navbar = ({
           
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
-          <button onClick={toggleLang} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors">
+          <button onClick={toggleLang} aria-label={lang === 'EN' ? 'Change language to Spanish' : 'Cambiar idioma a Inglés'} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none">
             {lang}
           </button>
           
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button onClick={toggleTheme} aria-label="Toggle theme" className="p-2 rounded-full hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none">
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <a href="#contact" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+          <a href="#contact" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none">
             {lang === 'EN' ? "Let's Talk" : 'Contáctame'}
           </a>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button className="md:hidden focus-visible:ring-2 focus-visible:outline-none rounded-md" aria-label="Toggle menu" aria-expanded={isOpen} onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -1143,7 +1143,8 @@ const Projects = () => {
             >
                 <button 
                     onClick={() => setSelectedId(null)}
-                    className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors"
+                    aria-label="Close modal"
+                    className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
                 >
                     <X size={20} />
                 </button>
@@ -1552,9 +1553,9 @@ const Contact = () => {
              </form>
 
              <div className="mt-12 flex justify-center gap-8 border-t border-white/10 pt-8">
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={24} /></a>
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={24} /></a>
+                 <a href="#" aria-label="GitHub profile" className="text-slate-400 hover:text-white transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"><Github size={24} /></a>
+                 <a href="#" aria-label="LinkedIn profile" className="text-slate-400 hover:text-white transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"><Linkedin size={24} /></a>
+                 <a href="#" aria-label="Twitter profile" className="text-slate-400 hover:text-white transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"><Twitter size={24} /></a>
              </div>
         </motion.div>
       </div>
@@ -1597,9 +1598,9 @@ const Footer = ({ lang }: { lang: Language }) => {
         </div>
 
         <div className="flex gap-4">
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={20} /></a>
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+             <a href="#" aria-label="GitHub profile" className="text-slate-400 hover:text-white transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"><Github size={20} /></a>
+             <a href="#" aria-label="LinkedIn profile" className="text-slate-400 hover:text-white transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"><Linkedin size={20} /></a>
+             <a href="#" aria-label="Twitter profile" className="text-slate-400 hover:text-white transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"><Twitter size={20} /></a>
         </div>
       </div>
     </footer>
