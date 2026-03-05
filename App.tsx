@@ -58,10 +58,15 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { Suspense, lazy } from 'react';
 import ParticleBackground from './components/ParticleBackground';
 import FooterParticles from './components/FooterParticles';
-import Scene3D from './components/Scene3D';
 import { Project, Language } from './types';
+
+// ⚡ Bolt Performance Optimization:
+// Lazy load the heavy 3D scene (Three.js & React Three Fiber)
+// to significantly reduce the initial JavaScript bundle size.
+const Scene3D = lazy(() => import('./components/Scene3D'));
 
 // --- Animation Variants ---
 
@@ -372,7 +377,9 @@ const Hero = ({ lang }: { lang: Language }) => {
           className="relative hidden lg:block"
         >
             <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-brand-indigo/20 rounded-full blur-[100px] animate-pulse"></div>
-            <Scene3D />
+            <Suspense fallback={<div className="h-[400px] w-full max-w-[500px] mx-auto rounded-2xl bg-slate-900/40 border border-cyan-500/20 animate-pulse"></div>}>
+              <Scene3D />
+            </Suspense>
             
             {/* Floating Tech Icons Decor */}
             <motion.div 
