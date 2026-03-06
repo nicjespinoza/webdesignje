@@ -58,10 +58,15 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import ParticleBackground from './components/ParticleBackground';
-import FooterParticles from './components/FooterParticles';
-import Scene3D from './components/Scene3D';
 import { Project, Language } from './types';
+
+// ⚡ Bolt: Code-splitting heavy 3D and canvas-based components.
+// We use React.lazy and Suspense to prevent these components from
+// blocking the initial main thread render, reducing the initial Vite bundle size
+// and significantly improving Time to Interactive (TTI).
+const ParticleBackground = React.lazy(() => import('./components/ParticleBackground'));
+const FooterParticles = React.lazy(() => import('./components/FooterParticles'));
+const Scene3D = React.lazy(() => import('./components/Scene3D'));
 
 // --- Animation Variants ---
 
@@ -298,7 +303,9 @@ const Navbar = ({
 const Hero = ({ lang }: { lang: Language }) => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      <ParticleBackground />
+      <React.Suspense fallback={<div className="absolute inset-0 bg-slate-950 -z-10" />}>
+        <ParticleBackground />
+      </React.Suspense>
       <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
         <motion.div
           initial="hidden"
@@ -372,7 +379,9 @@ const Hero = ({ lang }: { lang: Language }) => {
           className="relative hidden lg:block"
         >
             <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-brand-indigo/20 rounded-full blur-[100px] animate-pulse"></div>
-            <Scene3D />
+            <React.Suspense fallback={<div className="w-full h-[400px] max-w-[500px] mx-auto rounded-2xl bg-slate-900/40 border border-cyan-500/20 shadow-[0_0_50px_rgba(6,182,212,0.15)] flex items-center justify-center"><div className="w-10 h-10 border-4 border-brand-cyan border-t-transparent rounded-full animate-spin"></div></div>}>
+              <Scene3D />
+            </React.Suspense>
             
             {/* Floating Tech Icons Decor */}
             <motion.div 
@@ -1574,7 +1583,9 @@ const Footer = ({ lang }: { lang: Language }) => {
 
   return (
     <footer className="py-12 relative z-10 border-t border-white/5 bg-slate-950 overflow-hidden">
-      <FooterParticles />
+      <React.Suspense fallback={null}>
+        <FooterParticles />
+      </React.Suspense>
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
         <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
