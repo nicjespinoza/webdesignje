@@ -89,6 +89,9 @@ const FooterParticles: React.FC = () => {
       if (!ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      const connectionDistSq = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
+      const mouseDistSq = MOUSE_DISTANCE * MOUSE_DISTANCE;
+
       // Update and draw particles
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
@@ -98,9 +101,11 @@ const FooterParticles: React.FC = () => {
         for (let j = i; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            const distSq = dx * dx + dy * dy;
 
-            if (distance < CONNECTION_DISTANCE) {
+            // Optimization: check squared distance first to avoid redundant Math.sqrt
+            if (distSq < connectionDistSq) {
+                const distance = Math.sqrt(distSq);
                 ctx.beginPath();
                 const opacity = 1 - (distance / CONNECTION_DISTANCE);
                 ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`; // Faint network lines
@@ -114,9 +119,11 @@ const FooterParticles: React.FC = () => {
         // Draw connections to Mouse (Interactive Node)
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distSq = dx * dx + dy * dy;
 
-        if (distance < MOUSE_DISTANCE) {
+        // Optimization: check squared distance first to avoid redundant Math.sqrt
+        if (distSq < mouseDistSq) {
+            const distance = Math.sqrt(distSq);
             ctx.beginPath();
             const opacity = 1 - (distance / MOUSE_DISTANCE);
             ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`; // Cyan highlight for interaction
