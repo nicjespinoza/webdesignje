@@ -1,0 +1,3 @@
+## 2024-03-11 - Avoid Math.sqrt in high-frequency animation loops
+**Learning:** In high-frequency animation loops (like React Three Fiber's useFrame or canvas requestAnimationFrame), calculating distances using `Math.sqrt` (or `THREE.Vector3.distanceTo`) is a significant performance bottleneck due to the cost of the square root operation, especially when applied to hundreds of particles.
+**Action:** Optimize distance-based logic in these loops by using squared distance comparisons (`dx*dx + dy*dy < radius*radius`) to avoid redundant `Math.sqrt` calls. For Three.js vectors, always use `distanceToSquared()` instead of `distanceTo()`.
