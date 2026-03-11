@@ -238,11 +238,11 @@ const Navbar = ({
           
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
-          <button onClick={toggleLang} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors">
+          <button onClick={toggleLang} aria-label={lang === 'EN' ? "Switch to Spanish" : "Switch to English"} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none">
             {lang}
           </button>
           
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button onClick={toggleTheme} aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"} className="p-2 rounded-full hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none">
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
@@ -252,7 +252,7 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button className="md:hidden focus-visible:ring-2 focus-visible:outline-none rounded-md" aria-label={isOpen ? "Close menu" : "Open menu"} onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -278,10 +278,10 @@ const Navbar = ({
                 </a>
               ))}
               <div className="flex gap-4 mt-4">
-                <button onClick={toggleLang} className="text-sm px-3 py-1 border border-white/20 rounded">
+                <button onClick={toggleLang} aria-label={lang === 'EN' ? "Switch to Spanish" : "Switch to English"} className="text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none">
                   {lang === 'EN' ? 'Español' : 'English'}
                 </button>
-                <button onClick={toggleTheme} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded">
+                <button onClick={toggleTheme} aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none">
                   {isDark ? <Sun size={14}/> : <Moon size={14} />} Theme
                 </button>
               </div>
@@ -1184,7 +1184,7 @@ const Projects = () => {
                                 </a>
                                 )}
                                 {selectedProject.githubUrl && (
-                                <a href={selectedProject.githubUrl} className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-full font-bold transition-all">
+                                <a href={selectedProject.githubUrl} aria-label={`View source code for ${selectedProject.title} on GitHub`} className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-full font-bold transition-all focus-visible:ring-2 focus-visible:outline-none">
                                     <Github size={18} /> Source Code
                                 </a>
                                 )}
@@ -1457,7 +1457,7 @@ const Blog = () => {
                     </span>
                     ))}
                 </div>
-                <button className="text-brand-indigo hover:text-white transition-colors">
+                <button aria-label={`Read more about ${post.title}`} className="text-brand-indigo hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none rounded-full p-1">
                     <ArrowRight size={20} />
                 </button>
                 </div>
@@ -1552,9 +1552,9 @@ const Contact = () => {
              </form>
 
              <div className="mt-12 flex justify-center gap-8 border-t border-white/10 pt-8">
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={24} /></a>
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={24} /></a>
+                 <a href="#" aria-label="Visit my GitHub profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none rounded-full"><Github size={24} /></a>
+                 <a href="#" aria-label="Visit my LinkedIn profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none rounded-full"><Linkedin size={24} /></a>
+                 <a href="#" aria-label="Visit my Twitter profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none rounded-full"><Twitter size={24} /></a>
              </div>
         </motion.div>
       </div>
@@ -1597,9 +1597,9 @@ const Footer = ({ lang }: { lang: Language }) => {
         </div>
 
         <div className="flex gap-4">
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={20} /></a>
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+             <a href="#" aria-label="Visit my GitHub profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none rounded-full"><Github size={20} /></a>
+             <a href="#" aria-label="Visit my LinkedIn profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none rounded-full"><Linkedin size={20} /></a>
+             <a href="#" aria-label="Visit my Twitter profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none rounded-full"><Twitter size={20} /></a>
         </div>
       </div>
     </footer>
