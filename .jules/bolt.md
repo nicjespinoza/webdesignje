@@ -1,0 +1,3 @@
+## 2025-03-08 - Squared Distance Calculations in Animation Loops
+**Learning:** Checking for particle connections, collisions, and mouse interactions using `Math.sqrt()` inside nested `O(n^2)` loops or `useFrame` animation loops creates significant CPU overhead and can cause frame drops, especially with a large number of particles or complex Three.js scenes.
+**Action:** Always prefer squared distance comparisons (`dx*dx + dy*dy < radius*radius`) over traditional Euclidean distance (`Math.sqrt(dx*dx + dy*dy) < radius`) in high-frequency animation loops. For Three.js vectors, always use `distanceToSquared()` instead of `distanceTo()`.
