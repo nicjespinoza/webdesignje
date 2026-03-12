@@ -98,9 +98,12 @@ const FooterParticles: React.FC = () => {
         for (let j = i; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            const distanceSq = dx * dx + dy * dy;
+            const CONNECTION_DISTANCE_SQ = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
 
-            if (distance < CONNECTION_DISTANCE) {
+            // ⚡ Bolt Performance: Use squared distance to avoid Math.sqrt in O(N²) loop
+            if (distanceSq < CONNECTION_DISTANCE_SQ) {
+                const distance = Math.sqrt(distanceSq);
                 ctx.beginPath();
                 const opacity = 1 - (distance / CONNECTION_DISTANCE);
                 ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`; // Faint network lines
@@ -114,9 +117,12 @@ const FooterParticles: React.FC = () => {
         // Draw connections to Mouse (Interactive Node)
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distanceSq = dx * dx + dy * dy;
+        const MOUSE_DISTANCE_SQ = MOUSE_DISTANCE * MOUSE_DISTANCE;
 
-        if (distance < MOUSE_DISTANCE) {
+        // ⚡ Bolt Performance: Use squared distance to avoid Math.sqrt in high-frequency loop
+        if (distanceSq < MOUSE_DISTANCE_SQ) {
+            const distance = Math.sqrt(distanceSq);
             ctx.beginPath();
             const opacity = 1 - (distance / MOUSE_DISTANCE);
             ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`; // Cyan highlight for interaction
