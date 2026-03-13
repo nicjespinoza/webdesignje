@@ -1,0 +1,3 @@
+## 2024-03-13 - Optimize 3D and 2D Particle Engine Distances
+**Learning:** In highly iterated `useFrame` or Canvas 2D `requestAnimationFrame` loops, using `Math.sqrt` to find the Euclidean distance is a major bottleneck when performing O(N^2) checks for particle connectivity or collision detection. For Three.js vectors, using `distanceTo` triggers `Math.sqrt`.
+**Action:** Always prefer `distanceToSquared` for Three.js vectors, and manually compute `dx*dx + dy*dy` and compare to `radius*radius` for simple coordinate comparisons, only computing `Math.sqrt` when explicitly needed within the conditional logic (e.g., for accurate opacity mapping or force calculation).
