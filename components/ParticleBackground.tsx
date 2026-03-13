@@ -46,12 +46,15 @@ const ParticleBackground: React.FC = () => {
         if (this.y > canvas!.height || this.y < 0) this.speedY *= -1;
 
         // Mouse interaction
+        // Optimize: Use squared distance to avoid Math.sqrt in high-frequency loop
         const dx = mouseX - this.x;
         const dy = mouseY - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distanceSq = dx * dx + dy * dy;
         const maxDistance = 150;
+        const maxDistanceSq = maxDistance * maxDistance;
 
-        if (distance < maxDistance) {
+        if (distanceSq < maxDistanceSq) {
+            const distance = Math.sqrt(distanceSq); // Only calculate actual distance if within range
             const forceDirectionX = dx / distance;
             const forceDirectionY = dy / distance;
             const force = (maxDistance - distance) / maxDistance;
