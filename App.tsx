@@ -238,21 +238,34 @@ const Navbar = ({
           
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
-          <button onClick={toggleLang} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors">
+          <button
+            onClick={toggleLang}
+            aria-label={lang === 'EN' ? "Switch to Spanish" : "Cambiar a Inglés"}
+            className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 focus-visible:ring-2 focus-visible:outline-none transition-colors"
+          >
             {lang}
           </button>
           
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button
+            onClick={toggleTheme}
+            aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+            className="p-2 rounded-full hover:bg-white/5 focus-visible:ring-2 focus-visible:outline-none transition-colors"
+          >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <a href="#contact" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+          <a href="#contact" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:scale-105 focus-visible:ring-2 focus-visible:outline-none transition-transform">
             {lang === 'EN' ? "Let's Talk" : 'Contáctame'}
           </a>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden p-2 -mr-2 rounded-lg hover:bg-white/5 focus-visible:ring-2 focus-visible:outline-none transition-colors"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
+        >
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -272,16 +285,24 @@ const Navbar = ({
                   key={link.name} 
                   href={link.href} 
                   onClick={() => setIsOpen(false)}
-                  className="text-lg font-medium"
+                  className="text-lg font-medium focus-visible:ring-2 focus-visible:outline-none rounded"
                 >
                   {link.name}
                 </a>
               ))}
               <div className="flex gap-4 mt-4">
-                <button onClick={toggleLang} className="text-sm px-3 py-1 border border-white/20 rounded">
+                <button
+                  onClick={toggleLang}
+                  aria-label={lang === 'EN' ? "Switch to Spanish" : "Cambiar a Inglés"}
+                  className="text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none transition-colors"
+                >
                   {lang === 'EN' ? 'Español' : 'English'}
                 </button>
-                <button onClick={toggleTheme} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded">
+                <button
+                  onClick={toggleTheme}
+                  aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+                  className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none transition-colors"
+                >
                   {isDark ? <Sun size={14}/> : <Moon size={14} />} Theme
                 </button>
               </div>
@@ -1143,7 +1164,8 @@ const Projects = () => {
             >
                 <button 
                     onClick={() => setSelectedId(null)}
-                    className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors"
+                    aria-label="Close project details"
+                    className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black focus-visible:ring-2 focus-visible:outline-none transition-colors"
                 >
                     <X size={20} />
                 </button>
@@ -1457,7 +1479,10 @@ const Blog = () => {
                     </span>
                     ))}
                 </div>
-                <button className="text-brand-indigo hover:text-white transition-colors">
+                <button
+                    aria-label={`Read ${post.title}`}
+                    className="text-brand-indigo hover:text-white focus-visible:ring-2 focus-visible:outline-none rounded-full p-1 transition-colors"
+                >
                     <ArrowRight size={20} />
                 </button>
                 </div>
@@ -1540,7 +1565,7 @@ const Contact = () => {
                     <button 
                         disabled={isSubmitting}
                         type="submit" 
-                        className="px-8 py-4 bg-brand-indigo hover:bg-brand-purple text-white rounded-xl font-bold transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-indigo/25"
+                        className="px-8 py-4 bg-brand-indigo hover:bg-brand-purple text-white rounded-xl font-bold focus-visible:ring-2 focus-visible:outline-none transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-indigo/25"
                     >
                         {isSubmitting ? (
                             <>Sending...</>
