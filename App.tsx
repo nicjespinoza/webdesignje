@@ -242,7 +242,7 @@ const Navbar = ({
             {lang}
           </button>
           
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button onClick={toggleTheme} aria-label="Toggle theme" className="p-2 rounded-full hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo">
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
@@ -252,7 +252,7 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button className="md:hidden focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-md p-1" aria-label="Toggle mobile menu" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -1143,7 +1143,8 @@ const Projects = () => {
             >
                 <button 
                     onClick={() => setSelectedId(null)}
-                    className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors"
+                    aria-label="Close modal"
+                    className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
                 >
                     <X size={20} />
                 </button>
@@ -1457,7 +1458,7 @@ const Blog = () => {
                     </span>
                     ))}
                 </div>
-                <button className="text-brand-indigo hover:text-white transition-colors">
+                <button className="text-brand-indigo hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-md p-1" aria-label={`Read more about ${post.title}`}>
                     <ArrowRight size={20} />
                 </button>
                 </div>
@@ -1552,9 +1553,9 @@ const Contact = () => {
              </form>
 
              <div className="mt-12 flex justify-center gap-8 border-t border-white/10 pt-8">
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={24} /></a>
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={24} /></a>
+                 <a href="#" aria-label="GitHub profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-md"><Github size={24} /></a>
+                 <a href="#" aria-label="LinkedIn profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-md"><Linkedin size={24} /></a>
+                 <a href="#" aria-label="Twitter profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-md"><Twitter size={24} /></a>
              </div>
         </motion.div>
       </div>
@@ -1597,9 +1598,9 @@ const Footer = ({ lang }: { lang: Language }) => {
         </div>
 
         <div className="flex gap-4">
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={20} /></a>
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+             <a href="#" aria-label="GitHub profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-md"><Github size={20} /></a>
+             <a href="#" aria-label="LinkedIn profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-md"><Linkedin size={20} /></a>
+             <a href="#" aria-label="Twitter profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-md"><Twitter size={20} /></a>
         </div>
       </div>
     </footer>
