@@ -1,0 +1,3 @@
+## 2024-03-15 - Optimizing Distance Calculations in Animation Loops
+**Learning:** High-frequency animation loops (e.g., in particle systems and Three.js scenes) can suffer performance degradation from expensive mathematical operations like `Math.sqrt()` and Three.js's `distanceTo()`. These are often used to check if objects are within a certain radius.
+**Action:** Always optimize distance-based logic in these loops by using squared distance comparisons (`dx*dx + dy*dy < radius*radius`) to avoid redundant `Math.sqrt` calls. For Three.js vectors, use `distanceToSquared()` instead of `distanceTo()`.
