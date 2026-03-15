@@ -1,0 +1,3 @@
+## 2024-05-24 - Missing ARIA Labels and Focus Styles on Icon-Only Elements
+**Learning:** Icon-only interactive elements (such as Lucide icons in buttons or links used for theme toggle, mobile menu, close modal, and social links) lack `aria-label` attributes and proper focus styles. This creates a barrier for screen reader users and keyboard navigators.
+**Action:** When adding icon-only buttons or links, always include a descriptive `aria-label` and use `focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo` Tailwind classes to ensure proper keyboard navigation visibility.
