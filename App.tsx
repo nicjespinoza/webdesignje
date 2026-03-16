@@ -218,7 +218,7 @@ const Navbar = ({
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-3 shadow-lg backdrop-blur-md' : 'py-6 bg-transparent'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <a href="#" className="flex items-center gap-2 group">
+        <a href="#" className="flex items-center gap-2 group focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-lg px-2 -ml-2">
           <div className="bg-brand-indigo/20 p-2 rounded-lg group-hover:bg-brand-indigo/40 transition-colors">
             <Code2 className="text-brand-indigo w-6 h-6" />
           </div>
@@ -230,7 +230,7 @@ const Navbar = ({
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a key={link.name} href={link.href} className="relative text-sm font-medium hover:text-brand-cyan transition-colors group">
+            <a key={link.name} href={link.href} className="relative text-sm font-medium hover:text-brand-cyan transition-colors group focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded px-1">
               {link.name}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-cyan transition-all duration-300 group-hover:w-full"></span>
             </a>
@@ -238,21 +238,33 @@ const Navbar = ({
           
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
-          <button onClick={toggleLang} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors">
+          <button
+            onClick={toggleLang}
+            className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+            aria-label={lang === 'EN' ? "Switch to Spanish" : "Cambiar a Inglés"}
+          >
             {lang}
           </button>
           
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+            aria-label={lang === 'EN' ? "Toggle Theme" : "Cambiar Tema"}
+          >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <a href="#contact" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+          <a href="#contact" className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo">
             {lang === 'EN' ? "Let's Talk" : 'Contáctame'}
           </a>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden p-2 rounded-full focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={lang === 'EN' ? "Toggle Menu" : "Menú Móvil"}
+        >
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -272,16 +284,24 @@ const Navbar = ({
                   key={link.name} 
                   href={link.href} 
                   onClick={() => setIsOpen(false)}
-                  className="text-lg font-medium"
+                  className="text-lg font-medium focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded px-2 -mx-2"
                 >
                   {link.name}
                 </a>
               ))}
               <div className="flex gap-4 mt-4">
-                <button onClick={toggleLang} className="text-sm px-3 py-1 border border-white/20 rounded">
+                <button
+                  onClick={toggleLang}
+                  className="text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+                  aria-label={lang === 'EN' ? "Switch to Spanish" : "Cambiar a Inglés"}
+                >
                   {lang === 'EN' ? 'Español' : 'English'}
                 </button>
-                <button onClick={toggleTheme} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded">
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+                  aria-label={lang === 'EN' ? "Toggle Theme" : "Cambiar Tema"}
+                >
                   {isDark ? <Sun size={14}/> : <Moon size={14} />} Theme
                 </button>
               </div>
