@@ -1,0 +1,3 @@
+## 2025-03-17 - Eliminate Math.sqrt from high-frequency canvas/3D loops
+**Learning:** Found multiple instances where Euclidean distances (`Math.sqrt`) were calculated in every animation frame or nested particle loop across the codebase. Due to the high number of iterations (e.g., node combinations, mouse checks), this introduced considerable overhead. For Three.js vectors, computing `distanceTo()` is an unneeded expense if only checking thresholds.
+**Action:** Default to `distanceToSquared()` or computing `dx*dx + dy*dy` and comparing against pre-squared threshold values before resolving actual `Math.sqrt` calculations in visual rendering and physics loops.
