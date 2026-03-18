@@ -48,10 +48,14 @@ const ParticleBackground: React.FC = () => {
         // Mouse interaction
         const dx = mouseX - this.x;
         const dy = mouseY - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 150;
 
-        if (distance < maxDistance) {
+        // ⚡ Bolt Optimization: Use squared distance to avoid Math.sqrt in high-frequency animation loop
+        const distanceSq = dx * dx + dy * dy;
+        const maxDistance = 150;
+        const maxDistanceSq = maxDistance * maxDistance;
+
+        if (distanceSq < maxDistanceSq) {
+            const distance = Math.sqrt(distanceSq);
             const forceDirectionX = dx / distance;
             const forceDirectionY = dy / distance;
             const force = (maxDistance - distance) / maxDistance;
