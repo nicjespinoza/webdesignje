@@ -1,0 +1,3 @@
+## 2026-03-18 - Avoiding Math.sqrt in High-Frequency Loops
+**Learning:** In particle systems and 3D scenes (like `ParticleBackground.tsx`, `FooterParticles.tsx`, and `Scene3D.tsx`), calculating exact Euclidean distances using `Math.sqrt` (or Three.js's `distanceTo()`) within O(n²) nested loops or high-frequency `requestAnimationFrame` callbacks creates a significant computational bottleneck.
+**Action:** Always optimize distance-based logic by comparing squared distances (`dx*dx + dy*dy < radius*radius`). For Three.js vectors, strictly use `distanceToSquared()` instead of `distanceTo()`. Only compute `Math.sqrt` if the exact distance is strictly required *after* the initial threshold condition is met.
