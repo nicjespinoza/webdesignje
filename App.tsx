@@ -238,11 +238,19 @@ const Navbar = ({
           
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
-          <button onClick={toggleLang} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors">
+          <button
+            onClick={toggleLang}
+            className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+            aria-label={`Current language: ${lang}. Click to switch to ${lang === 'EN' ? 'Spanish' : 'English'}`}
+          >
             {lang}
           </button>
           
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
@@ -252,7 +260,11 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+        >
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -1552,9 +1564,9 @@ const Contact = () => {
              </form>
 
              <div className="mt-12 flex justify-center gap-8 border-t border-white/10 pt-8">
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={24} /></a>
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={24} /></a>
-                 <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={24} /></a>
+                 <a href="#" aria-label="GitHub profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded"><Github size={24} /></a>
+                 <a href="#" aria-label="LinkedIn profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded"><Linkedin size={24} /></a>
+                 <a href="#" aria-label="Twitter profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded"><Twitter size={24} /></a>
              </div>
         </motion.div>
       </div>
@@ -1597,9 +1609,9 @@ const Footer = ({ lang }: { lang: Language }) => {
         </div>
 
         <div className="flex gap-4">
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={20} /></a>
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
-             <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+             <a href="#" aria-label="GitHub profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded"><Github size={20} /></a>
+             <a href="#" aria-label="LinkedIn profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded"><Linkedin size={20} /></a>
+             <a href="#" aria-label="Twitter profile" className="text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded"><Twitter size={20} /></a>
         </div>
       </div>
     </footer>
