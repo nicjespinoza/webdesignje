@@ -7,12 +7,12 @@ import { Save, ArrowLeft, Loader2, Plus, Trash2, Activity } from 'lucide-react';
 
 import { api } from '@/lib/api';
 import { Patient, SubsequentConsult } from '@/types';
-import * as C from '@/constants';
+import * as C from '@/data/medical-constants';
 
 // UI Components
-import { FloatingLabelInput } from '@/components/premium-ui/FloatingLabelInput';
-import { CheckboxList, PhysicalExamSection } from '@/components/ui/FormComponents';
-import { ObesityHistoryModal } from '@/components/ObesityHistoryModal';
+import { FloatingLabelInput } from '@/components/medical/premium-ui/FloatingLabelInput';
+import { CheckboxList, PhysicalExamSection } from '@/components/medical/ui/FormComponents';
+import { ObesityHistoryModal } from '@/components/medical/ObesityHistoryModal';
 import { toast } from 'react-hot-toast';
 
 import { motion } from 'framer-motion';

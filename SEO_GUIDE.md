@@ -112,7 +112,7 @@
    - Usar formato WebP para mejor performance
    - Compresión: https://tinyjpg.com
 
-### **PASO 5: Configurar Vercel (20 min)**
+### **PASO 5: Configurar (20 min)**
 
 1. **Subir proyecto a GitHub:**
    ```bash
@@ -123,16 +123,6 @@
    git push -u origin main
    ```
 
-2. **Conectar Vercel:**
-   - Ir a: https://vercel.com
-   - "Add New Project"
-   - Importar desde GitHub
-   - Configurar variables de entorno (copiar de .env.local)
-
-3. **Configurar dominio:**
-   - Comprar dominio: `webdesignje.com` (Namecheap, GoDaddy, etc.)
-   - En Vercel: Settings → Domains → Agregar `webdesignje.com`
-   - Configurar DNS según instrucciones de Vercel
 
 ### **PASO 6: Monitoreo de SEO (Ongoing)**
 

@@ -12,18 +12,18 @@ import { Patient, InitialHistory } from '@/types';
 import { initialHistorySchema, type InitialHistoryFormData, getDefaultInitialHistoryValues } from '@/lib/validations/history';
 
 // UI Components
-import { Toast } from '@/components/ui/Toast';
-import { FloatingLabelInput } from '@/components/premium-ui/FloatingLabelInput';
-import { ObesityHistoryModal } from '@/components/ObesityHistoryModal';
+import { Toast } from '@/components/medical/ui/Toast';
+import { FloatingLabelInput } from '@/components/medical/premium-ui/FloatingLabelInput';
+import { ObesityHistoryModal } from '@/components/medical/ObesityHistoryModal';
 
 // Detail Sections
-import { MotivesSection } from '@/components/history/sections/MotivesSection';
-import { DiseaseHistorySection } from '@/components/history/sections/DiseaseHistorySection';
-import { PathologicalAntecedentsSection } from '@/components/history/sections/PathologicalAntecedentsSection';
-import { NonPathologicalAntecedentsSection } from '@/components/history/sections/NonPathologicalAntecedentsSection';
-import { FamilyHistorySection } from '@/components/history/sections/FamilyHistorySection';
-import { PhysicalExamSection } from '@/components/history/sections/PhysicalExamSection';
-import { TreatmentPlanSection } from '@/components/history/sections/TreatmentPlanSection';
+import { MotivesSection } from '@/components/medical/history/sections/MotivesSection';
+import { DiseaseHistorySection } from '@/components/medical/history/sections/DiseaseHistorySection';
+import { PathologicalAntecedentsSection } from '@/components/medical/history/sections/PathologicalAntecedentsSection';
+import { NonPathologicalAntecedentsSection } from '@/components/medical/history/sections/NonPathologicalAntecedentsSection';
+import { FamilyHistorySection } from '@/components/medical/history/sections/FamilyHistorySection';
+import { PhysicalExamSection } from '@/components/medical/history/sections/PhysicalExamSection';
+import { TreatmentPlanSection } from '@/components/medical/history/sections/TreatmentPlanSection';
 
 import { getSpecialtyById, Specialty } from '@/lib/specialties';
 import { motion, AnimatePresence } from 'framer-motion';

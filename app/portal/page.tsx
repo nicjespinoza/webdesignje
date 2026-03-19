@@ -1,9 +1,10 @@
-// app/portal/page.tsx
+// app/[locale]/portal/page.tsx
 "use client";
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { getSpecialtyById } from '@/lib/specialties';
 import { Open_Sans } from 'next/font/google';
 import {
   User,
@@ -41,63 +42,67 @@ const fadeInUpVariants = {
 };
 
 const specialtyItems = [
-  { id: 'cardiology', label: 'Cardiología', icon: Heart },
-  { id: 'cosmetic_dentistry', label: 'Odontología Estética', icon: Sparkles },
-  { id: 'dermatology', label: 'Dermatología', icon: Activity },
-  { id: 'endocrinology', label: 'Endocrinología', icon: Flame },
-  { id: 'endodontics', label: 'Endodoncia', icon: Activity },
-  { id: 'gastroenterology', label: 'Gastroenterología', icon: Stethoscope },
-  { id: 'general_surgery', label: 'Cirugía General', icon: Stethoscope },
-  { id: 'geriatrics', label: 'Geriatría', icon: User },
-  { id: 'gynecology', label: 'Ginecología', icon: Clipboard },
-  { id: 'hematology', label: 'Hematología', icon: Heart },
-  { id: 'implantology', label: 'Implantología', icon: Activity },
-  { id: 'infectology', label: 'Infectología', icon: ShieldAlert },
-  { id: 'maxillofacial_surgery', label: 'Cirugía Maxilofacial', icon: Stethoscope },
-  { id: 'nephrology', label: 'Nefrología', icon: Activity },
-  { id: 'neurology', label: 'Neurología', icon: Activity },
-  { id: 'oncology', label: 'Oncología', icon: ShieldCheck },
-  { id: 'ophthalmology', label: 'Oftalmología', icon: Eye },
-  { id: 'orthodontics', label: 'Ortodoncia', icon: Star },
-  { id: 'orthopedics', label: 'Ortopedia', icon: User },
-  { id: 'otolaryngology', label: 'Otorrinolaringología', icon: Ear },
-  { id: 'pediatric_dentistry', label: 'Odontopediatría', icon: Baby },
-  { id: 'pediatrics', label: 'Pediatría', icon: Baby },
-  { id: 'periodontics', label: 'Periodoncia', icon: Activity },
-  { id: 'prosthodontics', label: 'Prostodoncia', icon: Activity },
-  { id: 'psychiatry', label: 'Psiquiatría', icon: Activity },
-  { id: 'pulmonology', label: 'Neumología', icon: Activity },
-  { id: 'rheumatology', label: 'Reumatología', icon: Activity },
-  { id: 'urology', label: 'Urología', icon: ShieldAlert },
+  { id: 'cardiology', key: 'cardiology', icon: Heart },
+  { id: 'cosmetic_dentistry', key: 'cosmetic_dentistry', icon: Sparkles },
+  { id: 'dermatology', key: 'dermatology', icon: Activity },
+  { id: 'endocrinology', key: 'endocrinology', icon: Flame },
+  { id: 'endodontics', key: 'endodontics', icon: Activity },
+  { id: 'gastroenterology', key: 'gastroenterology', icon: Stethoscope },
+  { id: 'general_surgery', key: 'general_surgery', icon: Stethoscope },
+  { id: 'geriatrics', key: 'geriatrics', icon: User },
+  { id: 'gynecology', key: 'gynecology', icon: Clipboard },
+  { id: 'hematology', key: 'hematology', icon: Heart },
+  { id: 'implantology', key: 'implantology', icon: Activity },
+  { id: 'infectology', key: 'infectology', icon: ShieldAlert },
+  { id: 'maxillofacial_surgery', key: 'maxillofacial_surgery', icon: Stethoscope },
+  { id: 'nephrology', key: 'nephrology', icon: Activity },
+  { id: 'neurology', key: 'neurology', icon: Activity },
+  { id: 'oncology', key: 'oncology', icon: ShieldCheck },
+  { id: 'ophthalmology', key: 'ophthalmology', icon: Eye },
+  { id: 'orthodontics', key: 'orthodontics', icon: Star },
+  { id: 'orthopedics', key: 'orthopedics', icon: User },
+  { id: 'otolaryngology', key: 'otolaryngology', icon: Ear },
+  { id: 'pediatric_dentistry', key: 'pediatric_dentistry', icon: Baby },
+  { id: 'pediatrics', key: 'pediatrics', icon: Baby },
+  { id: 'periodontics', key: 'periodontics', icon: Activity },
+  { id: 'prosthodontics', key: 'prosthodontics', icon: Activity },
+  { id: 'psychiatry', key: 'psychiatry', icon: Activity },
+  { id: 'pulmonology', key: 'pulmonology', icon: Activity },
+  { id: 'rheumatology', key: 'rheumatology', icon: Activity },
+  { id: 'urology', key: 'urology', icon: ShieldAlert },
 ];
 
 const projects = [
   {
     id: 'medical',
-    title: 'Historia Clínica SaaS',
+    key: 'medical',
     icon: Hospital,
-    desc: 'Sistema integral para gestión de salud.',
+    title: 'Historia Clínica SaaS',
+    description: 'Portal médico con dashboard de pacientes, agenda y reportes.',
     path: '/dashboard'
   },
   {
     id: 'pos',
-    title: 'POS Tienda Zapatos',
+    key: 'pos',
     icon: ShoppingBag,
-    desc: 'Punto de Venta especializado en retail.',
+    title: 'POS Tienda de Zapatos',
+    description: 'Punto de venta en la nube con inventario en tiempo real.',
     path: '/demos/pos'
   },
   {
     id: 'hotel',
-    title: 'Hotel Management',
+    key: 'hotel',
     icon: Hotel,
-    desc: 'Gestión hotelera de alta gama.',
+    title: 'Hotel Management',
+    description: 'Reservas, housekeeping y portal de huéspedes premium.',
     path: '/demos/hotel'
   },
   {
     id: 'ecommerce',
-    title: 'Eve Commerce',
+    key: 'ecommerce',
     icon: Monitor,
-    desc: 'E-commerce premium de alta conversión.',
+    title: 'Eve Commerce',
+    description: 'E‑commerce de moda con checkout optimizado.',
     path: '/demos/evecommerce'
   }
 ];
@@ -115,7 +120,7 @@ export default function UnifiedPortalPage() {
     setError('');
 
     if (!specialty) {
-      setError('Por favor selecciona una especialidad');
+      setError("Selecciona tu especialidad");
       return;
     }
 
@@ -133,17 +138,17 @@ export default function UnifiedPortalPage() {
       const role = email.includes('asistente') ? 'assistant' : '';
       const roleParam = role ? `&role=${role}` : '';
 
-      router.push(`/dashboard?specialty=${specialty}${roleParam}`);
+      router.push(`/dashboard?specialty=${specialty}${roleParam}` as any);
     } catch (err: any) {
       console.error("Login error:", err);
       // Fallback a credenciales hardcoded SOLO para desarrollo si falla la red, 
       // pero esto no arreglará el problema de permisos de Firestore.
       if (email === 'dr@je.com' && (password === '123456' || password === 'Doctor')) {
-        router.push(`/dashboard?specialty=${specialty}`);
+        router.push(`/dashboard?specialty=${specialty}` as any);
       } else if (email === 'asistente@je.com' && (password === 'Asistente' || password === '123456')) {
-        router.push(`/dashboard?specialty=${specialty}&role=assistant`);
+        router.push(`/dashboard?specialty=${specialty}&role=assistant` as any);
       } else {
-        setError('Error de autenticación. Verifica tus credenciales o conexión.');
+        setError("Error de autenticación. Verifica tus datos.");
       }
     }
   };
@@ -173,7 +178,7 @@ export default function UnifiedPortalPage() {
                 animate={{ y: 0, opacity: 1 }}
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-slate-400 text-[10px] font-semibold mb-4 tracking-wider"
               >
-                <LayoutGrid size={12} /> Catálogo de proyectos
+                <LayoutGrid size={12} /> Catálogo
               </motion.div>
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-tight">
                 Selecciona una experiencia
@@ -189,7 +194,7 @@ export default function UnifiedPortalPage() {
                     if (project.id === 'medical') {
                       setView('medical-login');
                     } else {
-                      router.push(project.path);
+                      router.push(`${project.path}` as any);
                     }
                   }}
                   className="bg-[#1a1a2e]/30 border border-white/5 rounded-2xl p-8 cursor-pointer group hover:border-[#C69320]/30 transition-all duration-300"
@@ -199,9 +204,9 @@ export default function UnifiedPortalPage() {
                       <project.icon size={28} className="text-[#FBE18D]" />
                     </div>
                     <h3 className="text-lg font-bold mb-2 group-hover:text-[#FBE18D] transition-colors">{project.title}</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed mb-6">{project.desc}</p>
+                    <p className="text-xs text-slate-500 leading-relaxed mb-6">{project.description}</p>
                     <div className="flex items-center gap-2 text-[#C69320] text-xs font-semibold mt-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                      Ingresar <ChevronRight size={14} />
+                      Entrar <ChevronRight size={14} />
                     </div>
                   </div>
                 </motion.div>
@@ -239,7 +244,7 @@ export default function UnifiedPortalPage() {
                       className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mt-2"
                     >
                       <ShieldCheck size={16} className="text-[#FBE18D]" />
-                      <span className="text-[11px] font-medium text-slate-300">Especialidad: {selectedItem?.label}</span>
+                      <span className="text-[11px] font-medium text-slate-300">Especialidad seleccionada: {selectedItem ? getSpecialtyById(selectedItem.id)?.nameEs || selectedItem.key : ''}</span>
                       <button onClick={() => setSpecialty('')} className="ml-2 text-[10px] text-white/30 hover:text-white underline font-semibold transition-colors">Cambiar</button>
                     </motion.div>
                   )}
@@ -269,7 +274,7 @@ export default function UnifiedPortalPage() {
                           className="bg-white/5 border border-white/10 p-4 rounded-xl flex items-center justify-between group transition-all hover:bg-white/10 hover:border-[#C69320]/30"
                         >
                           <item.icon size={18} className="text-[#C69320]/60 group-hover:text-[#FBE18D] transition-colors" />
-                          <span className="text-[11px] font-medium text-slate-300 mx-3">{item.label}</span>
+                          <span className="text-[11px] font-medium text-slate-300 mx-3">{getSpecialtyById(item.id)?.nameEs || item.key}</span>
                           <div className="w-1.5 h-1.5 rounded-full bg-white/5 group-hover:bg-[#C69320]/50 transition-colors"></div>
                         </motion.button>
                       ))}
@@ -282,7 +287,7 @@ export default function UnifiedPortalPage() {
               <form onSubmit={handleLogin} className={`max-w-2xl mx-auto space-y-8 transition-all duration-700 ${!specialty ? 'opacity-10 pointer-events-none blur-sm' : 'opacity-100'}`}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-semibold text-slate-500 ml-1">E-mail</label>
+                    <label className="text-[10px] font-semibold text-slate-500 ml-1">Correo</label>
                     <div className="relative group">
                       <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-[#FBE18D] transition-colors" />
                       <input
@@ -322,7 +327,7 @@ export default function UnifiedPortalPage() {
                     className="w-full md:w-64 py-4 bg-gradient-to-r from-[#C69320] to-[#FBE18D] rounded-full text-black font-bold text-sm tracking-wide shadow-lg shadow-[#C69320]/20 flex items-center justify-center gap-2 group relative overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center gap-2">
-                      Iniciar sesión <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                      Acceder <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </span>
                   </motion.button>
 

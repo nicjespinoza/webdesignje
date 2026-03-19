@@ -1,0 +1,22 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "search": "Buscar",
+    "back": "Volver"
+  },
+  "portal": {
+    "title": "Selecciona una experiencia",
+    "medical": "Historia Clínica SaaS",
+    "selectSpecialty": "Selecciona tu especialidad"
+  },
+  "dashboard": {
+    "patients": "Pacientes",
+    "agenda": "Agenda",
+    "chat": "Chat",
+    "reports": "Analítica"
+  }
+}

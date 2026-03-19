@@ -1,0 +1,254 @@
+﻿
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/history/new/I
+  
+nitialHistoryClient.tsx:17:1
+> Module not found: Can't 
+  resolve 
+'@/components/Obesity
+  HistoryModal'
+  [0m [90m 15 |[39m 
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/history/new/I
+  
+nitialHistoryClient.tsx:21:1
+> Module not found: Can't 
+  resolve 
+'@/components/history
+  
+/sections/DiseaseHistorySecti
+  on'
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/history/new/I
+  
+nitialHistoryClient.tsx:24:1
+> Module not found: Can't 
+  resolve 
+'@/components/history
+  
+/sections/FamilyHistorySectio
+  n'
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/history/new/I
+  
+nitialHistoryClient.tsx:20:1
+> Module not found: Can't 
+  resolve 
+'@/components/history
+  /sections/MotivesSection'
+  [0m [90m 18 |[39m
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/history/new/I
+  
+nitialHistoryClient.tsx:23:1
+> Module not found: Can't 
+  resolve 
+'@/components/history
+  
+/sections/NonPathologicalAnte
+  cedentsSection'
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/history/new/I
+  
+nitialHistoryClient.tsx:22:1
+> Module not found: Can't 
+  resolve 
+'@/components/history
+  
+/sections/PathologicalAnteced
+  entsSection'
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/history/new/I
+  
+nitialHistoryClient.tsx:25:1
+> Module not found: Can't 
+  resolve 
+'@/components/history
+  
+/sections/PhysicalExamSection
+  '
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/history/new/I
+  
+nitialHistoryClient.tsx:26:1
+> Module not found: Can't 
+  resolve 
+'@/components/history
+  
+/sections/TreatmentPlanSectio
+  n'
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/PatientProfil
+  eClient.tsx:11:1
+> Module not found: Can't 
+  resolve 
+'@/components/profile
+  /ConsultList'
+  [0m [90m  9 |[39m 
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/PatientProfil
+  eClient.tsx:10:1
+> Module not found: Can't 
+  resolve 
+'@/components/profile
+  /HistoryList'
+  [0m [90m  8 |[39m 
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/PatientProfil
+  eClient.tsx:8:1
+> Module not found: Can't 
+  resolve 
+'@/components/profile
+  /PatientHeader'
+  [0m [90m  6 |[39m 
+  
+./app/[lang]/dashboard/(inner
+  
+)/patients/[id]/PatientProfil
+  eClient.tsx:9:1
+> Module not found: Can't 
+  resolve 
+'@/components/profile
+  /PatientInfoCard'
+  [0m [90m  7 |[39m 
+  
+  
+./src/components/medical/ui/F
+  ormComponents.tsx:7:1
+> Module not found: Can't 
+  resolve '@/constants'
+  [0m [90m  5 |[39m 
+  [36mimport[39m { 
+  
+  
+./app/[lang]/demos/evecommerc
+  e/page.tsx:2:1
+> Module not found: Can't 
+  resolve '@/i18n'
+  [0m [90m 1 |[39m 
+  [36mimport[39m 
+  
+  
+./app/[lang]/demos/hotel/page
+  .tsx:2:1
+> Module not found: Can't 
+  resolve '@/i18n'
+  [0m [90m 1 |[39m 
+  [36mimport[39m 
+  
+  
+./app/[lang]/demos/pos/page.t
+  sx:2:1
+> Module not found: Can't 
+  resolve '@/i18n'
+  [0m [90m 1 |[39m 
+  [36mimport[39m 
+  
+  
+  ./app/[lang]/layout.tsx:4:1
+> Module not found: Can't 
+  resolve '@/i18n'
+  [0m [90m 2 |[39m 
+  [36mimport[39m 
+  
+  
+./src/components/landing/AISe
+  ction.tsx:20:1
+> Module not found: Can't 
+  resolve 
+'@/src/components/lan
+  ding/animations'
+  [0m [90m 18 |[39m 
+  
+  
+./src/components/landing/Abou
+  tSection.tsx:20:1
+> Module not found: Can't 
+  resolve 
+'@/src/components/lan
+  ding/animations'
+  [0m [90m 18 |[39m 
+  
+  
+./src/components/landing/Proj
+  ectsSection.tsx:20:1
+> Module not found: Can't 
+  resolve 
+'@/src/components/lan
+  ding/animations'
+  [0m [90m 18 |[39m 
+  
+  
+./src/components/landing/RAGS
+  ection.tsx:20:1
+> Module not found: Can't 
+  resolve 
+'@/src/components/lan
+  ding/animations'
+  [0m [90m 18 |[39m 
+  
+  
+./src/components/landing/Serv
+  icesSection.tsx:20:1
+> Module not found: Can't 
+  resolve 
+'@/src/components/lan
+  ding/animations'
+  [0m [90m 18 |[39m 
+  
+  
+./src/components/landing/Stac
+  kSection.tsx:20:1
+> Module not found: Can't 
+  resolve 
+'@/src/components/lan
+  ding/animations'
+  [0m [90m 18 |[39m 
+  
+  
+./src/components/landing/Proj
+  ectsSection.tsx:19:1
+> Module not found: Can't 
+  resolve 
+  '@/src/data/constants'
+  [0m [90m 17 |[39m 
+  
+  
+./src/components/landing/Serv
+  icesSection.tsx:19:1
+> Module not found: Can't 
+  resolve 
+  '@/src/data/constants'
+  [0m [90m 17 |[39m 
+  
+  
+./src/components/landing/Stac
+  kSection.tsx:19:1
+> Module not found: Can't 
+  resolve 
+  '@/src/data/constants'
+  [0m [90m 17 |[39m 
+
+

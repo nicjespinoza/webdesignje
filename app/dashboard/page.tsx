@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/ThemeContext";
 import { getSpecialtyById } from "@/lib/specialties";
-import GlobalParticles from "@/src/components/landing/GlobalParticles";
-import Logo from "@/components/ui/Logo";
+import GlobalParticles from "@/components/landing/GlobalParticles";
+import Logo from "@/components/medical/ui/Logo";
 
 function DashboardContent() {
   const router = useRouter();
@@ -145,7 +145,7 @@ function DashboardContent() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className="relative group cursor-pointer"
-              onClick={() => router.push('/portal')}
+              onClick={() => router.push(`/portal` as any)}
             >
               <Logo size={80} />
             </motion.div>
@@ -171,7 +171,7 @@ function DashboardContent() {
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
             <button
-              onClick={async () => { await logout(); router.push("/portal"); }}
+              onClick={async () => { await logout(); router.push(`/portal` as any); }}
               className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group !bg-transparent"
             >
               <div className="liquid-gold-content !py-2.5 !px-10 !rounded-full !bg-black hover:!bg-black/40 transition-all flex items-center justify-center">
@@ -191,7 +191,7 @@ function DashboardContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
               key={item.path}
-              onClick={() => router.push(item.path)}
+              onClick={() => router.push(item.path as any)}
               className="group relative h-[320px] cursor-pointer"
             >
               {/* Simple Elegant Transparent Card */}

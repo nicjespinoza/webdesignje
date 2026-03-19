@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebDesignJE - Joseph Espinoza - Desarrollo Full-Stack & IA</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0a0a0f; color: #e5e5e5; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; width: 100%; }
+        header { background: #1a1a2e; color: white; padding: 1rem 0; text-align: center; }
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin: 0.5rem 0; font-size: 1.1rem; }
+        nav { background: #2a2a4a; padding: 0.7rem 0; text-align: center; }
+        nav a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; transition: color 0.3s ease; }
+        nav a:hover { color: #6366f1; }
+        .hero { background: linear-gradient(135deg, #1a1a2e, #3a3a5e); color: white; padding: 60px 20px; text-align: center; }
+        .hero h2 { font-size: 3rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.3rem; max-width: 800px; margin: 0 auto 30px; }
+        .btn { background: #6366f1; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background 0.3s ease; }
+        .btn:hover { background: #9333ea; }
+        section { padding: 40px 20px; }
+        section h3 { font-size: 2.2rem; text-align: center; margin-bottom: 30px; color: #6366f1; }
+        .features, .demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; text-align: center; }
+        .feature-item, .demo-item { background: #1a1a2e; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: transform 0.3s ease; }
+        .feature-item:hover, .demo-item:hover { transform: translateY(-10px); }
+        .feature-item h4, .demo-item h4 { font-size: 1.5rem; color: #ffffff; margin-bottom: 15px; }
+        .feature-item p, .demo-item p { color: #cccccc; }
+        footer { background: #1a1a2e; color: #cccccc; text-align: center; padding: 20px 0; margin-top: auto; }
+        .contact-form { max-width: 600px; margin: 0 auto; background: #1a1a2e; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .contact-form label { display: block; margin-bottom: 8px; color: #e5e5e5; text-align: left; }
+        .contact-form input, .contact-form textarea { width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #3a3a5e; background-color: #0a0a0f; color: #e5e5e5; }
+        .contact-form button { width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; transition: background 0.3s ease; }
+        .contact-form button:hover { background: #9333ea; }
+        .icon { font-size: 3rem; color: #6366f1; margin-bottom: 15px; }
+
+        @media (max-width: 768px) {
+            .hero h2 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            section h3 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>WebDesignJE - Joseph Espinoza</h1>
+            <p>PhD en IA/ML | Senior Full-Stack Developer con 15+ años de experiencia</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <a href="#servicios">Servicios</a>
+            <a href="#proyectos">Proyectos Demo</a>
+            <a href="/Historia-Clinica-DEMO/index.portal.html">Portal Médico (Demo)</a>
+            <a href="#contacto">Contacto</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Transformando ideas en soluciones digitales robustas y escalables.</h2>
+            <p>Con expertise profundo en desarrollo Full-Stack moderno e integración avanzada de Inteligencia Artificial, llevo tus proyectos al siguiente nivel.</p>
+            <a href="#contacto" class="btn">¡Hablemos de tu proyecto!</a>
+        </div>
+    </section>
+
+    <section id="servicios">
+        <div class="container">
+            <h3>Mis Servicios Clave</h3>
+            <div class="features">
+                <div class="feature-item">
+                    <div class="icon">💻</div>
+                    <h4>Desarrollo Full-Stack Moderno</h4>
+                    <p>Next.js, React, TypeScript, Node.js, Python, Django, FastAPI, Tailwind, shadcn/ui.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">🧠</div>
+                    <h4>Integración Avanzada de IA</h4>
+                    <p>RAG, Agentes inteligentes, fine-tuning, LangChain, LlamaIndex para soluciones innovadoras.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">🏗️</div>
+                    <h4>Arquitectura y Escalabilidad</h4>
+                    <p>Diseño de sistemas limpios, mantenibles y preparados para el crecimiento futuro.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">📊</div>
+                    <h4>Optimización y Calidad</h4>
+                    <p>Mejoras en rendimiento, seguridad, UX/accesibilidad y calidad de código educativo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="proyectos" style="background-color: #0a0a0f;">
+        <div class="container">
+            <h3>Proyectos Demo Destacados</h3>
+            <div class="demos">
+                <div class="demo-item">
+                    <div class="icon">🏥</div>
+                    <h4>Portal Médico: MediRecord Pro</h4>
+                    <p>Sistema completo de historias clínicas con visualizador 3D y IA. Acceso demo.</p>
+                    <a href="/Historia-Clinica-DEMO/index.portal.html" class="btn" style="margin-top: 20px;">Ver Demo</a>
+                </div>
+                <div class="demo-item">
+                    <div class="icon">🛍️</div>
+                    <h4>POS Tienda Zapatos</h4>
+                    <p>Sistema de punto de venta con gestión de inventario y pagos.</p>
+                    <a href="#" class="btn" style="margin-top: 20px;">Próximamente</a>
+                </div>
+                <div class="demo-item">
+                    <div class="icon">🏨</div>
+                    <h4>Hotel (Gestión de Reservas)</h4>
+                    <p>Plataforma de reservas con Next.js y Stripe. Demo disponible pronto.</p>
+                    <a href="#" class="btn" style="margin-top: 20px;">Próximamente</a>
+                </div>
+                <div class="demo-item">
+                    <div class="icon">🛒</div>
+                    <h4>Eve Commerce</h4>
+                    <p>Tienda online moderna y escalable. Demo disponible pronto.</p>
+                    <a href="#" class="btn" style="margin-top: 20px;">Próximamente</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" style="background-color: #1a1a2e;">
+        <div class="container">
+            <h3>Contacto</h3>
+            <div class="contact-form">
+                <p style="color: #cccccc; margin-bottom: 20px;">¿Tenés un proyecto en mente o querés llevar el actual al siguiente nivel? Contáctame, ¡será un placer ayudarte!</p>
+                <form action="#" method="POST">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="message">Mensaje:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+
+                    <button type="submit">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 WebDesignJE - Joseph Espinoza. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

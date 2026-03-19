@@ -1,0 +1,43 @@
+﻿
+  Error: Turbopack build 
+  failed with 5 errors:
+  
+./app/[locale]/layout.tsx:7:1
+> Module not found: Can't 
+  resolve '@/app/globals.css'
+  [0m [90m  5 |[39m 
+  [36mimport[39m { 
+  
+  
+./app/[locale]/demos/evecomme
+  rce/page.tsx:2:1
+> Module not found: Can't 
+  resolve '@/i18n'
+  [0m [90m 1 |[39m 
+  [36mimport[39m 
+  
+  
+./app/[locale]/demos/hotel/pa
+  ge.tsx:2:1
+> Module not found: Can't 
+  resolve '@/i18n'
+  [0m [90m 1 |[39m 
+  [36mimport[39m 
+  
+  
+./app/[locale]/demos/pos/page
+  .tsx:2:1
+> Module not found: Can't 
+  resolve '@/i18n'
+  [0m [90m 1 |[39m 
+  [36mimport[39m 
+  
+  
+  
+./app/[locale]/layout.tsx:4:1
+> Module not found: Can't 
+  resolve '@/i18n'
+  [0m [90m 2 |[39m 
+  [36mimport[39m { 
+
+

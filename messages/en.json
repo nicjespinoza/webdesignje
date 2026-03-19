@@ -1,0 +1,22 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "back": "Back"
+  },
+  "portal": {
+    "title": "Select an experience",
+    "medical": "Medical Records SaaS",
+    "selectSpecialty": "Select your specialty"
+  },
+  "dashboard": {
+    "patients": "Patients",
+    "agenda": "Agenda",
+    "chat": "Chat",
+    "reports": "Analytics"
+  }
+}

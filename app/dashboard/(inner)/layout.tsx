@@ -19,8 +19,8 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import { getSpecialtyById } from "@/lib/specialties";
-import GlobalParticles from "@/src/components/landing/GlobalParticles";
-import LogoComponent from "@/components/ui/Logo";
+import GlobalParticles from "@/components/landing/GlobalParticles";
+import LogoComponent from "@/components/medical/ui/Logo";
 
 function InnerDashboardLayoutContent({
     children,
@@ -112,7 +112,7 @@ function InnerDashboardLayoutContent({
     const handleLogout = async () => {
         try {
             await logout();
-            router.push("/");
+            router.push(`/` as any);
         } catch (error) {
             console.error("Logout error", error);
         }
@@ -156,7 +156,7 @@ function InnerDashboardLayoutContent({
                         <motion.div
                             whileHover={{ scale: 1.05 }}
                             className="relative cursor-pointer"
-                            onClick={() => router.push(`/dashboard?specialty=${currentSpecialtyId}`)}
+                            onClick={() => router.push(`/dashboard?specialty=${currentSpecialtyId}` as any)}
                         >
                             <LogoComponent size={36} />
                         </motion.div>
@@ -174,7 +174,7 @@ function InnerDashboardLayoutContent({
                             return (
                                 <button
                                     key={idx}
-                                    onClick={() => router.push(`${link.href}?specialty=${currentSpecialtyId}`)}
+                                    onClick={() => router.push(`${link.href}?specialty=${currentSpecialtyId}` as any)}
                                     className={cn(
                                         "text-[9px] tracking-[0.4em] uppercase font-light transition-all duration-500 relative py-2",
                                         isActive ? "text-primary brightness-125" : "text-white/20 hover:text-white"

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { User, FileText, Stethoscope, ArrowLeft, Plus, Calendar, Edit, X, Save, Trash2, Eye, Video, Clock, CheckCircle, Brain, Lightbulb, AlertTriangle, ClipboardList, Loader2, PenTool, FileDown, StickyNote, Activity, Bell, Globe, Phone, MapPin, Users, UserPlus, Heart, Briefcase, Mail } from 'lucide-react';
 import { Patient, InitialHistory, SubsequentConsult } from '../../types';
 import { calculateAge } from '../../lib/helpers';
@@ -141,12 +141,12 @@ export const ProfileScreen = () => {
         if (!file || !patient) return;
 
         if (!isImageFile(file)) {
-            alert('Por favor selecciona un archivo de imagen vÃ¡lido (JPG, PNG, WEBP)');
+            alert('Por favor selecciona un archivo de imagen válido (JPG, PNG, WEBP)');
             return;
         }
 
         if (!validateFileSize(file, 2)) { // 2MB max
-            alert('La imagen no debe pesar mÃ¡s de 2MB');
+            alert('La imagen no debe pesar más de 2MB');
             return;
         }
 
@@ -157,7 +157,7 @@ export const ProfileScreen = () => {
             setPatient(prev => prev ? { ...prev, profileImage: url } : null);
         } catch (error) {
             console.error('Error uploading image:', error);
-            alert('Error al subir la imagen. IntÃ©ntalo de nuevo.');
+            alert('Error al subir la imagen. Inténtalo de nuevo.');
         } finally {
             setUploadingImage(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -227,13 +227,13 @@ export const ProfileScreen = () => {
 
     const CONSENTS_LIST = [
         { id: '1', title: 'Consentimiento para Endoscopia' },
-        { id: '2', title: 'Consentimiento para CirugÃ­a Menor' },
+        { id: '2', title: 'Consentimiento para Cirugía Menor' },
         { id: '3', title: 'Consentimiento para Telemedicina' },
         { id: '4', title: 'Consentimiento de Tratamiento de Datos' },
         { id: '5', title: 'Consentimiento Informado General' },
-        { id: '6', title: 'AutorizaciÃ³n de Procedimientos' },
+        { id: '6', title: 'Autorización de Procedimientos' },
         { id: '7', title: 'Consentimiento para Anestesia' },
-        { id: '8', title: 'Consentimiento para TransfusiÃ³n' },
+        { id: '8', title: 'Consentimiento para Transfusión' },
         { id: '9', title: 'Rechazo de Tratamiento' },
         { id: '10', title: 'Consentimiento COVID-19' },
     ];
@@ -276,7 +276,7 @@ export const ProfileScreen = () => {
             });
         } catch (error) {
             console.error("Error AI:", error);
-            alert("Error al generar anÃ¡lisis IA");
+            alert("Error al generar análisis IA");
             setShowAIModal(false);
         } finally {
             setIsAnalyzing(false);
@@ -398,10 +398,10 @@ export const ProfileScreen = () => {
             setEndoscopicNotes('');
             setEndoscopicDate('');
             setShowEndoscopicModal(false);
-            alert(`Control endoscÃ³pico guardado. Se programaron ${reminders.length} recordatorio(s).`);
+            alert(`Control endoscópico guardado. Se programaron ${reminders.length} recordatorio(s).`);
         } catch (error) {
             console.error('Error saving endoscopic control:', error);
-            alert('Error al guardar el control endoscÃ³pico');
+            alert('Error al guardar el control endoscópico');
         } finally {
             setSavingEndoscopic(false);
         }
@@ -410,7 +410,7 @@ export const ProfileScreen = () => {
     // Delete endoscopic control
     const handleDeleteEndoscopicControl = async (controlId: string) => {
         if (!patient) return;
-        if (!confirm('Â¿EstÃ¡ seguro de eliminar este control endoscÃ³pico? Esta acciÃ³n no se puede deshacer.')) return;
+        if (!confirm('¿Está seguro de eliminar este control endoscópico? Esta acción no se puede deshacer.')) return;
 
         try {
             const existingControls = (patient as any).endoscopicControls || [];
@@ -504,10 +504,10 @@ export const ProfileScreen = () => {
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
                                         <div className="relative z-10">
                                             <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-                                                <span className="bg-white/20 p-1.5 rounded-lg">ðŸ§¬</span> DiseÃ±ar Enfermedad
+                                                <span className="bg-white/20 p-1.5 rounded-lg">🧬</span> Diseñar Enfermedad
                                             </h3>
                                             <p className="text-blue-100 mb-4 text-sm max-w-md">
-                                                Utiliza nuestra herramienta de modelado 3D para visualizar y marcar Ã¡reas afectadas en el cuerpo humano.
+                                                Utiliza nuestra herramienta de modelado 3D para visualizar y marcar áreas afectadas en el cuerpo humano.
                                             </p>
                                             <button
                                                 onClick={async () => {
@@ -527,7 +527,7 @@ export const ProfileScreen = () => {
                                             {
                                                 snapshots.length > 0 && (
                                                     <div className="space-y-3">
-                                                        <h4 className="font-bold text-sm text-blue-200 uppercase tracking-widest border-b border-white/20 pb-1 mb-2">ImÃ¡genes Guardadas</h4>
+                                                        <h4 className="font-bold text-sm text-blue-200 uppercase tracking-widest border-b border-white/20 pb-1 mb-2">Imágenes Guardadas</h4>
                                                         {snapshots.map(snap => (
                                                             <div key={snap.id} className="bg-white/10 p-3 rounded-lg border border-white/10 flex justify-between items-center group hover:bg-white/20 transition-colors">
                                                                 <div>
@@ -706,16 +706,16 @@ export const ProfileScreen = () => {
                                                 </div>
                                                 <div className="space-y-4 text-gray-800 text-sm leading-relaxed text-justify">
                                                     <p>
-                                                        Yo, <strong>{patient.firstName} {patient.lastName}</strong>, identificado con la historia clÃ­nica nÃºmero <strong>{patient.id}</strong>, declaro que he sido informado/a detalladamente sobre el procedimiento.
+                                                        Yo, <strong>{patient.firstName} {patient.lastName}</strong>, identificado con la historia clínica número <strong>{patient.id}</strong>, declaro que he sido informado/a detalladamente sobre el procedimiento.
                                                     </p>
                                                     <p>
-                                                        Entiendo los beneficios, riesgos y alternativas del mismo. He tenido la oportunidad de hacer preguntas y Ã©stas han sido respondidas a mi satisfacciÃ³n.
+                                                        Entiendo los beneficios, riesgos y alternativas del mismo. He tenido la oportunidad de hacer preguntas y éstas han sido respondidas a mi satisfacción.
                                                     </p>
                                                     <p>
-                                                        Autorizo al equipo mÃ©dico a realizar el procedimiento y cualquier intervenciÃ³n adicional que se considere necesaria durante el proceso por mi bienestar.
+                                                        Autorizo al equipo médico a realizar el procedimiento y cualquier intervención adicional que se considere necesaria durante el proceso por mi bienestar.
                                                     </p>
                                                     <p className="mt-8 font-bold">
-                                                        Mediante mi firma a continuaciÃ³n, expreso mi consentimiento libre y voluntario.
+                                                        Mediante mi firma a continuación, expreso mi consentimiento libre y voluntario.
                                                     </p>
                                                     <div className="mt-12 pt-8 border-t border-gray-300">
                                                         <p className="mb-2">Firmado digitalmente:</p>
@@ -742,7 +742,7 @@ export const ProfileScreen = () => {
                                             </div>
                                             <div className="p-6">
                                                 <p className="text-sm text-gray-500 mb-4">
-                                                    Firme dentro del recuadro punteado usando su mouse o pantalla tÃ¡ctil.
+                                                    Firme dentro del recuadro punteado usando su mouse o pantalla táctil.
                                                 </p>
                                                 <div className="border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:border-blue-400 transition-colors cursor-crosshair relative">
                                                     <ReactSignatureCanvas
@@ -837,8 +837,8 @@ export const ProfileScreen = () => {
                                         <Brain size={24} />
                                     </div>
                                     <div>
-                                        <h2 className="text-2xl font-bold text-gray-900">AnÃ¡lisis IA</h2>
-                                        <p className="text-sm text-gray-500">Asistente ClÃ­nico Inteligente</p>
+                                        <h2 className="text-2xl font-bold text-gray-900">Análisis IA</h2>
+                                        <p className="text-sm text-gray-500">Asistente Clínico Inteligente</p>
                                     </div>
                                 </div>
                                 <button onClick={() => setShowAIModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600">
@@ -853,9 +853,9 @@ export const ProfileScreen = () => {
                                             <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full animate-pulse"></div>
                                             <Loader2 size={48} className="text-indigo-600 animate-spin relative z-10" />
                                         </div>
-                                        <h3 className="text-xl font-bold text-gray-900 mb-2">Analizando Historia ClÃ­nica...</h3>
+                                        <h3 className="text-xl font-bold text-gray-900 mb-2">Analizando Historia Clínica...</h3>
                                         <p className="text-gray-500 max-w-md mx-auto">
-                                            Nuestra IA estÃ¡ procesando los antecedentes, consultas y signos vitales del paciente para generar insights mÃ©dicos.
+                                            Nuestra IA está procesando los antecedentes, consultas y signos vitales del paciente para generar insights médicos.
                                         </p>
                                     </div>
                                 ) : aiResult ? (
@@ -864,7 +864,7 @@ export const ProfileScreen = () => {
                                         <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 shadow-sm">
                                             <h3 className="text-lg font-bold text-indigo-900 mb-3 flex items-center gap-2">
                                                 <ClipboardList size={20} className="text-indigo-600" />
-                                                Resumen ClÃ­nico
+                                                Resumen Clínico
                                             </h3>
                                             <p className="text-gray-700 leading-relaxed text-lg">
                                                 {aiResult.summary}
@@ -910,7 +910,7 @@ export const ProfileScreen = () => {
                                                 onClick={() => setShowAIModal(false)}
                                                 className="bg-gray-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition shadow-lg"
                                             >
-                                                Cerrar AnÃ¡lisis
+                                                Cerrar Análisis
                                             </button>
                                         </div>
                                     </div>
@@ -930,7 +930,7 @@ export const ProfileScreen = () => {
                             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-[#083c79] to-[#0a4d9c] text-white rounded-t-2xl">
                                 <div>
                                     <h3 className="text-xl font-bold flex items-center gap-2">
-                                        <UserPlus size={24} /> Editar InformaciÃ³n
+                                        <UserPlus size={24} /> Editar Información
                                     </h3>
                                     <p className="text-blue-100 text-sm mt-0.5">Actualice los datos personales y de contacto</p>
                                 </div>
@@ -987,7 +987,7 @@ export const ProfileScreen = () => {
                                             </select>
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="ProfesiÃ³n" icon={Briefcase}>
+                                        <InputWithIcon label="Profesión" icon={Briefcase}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.profession || ''}
@@ -1011,7 +1011,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="TelÃ©fono" icon={Phone}>
+                                        <InputWithIcon label="Teléfono" icon={Phone}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.phone || ''}
@@ -1019,7 +1019,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="TelÃ©fono Secundario" icon={Phone}>
+                                        <InputWithIcon label="Teléfono Secundario" icon={Phone}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.phoneSecondary || ''}
@@ -1027,7 +1027,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="DirecciÃ³n" icon={MapPin} className="md:col-span-2 lg:col-span-3">
+                                        <InputWithIcon label="Dirección" icon={MapPin} className="md:col-span-2 lg:col-span-3">
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.address || ''}
@@ -1051,7 +1051,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="RelaciÃ³n" icon={Users}>
+                                        <InputWithIcon label="Relación" icon={Users}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.emergencyContactRelation || ''}
@@ -1059,7 +1059,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="TelÃ©fono Contacto" icon={Phone}>
+                                        <InputWithIcon label="Teléfono Contacto" icon={Phone}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.emergencyContactPhone || ''}
@@ -1103,7 +1103,7 @@ export const ProfileScreen = () => {
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
                         <div className="bg-red-600 p-6 rounded-2xl shadow-2xl max-w-sm w-full border border-red-500 animate-in zoom-in-95 duration-200">
                             <h3 className="text-white font-bold text-lg mb-6 text-center leading-snug">
-                                Â¿EstÃ¡s seguro de que deseas eliminar permanentemente esta imagen?
+                                ¿Estás seguro de que deseas eliminar permanentemente esta imagen?
                             </h3>
                             <div className="flex gap-4 justify-center">
                                 <button
@@ -1192,7 +1192,7 @@ export const ProfileScreen = () => {
                                             <div key={note.id} className="bg-amber-50 border border-amber-200 rounded-xl p-4 relative group">
                                                 <button
                                                     onClick={async () => {
-                                                        if (!confirm('Â¿EstÃ¡ seguro de eliminar esta nota?')) return;
+                                                        if (!confirm('¿Está seguro de eliminar esta nota?')) return;
                                                         try {
                                                             const existingNotes = (patient as any).notes || [];
                                                             const updatedNotes = existingNotes.filter((n: any) => n.id !== note.id);
@@ -1245,7 +1245,7 @@ export const ProfileScreen = () => {
                         <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                                    <Activity className="text-teal-600" /> Programar Control EndoscÃ³pico
+                                    <Activity className="text-teal-600" /> Programar Control Endoscópico
                                 </h3>
                                 <button onClick={() => setShowEndoscopicModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                                     <X size={20} />
@@ -1255,13 +1255,13 @@ export const ProfileScreen = () => {
                             <div className="bg-teal-50 rounded-xl p-4 mb-4 border border-teal-200">
                                 <p className="text-sm text-teal-800 flex items-center gap-2">
                                     <Bell size={16} />
-                                    <span>Se enviarÃ¡n recordatorios automÃ¡ticos al email del paciente segÃºn la fecha programada.</span>
+                                    <span>Se enviarán recordatorios automáticos al email del paciente según la fecha programada.</span>
                                 </p>
                             </div>
 
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">ðŸ“… Fecha del Control</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">📅 Fecha del Control</label>
                                     <input
                                         type="date"
                                         value={endoscopicDate}
@@ -1272,11 +1272,11 @@ export const ProfileScreen = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">ðŸ“ Notas del Doctor</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">📝 Notas del Doctor</label>
                                     <textarea
                                         value={endoscopicNotes}
                                         onChange={(e) => setEndoscopicNotes(e.target.value)}
-                                        placeholder="Indicaciones especiales, preparaciÃ³n, tipo de estudio..."
+                                        placeholder="Indicaciones especiales, preparación, tipo de estudio..."
                                         className="w-full h-32 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-4 focus:ring-teal-100 outline-none resize-none text-gray-800"
                                     />
                                 </div>
@@ -1309,7 +1309,7 @@ export const ProfileScreen = () => {
                         <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[80vh] overflow-hidden">
                             <div className="flex justify-between items-center p-6 border-b bg-gradient-to-r from-teal-600 to-teal-700 text-white">
                                 <h3 className="text-xl font-bold flex items-center gap-2">
-                                    <Activity size={24} /> Controles EndoscÃ³picos
+                                    <Activity size={24} /> Controles Endoscópicos
                                 </h3>
                                 <button onClick={() => setShowViewEndoscopicModal(false)} className="p-2 hover:bg-white/20 rounded-full">
                                     <X size={20} />
@@ -1389,8 +1389,8 @@ export const ProfileScreen = () => {
                                         <AlertTriangle size={28} className="text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-white">âš ï¸ Eliminar Historia ClÃ­nica</h3>
-                                        <p className="text-red-100 text-sm">Esta acciÃ³n es irreversible</p>
+                                        <h3 className="text-xl font-bold text-white">⚠️ Eliminar Historia Clínica</h3>
+                                        <p className="text-red-100 text-sm">Esta acción es irreversible</p>
                                     </div>
                                 </div>
                             </div>
@@ -1399,12 +1399,12 @@ export const ProfileScreen = () => {
                             <div className="p-6">
                                 <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-6">
                                     <p className="text-red-800 font-medium mb-2">
-                                        Â¿EstÃ¡ seguro de eliminar esta historia clÃ­nica?
+                                        ¿Está seguro de eliminar esta historia clínica?
                                     </p>
                                     <ul className="text-red-700 text-sm space-y-1">
-                                        <li>â€¢ Se eliminarÃ¡ toda la informaciÃ³n de la base de datos</li>
-                                        <li>â€¢ No se podrÃ¡ recuperar despuÃ©s de eliminar</li>
-                                        <li>â€¢ Incluye diagnÃ³sticos, tratamientos y comentarios</li>
+                                        <li>• Se eliminará toda la información de la base de datos</li>
+                                        <li>• No se podrá recuperar después de eliminar</li>
+                                        <li>• Incluye diagnósticos, tratamientos y comentarios</li>
                                     </ul>
                                 </div>
 
@@ -1444,7 +1444,7 @@ export const ProfileScreen = () => {
                                         ) : (
                                             <>
                                                 <Trash2 size={18} />
-                                                SÃ­, Eliminar
+                                                Sí, Eliminar
                                             </>
                                         )}
                                     </button>
@@ -1468,8 +1468,8 @@ export const ProfileScreen = () => {
                                         <AlertTriangle size={28} className="text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-white">âš ï¸ Eliminar Consulta</h3>
-                                        <p className="text-red-100 text-sm">Esta acciÃ³n es irreversible</p>
+                                        <h3 className="text-xl font-bold text-white">⚠️ Eliminar Consulta</h3>
+                                        <p className="text-red-100 text-sm">Esta acción es irreversible</p>
                                     </div>
                                 </div>
                             </div>
@@ -1478,11 +1478,11 @@ export const ProfileScreen = () => {
                             <div className="p-6">
                                 <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-6">
                                     <p className="text-red-800 font-medium mb-2">
-                                        Â¿EstÃ¡ seguro de eliminar esta consulta mÃ©dica?
+                                        ¿Está seguro de eliminar esta consulta médica?
                                     </p>
                                     <ul className="text-red-700 text-sm space-y-1">
-                                        <li>â€¢ Se eliminarÃ¡ permanentemente de la base de datos</li>
-                                        <li>â€¢ Incluye signos vitales, diagnÃ³sticos y recetas</li>
+                                        <li>• Se eliminará permanentemente de la base de datos</li>
+                                        <li>• Incluye signos vitales, diagnósticos y recetas</li>
                                     </ul>
                                 </div>
 
@@ -1525,7 +1525,7 @@ export const ProfileScreen = () => {
                                         ) : (
                                             <>
                                                 <Trash2 size={18} />
-                                                SÃ­, Eliminar
+                                                Sí, Eliminar
                                             </>
                                         )}
                                     </button>
@@ -1558,7 +1558,7 @@ export const ProfileScreen = () => {
                             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-[#083c79] to-[#0a4d9c] text-white rounded-t-2xl">
                                 <div>
                                     <h3 className="text-xl font-bold flex items-center gap-2">
-                                        <UserPlus size={24} /> Editar InformaciÃ³n
+                                        <UserPlus size={24} /> Editar Información
                                     </h3>
                                     <p className="text-blue-100 text-sm mt-0.5">Actualice los datos personales y de contacto</p>
                                 </div>
@@ -1615,7 +1615,7 @@ export const ProfileScreen = () => {
                                             </select>
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="ProfesiÃ³n" icon={Briefcase}>
+                                        <InputWithIcon label="Profesión" icon={Briefcase}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.profession || ''}
@@ -1639,7 +1639,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="TelÃ©fono" icon={Phone}>
+                                        <InputWithIcon label="Teléfono" icon={Phone}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.phone || ''}
@@ -1647,7 +1647,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="TelÃ©fono Secundario" icon={Phone}>
+                                        <InputWithIcon label="Teléfono Secundario" icon={Phone}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.phoneSecondary || ''}
@@ -1655,7 +1655,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="DirecciÃ³n" icon={MapPin} className="md:col-span-2 lg:col-span-3">
+                                        <InputWithIcon label="Dirección" icon={MapPin} className="md:col-span-2 lg:col-span-3">
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.address || ''}
@@ -1679,7 +1679,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="RelaciÃ³n" icon={Users}>
+                                        <InputWithIcon label="Relación" icon={Users}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.emergencyContactRelation || ''}
@@ -1687,7 +1687,7 @@ export const ProfileScreen = () => {
                                             />
                                         </InputWithIcon>
 
-                                        <InputWithIcon label="TelÃ©fono Contacto" icon={Phone}>
+                                        <InputWithIcon label="Teléfono Contacto" icon={Phone}>
                                             <input
                                                 className="flex-1 outline-none text-gray-800 bg-transparent placeholder-gray-400"
                                                 value={editingPatient.emergencyContactPhone || ''}
@@ -1734,7 +1734,7 @@ export const ProfileScreen = () => {
                             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                                 <div>
                                     <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                                        <ClipboardList className="text-emerald-600" /> Ã“rdenes MÃ©dicas
+                                        <ClipboardList className="text-emerald-600" /> Órdenes Médicas
                                     </h3>
                                     <p className="text-xs text-gray-500 mt-1">Consulta del {selectedItemForOrders.date}</p>
                                 </div>
@@ -1747,22 +1747,22 @@ export const ProfileScreen = () => {
                                 {Array.isArray(selectedItemForOrders.medicalOrders) && selectedItemForOrders.medicalOrders.length > 0 ? (
                                     selectedItemForOrders.medicalOrders.map((order: any, idx: number) => {
                                         const labels: any = {
-                                            prescription: 'Receta MÃ©dica',
+                                            prescription: 'Receta Médica',
                                             lab_general: 'Laboratorio General',
-                                            lab_basic: 'Perfil BÃ¡sico',
+                                            lab_basic: 'Perfil Básico',
                                             lab_extended: 'Perfil Extendido',
                                             lab_feces: 'Examen de Heces',
                                             image: 'Estudio de Imagen',
-                                            endoscopy: 'Procedimiento EndoscÃ³pico'
+                                            endoscopy: 'Procedimiento Endoscópico'
                                         };
                                         return (
                                             <div key={order.id || idx} className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all group">
                                                 <div className="flex justify-between items-start mb-3">
                                                     <div>
                                                         <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-2 inline-block">
-                                                            {labels[order.type] || 'Orden MÃ©dica'}
+                                                            {labels[order.type] || 'Orden Médica'}
                                                         </span>
-                                                        <h4 className="font-bold text-gray-900 line-clamp-1">{order.diagnosis || 'Sin diagnÃ³stico especificado'}</h4>
+                                                        <h4 className="font-bold text-gray-900 line-clamp-1">{order.diagnosis || 'Sin diagnóstico especificado'}</h4>
                                                     </div>
                                                     <button
                                                         onClick={() => setSelectedOrderForPrint(order)}
@@ -1780,7 +1780,7 @@ export const ProfileScreen = () => {
                                 ) : (
                                     <div className="text-center py-12">
                                         <ClipboardList size={48} className="mx-auto text-gray-200 mb-4" />
-                                        <p className="text-gray-400">No hay Ã³rdenes registradas para esta consulta.</p>
+                                        <p className="text-gray-400">No hay órdenes registradas para esta consulta.</p>
                                     </div>
                                 )}
                             </div>
@@ -1825,8 +1825,8 @@ export const ProfileScreen = () => {
                                     />
                                     <div className="text-[11px] text-gray-900 space-y-0">
                                         <p className="text-sm font-black">DR. MILTON ANTONIO MAIRENA VALLE</p>
-                                        <p className="font-bold">CirugÃ­a EndoscÃ³pica Gastrointestinal</p>
-                                        <p>Ultrasonido EndoscÃ³pico â€¢ Enteroscopia y CÃ¡psula</p>
+                                        <p className="font-bold">Cirugía Endoscópica Gastrointestinal</p>
+                                        <p>Ultrasonido Endoscópico • Enteroscopia y Cápsula</p>
                                     </div>
                                 </div>
 
@@ -1847,13 +1847,13 @@ export const ProfileScreen = () => {
                                     <p className="font-black text-gray-900 text-lg uppercase leading-tight">{patient.firstName} {patient.lastName}</p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold">Fecha de EmisiÃ³n</p>
+                                    <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold">Fecha de Emisión</p>
                                     <p className="font-bold text-gray-800 text-base">{new Date().toLocaleDateString('es-NI', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                                 </div>
                                 <div className="col-span-2">
                                     <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold">Tipo de Orden</p>
                                     <p className="font-bold text-emerald-700 uppercase text-base">
-                                        {selectedOrderForPrint.type === 'prescription' ? 'RECETA MÃ‰DICA' : 'ORDEN DE ESTUDIOS'}
+                                        {selectedOrderForPrint.type === 'prescription' ? 'RECETA MÉDICA' : 'ORDEN DE ESTUDIOS'}
                                     </p>
                                 </div>
                             </div>
@@ -1861,8 +1861,8 @@ export const ProfileScreen = () => {
                             {/* Order Content */}
                             <div className="min-h-[300px] mb-8">
                                 <div className="mb-4">
-                                    <h4 className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-0.5">DiagnÃ³stico</h4>
-                                    <p className="text-gray-900 font-bold text-base border-b border-gray-100 pb-1">{selectedOrderForPrint.diagnosis || 'Consulta MÃ©dica'}</p>
+                                    <h4 className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-0.5">Diagnóstico</h4>
+                                    <p className="text-gray-900 font-bold text-base border-b border-gray-100 pb-1">{selectedOrderForPrint.diagnosis || 'Consulta Médica'}</p>
                                 </div>
 
                                 <div>
@@ -1883,7 +1883,7 @@ export const ProfileScreen = () => {
                                     />
                                     <div className="w-40 h-[1px] bg-gray-400 mx-auto"></div>
                                     <p className="text-[10px] font-bold text-gray-800 pt-1.5 uppercase">Firma y sello</p>
-                                    <p className="text-[9px] text-gray-500">CÃ³digo MINSA 13447</p>
+                                    <p className="text-[9px] text-gray-500">Código MINSA 13447</p>
                                 </div>
 
                                 <div className="text-center">
@@ -1912,7 +1912,7 @@ export const ProfileScreen = () => {
                                         <MapPin size={16} />
                                     </div>
                                     <div className="text-[10px] font-bold">
-                                        <p>Hospital Vivian Pellas Km 9 Â½</p>
+                                        <p>Hospital Vivian Pellas Km 9 ½</p>
                                         <p>Carretera a Masaya 250 mts al oeste.</p>
                                         <p>Torre 1. Consultorio # 208. Managua.</p>
                                     </div>

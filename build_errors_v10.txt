@@ -1,0 +1,16 @@
+﻿
+   
+  > Build error occurred
+  Error: Turbopack build 
+  failed with 1 errors:
+  
+./app/[locale]/layout.tsx:7:1
+> Module not found: Can't 
+  resolve '@/app/globals.css'
+  [0m [90m  5 |[39m 
+  [36mimport[39m { 
+  [33mThemeProvider[39m } 
+  [36mfrom[39m 
+[32m"@/contex
+
+
