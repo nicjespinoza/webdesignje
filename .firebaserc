@@ -1,0 +1,20 @@
+{
+  "projects": {},
+  "targets": {
+    "web-design-je": {
+      "hosting": {
+        "firebase2": [
+          "web-design-je"
+        ]
+      }
+    },
+    "ecom-uro": {
+      "hosting": {
+        "firebase2": [
+          "ecom-uro"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
