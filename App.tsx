@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, Variants } from 'framer-motion';
 import { 
   Code2, 
@@ -60,7 +60,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import ParticleBackground from './components/ParticleBackground';
 import FooterParticles from './components/FooterParticles';
-import Scene3D from './components/Scene3D';
+// Performance optimization: Lazy load heavy 3D components to minimize initial Vite bundle size
+const Scene3D = React.lazy(() => import('./components/Scene3D'));
 import { Project, Language } from './types';
 
 // --- Animation Variants ---
@@ -372,7 +373,9 @@ const Hero = ({ lang }: { lang: Language }) => {
           className="relative hidden lg:block"
         >
             <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-brand-indigo/20 rounded-full blur-[100px] animate-pulse"></div>
-            <Scene3D />
+            <Suspense fallback={<div>Loading 3D...</div>}>
+              <Scene3D />
+            </Suspense>
             
             {/* Floating Tech Icons Decor */}
             <motion.div 
