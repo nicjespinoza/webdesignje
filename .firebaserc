@@ -1,5 +1,7 @@
 {
-  "projects": {},
+  "projects": {
+    "default": "web-design-je"
+  },
   "targets": {
     "web-design-je": {
       "hosting": {
@@ -7,14 +9,6 @@
           "web-design-je"
         ]
       }
-    },
-    "ecom-uro": {
-      "hosting": {
-        "firebase2": [
-          "ecom-uro"
-        ]
-      }
     }
-  },
-  "etags": {}
+  }
 }
