@@ -74,7 +74,11 @@ const Navbar = ({
             {lang}
           </button>
 
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo"
+            aria-label={lang === 'EN' ? 'Toggle theme' : 'Cambiar tema'}
+          >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
@@ -88,7 +92,12 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded p-1"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-label={isOpen ? (lang === 'EN' ? 'Close menu' : 'Cerrar menú') : (lang === 'EN' ? 'Open menu' : 'Abrir menú')}
+        >
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>

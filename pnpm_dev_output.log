@@ -1,0 +1,26 @@
+
+> medical-ai-demo@0.1.0 dev /app
+> next dev -p 3333
+
+▲ Next.js 16.2.0 (Turbopack)
+- Local:         http://localhost:3333
+- Network:       http://192.168.0.2:3333
+✓ Ready in 557ms
+
+○ Compiling / ...
+ GET / 200 in 6.9s (next.js: 6.3s, application-code: 600ms)
+ GET /screenshots/beauty-agenda.png 404 in 2.2s (next.js: 1288ms, application-code: 901ms)
+ GET /screenshots/pos-zapatos.png 404 in 2.2s (next.js: 1472ms, application-code: 740ms)
+ GET /screenshots/eve-commerce.png 404 in 2.2s (next.js: 1654ms, application-code: 556ms)
+ GET /screenshots/historia-clinica.png 404 in 2.2s (next.js: 1754ms, application-code: 466ms)
+ GET /logos/tsconfigjson.svg 404 in 1889ms (next.js: 868ms, application-code: 1022ms)
+ GET /screenshots/hotel-management.png 404 in 2.2s (next.js: 1566ms, application-code: 649ms)
+[browser] Image with src "http://localhost:3333/logos/logo-gold-2.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 170ms (next.js: 5ms, application-code: 165ms)
+ GET /screenshots/hotel-management.png 404 in 386ms (next.js: 66ms, application-code: 320ms)
+ GET /screenshots/pos-zapatos.png 404 in 390ms (next.js: 13ms, application-code: 377ms)
+ GET /screenshots/eve-commerce.png 404 in 191ms (next.js: 16ms, application-code: 175ms)
+ GET /screenshots/historia-clinica.png 404 in 397ms (next.js: 96ms, application-code: 300ms)
+ GET /screenshots/beauty-agenda.png 404 in 182ms (next.js: 66ms, application-code: 116ms)
+ GET /logos/tsconfigjson.svg 404 in 118ms (next.js: 12ms, application-code: 107ms)
+[browser] Image with src "http://localhost:3333/logos/logo-gold-2.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
