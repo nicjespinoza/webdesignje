@@ -288,6 +288,23 @@ export const projects: Project[] = [
         imageUrl: '/screenshots/beauty-agenda.png',
         githubUrl: '#',
         demoUrl: '/demos/beauty-agenda'
+    },
+    {
+        id: '6',
+        title: 'ScholarAI Nexus',
+        description: 'Plataforma educativa inteligente para la gestión integral de colegios. Utiliza IA para el seguimiento del rendimiento académico, detección temprana de deserción y tutoría personalizada.',
+        longDescription: 'Un ecosistema educativo de próxima generación. ScholarAI Nexus utiliza modelos de lenguaje avanzados para analizar el progreso de cada alumno en tiempo real, generando alertas predictivas sobre dificultades de aprendizaje. Incluye un asistente para profesores que automatiza la creación de exámenes, rúbricas de evaluación y reportes detallados para padres, optimizando el control administrativo y pedagógico.',
+        features: [
+            'Detección predictiva de riesgo académico mediante Machine Learning',
+            'Generación automática de material didáctico y evaluaciones con IA',
+            'Dashboard de seguimiento comportamental y de asistencia en tiempo real',
+            'Tutor virtual 24/7 disponible para dudas de alumnos',
+            'Comunicación inteligente y segmentada con padres de familia'
+        ],
+        techStack: ['Next.js 15', 'OpenClaw RAG', 'Firebase', 'Python (FastAPI)', 'Recharts'],
+        imageUrl: '/screenshots/scholar-ai.png',
+        githubUrl: '#',
+        demoUrl: '/demos/scholar-ai'
     }
 ];
 

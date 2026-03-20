@@ -22,7 +22,7 @@ import { fadeInUp, staggerContainer, scaleIn } from '@/components/landing/animat
 const ContactSection = () => {
   return (
     <>
-      < section id="contact" className="py-20 relative" >
+      <section id="contact" className="py-16 relative">
         <div className="container mx-auto px-6 max-w-4xl">
           <div
             className="liquid-gold-card relative z-10"

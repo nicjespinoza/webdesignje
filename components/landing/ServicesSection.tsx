@@ -21,7 +21,7 @@ import { fadeInUp, staggerContainer, scaleIn } from '@/components/landing/animat
 
 const ServicesSection = () => {
   return (
-    <section id="services" className="py-20 relative">
+    <section id="services" className="py-16 relative">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"

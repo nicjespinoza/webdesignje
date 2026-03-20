@@ -21,7 +21,7 @@ import { fadeInUp, staggerContainer, scaleIn } from '@/components/landing/animat
 
 const StackSection = () => {
   return (
-    <section id="stack" className="py-20 container mx-auto px-6">
+    <section id="stack" className="py-16 container mx-auto px-6">
       <div
         className="flex flex-col items-center mb-10 relative z-10"
       >
