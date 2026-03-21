@@ -141,7 +141,9 @@ Podés preguntarme sobre:
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black shadow-[0_0_30px_rgba(198,147,32,0.5)] flex items-center justify-center group hover:shadow-[0_0_50px_rgba(198,147,32,0.7)] transition-all duration-300"
+        aria-label={isOpen ? "Cerrar chat" : "Abrir chat"}
+        aria-expanded={isOpen}
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black shadow-[0_0_30px_rgba(198,147,32,0.5)] flex items-center justify-center group hover:shadow-[0_0_50px_rgba(198,147,32,0.7)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#FBE18D]/50"
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -210,8 +212,9 @@ Podés preguntarme sobre:
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setMessages([])}
-                  className="p-2 rounded-lg hover:bg-black/10 transition-colors"
+                  className="p-2 rounded-lg hover:bg-black/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
                   title="Reiniciar conversación"
+                  aria-label="Reiniciar conversación"
                 >
                   <Sparkles size={18} className="text-black" />
                 </button>
@@ -300,12 +303,13 @@ Podés preguntarme sobre:
                 <button
                   onClick={handleSend}
                   disabled={isLoading || !input.trim()}
-                  className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black flex items-center justify-center hover:shadow-[0_0_20px_rgba(198,147,32,0.5)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                  className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black flex items-center justify-center hover:shadow-[0_0_20px_rgba(198,147,32,0.5)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FBE18D]"
+                  aria-label="Enviar mensaje"
                 >
                   {isLoading ? (
-                    <Loader2 size={20} className="animate-spin" />
+                    <Loader2 size={20} className="animate-spin" aria-hidden="true" />
                   ) : (
-                    <Send size={20} strokeWidth={2.5} />
+                    <Send size={20} strokeWidth={2.5} aria-hidden="true" />
                   )}
                 </button>
               </div>

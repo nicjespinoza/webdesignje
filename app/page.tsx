@@ -13,6 +13,7 @@ import AboutSection from "@/components/landing/AboutSection";
 import ContactSection from "@/components/landing/ContactSection";
 import FooterSection from "@/components/landing/FooterSection";
 import ParticleBackground from "@/components/ParticleBackground";
+import ChatBot from "@/components/landing/ChatBot";
 import { Language } from "@/components/landing/types";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/components/landing/animations";
@@ -115,6 +116,7 @@ export default function RootPage() {
           <FooterSection />
         </motion.div>
       </div>
+      <ChatBot defaultOpen={false} />
     </main>
   );
 }
