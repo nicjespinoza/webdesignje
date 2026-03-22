@@ -1,0 +1,3 @@
+## 2024-05-18 - Icon-only interactive elements lack ARIA labels and focus visibility
+**Learning:** The project's icon-only interactive elements (like delete buttons or icon buttons) often lack `aria-label`s for screen readers and visible keyboard focus states (`focus-visible`). The application uses lucide-react for icons, and these buttons rely on visual context alone.
+**Action:** When working with icon-only buttons, consistently add descriptive `aria-label` attributes and use `focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary` (or similar brand color) Tailwind classes to ensure proper keyboard navigation visibility.
