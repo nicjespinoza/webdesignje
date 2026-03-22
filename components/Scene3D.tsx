@@ -39,12 +39,14 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
   const connections = useMemo(() => {
     const lines: THREE.Vector3[][] = [];
     const threshold = 2.5;
+    const thresholdSq = threshold * threshold;
 
     particles.forEach((p1, i) => {
       particles.forEach((p2, j) => {
         if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+          // ⚡ Bolt: Use distanceToSquared to avoid expensive Math.sqrt in nested loop
+          const distSq = p1.distanceToSquared(p2);
+          if (distSq < thresholdSq) {
             lines.push([p1, p2]);
           }
         }
@@ -144,7 +146,8 @@ const DataPulses = ({ radius }: { radius: number }) => {
             agent.pos.add(dir.multiplyScalar(agent.speed));
             
             // If close to destination, pick new destination
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // ⚡ Bolt: Use distanceToSquared (0.5^2 = 0.25) to avoid Math.sqrt in high-frequency useFrame
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,

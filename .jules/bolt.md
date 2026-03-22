@@ -1,0 +1,3 @@
+## 2024-03-22 - Optimize Three.js Distance Calculations
+**Learning:** Found a performance bottleneck in high-frequency animation loops (`useFrame`) and nested array iterations where `distanceTo()` is heavily used. `distanceTo()` internally calls `Math.sqrt`, which is computationally expensive when executed hundreds or thousands of times per frame.
+**Action:** Always use `distanceToSquared()` instead of `distanceTo()` in Three.js and compare against the squared threshold (`threshold * threshold`) to avoid redundant square root operations, dramatically improving framerate in particle systems and physics simulations.
