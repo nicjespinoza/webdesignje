@@ -1,0 +1,3 @@
+## 2024-05-20 - Icon-Only Button Accessibility in Dashboards
+**Learning:** High-density medical dashboards (like the agenda view) frequently use icon-only buttons (`lucide-react` icons inside `<button>`) to save space. Without `aria-label`s, screen readers announce these as blank, significantly degrading accessibility. Additionally, the lack of `focus-visible` states makes keyboard navigation nearly impossible in complex grid layouts like calendars.
+**Action:** When adding icon-only action buttons (for navigation, deletion, modal closing) in data-heavy views, explicitly pair them with a descriptive `aria-label` and `focus-visible:ring-brand-indigo` styles to ensure equitable access via screen readers and keyboards.
