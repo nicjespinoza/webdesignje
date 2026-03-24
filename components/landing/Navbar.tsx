@@ -70,11 +70,11 @@ const Navbar = ({
 
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
-          <button onClick={toggleLang} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors">
+          <button aria-label={lang === 'EN' ? 'Change language' : 'Cambiar idioma'} onClick={toggleLang} className="text-xs font-bold px-2 py-1 rounded border border-white/10 hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo">
             {lang}
           </button>
 
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'} onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo">
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
@@ -88,7 +88,7 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button aria-label={isOpen ? 'Close menu' : 'Open menu'} aria-expanded={isOpen} className="md:hidden focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded p-1" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -114,10 +114,10 @@ const Navbar = ({
                 </a>
               ))}
               <div className="flex gap-4 mt-4">
-                <button onClick={toggleLang} className="text-sm px-3 py-1 border border-white/20 rounded">
+                <button aria-label={lang === 'EN' ? 'Change language' : 'Cambiar idioma'} onClick={toggleLang} className="text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo">
                   {lang === 'EN' ? 'Español' : 'English'}
                 </button>
-                <button onClick={toggleTheme} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded">
+                <button aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'} onClick={toggleTheme} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo">
                   {isDark ? <Sun size={14} /> : <Moon size={14} />} Theme
                 </button>
               </div>
