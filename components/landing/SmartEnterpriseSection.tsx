@@ -23,7 +23,7 @@ const SmartEnterpriseSection = () => {
             <Cpu size={14} /> Inteligencia Empresarial Total
           </div>
           <h2 className="text-3xl md:text-5xl font-black text-center text-white mb-6">
-            IA + RAG: <span className="gradient-text">El Cerebro de tu Empresa</span>
+            No solo es IA, <span className="gradient-text">es la Inteligencia de tu Empresa trabajando</span>
           </h2>
           <p className="gradient-text-platinum mt-2 max-w-3xl text-center text-lg leading-relaxed">
             Fusionamos el procesamiento de lenguaje natural avanzado con arquitecturas de recuperación de datos (RAG) para crear sistemas que no solo hablan, sino que conocen tu negocio a fondo.

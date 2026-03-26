@@ -34,10 +34,10 @@ const ServicesSection = () => {
             <Star size={14} className="text-slate-300 group-hover:text-[#FBE18D]" /> <span className="gradient-text-platinum group-hover:gradient-text">Métricas de Competencia</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-center">
-            <span className="gradient-text">Soluciones de Alto Impacto</span>
+            <span className="gradient-text">Soluciones de Ingeniería de Vanguardia</span>
           </h2>
           <p className="gradient-text-platinum mt-4 max-w-3xl text-center">
-            Creamos aplicaciones de alto rendimiento con arquitecturas de vanguardia, diseñadas para transformar sus ideas en resultados tangibles y escalables.
+            Aplicaciones de alto rendimiento con arquitecturas modernas diseñadas para transformar tus ideas en resultados tangibles y escalables.
           </p>
         </motion.div>
 

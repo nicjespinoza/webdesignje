@@ -27,87 +27,154 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
       <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center text-center mt-12 pointer-events-auto">
 
         <motion.h1
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-tight mb-6 tracking-tight font-serif relative z-10 gradient-text px-4 pb-4 overflow-visible"
+          initial={{
+            opacity: 0,
+            scale: 0.1,
+            filter: "blur(50px)",
+            z: -1000,
+            rotateX: 60,
+            y: 100
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            z: 0,
+            rotateX: 0,
+            y: 0
+          }}
+          transition={{
+            duration: 2,
+            type: "spring",
+            damping: 20,
+            stiffness: 50,
+            delay: 0.5
+          }}
+          className="text-3xl md:text-5xl lg:text-5xl font-extrabold leading-[1.1] mb-10 tracking-tight font-serif relative z-10 gradient-text px-4 pb-2 overflow-visible"
         >
-          {lang === 'EN' ? "Full-Stack & AI Engineer" : "Ingeniero Full-Stack y AI"}
+          {lang === 'EN' ? "Intelligent Automation That Facilitates Your Day" : "Automatización Inteligente que Facilitan tu Día"}
         </motion.h1>
 
         <motion.p
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="gradient-text-platinum font-light text-base md:text-lg lg:text-xl max-w-6xl mb-14 leading-relaxed drop-shadow-lg text-center tracking-wide"
+          initial={{
+            opacity: 0,
+            filter: "blur(40px)",
+            scale: 0.2,
+            z: -800,
+            y: 50,
+            rotateX: 45
+          }}
+          animate={{
+            opacity: 1,
+            filter: "blur(0px)",
+            scale: 1,
+            z: 0,
+            y: 0,
+            rotateX: 0
+          }}
+          transition={{
+            duration: 1.5,
+            delay: 1.2,
+            type: "spring",
+            damping: 25,
+            stiffness: 70
+          }}
+          className="gradient-text-platinum font-light text-sm md:text-base lg:text-lg max-w-3xl mb-16 leading-relaxed drop-shadow-lg text-center tracking-wide"
         >
           {lang === 'EN'
-            ? "Crafting digital experiences that anticipate the future and captivate with intelligence and design."
-            : "Creando experiencias digitales que anticipan el futuro y cautivan con inteligencia y diseño."
+            ? "I create custom AI ecosystems that integrate your operational knowledge to multiply your efficiency."
+            : "Creo ecosistemas de IA personalizados que integran tu conocimiento operativo para multiplicar tu eficiencia."
           }
         </motion.p>
 
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-20 pointer-events-auto">
-          {/* CTA Principal: Acceder a Demo */}
-          <motion.button
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            transition={{ duration: 0.8, delay: 0.6 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="flex flex-wrap justify-center gap-6 md:gap-10 mb-24"
+        >
+          <motion.a
+            initial={{ opacity: 0, scale: 0.1, z: -1000, filter: "blur(60px)", rotateX: 30 }}
+            animate={{ opacity: 1, scale: 1, z: 0, filter: "blur(0px)", rotateX: 0 }}
+            transition={{ duration: 1.5, delay: 2.8, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.05, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+            href="#projects"
+            className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group relative overflow-hidden"
+          >
+            <div className="liquid-gold-content !py-2.5 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
+              <Briefcase size={16} className="text-slate-300 group-hover:text-[#C69320] group-hover:scale-110 transition-transform" />
+              <span className="gradient-text-platinum font-bold text-xs whitespace-nowrap tracking-widest group-hover:gradient-text uppercase">
+                {lang === 'EN' ? "Personalized Projects" : "Proyectos personalizados"}
+              </span>
+            </div>
+            <motion.div
+              className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
+              style={{ skewX: "-20deg" }}
+            />
+          </motion.a>
+
+          <motion.button
+            initial={{ opacity: 0, scale: 0.1, z: -1000, filter: "blur(60px)", rotateX: 30 }}
+            animate={{ opacity: 1, scale: 1, z: 0, filter: "blur(0px)", rotateX: 0 }}
+            transition={{ duration: 1.5, delay: 3, type: "spring", damping: 20 }}
+            whileHover={{ scale: 1.08, y: -8 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.push('/portal')}
             className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group relative overflow-hidden"
           >
-            <div className="liquid-gold-content !py-3 !px-8 !rounded-full !flex-row flex items-center gap-2 relative z-10 transition-all duration-300">
-              <Sparkles size={18} className="text-[#C69320] group-hover:rotate-12 transition-transform" />
-              <span className="gradient-text font-bold text-sm md:text-base whitespace-nowrap tracking-wide">
-                {lang === 'EN' ? "Access Demo" : "Acceder a Demo"}
+            <div className="liquid-gold-content !py-2.5 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
+              <Sparkles size={16} className="text-slate-300 group-hover:text-[#C69320] transition-transform group-hover:rotate-12" />
+              <span className="gradient-text-platinum font-bold text-xs whitespace-nowrap tracking-widest group-hover:gradient-text uppercase">
+                {lang === 'EN' ? "Success Cases" : "Casos de Éxito"}
               </span>
             </div>
+            <motion.div
+              className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
+              style={{ skewX: "-20deg" }}
+            />
           </motion.button>
-
-          {/* CTA Secundario: Ver Proyectos */}
-          <motion.a
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            whileHover={{ scale: 1.05, y: -5, backgroundColor: "rgba(255,255,255,0.05)" }}
-            whileTap={{ scale: 0.95 }}
-            href="#projects"
-            className="px-8 py-3 rounded-full border border-white/10 glass-panel flex items-center gap-2 transition-all duration-300 text-slate-300 hover:text-white group"
-          >
-            <Briefcase size={18} className="opacity-70 group-hover:opacity-100 transition-opacity" />
-            <span className="font-medium text-sm md:text-base">
-              {lang === 'EN' ? "View Work" : "Ver Proyectos"}
-            </span>
-          </motion.a>
-        </div>
+        </motion.div>
 
         <motion.div
           initial="hidden"
           animate="visible"
-          variants={staggerContainer}
-          transition={{ delayChildren: 1.2 }}
-          className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-sm md:text-base lg:text-lg text-slate-400 font-mono tracking-[0.2em] uppercase font-bold"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.15, delayChildren: 3.2 }
+            }
+          }}
+          className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[9px] md:text-xs text-slate-400 font-mono tracking-[0.3em] uppercase font-bold"
         >
           {[
             "Next.js", "React.js", "Node.js", "Tailwind CSS", "JavaScript", "AI Agents"
           ].map((tech, i) => (
             <React.Fragment key={tech}>
               <motion.span
-                variants={fadeInUp}
-                className="gradient-text-platinum hover:text-white transition-colors cursor-default"
+                variants={{
+                  hidden: { opacity: 0, scale: 0.1, z: -800, filter: "blur(40px)", y: 30 },
+                  visible: {
+                    opacity: 1,
+                    scale: 1,
+                    z: 0,
+                    filter: "blur(0px)",
+                    y: 0,
+                    transition: { type: "spring", damping: 20 }
+                  }
+                }}
+                className="gradient-text-platinum transition-colors cursor-default group-hover:gradient-text"
               >
                 {tech}
               </motion.span>
               {i < 5 && (
                 <motion.span
-                  variants={fadeInUp}
-                  className="w-1.5 h-1.5 bg-[#FBE18D]/40 rounded-full"
+                  variants={{
+                    hidden: { opacity: 0, scale: 0 },
+                    visible: { opacity: 1, scale: 1 }
+                  }}
+                  className="w-1 h-1 bg-[#FBE18D]/40 rounded-full"
                 ></motion.span>
               )}
             </React.Fragment>
