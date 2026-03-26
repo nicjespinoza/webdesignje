@@ -48,9 +48,10 @@ const ParticleBackground: React.FC = () => {
                 // Determine if hovered
                 const dxm = mouse.x - this.x;
                 const dym = mouse.y - this.y;
-                const distMouse = Math.sqrt(dxm * dxm + dym * dym);
-                
-                this.isHovered = distMouse < 40;
+                const distMouseSq = dxm * dxm + dym * dym;
+
+                // ⚡ Bolt: Use squared distance to avoid Math.sqrt in high-frequency loop
+                this.isHovered = distMouseSq < 1600; // 40 * 40
 
                 // Handle size growth / shrink
                 const targetSize = this.isHovered ? this.baseSize * 4 : this.baseSize;
@@ -62,8 +63,9 @@ const ParticleBackground: React.FC = () => {
                         if (p === this) return;
                         const dxo = this.x - p.x;
                         const dyo = this.y - p.y;
-                        const distOther = Math.sqrt(dxo * dxo + dyo * dyo);
-                        if (distOther < 120) {
+                        const distOtherSq = dxo * dxo + dyo * dyo;
+                        // ⚡ Bolt: Use squared distance to avoid Math.sqrt in high-frequency loop
+                        if (distOtherSq < 14400) { // 120 * 120
                             p.x += dxo * 0.005;
                             p.y += dyo * 0.005;
                         }
@@ -121,10 +123,13 @@ const ParticleBackground: React.FC = () => {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const distanceSq = dx * dx + dy * dy;
                     const maxDist = 180;
+                    const maxDistSq = 32400; // 180 * 180
 
-                    if (distance < maxDist) {
+                    if (distanceSq < maxDistSq) {
+                        // ⚡ Bolt: Delay Math.sqrt calculation until confirmed within threshold
+                        const distance = Math.sqrt(distanceSq);
                         const baseOpacity = (1 - distance / maxDist) * 0.3;
                         const pulseBonus = (0.5 + Math.sin(particles[i].pulse) * 0.5) * 0.2;
                         const hoverBonus = (particles[i].isHovered || particles[j].isHovered) ? 0.3 : 0;
