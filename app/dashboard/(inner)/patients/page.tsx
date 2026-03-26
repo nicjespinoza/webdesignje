@@ -253,7 +253,8 @@ function PatientsPageContent() {
                                     </button>
                                     <button
                                         onClick={() => setPatientToDelete(p)}
-                                        className="text-white/5 hover:text-destructive transition-colors"
+                                        className="text-white/5 hover:text-destructive transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded"
+                                        aria-label="Eliminar paciente"
                                     >
                                         <Trash2 size={16} strokeWidth={1} />
                                     </button>
