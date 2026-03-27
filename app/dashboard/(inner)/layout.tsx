@@ -194,7 +194,11 @@ function InnerDashboardLayoutContent({
 
                     {/* Right: Refined Actions */}
                     <div className="flex items-center gap-6">
-                        <button onClick={toggleTheme} className="text-white/20 hover:text-primary transition-colors">
+                        <button
+                            onClick={toggleTheme}
+                            aria-label="Alternar tema"
+                            className="text-white/20 hover:text-primary transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded-full p-1"
+                        >
                             {theme === 'light' ? <Moon size={16} strokeWidth={1} /> : <Sun size={16} strokeWidth={1} />}
                         </button>
 
