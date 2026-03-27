@@ -78,9 +78,9 @@ const ContactSection = () => {
               </form>
 
               <div className="mt-12 flex justify-center gap-8 border-t border-[#C69320]/20 pt-8">
-                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Github size={24} /></a>
-                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Linkedin size={24} /></a>
-                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Twitter size={24} /></a>
+                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded p-1" aria-label="GitHub Profile"><Github size={24} /></a>
+                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded p-1" aria-label="LinkedIn Profile"><Linkedin size={24} /></a>
+                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-indigo rounded p-1" aria-label="Twitter Profile"><Twitter size={24} /></a>
               </div>
             </div>
           </div>
