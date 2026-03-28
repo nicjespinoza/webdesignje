@@ -29,8 +29,8 @@ const AUTHOR_DESCRIPTION = "Desarrollador Full-Stack especializado en Next.js, R
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Joseph Espinoza | Full-Stack Developer & AI Engineer Nicaragua",
-    template: `%s | Joseph Espinoza`
+    default: "Joseph Espinoza | Web Design & AI Solutions",
+    template: `%s | Web Design & AI Solutions`
   },
   description: AUTHOR_DESCRIPTION,
   keywords: ["Desarrollador Full-Stack Nicaragua", "Full-Stack Developer", "AI Engineer"],
