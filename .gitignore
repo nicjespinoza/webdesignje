@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
 /node_modules
+**/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -16,6 +16,8 @@
 # next.js
 /.next/
 /out/
+functions/lib/
+functions/node_modules/
 
 # production
 /build
@@ -30,6 +32,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# build and lint logs
+*.txt
+*.log
+.eslint-errors.json
+*.tsbuildinfo
+*.bak
+
 # env files (can opt-in for committing if needed)
 .env*
 
@@ -43,3 +52,16 @@ next-env.d.ts
 # firebase
 .firebase/
 firebase-debug.log*
+
+# legacy and diagnostic files
+/App.tsx
+/index.html
+/index.tsx
+/vite.config.ts
+/upgrade_ui.js
+/metadata.json
+/sites.json
+/build_err*
+/build_log*
+/lint_output*
+/tsc_output*
