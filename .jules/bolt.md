@@ -1,0 +1,3 @@
+## 2025-02-17 - Hoisting new Date() out of render loops
+**Learning:** In React rendering loops (e.g., `.map()`), instantiating `new Date()` and calling its getter methods (`getDate()`, `getMonth()`) inside the loop creates redundant object allocations and system time calls. This can significantly impact performance in high-frequency rendering paths, like generating calendar grids where the loop executes 31 times per render.
+**Action:** Always hoist `new Date()` and its associated getter calls outside of the loop to eliminate redundant operations. Pre-calculate values (like `todayDate` and `todayMonth`) before the loop and use those constant values inside the loop body.

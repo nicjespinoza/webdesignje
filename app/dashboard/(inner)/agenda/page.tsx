@@ -249,13 +249,18 @@ function AgendaPageContent() {
                             {Array.from({ length: firstDay }).map((_, i) => (
                                 <div key={`empty-${i}`} className="border-b border-r border-border/20 bg-muted/5 opacity-50" />
                             ))}
-                            {Array.from({ length: days }).map((_, i) => {
-                                const day = i + 1;
-                                const dayApts = getAppointmentsForDay(day);
-                                const isSelected = selectedDay === day;
-                                const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth();
+                            {/* ⚡ Bolt: Hoist Date allocation out of the 31-day render loop to prevent 62+ redundant object creations/method calls per calendar render */}
+                            {(() => {
+                                const todayObj = new Date();
+                                const todayDate = todayObj.getDate();
+                                const todayMonth = todayObj.getMonth();
+                                return Array.from({ length: days }).map((_, i) => {
+                                    const day = i + 1;
+                                    const dayApts = getAppointmentsForDay(day);
+                                    const isSelected = selectedDay === day;
+                                    const isToday = day === todayDate && currentDate.getMonth() === todayMonth;
 
-                                return (
+                                    return (
                                     <motion.div
                                         key={day}
                                         onClick={() => setSelectedDay(day)}
@@ -280,7 +285,8 @@ function AgendaPageContent() {
                                         </div>
                                     </motion.div>
                                 );
-                            })}
+                            });
+                            })()}
                         </div>
                     </div>
                 </div>
