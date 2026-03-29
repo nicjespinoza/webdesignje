@@ -1506,34 +1506,41 @@ const Contact = () => {
              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-bold text-slate-300">Name</label>
+                        <label htmlFor="name" className="text-sm font-bold text-slate-300">Name</label>
                         <input 
+                            id="name"
                             {...register('name')}
+                            aria-invalid={errors.name ? "true" : "false"}
                             className={`w-full bg-black/20 border ${errors.name ? 'border-red-500' : 'border-white/10'} rounded-xl p-4 text-white focus:outline-none focus:border-brand-indigo/50 transition-colors`}
                             placeholder="John Doe"
                         />
-                        {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
+                        {errors.name && <p role="alert" className="text-red-500 text-xs">{errors.name.message}</p>}
                     </div>
                     <div className="space-y-2">
-                        <label className="text-sm font-bold text-slate-300">Email</label>
+                        <label htmlFor="email" className="text-sm font-bold text-slate-300">Email</label>
                         <input 
+                            id="email"
+                            type="email"
                             {...register('email')}
+                            aria-invalid={errors.email ? "true" : "false"}
                             className={`w-full bg-black/20 border ${errors.email ? 'border-red-500' : 'border-white/10'} rounded-xl p-4 text-white focus:outline-none focus:border-brand-indigo/50 transition-colors`}
                             placeholder="john@example.com"
                         />
-                        {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
+                        {errors.email && <p role="alert" className="text-red-500 text-xs">{errors.email.message}</p>}
                     </div>
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-300">Message</label>
+                    <label htmlFor="message" className="text-sm font-bold text-slate-300">Message</label>
                     <textarea 
+                        id="message"
                         {...register('message')}
+                        aria-invalid={errors.message ? "true" : "false"}
                         rows={5}
                         className={`w-full bg-black/20 border ${errors.message ? 'border-red-500' : 'border-white/10'} rounded-xl p-4 text-white focus:outline-none focus:border-brand-indigo/50 transition-colors resize-none`}
                         placeholder="Tell me about your project..."
                     />
-                    {errors.message && <p className="text-red-500 text-xs">{errors.message.message}</p>}
+                    {errors.message && <p role="alert" className="text-red-500 text-xs">{errors.message.message}</p>}
                 </div>
 
                 <div className="flex justify-end">
