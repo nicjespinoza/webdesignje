@@ -50,7 +50,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
             stiffness: 50,
             delay: 0.5
           }}
-          className="text-3xl md:text-5xl lg:text-5xl font-extrabold leading-[1.1] mb-10 tracking-tight font-serif relative z-10 gradient-text px-4 pb-2 overflow-visible"
+          className="text-3xl md:text-6xl lg:text-6xl font-extrabold leading-[1.1] mb-10 tracking-tight font-serif relative z-10 gradient-text px-4 pb-2 overflow-visible"
         >
           {lang === 'EN' ? "Intelligent Automation That Facilitates Your Day" : "Automatización Inteligente que Facilitan tu Día"}
         </motion.h1>
@@ -83,7 +83,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
         >
           {lang === 'EN'
             ? "I create custom AI ecosystems that integrate your operational knowledge to multiply your efficiency."
-            : "Creo ecosistemas de IA personalizados que integran tu conocimiento operativo para multiplicar tu eficiencia."
+            : "Creo ecosistemas con IA personalizados que integran tu conocimiento operativo para multiplicar tu eficiencia."
           }
         </motion.p>
 
@@ -105,7 +105,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
             <div className="liquid-gold-content !py-2.5 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
               <Briefcase size={16} className="text-slate-300 group-hover:text-[#C69320] group-hover:scale-110 transition-transform" />
               <span className="gradient-text-platinum font-bold text-xs whitespace-nowrap tracking-widest group-hover:gradient-text uppercase">
-                {lang === 'EN' ? "Personalized Projects" : "Proyectos personalizados"}
+                {lang === 'EN' ? "Projects" : "Proyectos"}
               </span>
             </div>
             <motion.div
