@@ -1,0 +1,3 @@
+## 2025-03-30 - Icon-Only Button Accessibility Pattern
+**Learning:** In dynamic form lists (like medications and diagnoses) and dashboard headers, icon-only buttons (e.g., using lucide-react Trash2, Chevron, X icons) frequently lack `aria-label`s and visible focus states, making them invisible to screen readers and difficult to navigate via keyboard.
+**Action:** Always add descriptive `aria-label` attributes and `focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary` (or `ring-destructive`) Tailwind classes to any icon-only interactive element added to the UI, especially within repeated list structures.
