@@ -242,7 +242,7 @@ const Navbar = ({
             {lang}
           </button>
           
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-white/5 transition-colors">
+          <button onClick={toggleTheme} aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"} className="p-2 rounded-full hover:bg-white/5 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-cyan">
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
@@ -252,7 +252,7 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button className="md:hidden focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-cyan rounded p-1" aria-label={isOpen ? "Close menu" : "Open menu"} aria-expanded={isOpen} onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -281,7 +281,7 @@ const Navbar = ({
                 <button onClick={toggleLang} className="text-sm px-3 py-1 border border-white/20 rounded">
                   {lang === 'EN' ? 'Español' : 'English'}
                 </button>
-                <button onClick={toggleTheme} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded">
+                <button onClick={toggleTheme} aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"} className="flex items-center gap-2 text-sm px-3 py-1 border border-white/20 rounded focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-brand-cyan">
                   {isDark ? <Sun size={14}/> : <Moon size={14} />} Theme
                 </button>
               </div>
