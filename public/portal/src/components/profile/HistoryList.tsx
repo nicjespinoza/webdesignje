@@ -70,6 +70,7 @@ export const HistoryList: React.FC<HistoryListProps> = ({ patient, histories, na
                                         icon={<Edit size={16} />}
                                         onClick={() => navigate(`/app/history/${patient.id}`, { state: { history: h } })}
                                         color="amber"
+                                        title="Editar borrador"
                                     />
                                 ) : (
                                     <>
@@ -77,18 +78,21 @@ export const HistoryList: React.FC<HistoryListProps> = ({ patient, histories, na
                                             icon={<Eye size={16} />}
                                             onClick={() => navigate(`/app/history-view/${patient.id}/${h.id}`)}
                                             color="blue"
+                                            title="Ver historia"
                                         />
                                         {Array.isArray(h.medicalOrders) && h.medicalOrders.length > 0 && (
                                             <ActionButtonSmall
                                                 icon={<ClipboardList size={16} />}
                                                 onClick={() => onViewOrders?.(h)}
                                                 color="emerald"
+                                                title="Órdenes médicas"
                                             />
                                         )}
                                         <ActionButtonSmall
                                             icon={<Edit size={16} />}
                                             onClick={() => navigate(`/app/history/${patient.id}`, { state: { history: h } })}
                                             color="amber"
+                                            title="Editar historia"
                                         />
                                     </>
                                 )}
@@ -96,6 +100,7 @@ export const HistoryList: React.FC<HistoryListProps> = ({ patient, histories, na
                                     icon={<Trash2 size={16} />}
                                     onClick={() => onDelete(h.id)}
                                     color="red"
+                                    title="Eliminar historia"
                                 />
                             </div>
                         </div>

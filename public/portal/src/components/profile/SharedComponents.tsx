@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ActionButton = ({ icon, label, onClick, color = 'blue', active = false }: any) => {
+export const ActionButton = ({ icon, label, onClick, color = 'blue', active = false, title }: any) => {
     const colors: any = {
         blue: 'hover:bg-blue-50 text-blue-700',
         indigo: 'hover:bg-indigo-50 text-indigo-700',
@@ -13,7 +13,8 @@ export const ActionButton = ({ icon, label, onClick, color = 'blue', active = fa
     return (
         <button
             onClick={onClick}
-            className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all font-medium text-xs md:text-sm ${active ? 'bg-gray-100 text-gray-900 shadow-inner' : 'text-gray-500'} ${colors[color]}`}
+            aria-label={title || label}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all font-medium text-xs md:text-sm focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-blue-500 ${active ? 'bg-gray-100 text-gray-900 shadow-inner' : 'text-gray-500'} ${colors[color]}`}
         >
             <div className={`p-1.5 rounded-lg ${active ? 'bg-white shadow-sm' : 'bg-transparent'}`}>{icon}</div>
             <span className="hidden md:inline">{label}</span>
@@ -21,7 +22,7 @@ export const ActionButton = ({ icon, label, onClick, color = 'blue', active = fa
     );
 };
 
-export const ActionButtonSmall = ({ icon, onClick, color }: any) => {
+export const ActionButtonSmall = ({ icon, onClick, color, title }: any) => {
     const colors: any = {
         blue: 'hover:bg-blue-50 text-blue-600',
         amber: 'hover:bg-amber-50 text-amber-600',
@@ -29,7 +30,7 @@ export const ActionButtonSmall = ({ icon, onClick, color }: any) => {
         emerald: 'hover:bg-emerald-50 text-emerald-600',
     };
     return (
-        <button onClick={(e) => { e.stopPropagation(); onClick(); }} className={`p-1.5 rounded-lg transition-colors ${colors[color]}`}>
+        <button onClick={(e) => { e.stopPropagation(); onClick(); }} aria-label={title} title={title} className={`p-1.5 rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-blue-500 ${colors[color]}`}>
             {icon}
         </button>
     )
