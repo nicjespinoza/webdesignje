@@ -87,6 +87,7 @@ export const ConsultList: React.FC<ConsultListProps> = ({ patient, consults, nav
                                             icon={<Trash2 size={16} />}
                                             onClick={() => onDelete(c.id)}
                                             color="red"
+                                            title="Eliminar borrador"
                                         />
                                     </>
                                 )}
@@ -98,23 +99,27 @@ export const ConsultList: React.FC<ConsultListProps> = ({ patient, consults, nav
                                             icon={<Eye size={16} />}
                                             onClick={() => navigate(`/app/consult-view/${patient.id}/${c.id}`)}
                                             color="blue"
+                                            title="Ver consulta"
                                         />
                                         {Array.isArray(c.medicalOrders) && c.medicalOrders.length > 0 && (
                                             <ActionButtonSmall
                                                 icon={<ClipboardList size={16} />}
                                                 onClick={() => onViewOrders?.(c)}
                                                 color="emerald"
+                                                title="Órdenes médicas"
                                             />
                                         )}
                                         <ActionButtonSmall
                                             icon={<Edit size={16} />}
                                             onClick={() => navigate(`/app/consult/${patient.id}`, { state: { consult: c } })}
                                             color="amber"
+                                            title="Editar consulta"
                                         />
                                         <ActionButtonSmall
                                             icon={<Trash2 size={16} />}
                                             onClick={() => onDelete(c.id)}
                                             color="red"
+                                            title="Eliminar consulta"
                                         />
                                     </>
                                 )}

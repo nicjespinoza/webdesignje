@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-export const ActionButton = ({ icon, label, onClick, color = 'blue', active = false, variant = 'default' }: any) => {
+export const ActionButton = ({ icon, label, onClick, color = 'blue', active = false, variant = 'default', title }: any) => {
     const colors: any = {
         blue: 'hover:bg_blue-500/10 text-blue-600 dark:text-blue-400',
         indigo: 'hover:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
@@ -15,8 +15,9 @@ export const ActionButton = ({ icon, label, onClick, color = 'blue', active = fa
         return (
             <button
                 onClick={onClick}
+                aria-label={title || label}
                 className={cn(
-                    "p-3 rounded-2xl transition-all hover:bg-muted/50 text-muted-foreground hover:text-foreground",
+                    "p-3 rounded-2xl transition-all hover:bg-muted/50 text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary",
                     colors[color]
                 )}
             >
@@ -28,8 +29,9 @@ export const ActionButton = ({ icon, label, onClick, color = 'blue', active = fa
     return (
         <button
             onClick={onClick}
+            aria-label={title || label}
             className={cn(
-                "flex items-center gap-3 px-6 py-3.5 rounded-[1.5rem] transition-all font-black text-[10px] uppercase tracking-widest",
+                "flex items-center gap-3 px-6 py-3.5 rounded-[1.5rem] transition-all font-black text-[10px] uppercase tracking-widest focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary",
                 active ? 'bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-105' : cn('text-muted-foreground bg-muted/30 hover:bg-muted/60', colors[color])
             )}
         >
@@ -39,7 +41,7 @@ export const ActionButton = ({ icon, label, onClick, color = 'blue', active = fa
     );
 };
 
-export const ActionButtonSmall = ({ icon, onClick, color }: any) => {
+export const ActionButtonSmall = ({ icon, onClick, color, title }: any) => {
     const colors: any = {
         blue: 'hover:bg-blue-500/10 text-blue-500',
         amber: 'hover:bg-amber-500/10 text-amber-500',
@@ -47,7 +49,7 @@ export const ActionButtonSmall = ({ icon, onClick, color }: any) => {
         emerald: 'hover:bg-emerald-500/10 text-emerald-500',
     };
     return (
-        <button onClick={(e) => { e.stopPropagation(); onClick(); }} className={cn("p-2.5 rounded-xl transition-all active:scale-90 border border-transparent hover:border-border/50 bg-muted/20", colors[color])}>
+        <button onClick={(e) => { e.stopPropagation(); onClick(); }} aria-label={title} title={title} className={cn("p-2.5 rounded-xl transition-all active:scale-90 border border-transparent hover:border-border/50 bg-muted/20 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary", colors[color])}>
             {icon}
         </button>
     );
