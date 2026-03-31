@@ -13,6 +13,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
 import GlobalParticles from '@/components/landing/GlobalParticles';
 import { Project, Language, BlogPost, ContactFormValues } from '@/components/landing/types';
 import Logo from '@/components/medical/ui/Logo';
@@ -20,32 +21,36 @@ import { categories, proficiency, projects, blogPosts, contactSchema, services }
 import { fadeInUp, staggerContainer, scaleIn } from '@/components/landing/animations';
 
 const StackSection = () => {
+  const { t } = useTranslation();
+
   return (
     <section id="stack" className="py-16 container mx-auto px-6">
       <div
         className="flex flex-col items-center mb-10 relative z-10"
       >
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-3 shadow-[0_0_20px_rgba(198,147,32,0.2)]">
-          <Layers size={14} /> Technology
+          <Layers size={14} /> {t('stack.badge')}
         </div>
         <h2 className="text-4xl md:text-5xl font-black text-center text-white tracking-tight">
-          <span className="gradient-text">Pila de Producción</span>
+          Infraestructura <span className="gradient-text">de Confianza</span>
         </h2>
         <p className="gradient-text-platinum mt-3 max-w-3xl text-center text-lg">
-          Utilizo las tecnologías más avanzadas del mercado, cuidadosamente integradas para construir aplicaciones de alto impacto que ofrecen una experiencia excepcional y una base sólida para el crecimiento de su negocio.
+          {t('stack.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <motion.div
             key={category.title}
             variants={fadeInUp}
             className="liquid-gold-card"
           >
             <div className="liquid-gold-content">
-              <motion.h3 variants={fadeInUp} className="text-xl font-bold text-slate-200 mb-6">
-                {category.title}
+              <motion.h3 variants={fadeInUp} className={`text-xl font-bold mb-6 font-sans ${index === 2 ? 'text-white' : 'text-slate-200'}`}>
+                {index === 0 && t('stack.categories.frontend')}
+                {index === 1 && t('stack.categories.data')}
+                {index === 2 && t('stack.categories.backend')}
               </motion.h3>
               <div className="space-y-4">
                 {category.items.map((item) => {
@@ -106,35 +111,7 @@ const StackSection = () => {
         ))}
       </div>
 
-      <div className="mt-12 mb-8 relative z-20 opacity-100 visible">
-        <div className="liquid-gold-card max-w-2xl mx-auto !opacity-100 !block">
-          <div className="liquid-gold-content">
-            <h3 className="text-lg font-bold text-center mb-6 flex items-center justify-center gap-2">
-              <Activity className="text-[#FBE18D]" size={18} />
-              <span className="gradient-text">Dominio de Habilidades Clave</span>
-            </h3>
 
-            <div className="space-y-4">
-              {proficiency.map((skill, index) => (
-                <div key={skill.name}>
-                  <div className="flex justify-between mb-1 text-xs font-bold text-slate-300">
-                    <span className="text-xs">{skill.name}</span>
-                    <span className="text-white text-xs">{skill.level}%</span>
-                  </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-                    <div
-                      className={`h-full rounded-full bg-gradient-to-r ${skill.color} relative transition-all duration-1000`}
-                      style={{ width: `${skill.level}%` }}
-                    >
-                      <div className="absolute top-0 right-0 bottom-0 w-0.5 bg-white/50 shadow-[0_0_5px_white]"></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
   );
 };

@@ -5,13 +5,28 @@ import {
   Search, CheckCircle, Smartphone, Activity 
 } from 'lucide-react';
 import { fadeInUp, staggerContainer } from '@/components/landing/animations';
+import { useTranslation } from 'react-i18next';
 
 const SmartEnterpriseSection = () => {
+  const { t } = useTranslation();
+  
+  // Rock-solid metrics fallback (Spanish default)
+  const defaultMetrics = [
+    { title: "PLN Avanzado", description: "Atención al cliente inteligente que responde como un experto en cualquier idioma." },
+    { title: "Agentes Autónomos", description: "Asistentes que gestionan los procesos de tu negocio sin que tú tengas que supervisar." },
+    { title: "ML Predictivo", description: "Predicciones que anticipan tendencias y comportamientos de tus clientes." },
+    { title: "Deep Learning", description: "Modelos entrenados con la información exclusiva de tu propio negocio." }
+  ];
+
+  // Extraction with high-reliability
+  const metricsData = t('smart.metrics', { returnObjects: true }) as any;
+  const metrics = Array.isArray(metricsData) ? metricsData : defaultMetrics;
+
   return (
     <section id="ai-rag" className="py-16 relative overflow-hidden">
       <div className="container mx-auto px-6">
         
-        {/* --- HEADER (Basado en AISection) --- */}
+        {/* --- HEADER --- */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -19,18 +34,27 @@ const SmartEnterpriseSection = () => {
           variants={fadeInUp}
           className="flex flex-col items-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4 shadow-[0_0_15px_rgba(198,147,32,0.2)]">
-            <Cpu size={14} /> Inteligencia Empresarial Total
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4 shadow-[0_0_15px_rgba(198,147,32,0.2)] group">
+            <Cpu size={14} className="group-hover:rotate-12 transition-transform" /> {t('smart.badge')}
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-center text-white mb-6">
-            No solo es IA, <span className="gradient-text">es la Inteligencia de tu Empresa trabajando</span>
+          <h2 className="text-3xl md:text-5xl font-black text-center text-white mb-6 leading-tight">
+            {(() => {
+              const fullTitle = t('smart.title');
+              if (fullTitle.includes(',')) {
+                const parts = fullTitle.split(',');
+                const first = parts[0];
+                const rest = parts.slice(1).join(',');
+                return <>{first}, <span className="gradient-text">{rest}</span></>;
+              }
+              return <span className="gradient-text">{fullTitle}</span>;
+            })()}
           </h2>
           <p className="gradient-text-platinum mt-2 max-w-3xl text-center text-lg leading-relaxed">
-            Fusionamos el procesamiento de lenguaje natural avanzado con arquitecturas de recuperación de datos (RAG) para crear sistemas que no solo hablan, sino que conocen tu negocio a fondo.
+            {t('smart.subtitle')}
           </p>
         </motion.div>
-
-        {/* --- MÉTRICAS DE COMPETENCIA (De AISection) --- */}
+        
+        {/* --- MÉTRICAS DE COMPETENCIA --- */}
         <motion.div 
           variants={staggerContainer}
           initial="hidden"
@@ -38,53 +62,31 @@ const SmartEnterpriseSection = () => {
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24"
         >
-          {[
-            {
-              icon: Brain,
-              title: "PLN Avanzado",
-              description: "Análisis semántico y respuesta contextual en múltiples idiomas con precisión quirúrgica.",
-              level: 95
-            },
-            {
-              icon: Bot,
-              title: "Agentes Autónomos",
-              description: "Sistemas OpenClaw que gestionan procesos, citas y pedidos sin supervisión constante.",
-              level: 88
-            },
-            {
-              icon: Sparkles,
-              title: "ML Predictivo",
-              description: "Anticipamos tendencias y comportamientos de usuarios transformando datos en estrategia.",
-              level: 92
-            },
-            {
-              icon: Network,
-              title: "Deep Learning",
-              description: "Entrenamiento de modelos a medida utilizando tus datasets específicos y privados.",
-              level: 85
-            }
-          ].map((skill) => (
+          {metrics.map((skill: any, index: number) => (
             <motion.div
-              key={skill.title}
+              key={index}
               variants={fadeInUp}
               className="liquid-gold-card group h-full"
             >
               <div className="liquid-gold-content text-center flex flex-col items-center h-full">
-                <div className="bg-[#FBE18D]/10 p-3 rounded-xl text-[#FBE18D] mb-4 group-hover:scale-110 transition-transform">
-                  <skill.icon size={26} />
+                <div className="bg-[#FBE18D]/10 p-3 rounded-xl text-white mb-4 group-hover:scale-110 transition-transform">
+                  {index === 0 && <Brain size={26} />}
+                  {index === 1 && <Bot size={26} />}
+                  {index === 2 && <Sparkles size={26} />}
+                  {index === 3 && <Network size={26} />}
                 </div>
-                <h4 className="font-bold text-white mb-2">{skill.title}</h4>
-                <p className="text-sm text-slate-400 mb-6 flex-grow">{skill.description}</p>
+                <h4 className="font-bold gradient-text mb-2 tracking-tight">{skill?.title}</h4>
+                <p className="text-sm text-slate-400 mb-6 flex-grow">{skill?.description}</p>
                 
                 <div className="w-full">
                   <div className="flex justify-between mb-2 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-                    <span>Eficiencia</span>
-                    <span className="text-white">{skill.level}%</span>
+                    <span>{t('smart.efficiency') || 'Eficiencia'}</span>
+                    <span className="text-white">{[95, 88, 92, 85][index]}%</span>
                   </div>
                   <div className="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.level}%` }}
+                      whileInView={{ width: `${[95, 88, 92, 85][index]}%` }}
                       viewport={{ once: true }}
                       transition={{ duration: 1.5, ease: "easeOut" }}
                       className="absolute h-full bg-gradient-to-r from-[#C69320] to-[#FBE18D] rounded-full shadow-[0_0_10px_#C69320]"
@@ -96,7 +98,7 @@ const SmartEnterpriseSection = () => {
           ))}
         </motion.div>
 
-        {/* --- TUBERÍA RAG (Visual Flow de RAGSection) --- */}
+        {/* --- TUBERÍA RAG --- */}
         <motion.div
           variants={fadeInUp}
           initial="hidden"
@@ -105,14 +107,21 @@ const SmartEnterpriseSection = () => {
           className="mb-24"
         >
           <div className="text-center mb-16">
-            <h3 className="text-2xl md:text-3xl font-bold gradient-text mb-4">Pipeline Inteligente de Datos</h3>
-            <p className="text-slate-400 max-w-2xl mx-auto">Visualiza cómo tus datos se transforman en conocimiento listo para ser consumido por tu IA corporativa.</p>
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              {(() => {
+                const pTitle = t('smart.pipeline.title');
+                const words = pTitle.split(' ');
+                const first = words[0];
+                const rest = words.slice(1).join(' ');
+                return <>{first} <span className="gradient-text">{rest}</span></>;
+              })()}
+            </h3>
+            <p className="text-slate-400 max-w-2xl mx-auto">{t('smart.pipeline.subtitle')}</p>
           </div>
 
           <div className="relative py-12">
-            {/* 4 Puntos del Timeline */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-20">
-              {/* Punto 1: Documentos */}
+              {/* Docs */}
               <motion.div variants={fadeInUp} className="flex flex-col items-center group">
                 <div className="relative mb-6">
                   <div className="absolute -inset-4 bg-blue-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -123,12 +132,12 @@ const SmartEnterpriseSection = () => {
                   </div>
                 </div>
                 <div className="text-center px-4">
-                  <h5 className="font-bold text-blue-400 text-lg mb-2">Documentos</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">PDFs, Bases de Datos y Manuales Corporativos</p>
+                  <h5 className="font-bold text-blue-400 text-lg mb-2">{t('smart.pipeline.docs')}</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.docs_desc')}</p>
                 </div>
               </motion.div>
 
-              {/* Punto 2: Vectorización */}
+              {/* Vector */}
               <motion.div variants={fadeInUp} className="flex flex-col items-center group">
                 <div className="relative mb-6">
                   <div className="absolute -inset-4 bg-purple-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -139,12 +148,12 @@ const SmartEnterpriseSection = () => {
                   </div>
                 </div>
                 <div className="text-center px-4">
-                  <h5 className="font-bold text-purple-400 text-lg mb-2">Vectorización</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">Embeddings de alta fidelidad para búsqueda semántica</p>
+                  <h5 className="font-bold text-purple-400 text-lg mb-2">{t('smart.pipeline.vector')}</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.vector_desc')}</p>
                 </div>
               </motion.div>
 
-              {/* Punto 3: OpenClaw RAG */}
+              {/* Recovery */}
               <motion.div variants={fadeInUp} className="flex flex-col items-center group">
                 <div className="relative mb-6">
                   <div className="absolute -inset-4 bg-[#C69320]/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -155,12 +164,12 @@ const SmartEnterpriseSection = () => {
                   </div>
                 </div>
                 <div className="text-center px-4">
-                  <h5 className="font-bold text-[#FBE18D] text-lg mb-2">OpenClaw RAG</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">Recuperación contextual con fuentes verificables</p>
+                  <h5 className="font-bold text-[#FBE18D] text-lg mb-2">{t('smart.pipeline.recovery')}</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.recovery_desc')}</p>
                 </div>
               </motion.div>
 
-              {/* Punto 4: Respuesta */}
+              {/* Response */}
               <motion.div variants={fadeInUp} className="flex flex-col items-center group">
                 <div className="relative mb-6">
                   <div className="absolute -inset-4 bg-green-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -171,48 +180,31 @@ const SmartEnterpriseSection = () => {
                   </div>
                 </div>
                 <div className="text-center px-4">
-                  <h5 className="font-bold text-green-400 text-lg mb-2">Respuesta</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">Generación de valor real para el usuario final</p>
+                  <h5 className="font-bold text-green-400 text-lg mb-2">{t('smart.pipeline.response')}</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.response_desc')}</p>
                 </div>
               </motion.div>
             </div>
 
-            {/* Líneas animadas entre puntos (Desktop Only) */}
             <div className="hidden md:block absolute top-[96px] left-0 right-0 h-0 pointer-events-none z-10">
               <div className="absolute left-[12.5%] right-[62.5%] top-0 -translate-y-1/2 px-10">
                 <div className="h-[2px] bg-blue-500/10 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ scaleX: 0, originX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                    className="h-full bg-blue-500/50 shadow-[0_0_10px_#3B82F6]" 
-                  />
+                  <motion.div initial={{ scaleX: 0, originX: 0 }} whileInView={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.5 }} className="h-full bg-blue-500/50 shadow-[0_0_10px_#3B82F6]" />
                 </div>
               </div>
               <div className="absolute left-[37.5%] right-[37.5%] top-0 -translate-y-1/2 px-10">
                 <div className="h-[2px] bg-purple-500/10 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ scaleX: 0, originX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    transition={{ duration: 1, delay: 1 }}
-                    className="h-full bg-purple-500/50 shadow-[0_0_10px_#A855F7]" 
-                  />
+                  <motion.div initial={{ scaleX: 0, originX: 0 }} whileInView={{ scaleX: 1 }} transition={{ duration: 1, delay: 1 }} className="h-full bg-purple-500/50 shadow-[0_0_10px_#A855F7]" />
                 </div>
               </div>
               <div className="absolute left-[62.5%] right-[12.5%] top-0 -translate-y-1/2 px-10">
                 <div className="h-[2px] bg-[#C69320]/10 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ scaleX: 0, originX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    transition={{ duration: 1, delay: 1.5 }}
-                    className="h-full bg-[#C69320]/50 shadow-[0_0_10px_#C69320]" 
-                  />
+                  <motion.div initial={{ scaleX: 0, originX: 0 }} whileInView={{ scaleX: 1 }} transition={{ duration: 1, delay: 1.5 }} className="h-full bg-[#C69320]/50 shadow-[0_0_10px_#C69320]" />
                 </div>
               </div>
             </div>
           </div>
         </motion.div>
-
       </div>
     </section>
   );

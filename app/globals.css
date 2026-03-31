@@ -5,9 +5,9 @@
    Portafolio Joseph Espinoza - Paleta de marca
    ============================================================ */
 @theme inline {
-  --font-sans: var(--font-inter);
-  --font-headings: var(--font-manrope);
-  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-headings: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   /* Paleta de marca del portafolio */
   --color-brand-indigo: #6366f1;
@@ -81,12 +81,9 @@ body {
 h1,
 h2,
 h3,
-.font-headings {
-  font-family: var(--font-manrope), sans-serif;
-}
-
+.font-headings,
 .font-serif {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-inter), sans-serif;
 }
 
 .liquid-black {

@@ -34,7 +34,7 @@ export interface BlogPost {
   tags: string[];
 }
 
-export type Language = 'ES' | 'EN';
+export type Language = 'es' | 'en' | 'fr' | 'zh';
 
 export interface ContactFormValues {
   name: string;

@@ -1,8 +1,0 @@
-﻿
-  failed with 1 errors:
-  ./middleware.ts:2:1
-> Module not found: Can't 
-  resolve './i18n'
-  [0m [90m 1 |[39m 
-
-

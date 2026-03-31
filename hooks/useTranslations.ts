@@ -1,3 +1,6 @@
-import {useTranslations} from 'next-intl';
+import { useTranslation } from 'react-i18next';
 
-export const useAppTranslations = () => useTranslations();
+export const useAppTranslations = () => {
+  const { t, i18n } = useTranslation();
+  return { t, i18n };
+};

@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import "@/lib/i18n";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
 import StackSection from "@/components/landing/StackSection";
 import ServicesSection from "@/components/landing/ServicesSection";
-import AISection from "@/components/landing/AISection";
 import SmartEnterpriseSection from "@/components/landing/SmartEnterpriseSection";
 import ProjectsSection from "@/components/landing/ProjectsSection";
 import AboutSection from "@/components/landing/AboutSection";
+import ClientsSection from "@/components/landing/ClientsSection";
 import ContactSection from "@/components/landing/ContactSection";
 import FooterSection from "@/components/landing/FooterSection";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -19,10 +21,20 @@ import { fadeInUp, staggerContainer } from "@/components/landing/animations";
 
 export default function RootPage() {
   const router = useRouter();
-  const [lang] = useState<Language>("ES");
+  const { i18n } = useTranslation();
   const [isDark, setIsDark] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => setIsDark((v) => !v);
+  const toggleLang = (langCode: string) => {
+    i18n.changeLanguage(langCode.toLowerCase());
+  };
+
+  const lang = !mounted ? "es" : (i18n.language.split('-')[0].toLowerCase() as Language) || "es";
 
   return (
     <main className="min-h-screen bg-[#020202] text-white relative overflow-hidden">
@@ -35,7 +47,7 @@ export default function RootPage() {
           isDark={isDark}
           toggleTheme={toggleTheme}
           lang={lang}
-          toggleLang={() => {}}
+          toggleLang={(newLang) => toggleLang(newLang)}
         />
 
         {/* 1. Hero (Captación) - Aparece de inmediato */}
@@ -95,6 +107,15 @@ export default function RootPage() {
           variants={fadeInUp}
         >
           <AboutSection />
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={fadeInUp}
+        >
+          <ClientsSection />
         </motion.div>
 
         <motion.div

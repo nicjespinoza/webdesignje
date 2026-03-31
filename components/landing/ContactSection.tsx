@@ -1,92 +1,85 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, Variants } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import {
-  Github, ExternalLink, Menu, X, Sun, Moon, Code2, ChevronDown, ArrowRight,
-  Calendar, Clock, BookOpen, Send, User, Briefcase, Award, Terminal, Layers,
-  Atom, Blocks, Zap, Box, Wind, Hash, FileCode, ClipboardList, ShieldCheck,
-  BarChart3, FileText, FileCog, Activity, Server, DatabaseZap, Flame, Database,
-  Table, Container, Package, Star, Cloud, Smartphone, Globe, Cpu, Brain, Bot,
-  Sparkles, Network, CheckCircle, Search, Linkedin, Twitter, Gem, ArrowRightLeft
-} from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import GlobalParticles from '@/components/landing/GlobalParticles';
-import { Project, Language, BlogPost, ContactFormValues } from '@/components/landing/types';
-import Logo from '@/components/medical/ui/Logo';
-import { categories, proficiency, projects, blogPosts, contactSchema, services } from '@/data/constants';
-import { fadeInUp, staggerContainer, scaleIn } from '@/components/landing/animations';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Github, Linkedin, Twitter, CheckCircle, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { fadeInUp } from '@/components/landing/animations';
 
 const ContactSection = () => {
+  const { t } = useTranslation();
+
   return (
-    <>
-      <section id="contact" className="py-16 relative">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <div
-            className="liquid-gold-card relative z-10"
-          >
-            <div className="liquid-gold-content p-8 md:p-12">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-black mb-4 text-white">Get In <span className="gradient-text">Touch</span></h2>
-                <p className="text-slate-400 text-lg">Have a project in mind? Let's build something extraordinary together.</p>
-              </div>
+    <section id="contact" className="py-16 relative">
+      <div className="container mx-auto px-6 max-w-4xl">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={fadeInUp}
+          className="liquid-gold-card relative z-10"
+        >
+          <div className="liquid-gold-content p-8 md:p-12">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-black mb-4 text-white">
+                {t('contact.title')} <span className="gradient-text">{t('contact.title_accent')}</span>
+              </h2>
+              <p className="text-slate-400 text-lg">
+                {t('contact.subtitle')}
+              </p>
+            </div>
 
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-300">Tu Nombre</label>
-                    <input
-                      type="text"
-                      className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors"
-                      placeholder="Ej: Juan Pérez"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-300">Tu Email</label>
-                    <input
-                      type="email"
-                      className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors"
-                      placeholder="juan@tuempresa.com"
-                    />
-                  </div>
-                </div>
-
+            <form className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-300">¿Qué necesitas?</label>
-                  <textarea
-                    rows={5}
-                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors resize-none"
-                    placeholder="Cuéntame sobre tu proyecto: tipo de negocio, funcionalidades que necesitas, timeline estimado..."
+                  <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.name_label')}</label>
+                  <input
+                    type="text"
+                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors font-sans"
+                    placeholder={t('contact.name_placeholder')}
                   />
                 </div>
-
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                  <p className="text-sm text-slate-400 flex items-center gap-2">
-                    <CheckCircle className="text-[#FBE18D]" size={16} />
-                    Respuesta en menos de 2 horas
-                  </p>
-                  <button
-                    type="submit"
-                    className="px-10 py-4 bg-gradient-to-r from-[#C69320] to-[#FBE18D] hover:brightness-110 text-black rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-[#C69320]/40 text-lg group"
-                  >
-                    🚀 Recibir Cotización Gratis
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.email_label')}</label>
+                  <input
+                    type="email"
+                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors font-sans"
+                    placeholder={t('contact.email_placeholder')}
+                  />
                 </div>
-              </form>
-
-              <div className="mt-12 flex justify-center gap-8 border-t border-[#C69320]/20 pt-8">
-                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Github size={24} /></a>
-                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Linkedin size={24} /></a>
-                <a href="#" className="text-slate-400 hover:text-[#FBE18D] transition-colors"><Twitter size={24} /></a>
               </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.project_label')}</label>
+                <textarea
+                  rows={5}
+                  className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors resize-none font-sans"
+                  placeholder={t('contact.project_placeholder')}
+                />
+              </div>
+
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-4">
+                <p className="text-xs text-slate-400 flex items-center gap-2 font-sans font-medium uppercase tracking-tight">
+                  <CheckCircle className="text-[#FBE18D]" size={16} />
+                  {t('contact.response_time')}
+                </p>
+                <button
+                  type="submit"
+                  className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-[#C69320] to-[#FBE18D] hover:brightness-110 text-black rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#C69320]/20 text-base group font-sans uppercase tracking-wider"
+                >
+                  {t('contact.cta')}
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </form>
+
+            <div className="mt-12 flex justify-center gap-8 border-t border-[#C69320]/10 pt-8">
+              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Github size={22} /></a>
+              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Linkedin size={22} /></a>
+              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Twitter size={22} /></a>
             </div>
           </div>
-        </div>
-      </section>
-    </>
+        </motion.div>
+      </div>
+    </section>
   );
 };
 

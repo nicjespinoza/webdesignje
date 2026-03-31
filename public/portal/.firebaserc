@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "web-design-je",
+    "production": "web-design-je",
+    "legacy": "cenlae"
+  },
+  "targets": {
+    "web-design-je": {
+      "hosting": {
+        "app": [
+          "web-design-je"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

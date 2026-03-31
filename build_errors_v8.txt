@@ -1,9 +1,0 @@
-﻿
-  failed with 1 errors:
-  
-./app/[locale]/layout.tsx:7:1
-> Module not found: Can't 
-  resolve '@/app/globals.css'
-  [0m [90m  5 |[39m 
-
-

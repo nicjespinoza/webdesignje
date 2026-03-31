@@ -13,6 +13,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from "react-i18next";
 import GlobalParticles from '@/components/landing/GlobalParticles';
 import { Project, Language, BlogPost, ContactFormValues } from '@/components/landing/types';
 import Logo from '@/components/medical/ui/Logo';
@@ -20,6 +21,8 @@ import { categories, proficiency, projects, blogPosts, contactSchema, services }
 import { fadeInUp, staggerContainer, scaleIn } from '@/components/landing/animations';
 
 const Hero = ({ lang, router }: { lang: Language; router: any }) => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden bg-transparent pointer-events-none">
 
@@ -52,7 +55,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
           }}
           className="text-3xl md:text-6xl lg:text-6xl font-extrabold leading-[1.1] mb-10 tracking-tight font-serif relative z-10 gradient-text px-4 pb-2 overflow-visible"
         >
-          {lang === 'EN' ? "Intelligent Automation That Facilitates Your Day" : "Automatización Inteligente que Facilitan tu Día"}
+          {t('hero.title')}
         </motion.h1>
 
         <motion.p
@@ -81,10 +84,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
           }}
           className="gradient-text-platinum font-light text-sm md:text-base lg:text-lg max-w-3xl mb-16 leading-relaxed drop-shadow-lg text-center tracking-wide"
         >
-          {lang === 'EN'
-            ? "I create custom AI ecosystems that integrate your operational knowledge to multiply your efficiency."
-            : "Creo ecosistemas con IA personalizados que integran tu conocimiento operativo para multiplicar tu eficiencia."
-          }
+          {t('hero.subtitle')}
         </motion.p>
 
         <motion.div
@@ -105,7 +105,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
             <div className="liquid-gold-content !py-2.5 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
               <Briefcase size={16} className="text-slate-300 group-hover:text-[#C69320] group-hover:scale-110 transition-transform" />
               <span className="gradient-text-platinum font-bold text-xs whitespace-nowrap tracking-widest group-hover:gradient-text uppercase">
-                {lang === 'EN' ? "Projects" : "Proyectos"}
+                {t('hero.projects')}
               </span>
             </div>
             <motion.div
@@ -126,7 +126,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
             <div className="liquid-gold-content !py-2.5 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
               <Sparkles size={16} className="text-slate-300 group-hover:text-[#C69320] transition-transform group-hover:rotate-12" />
               <span className="gradient-text-platinum font-bold text-xs whitespace-nowrap tracking-widest group-hover:gradient-text uppercase">
-                {lang === 'EN' ? "Success Cases" : "Casos de Éxito"}
+                {t('hero.success')}
               </span>
             </div>
             <motion.div
@@ -164,7 +164,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
                     transition: { type: "spring", damping: 20 }
                   }
                 }}
-                className="gradient-text-platinum transition-colors cursor-default group-hover:gradient-text"
+                className="gradient-text transition-colors cursor-default"
               >
                 {tech}
               </motion.span>

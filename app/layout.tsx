@@ -1,23 +1,12 @@
 import { ThemeProvider } from "../context/ThemeContext";
-import { Inter, Manrope, Playfair_Display } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Metadata } from 'next';
+import ChatWidget from "@/components/landing/ChatWidget";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: 'swap',
-});
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
-  display: 'swap',
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
   display: 'swap',
 });
 
@@ -73,11 +62,12 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${manrope.variable} ${playfair.variable} font-sans antialiased min-h-screen`}
+        className={`${inter.variable} font-sans antialiased min-h-screen`}
         suppressHydrationWarning
       >
         <ThemeProvider>
           {children}
+          <ChatWidget />
         </ThemeProvider>
       </body>
     </html>

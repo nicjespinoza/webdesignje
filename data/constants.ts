@@ -202,15 +202,16 @@ export const proficiency = [
 export const projects: Project[] = [
     {
         id: '1',
-        title: 'Historia Clínica SaaS',
-        description: 'Sistema integral de historias clínicas para clínicas multi-especialidad. Incluye sincronización en tiempo real, visualización 3D interactiva de anatomía y generación dinámica de reportes PDF.',
-        longDescription: "Plataforma SaaS de grado profesional construida para escalar. Permite a las clínicas gestionar datos de pacientes de forma segura con arquitectura HIPAA-compliant. La característica destacada es el modelo humano 3D interactivo que los doctores pueden rotar y anotar para visualizar lesiones o sitios quirúrgicos. El sistema también maneja programación de citas, facturación e inventario de farmacia.",
+        title: 'Historia Clínica AI',
+        description: 'Sistema integral de historias clínicas para múltiples especialidades. Incluye sincronización en tiempo real, visualización 3D interactiva de anatomía y generación dinámica de reportes PDF, programación de citas, facturación, Integración con IA para diagnóstico y tratamiento.',
+        longDescription: "Plataforma SaaS de grado profesional construida para escalar. Permite a las clínicas gestionar datos de pacientes de forma segura con arquitectura HIPAA-compliant. La característica destacada es el modelo humano 3D interactivo que los doctores pueden rotar y anotar para visualizar lesiones o sitios quirúrgicos. El sistema también maneja programación de citas, facturación e inventario.",
         features: [
-            'Sincronización de datos en tiempo real con Firebase Firestore',
-            'Anatomía 3D interactiva usando React Three Fiber',
+            'Sincronización de datos en tiempo real',
+            'Anatomía 3D interactiva',
             'Control de acceso basado en roles (RBAC) para Doctores/Personal',
             'Generación automática de PDF de prescripciones y reportes',
             'Portal seguro para pacientes'
+
         ],
         techStack: ['React 19', 'Firebase', 'Three.js', 'jsPDF', 'Zod'],
         imageUrl: '/screenshots/historia-clinica.png',
@@ -220,15 +221,15 @@ export const projects: Project[] = [
     },
     {
         id: '2',
-        title: 'POS Tienda Zapatos',
-        description: 'Punto de venta en la nube diseñado específicamente para tiendas de calzado. Control de inventario en tiempo real por talla, color y modelo.',
+        title: 'POS & Tienda',
+        description: 'Punto de venta en la nube diseñado específicamente para tiendas que deseen tener el control de su inventario en tiempo real, manejo de kardex, reportes de ventas y implementar IA para optimizar sus ventas.',
         longDescription: "Sistema POS especializado para la industria del calzado. Gestiona inventario complejo con múltiples variantes, maneja sincronización entre sucursales y proporciona análisis detallados de ventas. Integrado con pasarelas de pago locales y generación automática de facturas.",
         features: [
             'Gestión de inventario multi-variante',
             'Reportes y análisis de ventas en tiempo real',
             'Integración con programa de lealtad de clientes',
             'Optimizado para dispositivos móviles y tablets',
-            'Persistencia offline de Firebase'
+            'Persistencia offline'
         ],
         techStack: ['Next.js', 'Firebase', 'Tailwind CSS', 'Cloud Functions'],
         imageUrl: '/screenshots/pos-zapatos.png',
@@ -237,7 +238,7 @@ export const projects: Project[] = [
     },
     {
         id: '3',
-        title: 'Hotel Management System',
+        title: 'Hotel Management',
         description: 'Plataforma unificada para reservas hoteleras, gestión de habitaciones y servicios al huésped. Incluye un portal de huéspedes premium con diseño glassmorphic.',
         longDescription: "Un motor de hospitalidad todo-en-uno. Desde la recepción hasta el teléfono del huésped, este sistema optimiza cada interacción. Incluye un motor de reservas, gestión de housekeeping y un dashboard de huéspedes para servicios como room service y reservas de spa.",
         features: [
@@ -247,7 +248,7 @@ export const projects: Project[] = [
             'Análisis de gestión de ingresos',
             'Soporte multi-idioma'
         ],
-        techStack: ['TypeScript', 'Framer Motion', 'Figma', 'Stripe'],
+        techStack: ['TypeScript', 'Framer Motion', 'Firebase', 'Stripe', 'Paypal', 'Tailwind CSS'],
         imageUrl: '/screenshots/hotel-management.png',
         githubUrl: '#',
         demoUrl: '/demos/hotel'
@@ -255,7 +256,7 @@ export const projects: Project[] = [
     {
         id: '4',
         title: 'Eve Commerce',
-        description: 'Plataforma de e-commerce avanzada enfocada en moda de alta gama con una experiencia de compra fluida y elegante.',
+        description: 'Plataforma de e-commerce avanzada enfocada en tiendas online con una experiencia de compra fluida y elegante.',
         longDescription: "Una experiencia de e-commerce de lujo. Este proyecto empuja los límites del diseño web con vistas de productos inmersivas, transiciones suaves y un flujo de checkout altamente optimizado. Diseñado para mostrar colecciones de moda con estética premium.",
         features: [
             'Galería de productos de alto rendimiento',
@@ -264,14 +265,14 @@ export const projects: Project[] = [
             'Colecciones de productos personalizables',
             'SEO y velocidad optimizados'
         ],
-        techStack: ['Shopify SDK', 'Next.js', 'React 19', 'PostCSS'],
+        techStack: ['Shopify SDK', 'Next.js', 'React 19', 'PostCSS', 'Stripe', 'Paypal', 'Tailwind CSS'],
         imageUrl: '/screenshots/eve-commerce.png',
         githubUrl: '#',
         demoUrl: '/demos/evecommerce'
     },
     {
         id: '5',
-        title: 'Beauty Agenda SaaS',
+        title: 'Beauty Agenda',
         description: 'Sistema de agenda inteligente para salones de belleza, barberías y spas. Incluye reservas online, recordatorios automáticos por WhatsApp, CRM de clientes y asistente con IA integrado.',
         longDescription: "Plataforma todo-en-uno para negocios de belleza y bienestar. Gestiona citas, clientes y pagos desde un solo lugar. El asistente con IA responde preguntas frecuentes, sugiere servicios y optimiza la agenda automáticamente. Incluye recordatorios por WhatsApp, historial de clientes y reportes de rendimiento.",
         features: [
@@ -301,7 +302,7 @@ export const projects: Project[] = [
             'Tutor virtual 24/7 disponible para dudas de alumnos',
             'Comunicación inteligente y segmentada con padres de familia'
         ],
-        techStack: ['Next.js 15', 'OpenClaw RAG', 'Firebase', 'Python (FastAPI)', 'Recharts'],
+        techStack: ['Next.js 15', 'AI', 'Firebase', 'React', 'Recharts'],
         imageUrl: '/screenshots/scholar-ai.png',
         githubUrl: '#',
         demoUrl: '/demos/scholar-ai'
@@ -345,34 +346,34 @@ export const services = [
     {
         icon: Code2,
         title: "Desarrollo Web",
-        description: "Creamos experiencias web modernas y escalables que cautivan a sus usuarios y potencian su presencia digital.",
+        description: "Diseño páginas web modernas, rápidas y escalables que cautivan a sus usuarios, impulsan su marca y transforman su presencia digital en resultados reales.",
         features: [
-            "Tecnologías de Vanguardia para un Rendimiento Superior",
-            "Experiencias de Usuario Intuitivas y Adaptables a Cualquier Dispositivo",
-            "Conectividad Total con sus Sistemas Existentes",
-            "Máxima Visibilidad y Velocidad de Carga para su Audiencia"
+            "Tecnologías de Vanguardia para un Rendimiento Excepcional",
+            "Experiencias de Usuario Intuitivas y Adaptables",
+            "Integración Total con sus Sistemas y Procesos Existentes",
+            "Máxima Visibilidad, Velocidad y Conversión para su Audiencia"
         ]
     },
     {
         icon: Smartphone,
-        title: "Desarrollo de App",
-        description: "Desarrollamos aplicaciones móviles intuitivas y de alto rendimiento, llevando su negocio directamente a las manos de sus clientes en iOS y Android.",
+        title: "Desarrollo de Aplicaciones",
+        description: "Diseño aplicaciones móviles y web intuitivas de alto rendimiento, llevando su negocio directamente a los dispositivos y navegadores de sus clientes en iOS, Android y Web.",
         features: [
-            "Aplicaciones Nativas y Multiplataforma para Máximo Alcance",
+            "Aplicaciones Nativas, Multiplataforma y Web para Máximo Alcance",
             "Interfaces Atractivas que Encantan a sus Usuarios",
             "Funcionalidad Robusta y Escalable para sus Necesidades",
-            "Lanzamiento Exitoso y Gestión Simplificada en Todas las Tiendas"
+            "Lanzamiento Exitoso y Gestión Simplificada en Todas las Plataformas"
         ]
     },
     {
         icon: Cpu,
-        title: "Inteligencia Artificial Aplicada",
-        description: "Impulsamos sus aplicaciones con inteligencia artificial y machine learning, transformando datos en decisiones estratégicas y automatizando procesos clave.",
+        title: "Inteligencia Artificial para tu Negocio",
+        description: "Incorporo inteligencia artificial en tus sistemas para que tu negocio tome decisiones más inteligentes, ahorre tiempo valioso y aumente sus ventas de manera automática y eficiente.",
         features: [
-            "Atención al Cliente Inteligente y Automatizada 24/7",
-            "Análisis Profundo y Comprensión del Lenguaje Humano",
-            "Decisiones Estratégicas Basadas en Datos y Predicciones Precisas",
-            "Optimización de Procesos Clave con Inteligencia Autónoma"
+            "Atención al cliente inteligente disponible 24 horas al día",
+            "Tu sistema entiende y responde como un humano real",
+            "Toma de decisiones más inteligentes basadas en datos reales",
+            "Automatizamos tareas repetitivas para ahorrar tiempo y dinero"
         ]
     }
 ];
