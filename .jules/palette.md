@@ -1,0 +1,3 @@
+## 2025-04-01 - Adding ARIA labels to hidden/icon-only elements
+**Learning:** React components containing icon-only interactive elements and buttons that hide textual labels on mobile via CSS (e.g., Tailwind's `hidden`) must include a descriptive `aria-label` attribute. Use `focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary` (or similar) Tailwind classes to ensure proper keyboard navigation visibility.
+**Action:** When working on Palette issues, look for components like `PatientHeader`, `PatientInfoCard`, `HistoryList`, and `ConsultList` that heavily utilize `lucide-react` icons. Add `aria-label` when the action is not clear from context or visual text, and include focus rings for keyboard a11y.
