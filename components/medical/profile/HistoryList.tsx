@@ -58,11 +58,23 @@ export const HistoryList: React.FC<HistoryListProps> = ({ histories, onNavigate,
                         <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-700">
                             <button
                                 onClick={(e) => { e.stopPropagation(); onDelete(history.id); }}
-                                className="p-2 text-white/10 hover:text-destructive transition-colors"
+                                className="p-2 text-white/10 hover:text-destructive transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary rounded-xl"
+                                aria-label="Eliminar entrada de historia clínica"
                             >
                                 <Trash2 size={14} strokeWidth={1} />
                             </button>
-                            <div className="p-2.5 rounded-full border border-primary/10 text-primary group-hover:scale-110 transition-transform">
+                            <div
+                                role="button"
+                                tabIndex={0}
+                                className="p-2.5 rounded-full border border-primary/10 text-primary group-hover:scale-110 transition-transform focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+                                aria-label="Ver detalles de historia clínica"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        onNavigate(`/dashboard/patients/${history.patientId}/history/${history.id}`);
+                                    }
+                                }}
+                            >
                                 <Eye size={14} strokeWidth={1} />
                             </div>
                         </div>
