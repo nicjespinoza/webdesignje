@@ -90,7 +90,7 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
                             <button onClick={onShowNotes} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
                                 <StickyNote size={14} strokeWidth={1} /> Notas
                             </button>
-                            <button onClick={onViewNotes} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                            <button onClick={onViewNotes} aria-label="Ver notas" title="Ver notas" className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary">
                                 <Eye size={12} strokeWidth={1} />
                             </button>
                         </div>
@@ -100,7 +100,7 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
                         <button onClick={onShowEndoscopic} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
                             <Activity size={14} strokeWidth={1} /> Endo
                         </button>
-                        <button onClick={onViewEndoscopic} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                        <button onClick={onViewEndoscopic} aria-label="Ver endoscopia" title="Ver endoscopia" className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary">
                             <Eye size={12} strokeWidth={1} />
                         </button>
                     </div>

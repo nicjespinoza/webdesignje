@@ -58,7 +58,9 @@ export const HistoryList: React.FC<HistoryListProps> = ({ histories, onNavigate,
                         <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-700">
                             <button
                                 onClick={(e) => { e.stopPropagation(); onDelete(history.id); }}
-                                className="p-2 text-white/10 hover:text-destructive transition-colors"
+                                aria-label="Eliminar registro primario"
+                                title="Eliminar"
+                                className="p-2 text-white/10 hover:text-destructive transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-destructive rounded-md"
                             >
                                 <Trash2 size={14} strokeWidth={1} />
                             </button>
