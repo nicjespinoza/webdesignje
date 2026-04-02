@@ -173,6 +173,7 @@ export default function ReportsPage() {
                         <button
                             onClick={() => router.back()}
                             className="bg-background/80 p-4 rounded-2xl border border-border/40 text-muted-foreground hover:text-primary transition-all shadow-soft hover:scale-105"
+                            aria-label="Volver atrás"
                         >
                             <ArrowLeft size={20} />
                         </button>
