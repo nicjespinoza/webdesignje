@@ -243,7 +243,8 @@ export default function NewConsultClient() {
                                         <button
                                             type="button"
                                             onClick={() => setValue('diagnoses', watch('diagnoses').filter((_, idx) => idx !== i))}
-                                            className="p-5 text-muted-foreground hover:text-destructive bg-muted/20 hover:bg-destructive/10 rounded-[1.5rem] transition-all border border-transparent hover:border-destructive/20 shadow-inner"
+                                            aria-label="Eliminar diagnóstico"
+                                            className="p-5 text-muted-foreground hover:text-destructive bg-muted/20 hover:bg-destructive/10 rounded-[1.5rem] transition-all border border-transparent hover:border-destructive/20 shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
                                         >
                                             <Trash2 size={20} />
                                         </button>
@@ -278,7 +279,7 @@ export default function NewConsultClient() {
                                 {watch('treatment.meds').map((_, i) => (
                                     <div key={i} className="flex gap-4 mb-4 group/med">
                                         <input className="flex-1 p-5 bg-background border border-border/40 rounded-[1.5rem] focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition-all font-bold text-foreground shadow-inner" placeholder={`Nombre comercial / Genérico / Posología ${i + 1}...`} {...methods.register(`treatment.meds.${i}`)} />
-                                        <button type="button" onClick={() => setValue('treatment.meds', watch('treatment.meds').filter((_, idx) => idx !== i))} className="p-5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-[1.5rem] transition-all"><Trash2 size={20} /></button>
+                                        <button type="button" aria-label="Eliminar fármaco" onClick={() => setValue('treatment.meds', watch('treatment.meds').filter((_, idx) => idx !== i))} className="p-5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-[1.5rem] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"><Trash2 size={20} /></button>
                                     </div>
                                 ))}
                                 <button type="button" onClick={() => setValue('treatment.meds', [...watch('treatment.meds'), ''])} className="px-8 py-4 rounded-[1.5rem] bg-amber-500/10 text-amber-600 dark:text-amber-400 font-black text-[10px] uppercase tracking-widest flex items-center gap-3 hover:bg-amber-500/20 transition-all border border-amber-500/20">
