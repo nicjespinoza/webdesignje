@@ -1,0 +1,3 @@
+## 2024-05-24 - Avoiding Math.sqrt in Three.js High-Frequency Loops
+**Learning:** Using `distanceTo` in Three.js nested loops or `useFrame` animation loops causes expensive `Math.sqrt` calculations, which can significantly degrade performance when running thousands of times per frame (e.g., in particle systems or neural network connections).
+**Action:** Always prefer `distanceToSquared(v) < threshold * threshold` over `distanceTo(v) < threshold` in high-frequency React Three Fiber/Three.js loops to avoid the computational overhead of square root operations.
