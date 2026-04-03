@@ -118,10 +118,14 @@ export const MobileSidebar = ({
                 {...(props as any)}
             >
                 <div className="flex justify-end z-20 w-full">
-                    <Menu
-                        className="text-gray-700 cursor-pointer"
+                    <button
                         onClick={() => setOpen(!open)}
-                    />
+                        aria-label="Abrir menú"
+                        title="Abrir menú"
+                        className="focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-blue-600 rounded-md"
+                    >
+                        <Menu className="text-gray-700 cursor-pointer" />
+                    </button>
                 </div>
                 <AnimatePresence>
                     {open && (
@@ -138,12 +142,14 @@ export const MobileSidebar = ({
                                 className
                             )}
                         >
-                            <div
-                                className="absolute right-10 top-10 z-50 text-gray-700 cursor-pointer"
+                            <button
+                                className="absolute right-10 top-10 z-50 text-gray-700 cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-blue-600 rounded-md p-1"
                                 onClick={() => setOpen(!open)}
+                                aria-label="Cerrar menú"
+                                title="Cerrar menú"
                             >
                                 <X />
-                            </div>
+                            </button>
                             {children as React.ReactNode}
                         </motion.div>
                     )}
