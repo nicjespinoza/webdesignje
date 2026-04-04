@@ -77,7 +77,12 @@ export const ObesityHistoryModal: React.FC<ObesityHistoryModalProps> = ({ isOpen
                     {/* Header */}
                     <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                         <h2 className="text-2xl font-bold text-gray-900">Historia de Obesidad</h2>
-                        <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition-colors">
+                        <button
+                            onClick={onClose}
+                            aria-label="Cerrar modal"
+                            title="Cerrar modal"
+                            className="p-2 hover:bg-gray-200 rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+                        >
                             <X size={24} className="text-gray-500" />
                         </button>
                     </div>

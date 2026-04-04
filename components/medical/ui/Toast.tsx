@@ -48,7 +48,9 @@ export const Toast: React.FC<ToastProps> = ({ message, type, isVisible, onClose 
 
                     <button
                         onClick={onClose}
-                        className="ml-4 p-1 hover:bg-white/20 rounded-full transition-colors"
+                        aria-label="Cerrar notificación"
+                        title="Cerrar notificación"
+                        className="ml-4 p-1 hover:bg-white/20 rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
                     >
                         <X size={16} />
                     </button>
