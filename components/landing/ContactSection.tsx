@@ -30,28 +30,34 @@ const ContactSection = () => {
             <form className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.name_label')}</label>
+                  <label htmlFor="contact-name" className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.name_label')} <span className="text-red-500">*</span></label>
                   <input
+                    id="contact-name"
                     type="text"
-                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors font-sans"
+                    required
+                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors font-sans focus-visible:ring-2 focus-visible:ring-[#FBE18D]"
                     placeholder={t('contact.name_placeholder')}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.email_label')}</label>
+                  <label htmlFor="contact-email" className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.email_label')} <span className="text-red-500">*</span></label>
                   <input
+                    id="contact-email"
                     type="email"
-                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors font-sans"
+                    required
+                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors font-sans focus-visible:ring-2 focus-visible:ring-[#FBE18D]"
                     placeholder={t('contact.email_placeholder')}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.project_label')}</label>
+                <label htmlFor="contact-project" className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.project_label')} <span className="text-red-500">*</span></label>
                 <textarea
+                  id="contact-project"
                   rows={5}
-                  className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors resize-none font-sans"
+                  required
+                  className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors resize-none font-sans focus-visible:ring-2 focus-visible:ring-[#FBE18D]"
                   placeholder={t('contact.project_placeholder')}
                 />
               </div>
@@ -63,7 +69,7 @@ const ContactSection = () => {
                 </p>
                 <button
                   type="submit"
-                  className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-[#C69320] to-[#FBE18D] hover:brightness-110 text-black rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#C69320]/20 text-base group font-sans uppercase tracking-wider"
+                  className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-[#C69320] to-[#FBE18D] hover:brightness-110 text-black rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#C69320]/20 text-base group font-sans uppercase tracking-wider focus-visible:ring-2 focus-visible:ring-[#FBE18D] focus-visible:ring-offset-2 focus-visible:ring-offset-[#020202] focus-visible:outline-none"
                 >
                   {t('contact.cta')}
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -72,9 +78,9 @@ const ContactSection = () => {
             </form>
 
             <div className="mt-12 flex justify-center gap-8 border-t border-[#C69320]/10 pt-8">
-              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Github size={22} /></a>
-              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Linkedin size={22} /></a>
-              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Twitter size={22} /></a>
+              <a href="#" aria-label="Perfil de GitHub" title="Perfil de GitHub" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-[#FBE18D] focus-visible:outline-none rounded-md"><Github size={22} /></a>
+              <a href="#" aria-label="Perfil de LinkedIn" title="Perfil de LinkedIn" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-[#FBE18D] focus-visible:outline-none rounded-md"><Linkedin size={22} /></a>
+              <a href="#" aria-label="Perfil de Twitter" title="Perfil de Twitter" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-[#FBE18D] focus-visible:outline-none rounded-md"><Twitter size={22} /></a>
             </div>
           </div>
         </motion.div>

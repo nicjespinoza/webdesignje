@@ -1,0 +1,3 @@
+## 2024-04-05 - Translation Keys for Accessibility Attributes
+**Learning:** Hardcoding accessibility strings like `aria-label` or `title` (e.g., "Perfil de GitHub") violates localization principles in components that otherwise utilize translation libraries like `react-i18next`. Screen readers will announce the hardcoded string regardless of the user's selected language, leading to a degraded experience for international users.
+**Action:** When adding accessibility attributes to components that support multiple languages, always use the active translation mechanism (e.g., `t('social.github_aria')`) instead of hardcoded strings to ensure a consistent, localized experience for screen reader users.
