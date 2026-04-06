@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, AlertCircle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export type ToastType = 'success' | 'error';
 
@@ -12,6 +13,8 @@ interface ToastProps {
 }
 
 export const Toast: React.FC<ToastProps> = ({ message, type, isVisible, onClose }) => {
+    const { t } = useTranslation();
+
     useEffect(() => {
         if (isVisible) {
             const timer = setTimeout(() => {
@@ -48,7 +51,9 @@ export const Toast: React.FC<ToastProps> = ({ message, type, isVisible, onClose 
 
                     <button
                         onClick={onClose}
-                        className="ml-4 p-1 hover:bg-white/20 rounded-full transition-colors"
+                        aria-label={t('common.closeNotification')}
+                        title={t('common.closeNotification')}
+                        className="ml-4 p-1 hover:bg-white/20 rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-white"
                     >
                         <X size={16} />
                     </button>
