@@ -1,0 +1,3 @@
+## 2024-03-24 - Three.js Math.sqrt Animation Bottleneck
+**Learning:** In Three.js applications, using `.distanceTo()` inside high-frequency `useFrame` animation loops or heavily nested array iterations (like checking neural network connections) creates a significant performance bottleneck because it inherently calls computationally expensive `Math.sqrt` calculations repeatedly.
+**Action:** Always replace `.distanceTo(v) < threshold` with `.distanceToSquared(v) < threshold * threshold` in high-frequency rendering paths to bypass the `Math.sqrt` overhead while maintaining the exact same behavioral logic.
