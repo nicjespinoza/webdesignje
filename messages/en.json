@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "Loading...",
+    "closeNotification": "Close notification",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
