@@ -56,7 +56,8 @@ const Navbar = ({
           <div className="relative">
             <button 
               onClick={() => setIsLangOpen(!isLangOpen)}
-              className="text-xs font-bold px-3 py-1.5 rounded border border-white/10 hover:bg-white/5 transition-all flex items-center gap-2 min-w-[140px] justify-between group"
+              aria-label={t('nav.toggleLanguage')}
+              className="text-xs font-bold px-3 py-1.5 rounded border border-white/10 hover:bg-white/5 transition-all flex items-center gap-2 min-w-[140px] justify-between group focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
             >
               <div className="flex items-center gap-2">
                 <img 
@@ -105,8 +106,9 @@ const Navbar = ({
 
           <button 
             onClick={toggleTheme} 
-            className="p-2 rounded-full hover:bg-white/5 transition-colors text-slate-300 hover:text-white"
-            title="Toggle Theme"
+            className="p-2 rounded-full hover:bg-white/5 transition-colors text-slate-300 hover:text-white focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+            title={t('nav.toggleTheme')}
+            aria-label={t('nav.toggleTheme')}
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -121,7 +123,12 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={t('nav.toggleMenu')}
+          title={t('nav.toggleMenu')}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
