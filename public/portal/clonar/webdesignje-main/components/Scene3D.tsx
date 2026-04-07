@@ -43,8 +43,9 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
     particles.forEach((p1, i) => {
       particles.forEach((p2, j) => {
         if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+          // OPTIMIZATION: Use distanceToSquared to avoid expensive Math.sqrt in O(n^2) nested loop
+          const distSq = p1.distanceToSquared(p2);
+          if (distSq < threshold * threshold) {
             lines.push([p1, p2]);
           }
         }
@@ -144,7 +145,8 @@ const DataPulses = ({ radius }: { radius: number }) => {
             agent.pos.add(dir.multiplyScalar(agent.speed));
             
             // If close to destination, pick new destination
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // OPTIMIZATION: Use distanceToSquared to avoid expensive Math.sqrt in useFrame loop
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,
