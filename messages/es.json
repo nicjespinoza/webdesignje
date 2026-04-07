@@ -18,5 +18,10 @@
     "agenda": "Agenda",
     "chat": "Chat",
     "reports": "Analítica"
+  },
+  "nav": {
+    "toggleTheme": "Alternar tema",
+    "toggleMenu": "Alternar menú",
+    "toggleLanguage": "Alternar idioma"
   }
 }
