@@ -58,7 +58,9 @@ const ChatWidget = () => {
                             </div>
                             <button
                                 onClick={toggleChat}
-                                className="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400 hover:text-white"
+                                aria-label="Cerrar chat"
+                                title="Cerrar chat"
+                                className="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400 hover:text-white focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-[#C69320]"
                             >
                                 <X size={20} />
                             </button>
@@ -157,7 +159,9 @@ const ChatWidget = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleChat}
-                className="pointer-events-auto p-4 rounded-2xl bg-[#020202] border border-[#C69320]/40 shadow-[0_0_20px_rgba(198,147,32,0.3)] text-[#FBE18D] hover:shadow-[0_0_30px_rgba(198,147,32,0.5)] transition-all flex items-center justify-center group overflow-hidden relative"
+                aria-label={isOpen ? "Cerrar chat" : "Abrir chat"}
+                title={isOpen ? "Cerrar chat" : "Abrir chat"}
+                className="pointer-events-auto p-4 rounded-2xl bg-[#020202] border border-[#C69320]/40 shadow-[0_0_20px_rgba(198,147,32,0.3)] text-[#FBE18D] hover:shadow-[0_0_30px_rgba(198,147,32,0.5)] transition-all flex items-center justify-center group overflow-hidden relative focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-[#C69320]"
             >
                 {/* Efecto de brillo líquido */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#C69320]/0 via-[#FBE18D]/10 to-[#C69320]/0 opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-100%] group-hover:translate-x-[100%] duration-1000"></div>
