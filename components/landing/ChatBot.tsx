@@ -210,8 +210,9 @@ Podés preguntarme sobre:
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setMessages([])}
-                  className="p-2 rounded-lg hover:bg-black/10 transition-colors"
+                  aria-label="Reiniciar conversación"
                   title="Reiniciar conversación"
+                  className="p-2 rounded-lg hover:bg-black/10 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-[#C69320]"
                 >
                   <Sparkles size={18} className="text-black" />
                 </button>
