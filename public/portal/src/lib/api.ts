@@ -245,20 +245,29 @@ export const api = {
         const patientRef = doc(db, 'patients', id);
 
         // 1. Delete Subcollections
+        // ⚡ OPTIMIZATION: Replaced sequential await inside a for...of loop with Promise.all
+        // 📊 IMPACT: Reduces total latency by fetching and batch-deleting all 4 subcollections in parallel.
         const subcollections = ['histories', 'consults', 'observations', 'snapshots'];
-        for (const subCol of subcollections) {
+        await Promise.all(subcollections.map(async (subCol) => {
             const subDocs = await getDocs(collection(db, 'patients', id, subCol));
-            const batch = writeBatch(db);
-            subDocs.docs.forEach(d => batch.delete(d.ref));
-            await batch.commit();
-        }
+            // ⚡ OPTIMIZATION: Avoid committing empty writeBatches
+            // 📊 IMPACT: Reduces unnecessary network round-trips to Firestore.
+            if (!subDocs.empty) {
+                const batch = writeBatch(db);
+                subDocs.docs.forEach(d => batch.delete(d.ref));
+                await batch.commit();
+            }
+        }));
 
         // 2. Delete Related Appointments
         const appointmentsQ = query(collection(db, 'appointments'), where('patientId', '==', id));
         const appointmentsSnap = await getDocs(appointmentsQ);
-        const batchAppt = writeBatch(db);
-        appointmentsSnap.docs.forEach(d => batchAppt.delete(d.ref));
-        await batchAppt.commit();
+        // ⚡ OPTIMIZATION: Avoid committing empty writeBatches
+        if (!appointmentsSnap.empty) {
+            const batchAppt = writeBatch(db);
+            appointmentsSnap.docs.forEach(d => batchAppt.delete(d.ref));
+            await batchAppt.commit();
+        }
 
         // 3. Delete Patient Doc
         await deleteDoc(patientRef);
