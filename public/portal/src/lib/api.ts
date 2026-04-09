@@ -246,19 +246,27 @@ export const api = {
 
         // 1. Delete Subcollections
         const subcollections = ['histories', 'consults', 'observations', 'snapshots'];
-        for (const subCol of subcollections) {
+
+        // Optimize: Use Promise.all to fetch and delete subcollections in parallel
+        await Promise.all(subcollections.map(async (subCol) => {
             const subDocs = await getDocs(collection(db, 'patients', id, subCol));
-            const batch = writeBatch(db);
-            subDocs.docs.forEach(d => batch.delete(d.ref));
-            await batch.commit();
-        }
+            // Optimize: Only commit batch if there are documents to delete
+            if (!subDocs.empty) {
+                const batch = writeBatch(db);
+                subDocs.docs.forEach(d => batch.delete(d.ref));
+                await batch.commit();
+            }
+        }));
 
         // 2. Delete Related Appointments
         const appointmentsQ = query(collection(db, 'appointments'), where('patientId', '==', id));
         const appointmentsSnap = await getDocs(appointmentsQ);
-        const batchAppt = writeBatch(db);
-        appointmentsSnap.docs.forEach(d => batchAppt.delete(d.ref));
-        await batchAppt.commit();
+        // Optimize: Only commit batch if there are appointments to delete
+        if (!appointmentsSnap.empty) {
+            const batchAppt = writeBatch(db);
+            appointmentsSnap.docs.forEach(d => batchAppt.delete(d.ref));
+            await batchAppt.commit();
+        }
 
         // 3. Delete Patient Doc
         await deleteDoc(patientRef);
@@ -490,11 +498,19 @@ export const api = {
 
         // Fallback for getting all
         const patientsSnapshot = await getDocs(collection(db, 'patients'));
+
+        // Optimize: Fetch all consults subcollections in parallel instead of sequentially
+        const consultsPromises = patientsSnapshot.docs.map(patientDoc =>
+            getDocs(collection(db, 'patients', patientDoc.id, 'consults'))
+        );
+
+        const consultsSnapshots = await Promise.all(consultsPromises);
         const allConsults: SubsequentConsult[] = [];
-        for (const patientDoc of patientsSnapshot.docs) {
-            const consultsSnapshot = await getDocs(collection(db, 'patients', patientDoc.id, 'consults'));
+
+        for (const consultsSnapshot of consultsSnapshots) {
             allConsults.push(...consultsSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc)));
         }
+
         return allConsults;
     },
 

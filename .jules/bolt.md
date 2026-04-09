@@ -1,0 +1,3 @@
+## 2025-04-09 - Parallelize Firestore Data Fetching and Avoid Empty Batch Commits
+**Learning:** Sequential `for` loops making network calls (like fetching multiple `getDocs` requests) can significantly degrade performance due to cumulative network latency. In Firestore, a common anti-pattern is executing a `writeBatch` sequentially without verifying if there are any documents to commit, creating redundant network overhead.
+**Action:** When performing multiple independent Firestore requests, always use `Promise.all` to fetch data in parallel. Before initializing and committing a `writeBatch`, check `snapshot.empty` to ensure there are actually documents to modify, saving unnecessary network commits.
