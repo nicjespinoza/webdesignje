@@ -1,0 +1,3 @@
+## 2025-02-28 - Optimizing Distance Logic in High-Frequency Animation Loops
+**Learning:** `Math.sqrt()` is computationally expensive and commonly used to calculate the actual distance between points. Using it inside nested loops within high-frequency functions like `requestAnimationFrame` creates significant performance bottlenecks as the number of elements scales (O(n²)).
+**Action:** Always replace the actual distance comparison with a squared distance comparison (`dx*dx + dy*dy < radius*radius`) in critical loops to avoid redundant square root calculations. Defer `Math.sqrt()` calculations to only execute when an element is confirmed to be within the desired threshold, when the actual distance value is required.
