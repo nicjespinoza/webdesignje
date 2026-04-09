@@ -169,6 +169,11 @@ function AgendaPageContent() {
         </div>
     );
 
+    // Bolt: Hoist date objects out of render loop to prevent redundant instantiation
+    const todayDateObj = new Date();
+    const currentDayOfMonth = todayDateObj.getDate();
+    const currentMonthOfYear = todayDateObj.getMonth();
+
     return (
         <div className="max-w-7xl mx-auto space-y-10">
             {/* Liquid Gold Header Area */}
@@ -253,7 +258,7 @@ function AgendaPageContent() {
                                 const day = i + 1;
                                 const dayApts = getAppointmentsForDay(day);
                                 const isSelected = selectedDay === day;
-                                const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth();
+                                const isToday = day === currentDayOfMonth && currentDate.getMonth() === currentMonthOfYear;
 
                                 return (
                                     <motion.div
