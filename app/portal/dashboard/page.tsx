@@ -362,7 +362,7 @@ function DashboardContent() {
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <Badge variant="gold">Finalizado</Badge>
-                                            <button className="p-2 text-slate-700 hover:text-white transition-colors">
+                                            <button className="p-2 text-slate-700 hover:text-white transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary" aria-label="Más opciones">
                                                 <MoreVertical size={20} />
                                             </button>
                                         </div>

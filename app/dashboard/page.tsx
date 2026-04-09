@@ -166,7 +166,8 @@ function DashboardContent() {
           <div className="flex items-center gap-6">
             <button
               onClick={toggleTheme}
-              className="p-3.5 rounded-full border border-white/5 hover:border-primary/20 transition-all text-white/20 hover:text-primary"
+              className="p-3.5 rounded-full border border-white/5 hover:border-primary/20 transition-all text-white/20 hover:text-primary focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+              aria-label="Alternar tema"
             >
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>

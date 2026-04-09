@@ -172,7 +172,8 @@ export default function ReportsPage() {
                     <div className="flex items-center gap-8">
                         <button
                             onClick={() => router.back()}
-                            className="bg-background/80 p-4 rounded-2xl border border-border/40 text-muted-foreground hover:text-primary transition-all shadow-soft hover:scale-105"
+                            className="bg-background/80 p-4 rounded-2xl border border-border/40 text-muted-foreground hover:text-primary transition-all shadow-soft hover:scale-105 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+                            aria-label="Volver"
                         >
                             <ArrowLeft size={20} />
                         </button>
