@@ -18,5 +18,12 @@
     "agenda": "Agenda",
     "chat": "Chat",
     "reports": "Analítica"
+  },
+  "agenda": {
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "today": "Hoy",
+    "deleteAppointment": "Eliminar cita",
+    "close": "Cerrar modal"
   }
 }
