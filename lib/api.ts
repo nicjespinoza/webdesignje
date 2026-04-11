@@ -200,12 +200,17 @@ export const api = {
         if (patientId) {
             // 1. Try Subcollection (New App)
             const subColRef = collection(db, 'patients', patientId, 'histories');
-            const subSnapshot = await getDocs(subColRef);
-            const subDocs = subSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
 
             // 2. Try Root Collection (Migrated Data)
             const rootColRef = query(collection(db, 'initialHistories'), where('patientId', '==', patientId));
-            const rootSnapshot = await getDocs(rootColRef);
+
+            // OPTIMIZATION: Fetch both collections concurrently
+            const [subSnapshot, rootSnapshot] = await Promise.all([
+                getDocs(subColRef),
+                getDocs(rootColRef)
+            ]);
+
+            const subDocs = subSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
             const rootDocs = rootSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
 
             // Combine and sort by date descending
@@ -332,11 +337,15 @@ export const api = {
     getConsults: async (patientId: string): Promise<SubsequentConsult[]> => {
         // Similar dual-read strategy as Histories
         const subColRef = collection(db, 'patients', patientId, 'consults');
-        const subSnapshot = await getDocs(subColRef);
-        const subDocs = subSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
-
         const rootColRef = query(collection(db, 'subsequentConsults'), where('patientId', '==', patientId));
-        const rootSnapshot = await getDocs(rootColRef);
+
+        // OPTIMIZATION: Fetch both collections concurrently
+        const [subSnapshot, rootSnapshot] = await Promise.all([
+            getDocs(subColRef),
+            getDocs(rootColRef)
+        ]);
+
+        const subDocs = subSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
         const rootDocs = rootSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
 
         const combined = [...subDocs, ...rootDocs].sort((a, b) =>

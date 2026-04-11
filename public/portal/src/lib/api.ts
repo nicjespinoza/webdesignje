@@ -246,19 +246,28 @@ export const api = {
 
         // 1. Delete Subcollections
         const subcollections = ['histories', 'consults', 'observations', 'snapshots'];
-        for (const subCol of subcollections) {
-            const subDocs = await getDocs(collection(db, 'patients', id, subCol));
-            const batch = writeBatch(db);
-            subDocs.docs.forEach(d => batch.delete(d.ref));
-            await batch.commit();
+
+        // OPTIMIZATION: Fetch all subcollections concurrently
+        const subDocsSnapshots = await Promise.all(
+            subcollections.map(subCol => getDocs(collection(db, 'patients', id, subCol)))
+        );
+
+        for (const subSnapshot of subDocsSnapshots) {
+            if (!subSnapshot.empty) {
+                const batch = writeBatch(db);
+                subSnapshot.docs.forEach(d => batch.delete(d.ref));
+                await batch.commit();
+            }
         }
 
         // 2. Delete Related Appointments
         const appointmentsQ = query(collection(db, 'appointments'), where('patientId', '==', id));
         const appointmentsSnap = await getDocs(appointmentsQ);
-        const batchAppt = writeBatch(db);
-        appointmentsSnap.docs.forEach(d => batchAppt.delete(d.ref));
-        await batchAppt.commit();
+        if (!appointmentsSnap.empty) {
+            const batchAppt = writeBatch(db);
+            appointmentsSnap.docs.forEach(d => batchAppt.delete(d.ref));
+            await batchAppt.commit();
+        }
 
         // 3. Delete Patient Doc
         await deleteDoc(patientRef);
@@ -296,12 +305,17 @@ export const api = {
         if (patientId) {
             // 1. Try Subcollection (New App)
             const subColRef = collection(db, 'patients', patientId, 'histories');
-            const subSnapshot = await getDocs(subColRef);
-            const subDocs = subSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
 
             // 2. Try Root Collection (Migrated Data)
             const rootColRef = query(collection(db, 'initialHistories'), where('patientId', '==', patientId));
-            const rootSnapshot = await getDocs(rootColRef);
+
+            // OPTIMIZATION: Fetch both collections concurrently
+            const [subSnapshot, rootSnapshot] = await Promise.all([
+                getDocs(subColRef),
+                getDocs(rootColRef)
+            ]);
+
+            const subDocs = subSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
             const rootDocs = rootSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
 
             // Combine and sort by date descending
@@ -471,12 +485,18 @@ export const api = {
     getConsults: async (patientId?: string): Promise<SubsequentConsult[]> => {
         if (patientId) {
             // 1. Try Subcollection
-            const subSnapshot = await getDocs(collection(db, 'patients', patientId, 'consults'));
-            const subDocs = subSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
+            const subColRef = collection(db, 'patients', patientId, 'consults');
 
             // 2. Try Root Collection (Migrated)
             const rootQ = query(collection(db, 'subsequentConsults'), where('patientId', '==', patientId));
-            const rootSnapshot = await getDocs(rootQ);
+
+            // OPTIMIZATION: Fetch both collections concurrently
+            const [subSnapshot, rootSnapshot] = await Promise.all([
+                getDocs(subColRef),
+                getDocs(rootQ)
+            ]);
+
+            const subDocs = subSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
             const rootDocs = rootSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
 
             // Combine
