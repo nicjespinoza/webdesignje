@@ -6,7 +6,9 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "search": "Buscar",
-    "back": "Volver"
+    "back": "Volver",
+    "viewNotes": "Ver Notas",
+    "viewEndo": "Ver Endoscopia"
   },
   "portal": {
     "title": "Selecciona una experiencia",
