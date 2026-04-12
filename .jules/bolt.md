@@ -1,0 +1,3 @@
+## 2024-05-20 - Optimize 3D Euclidean Distance Calculations
+**Learning:** In Three.js and similar 3D environments, computing standard distance using `.distanceTo()` involves a computationally expensive `Math.sqrt()` operation. When used in high-frequency functions (like `useFrame` animation loops) or inside nested loops (O(n²)), this becomes a significant performance bottleneck that can cause frame rate drops.
+**Action:** Replace `.distanceTo(v) < threshold` with `.distanceToSquared(v) < (threshold * threshold)` to avoid the square root calculation entirely while preserving mathematical correctness for proximity checks.
