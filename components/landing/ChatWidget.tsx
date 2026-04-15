@@ -4,8 +4,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useChat } from 'ai/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Send, X, MessageCircle, Sparkles, Loader2, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const ChatWidget = () => {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
         api: '/api/chat',
@@ -59,6 +61,8 @@ const ChatWidget = () => {
                             <button
                                 onClick={toggleChat}
                                 className="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400 hover:text-white"
+                                aria-label={t("common.closeChat")}
+                                title={t("common.closeChat")}
                             >
                                 <X size={20} />
                             </button>
@@ -140,6 +144,8 @@ const ChatWidget = () => {
                                     type="submit"
                                     disabled={isLoading || !input.trim()}
                                     className="p-2.5 bg-[#C69320] text-black rounded-xl hover:bg-[#FBE18D] transition-all disabled:opacity-30 disabled:cursor-not-allowed group"
+                                    aria-label={t("common.sendMessage")}
+                                    title={t("common.sendMessage")}
                                 >
                                     <Send size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                                 </button>
@@ -158,6 +164,8 @@ const ChatWidget = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleChat}
                 className="pointer-events-auto p-4 rounded-2xl bg-[#020202] border border-[#C69320]/40 shadow-[0_0_20px_rgba(198,147,32,0.3)] text-[#FBE18D] hover:shadow-[0_0_30px_rgba(198,147,32,0.5)] transition-all flex items-center justify-center group overflow-hidden relative"
+                aria-label={isOpen ? t("common.closeChat") : t("common.openChat")}
+                title={isOpen ? t("common.closeChat") : t("common.openChat")}
             >
                 {/* Efecto de brillo líquido */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#C69320]/0 via-[#FBE18D]/10 to-[#C69320]/0 opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-100%] group-hover:translate-x-[100%] duration-1000"></div>

@@ -6,7 +6,11 @@
     "delete": "Delete",
     "edit": "Edit",
     "search": "Search",
-    "back": "Back"
+    "back": "Back",
+    "openChat": "Open chat",
+    "closeChat": "Close chat",
+    "sendMessage": "Send message",
+    "toggleMenu": "Toggle menu"
   },
   "portal": {
     "title": "Select an experience",
