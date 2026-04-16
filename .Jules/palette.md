@@ -1,0 +1,3 @@
+## 2024-03-22 - Internationalized Accessibility Attributes
+**Learning:** Hardcoding accessibility strings like `aria-label` or `title` on icon-only buttons breaks the experience for users reliant on screen readers when the application supports multiple languages (e.g., using `react-i18next`). Adding simple translations via dictionaries allows the accessibility layer to match the visual language.
+**Action:** Always utilize the existing translation hook (`const { t } = useTranslation();`) for all `aria-label` and `title` attributes on icon-only interactive elements to ensure inclusive screen reader support across localizations.
