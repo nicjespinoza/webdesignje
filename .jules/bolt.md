@@ -1,0 +1,3 @@
+## 2024-04-16 - [Math.sqrt optimization in Canvas loops]
+**Learning:** Using `Math.sqrt` inside nested `for` loops within `requestAnimationFrame` causes a measurable CPU overhead because it is executed thousands of times per frame (O(N²)). Replacing the initial distance check with a squared distance comparison (e.g., `dx * dx + dy * dy < maxDist * maxDist`) avoids calling `Math.sqrt` for particles outside the interaction threshold.
+**Action:** Always prefer squared distance comparisons (`distSq`) over `Math.sqrt` for early rejection in proximity checks inside high-frequency animation loops or nested loops. Only compute the actual square root when the exact distance is required for opacity or force calculations *after* the fast threshold check passes.
