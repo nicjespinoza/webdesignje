@@ -1,0 +1,4 @@
+
+## 2024-03-05 - R3F Draw Call Multiplication via Graph Logic
+**Learning:** When calculating undirected graph connections (like synapses between particles) for React Three Fiber rendering, a naïve O(N²) nested loop (`for each i, for each j where i != j`) calculates both A->B and B->A edges. In R3F, if these connections map 1:1 to components (like `<Line />`), you silently double the draw calls and WebGL geometry overhead. Furthermore, embedding `Math.random()` filters directly in the JSX render function causes unstable, flickering component trees on every re-render.
+**Action:** Always use an O(N²/2) combination loop (`for i=0 to N, for j=i+1 to N`) when generating bidirectional or undirected graph edge data for 3D visualization. Always lift unstable filters like `Math.random()` into a `useMemo` block that governs the data array, rather than rendering conditionally inside the JSX mapping loop.
