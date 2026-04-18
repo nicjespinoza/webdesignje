@@ -1,0 +1,3 @@
+## 2025-03-09 - Squared Distance Optimization in Particle Animation
+**Learning:** Found multiple instances where `Math.sqrt` was used in nested loops to calculate distances in particle animations. This is a common performance bottleneck in high-frequency animation loops. Since we only need to compare the distance against a threshold (e.g., `distance < maxDistance`), we can optimize this by comparing the squared distance `dx * dx + dy * dy` against the squared threshold `maxDistance * maxDistance`, completely avoiding the computationally expensive square root calculation.
+**Action:** Replace `Math.sqrt` with squared distance comparisons inside animation loops, particularly nested loops (O(n^2)), to improve frame rates and reduce CPU load.
