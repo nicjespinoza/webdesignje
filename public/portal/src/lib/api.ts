@@ -244,21 +244,28 @@ export const api = {
         // Deep delete: remove subcollections and related docs
         const patientRef = doc(db, 'patients', id);
 
-        // 1. Delete Subcollections
+        // 1 & 2. Delete Subcollections and Related Appointments concurrently
         const subcollections = ['histories', 'consults', 'observations', 'snapshots'];
-        for (const subCol of subcollections) {
+        const subColPromises = subcollections.map(async (subCol) => {
             const subDocs = await getDocs(collection(db, 'patients', id, subCol));
-            const batch = writeBatch(db);
-            subDocs.docs.forEach(d => batch.delete(d.ref));
-            await batch.commit();
-        }
+            if (!subDocs.empty) {
+                const batch = writeBatch(db);
+                subDocs.docs.forEach(d => batch.delete(d.ref));
+                await batch.commit();
+            }
+        });
 
-        // 2. Delete Related Appointments
-        const appointmentsQ = query(collection(db, 'appointments'), where('patientId', '==', id));
-        const appointmentsSnap = await getDocs(appointmentsQ);
-        const batchAppt = writeBatch(db);
-        appointmentsSnap.docs.forEach(d => batchAppt.delete(d.ref));
-        await batchAppt.commit();
+        const appointmentsPromise = (async () => {
+            const appointmentsQ = query(collection(db, 'appointments'), where('patientId', '==', id));
+            const appointmentsSnap = await getDocs(appointmentsQ);
+            if (!appointmentsSnap.empty) {
+                const batchAppt = writeBatch(db);
+                appointmentsSnap.docs.forEach(d => batchAppt.delete(d.ref));
+                await batchAppt.commit();
+            }
+        })();
+
+        await Promise.all([...subColPromises, appointmentsPromise]);
 
         // 3. Delete Patient Doc
         await deleteDoc(patientRef);
@@ -490,12 +497,13 @@ export const api = {
 
         // Fallback for getting all
         const patientsSnapshot = await getDocs(collection(db, 'patients'));
-        const allConsults: SubsequentConsult[] = [];
-        for (const patientDoc of patientsSnapshot.docs) {
+        const consultsPromises = patientsSnapshot.docs.map(async (patientDoc) => {
             const consultsSnapshot = await getDocs(collection(db, 'patients', patientDoc.id, 'consults'));
-            allConsults.push(...consultsSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc)));
-        }
-        return allConsults;
+            return consultsSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
+        });
+
+        const consultsArrays = await Promise.all(consultsPromises);
+        return consultsArrays.flat();
     },
 
     /**
