@@ -246,12 +246,14 @@ export const api = {
 
         // 1. Delete Subcollections
         const subcollections = ['histories', 'consults', 'observations', 'snapshots'];
-        for (const subCol of subcollections) {
+        // ⚡ Bolt: Parallelize subcollection deletion to reduce network wait time
+        await Promise.all(subcollections.map(async (subCol) => {
             const subDocs = await getDocs(collection(db, 'patients', id, subCol));
+            if (subDocs.empty) return; // ⚡ Bolt: avoid unnecessary empty batch commits
             const batch = writeBatch(db);
             subDocs.docs.forEach(d => batch.delete(d.ref));
             await batch.commit();
-        }
+        }));
 
         // 2. Delete Related Appointments
         const appointmentsQ = query(collection(db, 'appointments'), where('patientId', '==', id));
@@ -490,11 +492,15 @@ export const api = {
 
         // Fallback for getting all
         const patientsSnapshot = await getDocs(collection(db, 'patients'));
-        const allConsults: SubsequentConsult[] = [];
-        for (const patientDoc of patientsSnapshot.docs) {
-            const consultsSnapshot = await getDocs(collection(db, 'patients', patientDoc.id, 'consults'));
-            allConsults.push(...consultsSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc)));
-        }
+        // ⚡ Bolt: Parallelize consults fetching to avoid N+1 sequential network calls bottleneck
+        const consultsPromises = patientsSnapshot.docs.map(patientDoc =>
+            getDocs(collection(db, 'patients', patientDoc.id, 'consults'))
+        );
+        const consultsSnapshots = await Promise.all(consultsPromises);
+
+        const allConsults: SubsequentConsult[] = consultsSnapshots.flatMap(snapshot =>
+            snapshot.docs.map(doc => docToData<SubsequentConsult>(doc))
+        );
         return allConsults;
     },
 
