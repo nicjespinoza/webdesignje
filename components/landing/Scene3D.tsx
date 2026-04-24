@@ -103,23 +103,23 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
     const lines: { points: [THREE.Vector3, THREE.Vector3]; strength: number; layer: number }[] = [];
 
     neurons.forEach((n1, i) => {
-      neurons.forEach((n2, j) => {
-        if (i !== j) {
-          const dist = n1.position.distanceTo(n2.position);
-          // Different thresholds per layer
-          const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
+      for (let j = i + 1; j < neurons.length; j++) {
+        const n2 = neurons[j];
+        // Optimize: use distanceToSquared to avoid Math.sqrt and i < j to avoid duplicate lines
+        const distSq = n1.position.distanceToSquared(n2.position);
+        // Different thresholds per layer
+        const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
 
-          if (dist < threshold) {
-            // Strength based on layer (core connections stronger)
-            const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
-            lines.push({
-              points: [n1.position, n2.position],
-              strength,
-              layer: n1.layer
-            });
-          }
+        if (distSq < threshold * threshold) {
+          // Strength based on layer (core connections stronger)
+          const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
+          lines.push({
+            points: [n1.position, n2.position],
+            strength,
+            layer: n1.layer
+          });
         }
-      });
+      }
     });
     return lines;
   }, [neurons]);
@@ -296,7 +296,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // Optimize: use distanceToSquared to avoid Math.sqrt
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) {
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);

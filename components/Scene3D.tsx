@@ -41,14 +41,14 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
     const threshold = 2.5;
 
     particles.forEach((p1, i) => {
-      particles.forEach((p2, j) => {
-        if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
-            lines.push([p1, p2]);
-          }
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        // Optimize: use distanceToSquared to avoid Math.sqrt and i < j to avoid duplicate lines
+        const distSq = p1.distanceToSquared(p2);
+        if (distSq < threshold * threshold) {
+          lines.push([p1, p2]);
         }
-      });
+      }
     });
     return lines;
   }, [particles]);
@@ -144,7 +144,8 @@ const DataPulses = ({ radius }: { radius: number }) => {
             agent.pos.add(dir.multiplyScalar(agent.speed));
             
             // If close to destination, pick new destination
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // Optimize: use distanceToSquared to avoid Math.sqrt
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,
