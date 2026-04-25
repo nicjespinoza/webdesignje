@@ -6,7 +6,8 @@
     "delete": "Delete",
     "edit": "Edit",
     "search": "Search",
-    "back": "Back"
+    "back": "Back",
+    "updatePhoto": "Update photo"
   },
   "portal": {
     "title": "Select an experience",
