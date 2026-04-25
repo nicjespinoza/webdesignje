@@ -1,0 +1,3 @@
+## 2024-10-25 - Icon-only buttons accessibility in multilingual medical UI
+**Learning:** Icon-only buttons (like Edit or Update Photo) are visually clean but completely inaccessible to screen readers without ARIA labels, and confusing to users without titles (tooltips). Furthermore, when adding these accessibility texts in an application using react-i18next, they must use the translation system rather than hardcoding strings to maintain the multilingual functionality.
+**Action:** Always add 'aria-label', 'title', and 'focus-visible' CSS classes to icon-only buttons. When adding textual labels, leverage the 'useTranslation' hook and add new translation keys across all supported locales (e.g., en.json, es.json) instead of hardcoding.
