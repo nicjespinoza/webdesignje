@@ -17,6 +17,11 @@
     "patients": "Patients",
     "agenda": "Agenda",
     "chat": "Chat",
-    "reports": "Analytics"
+    "reports": "Analytics",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today",
+    "deleteAppointment": "Delete appointment",
+    "closeModal": "Close modal"
   }
 }
