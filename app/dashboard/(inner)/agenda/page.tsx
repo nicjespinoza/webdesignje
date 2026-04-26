@@ -27,6 +27,7 @@ import { toast } from 'react-hot-toast';
 import { getSpecialtyById, Specialty } from '@/lib/specialties';
 
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useAppTranslations } from '@/hooks/useTranslations';
 
 const TIME_SLOTS = [
     '08:00', '09:00', '10:00', '11:00', '12:00',
@@ -37,6 +38,7 @@ function AgendaPageContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
+    const { t } = useAppTranslations();
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [patients, setPatients] = useState<Patient[]>([]);
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -232,9 +234,9 @@ function AgendaPageContent() {
                             </div>
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center gap-2 p-2 bg-background/50 rounded-2xl border border-border/40 shadow-inner">
-                                    <button onClick={() => changeMonth(-1)} className="p-3 hover:bg-card rounded-xl transition-all text-muted-foreground hover:text-primary"><ChevronLeft size={20} /></button>
-                                    <button onClick={() => setCurrentDate(new Date())} className="px-6 py-3 bg-primary text-primary-foreground rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/10">Hoy</button>
-                                    <button onClick={() => changeMonth(1)} className="p-3 hover:bg-card rounded-xl transition-all text-muted-foreground hover:text-primary"><ChevronRight size={20} /></button>
+                                    <button aria-label={t('dashboard.previousMonth')} title={t('dashboard.previousMonth')} onClick={() => changeMonth(-1)} className="p-3 hover:bg-card rounded-xl transition-all text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"><ChevronLeft size={20} /></button>
+                                    <button onClick={() => setCurrentDate(new Date())} className="px-6 py-3 bg-primary text-primary-foreground rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/10 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary">{t('dashboard.today')}</button>
+                                    <button aria-label={t('dashboard.nextMonth')} title={t('dashboard.nextMonth')} onClick={() => changeMonth(1)} className="p-3 hover:bg-card rounded-xl transition-all text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"><ChevronRight size={20} /></button>
                                 </div>
                             </div>
                         </div>
@@ -314,8 +316,10 @@ function AgendaPageContent() {
                                                         {apt.time}
                                                     </div>
                                                     <button
+                                                        aria-label={t('dashboard.deleteAppointment')}
+                                                        title={t('dashboard.deleteAppointment')}
                                                         onClick={() => handleDeleteAppointment(apt.id)}
-                                                        className="p-2 text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all"
+                                                        className="p-2 text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
                                                     >
                                                         <Trash2 size={14} />
                                                     </button>
@@ -368,7 +372,7 @@ function AgendaPageContent() {
                                     <h3 className="text-3xl font-black text-foreground tracking-tighter">Nueva Cita</h3>
                                     <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1 italic">{specialty?.nameEs}</p>
                                 </div>
-                                <button onClick={() => setShowNewAppointmentModal(false)} className="p-4 bg-muted hover:bg-destructive hover:text-white rounded-[1.5rem] transition-all border border-border/40 shadow-soft">
+                                <button aria-label={t('dashboard.closeModal')} title={t('dashboard.closeModal')} onClick={() => setShowNewAppointmentModal(false)} className="p-4 bg-muted hover:bg-destructive hover:text-white rounded-[1.5rem] transition-all border border-border/40 shadow-soft focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary">
                                     <X size={20} />
                                 </button>
                             </div>
