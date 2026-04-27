@@ -1,0 +1,3 @@
+## 2024-04-27 - Centralized i18n for Accessibility Attributes
+**Learning:** When adding user-facing accessibility attributes like `aria-label` or `title`, hardcoding strings (e.g., in Spanish) bypasses the application's localization configuration and violates the project's memory guidelines for `medical-ai-demo`.
+**Action:** Always use the existing `react-i18next` integration (via the `useAppTranslations` hook and `t` function) and add the necessary translation keys to the dictionary files (`messages/en.json`, `messages/es.json`) to maintain centralized, localized accessible strings.

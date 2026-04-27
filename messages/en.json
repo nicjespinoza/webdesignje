@@ -6,7 +6,10 @@
     "delete": "Delete",
     "edit": "Edit",
     "search": "Search",
-    "back": "Back"
+    "back": "Back",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "close": "Close"
   },
   "portal": {
     "title": "Select an experience",
