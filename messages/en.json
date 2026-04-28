@@ -6,7 +6,9 @@
     "delete": "Delete",
     "edit": "Edit",
     "search": "Search",
-    "back": "Back"
+    "back": "Back",
+    "viewNotes": "View Notes",
+    "viewEndoscopic": "View Endoscopic Report"
   },
   "portal": {
     "title": "Select an experience",
