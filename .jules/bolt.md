@@ -1,0 +1,3 @@
+## 2025-04-28 - Avoid Math.sqrt in High Frequency Loops
+**Learning:** `Math.sqrt` inside animation frames (60 fps) and nested `O(n^2)` loops (like particle connections) can create significant CPU bottlenecks in JS Canvas and Three.js components. Calculating distance via square root is unnecessarily expensive when simply comparing against a static threshold.
+**Action:** Use squared distances `(dx*dx + dy*dy)` and square the distance threshold to compare. In cases where the exact linear distance is still required (e.g. for opacity/styling scaling), compute `Math.sqrt` *only inside* the conditional block where distance is already known to be less than the threshold. Also, avoid duplicate connection calculations by using `j = i + 1` instead of `j = i`.
