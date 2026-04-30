@@ -6,7 +6,14 @@
     "delete": "Delete",
     "edit": "Edit",
     "search": "Search",
-    "back": "Back"
+    "back": "Back",
+    "updateImage": "Update image",
+    "deleteHistory": "Delete history",
+    "viewHistory": "View history",
+    "deleteConsult": "Delete consult",
+    "viewConsult": "View consult",
+    "viewNotes": "View notes",
+    "viewEndo": "View endoscopic procedure"
   },
   "portal": {
     "title": "Select an experience",

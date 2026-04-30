@@ -6,17 +6,24 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "search": "Buscar",
-    "back": "Volver"
+    "back": "Volver",
+    "updateImage": "Actualizar imagen",
+    "deleteHistory": "Eliminar historial",
+    "viewHistory": "Ver historial",
+    "deleteConsult": "Eliminar consulta",
+    "viewConsult": "Ver consulta",
+    "viewNotes": "Ver notas",
+    "viewEndo": "Ver procedimiento endosc\u00f3pico"
   },
   "portal": {
     "title": "Selecciona una experiencia",
-    "medical": "Historia Clínica SaaS",
+    "medical": "Historia Cl\u00ednica SaaS",
     "selectSpecialty": "Selecciona tu especialidad"
   },
   "dashboard": {
     "patients": "Pacientes",
     "agenda": "Agenda",
     "chat": "Chat",
-    "reports": "Analítica"
+    "reports": "Anal\u00edtica"
   }
 }

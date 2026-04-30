@@ -5,6 +5,7 @@ import React from 'react';
 import { History, FileText, CheckCircle, ChevronRight, Trash2, Eye } from 'lucide-react';
 import { InitialHistory, Patient } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAppTranslations } from '@/hooks/useTranslations';
 
 interface HistoryListProps {
     patient: Patient;
@@ -14,6 +15,7 @@ interface HistoryListProps {
 }
 
 export const HistoryList: React.FC<HistoryListProps> = ({ histories, onNavigate, onDelete }) => {
+    const { t } = useAppTranslations();
     return (
         <div className="w-full">
             <header className="flex items-center justify-between mb-12">
@@ -58,13 +60,19 @@ export const HistoryList: React.FC<HistoryListProps> = ({ histories, onNavigate,
                         <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-700">
                             <button
                                 onClick={(e) => { e.stopPropagation(); onDelete(history.id); }}
+                                aria-label={t("common.deleteHistory")}
+                                title={t("common.deleteHistory")}
                                 className="p-2 text-white/10 hover:text-destructive transition-colors"
                             >
                                 <Trash2 size={14} strokeWidth={1} />
                             </button>
-                            <div className="p-2.5 rounded-full border border-primary/10 text-primary group-hover:scale-110 transition-transform">
+                            <button
+                                aria-label={t("common.viewHistory")}
+                                title={t("common.viewHistory")}
+                                className="p-2.5 rounded-full border border-primary/10 text-primary group-hover:scale-110 transition-transform"
+                            >
                                 <Eye size={14} strokeWidth={1} />
-                            </div>
+                            </button>
                         </div>
 
                         {/* Liquid Background Accent */}
