@@ -6,7 +6,9 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "search": "Buscar",
-    "back": "Volver"
+    "back": "Volver",
+    "editPatient": "Editar información del paciente",
+    "updateAvatar": "Actualizar foto de perfil"
   },
   "portal": {
     "title": "Selecciona una experiencia",
