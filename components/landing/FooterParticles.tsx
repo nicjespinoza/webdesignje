@@ -97,13 +97,16 @@ const FooterParticles: React.FC = () => {
         particles[i].update(canvas.width, canvas.height);
         particles[i].draw(ctx, PARTICLE_COLOR);
 
+        const thresholdSq = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
         // Draw connections to other particles (Synapses)
-        for (let j = i; j < particles.length; j++) {
+        // Optimization: Start from i + 1 to avoid duplicate/self-checks, and defer Math.sqrt
+        for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < CONNECTION_DISTANCE) {
+          if (distSq < thresholdSq) {
+            const distance = Math.sqrt(distSq);
             ctx.beginPath();
             const opacity = 1 - (distance / CONNECTION_DISTANCE);
             ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`; // Faint network lines
