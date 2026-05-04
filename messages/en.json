@@ -18,5 +18,10 @@
     "agenda": "Agenda",
     "chat": "Chat",
     "reports": "Analytics"
+  },
+  "patientHeader": {
+    "viewNotes": "View full notes",
+    "viewEndo": "View endoscopic record",
+    "back": "Go back"
   }
 }

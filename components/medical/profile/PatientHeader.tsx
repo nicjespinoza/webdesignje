@@ -8,6 +8,7 @@ import { Patient } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useAppTranslations } from '@/hooks/useTranslations';
 
 interface PatientHeaderProps {
     patient: Patient;
@@ -35,6 +36,7 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
     setActiveTab
 }) => {
     const { user } = useAuth();
+    const { t } = useAppTranslations();
     const isAssistant = user?.email === 'asistente@je.com';
 
     return (
@@ -45,7 +47,9 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
                 <div className="flex flex-col gap-5">
                     <button
                         onClick={onBack}
-                        className="flex items-center gap-3 text-white/20 hover:text-primary transition-all text-[8px] tracking-[0.5em] uppercase font-light group"
+                        aria-label={t('patientHeader.back')}
+                        title={t('patientHeader.back')}
+                        className="flex items-center gap-3 text-white/20 hover:text-primary transition-all text-[8px] tracking-[0.5em] uppercase font-light group focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary rounded-md p-1 -m-1"
                     >
                         <ChevronLeft size={14} strokeWidth={1} className="group-hover:-translate-x-1 transition-transform" />
                         Regresar
@@ -90,7 +94,12 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
                             <button onClick={onShowNotes} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
                                 <StickyNote size={14} strokeWidth={1} /> Notas
                             </button>
-                            <button onClick={onViewNotes} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                            <button
+                                onClick={onViewNotes}
+                                aria-label={t('patientHeader.viewNotes')}
+                                title={t('patientHeader.viewNotes')}
+                                className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+                            >
                                 <Eye size={12} strokeWidth={1} />
                             </button>
                         </div>
@@ -100,7 +109,12 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
                         <button onClick={onShowEndoscopic} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
                             <Activity size={14} strokeWidth={1} /> Endo
                         </button>
-                        <button onClick={onViewEndoscopic} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                        <button
+                            onClick={onViewEndoscopic}
+                            aria-label={t('patientHeader.viewEndo')}
+                            title={t('patientHeader.viewEndo')}
+                            className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+                        >
                             <Eye size={12} strokeWidth={1} />
                         </button>
                     </div>
