@@ -294,14 +294,17 @@ export const api = {
     // ==================== HISTORIES (Subcollection & Root Fallback) ====================
     getHistories: async (patientId?: string): Promise<InitialHistory[]> => {
         if (patientId) {
-            // 1. Try Subcollection (New App)
+            // 1 & 2. Try Subcollection (New App) and Root Collection (Migrated Data) concurrently
+            // Optimization: use Promise.all to parallelize independent data fetching
             const subColRef = collection(db, 'patients', patientId, 'histories');
-            const subSnapshot = await getDocs(subColRef);
-            const subDocs = subSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
-
-            // 2. Try Root Collection (Migrated Data)
             const rootColRef = query(collection(db, 'initialHistories'), where('patientId', '==', patientId));
-            const rootSnapshot = await getDocs(rootColRef);
+
+            const [subSnapshot, rootSnapshot] = await Promise.all([
+                getDocs(subColRef),
+                getDocs(rootColRef)
+            ]);
+
+            const subDocs = subSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
             const rootDocs = rootSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
 
             // Combine and sort by date descending
@@ -470,13 +473,17 @@ export const api = {
 
     getConsults: async (patientId?: string): Promise<SubsequentConsult[]> => {
         if (patientId) {
-            // 1. Try Subcollection
-            const subSnapshot = await getDocs(collection(db, 'patients', patientId, 'consults'));
-            const subDocs = subSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
-
-            // 2. Try Root Collection (Migrated)
+            // 1 & 2. Try Subcollection and Root Collection (Migrated) concurrently
+            // Optimization: use Promise.all to parallelize independent data fetching
+            const subColRef = collection(db, 'patients', patientId, 'consults');
             const rootQ = query(collection(db, 'subsequentConsults'), where('patientId', '==', patientId));
-            const rootSnapshot = await getDocs(rootQ);
+
+            const [subSnapshot, rootSnapshot] = await Promise.all([
+                getDocs(subColRef),
+                getDocs(rootQ)
+            ]);
+
+            const subDocs = subSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
             const rootDocs = rootSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
 
             // Combine
