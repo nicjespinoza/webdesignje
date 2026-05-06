@@ -1,0 +1,3 @@
+## 2024-05-18 - Avoid Math.sqrt in O(n^2) canvas loops
+**Learning:** Using `Math.sqrt` on every pair in a particle simulation creates unnecessary CPU overhead. Checking `distSq < maxDist * maxDist` handles thresholds without the expensive operation. Also, `for (let j = i; ...)` generates duplicate connections and self-loops, doubling the work and causing visual overlay glitches in line-drawing.
+**Action:** When calculating distances for thresholds inside `requestAnimationFrame` and O(n^2) loops, always use `distanceToSquared`. Update iteration to `for (let j = i + 1; j < array.length; j++)` when pairing elements to prevent redundant calculations and self-loops.
