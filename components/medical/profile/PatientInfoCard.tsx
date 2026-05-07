@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { getSpecialtyById, Specialty } from '@/lib/specialties';
 import { cn } from '@/lib/utils';
+import { useAppTranslations } from '@/hooks/useTranslations';
 
 interface PatientInfoCardProps {
     patient: Patient;
@@ -17,6 +18,7 @@ interface PatientInfoCardProps {
 }
 
 export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient, onUpdateImage, onEdit, uploadingImage }) => {
+    const { t } = useAppTranslations();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [specialty, setSpecialty] = useState<Specialty | null>(null);
 
@@ -52,7 +54,9 @@ export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient, onUpd
                 {onEdit && (
                     <button
                         onClick={onEdit}
-                        className="p-2.5 text-white/20 hover:text-primary transition-all rounded-full border border-white/5 hover:border-primary/20"
+                        aria-label={t('common.editProfile')}
+                        title={t('common.editProfile')}
+                        className="p-2.5 text-white/20 hover:text-primary transition-all rounded-full border border-white/5 hover:border-primary/20 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
                     >
                         <Edit size={12} strokeWidth={1} />
                     </button>
@@ -69,7 +73,7 @@ export const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ patient, onUpd
                                 <User size={40} strokeWidth={1} className="text-white/10" />
                             </div>
                         )}
-                        <button type="button" className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                        <button type="button" aria-label={t('common.updateProfileImage')} title={t('common.updateProfileImage')} className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary transition-opacity flex items-center justify-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                             <Camera className="text-white/60" size={20} strokeWidth={1} />
                         </button>
                     </div>
