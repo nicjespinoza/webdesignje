@@ -296,12 +296,16 @@ export const api = {
         if (patientId) {
             // 1. Try Subcollection (New App)
             const subColRef = collection(db, 'patients', patientId, 'histories');
-            const subSnapshot = await getDocs(subColRef);
-            const subDocs = subSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
-
             // 2. Try Root Collection (Migrated Data)
             const rootColRef = query(collection(db, 'initialHistories'), where('patientId', '==', patientId));
-            const rootSnapshot = await getDocs(rootColRef);
+
+            // Optimization: Parallelize dual-read strategy with Promise.all
+            const [subSnapshot, rootSnapshot] = await Promise.all([
+                getDocs(subColRef),
+                getDocs(rootColRef)
+            ]);
+
+            const subDocs = subSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
             const rootDocs = rootSnapshot.docs.map(doc => docToData<InitialHistory>(doc));
 
             // Combine and sort by date descending
@@ -471,12 +475,17 @@ export const api = {
     getConsults: async (patientId?: string): Promise<SubsequentConsult[]> => {
         if (patientId) {
             // 1. Try Subcollection
-            const subSnapshot = await getDocs(collection(db, 'patients', patientId, 'consults'));
-            const subDocs = subSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
-
+            const subColRef = collection(db, 'patients', patientId, 'consults');
             // 2. Try Root Collection (Migrated)
             const rootQ = query(collection(db, 'subsequentConsults'), where('patientId', '==', patientId));
-            const rootSnapshot = await getDocs(rootQ);
+
+            // Optimization: Parallelize dual-read strategy with Promise.all
+            const [subSnapshot, rootSnapshot] = await Promise.all([
+                getDocs(subColRef),
+                getDocs(rootQ)
+            ]);
+
+            const subDocs = subSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
             const rootDocs = rootSnapshot.docs.map(doc => docToData<SubsequentConsult>(doc));
 
             // Combine
