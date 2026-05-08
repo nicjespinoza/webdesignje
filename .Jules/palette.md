@@ -1,0 +1,3 @@
+## 2024-05-24 - Accessibility for Icon-Only Buttons with i18n
+**Learning:** In Next.js applications using react-i18next wrapper, accessibility attributes like `aria-label` and `title` on icon-only buttons must use translated strings instead of hardcoded text to support internationalization.
+**Action:** Always import and use `useAppTranslations` and add the specific strings to the JSON dictionaries when addressing missing `aria-label`s on icon-only interactive elements in the `medical-ai-demo` project. Ensure focus styles like `focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary` are present.
