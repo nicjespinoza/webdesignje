@@ -1,0 +1,3 @@
+## 2025-02-23 - Avoid Math.sqrt in High-Frequency Canvas Loops
+**Learning:** Using `Math.sqrt` to calculate Euclidean distances inside nested `requestAnimationFrame` loops (e.g., O(n^2) particle synapse algorithms) acts as a significant performance bottleneck.
+**Action:** Instead of calculating raw distances via `Math.sqrt(dx * dx + dy * dy) < maxDist`, use squared comparisons `dx * dx + dy * dy < maxDist * maxDist` to gate the execution of `Math.sqrt` only for objects confirmed to be within the threshold. Furthermore, hoist these squared threshold constants out of iterative loops and change iteration logic like `for (let j = i; j < len)` to `for (let j = i + 1; j < len)` to halve O(n^2) iterations and avoid redundant self-distance (`Math.sqrt(0)`) calculations.

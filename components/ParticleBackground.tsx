@@ -48,9 +48,10 @@ const ParticleBackground: React.FC = () => {
                 // Determine if hovered
                 const dxm = mouse.x - this.x;
                 const dym = mouse.y - this.y;
-                const distMouse = Math.sqrt(dxm * dxm + dym * dym);
-                
-                this.isHovered = distMouse < 40;
+                const distMouseSq = dxm * dxm + dym * dym;
+
+                // Optimization: use distanceToSquared to avoid expensive Math.sqrt
+                this.isHovered = distMouseSq < 1600; // 40 * 40
 
                 // Handle size growth / shrink
                 const targetSize = this.isHovered ? this.baseSize * 4 : this.baseSize;
@@ -62,13 +63,14 @@ const ParticleBackground: React.FC = () => {
                         if (p === this) return;
                         const dxo = this.x - p.x;
                         const dyo = this.y - p.y;
-                        const distOther = Math.sqrt(dxo * dxo + dyo * dyo);
-                        if (distOther < 120) {
+                        const distOtherSq = dxo * dxo + dyo * dyo;
+                        // Optimization: use distanceToSquared to avoid expensive Math.sqrt
+                        if (distOtherSq < 14400) { // 120 * 120
                             p.x += dxo * 0.005;
                             p.y += dyo * 0.005;
                         }
                     });
-                    
+
                     // Stick slightly to mouse
                     this.x += dxm * 0.05;
                     this.y += dym * 0.05;
@@ -87,13 +89,13 @@ const ParticleBackground: React.FC = () => {
             draw() {
                 if (!ctx) return;
                 const currentOpacity = (this.opacity + Math.sin(this.pulse) * 0.1) * (this.isHovered ? 1 : 0.8);
-                
+
                 // Outer glow
                 const glowSize = this.size * 4;
                 const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowSize);
                 gradient.addColorStop(0, `rgba(${COLORS.bright}, ${currentOpacity})`);
                 gradient.addColorStop(1, `rgba(${COLORS.gold}, 0)`);
-                
+
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, glowSize, 0, Math.PI * 2);
                 ctx.fillStyle = gradient;
@@ -117,18 +119,24 @@ const ParticleBackground: React.FC = () => {
 
         const drawLines = () => {
             if (!ctx) return;
+
+            // Optimization: hoist constants and threshold threshold calculation outside loop
+            const maxDist = 180;
+            const maxDistSq = 32400; // 180 * 180
+
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    const maxDist = 180;
+                    const distSq = dx * dx + dy * dy;
 
-                    if (distance < maxDist) {
+                    // Optimization: check squared distance before expensive Math.sqrt
+                    if (distSq < maxDistSq) {
+                        const distance = Math.sqrt(distSq);
                         const baseOpacity = (1 - distance / maxDist) * 0.3;
                         const pulseBonus = (0.5 + Math.sin(particles[i].pulse) * 0.5) * 0.2;
                         const hoverBonus = (particles[i].isHovered || particles[j].isHovered) ? 0.3 : 0;
-                        
+
                         ctx.beginPath();
                         ctx.strokeStyle = `rgba(${COLORS.gold}, ${baseOpacity + pulseBonus + hoverBonus})`;
                         ctx.lineWidth = (particles[i].isHovered || particles[j].isHovered) ? 0.8 : 0.4;
@@ -157,13 +165,13 @@ const ParticleBackground: React.FC = () => {
 
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             particles.forEach(p => {
                 p.update(particles);
                 p.draw();
             });
             drawLines();
-            
+
             animationFrameId = requestAnimationFrame(animate);
         };
 
@@ -185,4 +193,4 @@ const ParticleBackground: React.FC = () => {
     );
 };
 
-export default ParticleBackground;
+export default ParticleBackground;

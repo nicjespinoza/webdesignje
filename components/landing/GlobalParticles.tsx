@@ -154,6 +154,9 @@ const GlobalParticles: React.FC = () => {
             const mouseY = mouseRef.current.y;
             const isOver = isOverContentRef.current;
 
+            const thresholdSq = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
+            const mouseRadiusSq = MOUSE_RADIUS * MOUSE_RADIUS;
+
             for (let i = 0; i < particles.length; i++) {
                 const p1 = particles[i];
                 p1.update(canvas.width, canvas.height);
@@ -164,7 +167,6 @@ const GlobalParticles: React.FC = () => {
                     const dx = p1.x - p2.x;
                     const dy = p1.y - p2.y;
                     const distSq = dx * dx + dy * dy;
-                    const thresholdSq = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
 
                     if (distSq < thresholdSq) {
                         const dist = Math.sqrt(distSq);
@@ -196,7 +198,7 @@ const GlobalParticles: React.FC = () => {
                     const mdx = mouseX - p1.x;
                     const mdy = mouseY - p1.y;
                     const mdistSq = mdx * mdx + mdy * mdy;
-                    if (mdistSq < MOUSE_RADIUS * MOUSE_RADIUS) {
+                    if (mdistSq < mouseRadiusSq) {
                         const mdist = Math.sqrt(mdistSq);
                         const mRatio = 1 - (mdist / MOUSE_RADIUS);
                         ctx.beginPath();
