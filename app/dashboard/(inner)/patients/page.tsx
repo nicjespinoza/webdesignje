@@ -28,6 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { getSpecialtyById } from "@/lib/specialties";
+import { useAppTranslations } from "@/hooks/useTranslations";
 
 const PAGE_SIZE = 8;
 
@@ -44,6 +45,7 @@ type VitalSigns = {
 };
 
 function PatientsPageContent() {
+    const { t } = useAppTranslations();
     const searchParams = useSearchParams();
     const specialtyId = searchParams.get('specialty') || 'gastroenterology';
     const specialty = getSpecialtyById(specialtyId);
@@ -253,7 +255,9 @@ function PatientsPageContent() {
                                     </button>
                                     <button
                                         onClick={() => setPatientToDelete(p)}
-                                        className="text-white/5 hover:text-destructive transition-colors"
+                                        className="text-white/5 hover:text-destructive transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary rounded-md p-1"
+                                        aria-label={t('common.delete')}
+                                        title={t('common.delete')}
                                     >
                                         <Trash2 size={16} strokeWidth={1} />
                                     </button>
