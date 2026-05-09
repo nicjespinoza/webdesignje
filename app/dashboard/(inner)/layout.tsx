@@ -21,12 +21,14 @@ import { useTheme } from "@/context/ThemeContext";
 import { getSpecialtyById } from "@/lib/specialties";
 import GlobalParticles from "@/components/landing/GlobalParticles";
 import LogoComponent from "@/components/medical/ui/Logo";
+import { useAppTranslations } from "@/hooks/useTranslations";
 
 function InnerDashboardLayoutContent({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const { t } = useAppTranslations();
     const router = useRouter();
     const pathname = usePathname();
     const { logout } = useAuth();
@@ -194,7 +196,7 @@ function InnerDashboardLayoutContent({
 
                     {/* Right: Refined Actions */}
                     <div className="flex items-center gap-6">
-                        <button onClick={toggleTheme} className="text-white/20 hover:text-primary transition-colors">
+                        <button onClick={toggleTheme} aria-label={t('common.toggleTheme')} title={t('common.toggleTheme')} className="text-white/20 hover:text-primary transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary rounded-md p-1">
                             {theme === 'light' ? <Moon size={16} strokeWidth={1} /> : <Sun size={16} strokeWidth={1} />}
                         </button>
 

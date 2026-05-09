@@ -6,7 +6,8 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "search": "Buscar",
-    "back": "Volver"
+    "back": "Volver",
+    "toggleTheme": "Cambiar tema"
   },
   "portal": {
     "title": "Selecciona una experiencia",
