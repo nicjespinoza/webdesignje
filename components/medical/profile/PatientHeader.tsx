@@ -8,6 +8,7 @@ import { Patient } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useAppTranslations } from '@/hooks/useTranslations';
 
 interface PatientHeaderProps {
     patient: Patient;
@@ -34,6 +35,7 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
     activeTab,
     setActiveTab
 }) => {
+    const { t } = useAppTranslations();
     const { user } = useAuth();
     const isAssistant = user?.email === 'asistente@je.com';
 
@@ -90,7 +92,12 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
                             <button onClick={onShowNotes} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
                                 <StickyNote size={14} strokeWidth={1} /> Notas
                             </button>
-                            <button onClick={onViewNotes} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                            <button
+                                onClick={onViewNotes}
+                                className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+                                aria-label={t('common.viewNotes')}
+                                title={t('common.viewNotes')}
+                            >
                                 <Eye size={12} strokeWidth={1} />
                             </button>
                         </div>
@@ -100,7 +107,12 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
                         <button onClick={onShowEndoscopic} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
                             <Activity size={14} strokeWidth={1} /> Endo
                         </button>
-                        <button onClick={onViewEndoscopic} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                        <button
+                            onClick={onViewEndoscopic}
+                            className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
+                            aria-label={t('common.viewEndoscopic')}
+                            title={t('common.viewEndoscopic')}
+                        >
                             <Eye size={12} strokeWidth={1} />
                         </button>
                     </div>
