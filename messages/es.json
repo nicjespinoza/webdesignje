@@ -6,17 +6,18 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "search": "Buscar",
-    "back": "Volver"
+    "back": "Volver",
+    "updatePhoto": "Actualizar foto"
   },
   "portal": {
     "title": "Selecciona una experiencia",
-    "medical": "Historia Clínica SaaS",
+    "medical": "Historia Cl\u00ednica SaaS",
     "selectSpecialty": "Selecciona tu especialidad"
   },
   "dashboard": {
     "patients": "Pacientes",
     "agenda": "Agenda",
     "chat": "Chat",
-    "reports": "Analítica"
+    "reports": "Anal\u00edtica"
   }
 }
