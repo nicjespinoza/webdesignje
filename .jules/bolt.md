@@ -1,0 +1,3 @@
+## 2025-02-18 - Math.sqrt and Canvas Animation Loops
+**Learning:** High-frequency canvas animation loops with O(n^2) nested arrays calculation for distance often create significant CPU overhead due to unnecessary `Math.sqrt` calculations. Additionally, some particle networks loops calculate distances for elements from `j=i` instead of `j=i+1`, causing them to check themselves and redundantly process pairs.
+**Action:** When calculating distances to apply distance limits, replace `Math.sqrt(dx*dx + dy*dy) < maxDistance` with `dx*dx + dy*dy < maxDistance * maxDistance` to only calculate the square root on elements within range when necessary (e.g. for opacity computation). In addition, make sure nested loops iterate starting from `j=i+1` to half connection loop operations.

@@ -41,10 +41,12 @@ class BackgroundParticle {
 
     const dx = mouseX - this.x;
     const dy = mouseY - this.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    // Optimization: Use squared distance for mouse distance comparison check
+    const distSq = dx * dx + dy * dy;
     const maxDistance = 150;
 
-    if (distance < maxDistance) {
+    if (distSq < maxDistance * maxDistance) {
+      const distance = Math.sqrt(distSq);
       const forceDirectionX = dx / distance;
       const forceDirectionY = dy / distance;
       const force = (maxDistance - distance) / maxDistance;
