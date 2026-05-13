@@ -6,7 +6,9 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "search": "Buscar",
-    "back": "Volver"
+    "back": "Volver",
+    "updateProfileImage": "Actualizar foto de perfil",
+    "view": "Ver"
   },
   "portal": {
     "title": "Selecciona una experiencia",

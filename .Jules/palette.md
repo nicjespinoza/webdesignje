@@ -1,0 +1,3 @@
+## 2024-05-13 - Icon-only buttons lacking a11y
+**Learning:** Found several icon-only buttons in the medical profile components (`PatientInfoCard.tsx`, `PatientHeader.tsx`, `SharedComponents.tsx`) that lack `aria-label` and `title` attributes. Adding these attributes, along with `focus-visible` classes, greatly improves keyboard navigation and screen reader accessibility for interactive elements.
+**Action:** When working with medical dashboards, always verify icon-only action buttons (like Edit, Add, View, Camera) have appropriate `aria-label`, `title`, and `focus-visible` classes to ensure they are accessible. Use translations if possible, but fallback to direct strings if i18n is complex to integrate in the specific micro-UX scope.
