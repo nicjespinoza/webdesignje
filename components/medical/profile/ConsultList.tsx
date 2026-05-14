@@ -4,6 +4,7 @@
 import React from 'react';
 import { Activity, Calendar, ChevronRight, Trash2, Eye } from 'lucide-react';
 import { SubsequentConsult, Patient } from '@/types';
+import { useAppTranslations } from '@/hooks/useTranslations';
 import { motion } from 'framer-motion';
 
 interface ConsultListProps {
@@ -14,6 +15,7 @@ interface ConsultListProps {
 }
 
 export const ConsultList: React.FC<ConsultListProps> = ({ consults, onNavigate, onDelete }) => {
+    const { t } = useAppTranslations();
     return (
         <div className="w-full">
             <header className="flex items-center justify-between mb-12">
@@ -55,14 +57,16 @@ export const ConsultList: React.FC<ConsultListProps> = ({ consults, onNavigate, 
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-700">
+                        <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-all duration-700">
                             <button
                                 onClick={(e) => { e.stopPropagation(); onDelete(consult.id); }}
-                                className="p-2 text-white/10 hover:text-destructive transition-colors"
+                                aria-label={t("patientProfile.deleteConsult")}
+                                title={t("patientProfile.deleteConsult")}
+                                className="p-2 text-white/10 hover:text-destructive transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-destructive focus-visible:opacity-100"
                             >
                                 <Trash2 size={14} strokeWidth={1} />
                             </button>
-                            <div className="p-2.5 rounded-full border border-primary/10 text-primary group-hover:scale-110 transition-transform">
+                            <div className="p-2.5 rounded-full border border-primary/10 text-primary group-hover:scale-110 transition-transform" aria-label={t("patientProfile.viewConsult")} title={t("patientProfile.viewConsult")}>
                                 <Eye size={14} strokeWidth={1} />
                             </div>
                         </div>
