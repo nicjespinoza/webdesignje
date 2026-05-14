@@ -18,5 +18,18 @@
     "agenda": "Agenda",
     "chat": "Chat",
     "reports": "Analytics"
+  },
+  "patientProfile": {
+    "viewNotes": "View notes",
+    "viewEndoscopic": "View endoscopic notes",
+    "deleteHistory": "Delete history",
+    "viewHistory": "View history",
+    "deleteConsult": "Delete consult",
+    "viewConsult": "View consult",
+    "aiAnalysis": "AI Analysis",
+    "appointment": "Appointment",
+    "notes": "Notes",
+    "endoscopic": "Endoscopic",
+    "back": "Back"
   }
 }

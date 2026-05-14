@@ -6,6 +6,7 @@ import { ArrowLeft, Brain, Calendar, StickyNote, Activity, PenTool, Eye, Chevron
 import { calculateAge } from '@/lib/helpers';
 import { Patient } from '@/types';
 import { useAuth } from '@/context/AuthContext';
+import { useAppTranslations } from '@/hooks/useTranslations';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -34,6 +35,7 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
     activeTab,
     setActiveTab
 }) => {
+    const { t } = useAppTranslations();
     const { user } = useAuth();
     const isAssistant = user?.email === 'asistente@je.com';
 
@@ -45,7 +47,9 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
                 <div className="flex flex-col gap-5">
                     <button
                         onClick={onBack}
-                        className="flex items-center gap-3 text-white/20 hover:text-primary transition-all text-[8px] tracking-[0.5em] uppercase font-light group"
+                        aria-label={t("patientProfile.back")}
+                        title={t("patientProfile.back")}
+                        className="flex items-center gap-3 text-white/20 hover:text-primary transition-all text-[8px] tracking-[0.5em] uppercase font-light group focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary"
                     >
                         <ChevronLeft size={14} strokeWidth={1} className="group-hover:-translate-x-1 transition-transform" />
                         Regresar
@@ -87,20 +91,20 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({
 
                     {!isAssistant && (
                         <div className="flex items-center gap-2">
-                            <button onClick={onShowNotes} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
+                            <button onClick={onShowNotes} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary">
                                 <StickyNote size={14} strokeWidth={1} /> Notas
                             </button>
-                            <button onClick={onViewNotes} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                            <button onClick={onViewNotes} aria-label={t("patientProfile.viewNotes")} title={t("patientProfile.viewNotes")} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary">
                                 <Eye size={12} strokeWidth={1} />
                             </button>
                         </div>
                     )}
 
                     <div className="flex items-center gap-2">
-                        <button onClick={onShowEndoscopic} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0">
+                        <button onClick={onShowEndoscopic} className="px-6 py-2.5 rounded-l-full border border-white/5 hover:border-white/20 text-white/40 hover:text-white text-[8px] tracking-[0.3em] uppercase transition-all flex items-center gap-3 border-r-0 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary">
                             <Activity size={14} strokeWidth={1} /> Endo
                         </button>
-                        <button onClick={onViewEndoscopic} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all">
+                        <button onClick={onViewEndoscopic} aria-label={t("patientProfile.viewEndoscopic")} title={t("patientProfile.viewEndoscopic")} className="p-2.5 border border-white/5 hover:border-white/20 text-white/20 hover:text-white rounded-r-full transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-primary">
                             <Eye size={12} strokeWidth={1} />
                         </button>
                     </div>

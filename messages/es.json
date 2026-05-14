@@ -10,13 +10,26 @@
   },
   "portal": {
     "title": "Selecciona una experiencia",
-    "medical": "Historia Clínica SaaS",
+    "medical": "Historia Cl\u00ednica SaaS",
     "selectSpecialty": "Selecciona tu especialidad"
   },
   "dashboard": {
     "patients": "Pacientes",
     "agenda": "Agenda",
     "chat": "Chat",
-    "reports": "Analítica"
+    "reports": "Anal\u00edtica"
+  },
+  "patientProfile": {
+    "viewNotes": "Ver notas",
+    "viewEndoscopic": "Ver reporte endosc\u00f3pico",
+    "deleteHistory": "Eliminar historia",
+    "viewHistory": "Ver historia",
+    "deleteConsult": "Eliminar consulta",
+    "viewConsult": "Ver consulta",
+    "aiAnalysis": "An\u00e1lisis IA",
+    "appointment": "Cita",
+    "notes": "Notas",
+    "endoscopic": "Endosc\u00f3pico",
+    "back": "Regresar"
   }
 }
