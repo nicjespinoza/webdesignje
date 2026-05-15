@@ -30,28 +30,31 @@ const ContactSection = () => {
             <form className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.name_label')}</label>
+                  <label htmlFor="contact-name" className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.name_label')}</label>
                   <input
+                    id="contact-name"
                     type="text"
-                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors font-sans"
+                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] focus-visible:ring-2 focus-visible:ring-[#C69320]/50 transition-colors font-sans"
                     placeholder={t('contact.name_placeholder')}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.email_label')}</label>
+                  <label htmlFor="contact-email" className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.email_label')}</label>
                   <input
+                    id="contact-email"
                     type="email"
-                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors font-sans"
+                    className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] focus-visible:ring-2 focus-visible:ring-[#C69320]/50 transition-colors font-sans"
                     placeholder={t('contact.email_placeholder')}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.project_label')}</label>
+                <label htmlFor="contact-project" className="text-sm font-bold text-slate-300 font-sans uppercase tracking-wider">{t('contact.project_label')}</label>
                 <textarea
+                  id="contact-project"
                   rows={5}
-                  className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] transition-colors resize-none font-sans"
+                  className="w-full bg-black/40 border border-[#C69320]/30 rounded-xl p-4 text-white focus:outline-none focus:border-[#FBE18D] focus-visible:ring-2 focus-visible:ring-[#C69320]/50 transition-colors resize-none font-sans"
                   placeholder={t('contact.project_placeholder')}
                 />
               </div>
@@ -72,9 +75,9 @@ const ContactSection = () => {
             </form>
 
             <div className="mt-12 flex justify-center gap-8 border-t border-[#C69320]/10 pt-8">
-              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Github size={22} /></a>
-              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Linkedin size={22} /></a>
-              <a href="#" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110"><Twitter size={22} /></a>
+              <a href="#" aria-label="Github Profile" title="Github Profile" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320]/50 rounded-full"><Github size={22} /></a>
+              <a href="#" aria-label="LinkedIn Profile" title="LinkedIn Profile" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320]/50 rounded-full"><Linkedin size={22} /></a>
+              <a href="#" aria-label="Twitter Profile" title="Twitter Profile" className="text-slate-500 hover:text-[#FBE18D] transition-colors transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320]/50 rounded-full"><Twitter size={22} /></a>
             </div>
           </div>
         </motion.div>
