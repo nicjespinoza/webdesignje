@@ -39,17 +39,21 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
   const connections = useMemo(() => {
     const lines: THREE.Vector3[][] = [];
     const threshold = 2.5;
+    // Optimization: hoist threshold squared calculation outside nested loops
+    const thresholdSq = threshold * threshold;
 
-    particles.forEach((p1, i) => {
-      particles.forEach((p2, j) => {
+    for (let i = 0; i < particles.length; i++) {
+      const p1 = particles[i];
+      for (let j = 0; j < particles.length; j++) {
         if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+          const p2 = particles[j];
+          // Optimization: use distanceToSquared to avoid expensive Math.sqrt
+          if (p1.distanceToSquared(p2) < thresholdSq) {
             lines.push([p1, p2]);
           }
         }
-      });
-    });
+      }
+    }
     return lines;
   }, [particles]);
 
@@ -144,7 +148,8 @@ const DataPulses = ({ radius }: { radius: number }) => {
             agent.pos.add(dir.multiplyScalar(agent.speed));
             
             // If close to destination, pick new destination
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // Optimization: use distanceToSquared to avoid expensive Math.sqrt
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) { // 0.5 * 0.5
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,
