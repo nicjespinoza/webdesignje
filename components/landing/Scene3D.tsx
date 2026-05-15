@@ -102,16 +102,19 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
   const connections = useMemo(() => {
     const lines: { points: [THREE.Vector3, THREE.Vector3]; strength: number; layer: number }[] = [];
 
-    neurons.forEach((n1, i) => {
-      neurons.forEach((n2, j) => {
-        if (i !== j) {
-          const dist = n1.position.distanceTo(n2.position);
-          // Different thresholds per layer
-          const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
+    for (let i = 0; i < neurons.length; i++) {
+      const n1 = neurons[i];
+      // Different thresholds per layer
+      const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
+      // Optimization: hoist threshold squared calculation outside inner loop
+      const thresholdSq = threshold * threshold;
+      const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
 
-          if (dist < threshold) {
-            // Strength based on layer (core connections stronger)
-            const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
+      for (let j = 0; j < neurons.length; j++) {
+        if (i !== j) {
+          const n2 = neurons[j];
+          // Optimization: use distanceToSquared to avoid expensive Math.sqrt
+          if (n1.position.distanceToSquared(n2.position) < thresholdSq) {
             lines.push({
               points: [n1.position, n2.position],
               strength,
@@ -119,8 +122,8 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
             });
           }
         }
-      });
-    });
+      }
+    }
     return lines;
   }, [neurons]);
 
@@ -296,7 +299,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // Optimization: use distanceToSquared to avoid expensive Math.sqrt
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) { // 0.3 * 0.3
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);
