@@ -6,7 +6,9 @@
     "delete": "Delete",
     "edit": "Edit",
     "search": "Search",
-    "back": "Back"
+    "back": "Back",
+    "toggleMenu": "Toggle Menu",
+    "closeMenu": "Close Menu"
   },
   "portal": {
     "title": "Select an experience",

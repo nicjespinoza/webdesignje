@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useAppTranslations } from "@/hooks/useTranslations";
 
 interface Links {
     label: string;
@@ -109,6 +110,7 @@ export const MobileSidebar = ({
     ...props
 }: React.ComponentProps<typeof motion.div>) => {
     const { open, setOpen } = useSidebar();
+    const { t } = useAppTranslations();
     return (
         <>
             <div
@@ -118,10 +120,14 @@ export const MobileSidebar = ({
                 {...(props as any)}
             >
                 <div className="flex justify-end z-20 w-full">
-                    <Menu
-                        className="text-gray-700 cursor-pointer"
+                    <button
+                        aria-label={t("common.toggleMenu")}
+                        title={t("common.toggleMenu")}
+                        className="text-gray-700 cursor-pointer p-1 rounded-md hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none transition-colors"
                         onClick={() => setOpen(!open)}
-                    />
+                    >
+                        <Menu />
+                    </button>
                 </div>
                 <AnimatePresence>
                     {open && (
@@ -138,12 +144,14 @@ export const MobileSidebar = ({
                                 className
                             )}
                         >
-                            <div
-                                className="absolute right-10 top-10 z-50 text-gray-700 cursor-pointer"
+                            <button
+                                aria-label={t("common.closeMenu")}
+                                title={t("common.closeMenu")}
+                                className="absolute right-10 top-10 z-50 text-gray-700 cursor-pointer p-1 rounded-md hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-none transition-colors"
                                 onClick={() => setOpen(!open)}
                             >
                                 <X />
-                            </div>
+                            </button>
                             {children as React.ReactNode}
                         </motion.div>
                     )}
