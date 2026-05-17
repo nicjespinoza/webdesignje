@@ -17,7 +17,9 @@ const FooterParticles: React.FC = () => {
     const PARTICLE_COLOR = 'rgba(34, 211, 238, 1)'; // Brand Cyan
     const LINE_COLOR = 'rgba(99, 102, 241,'; // Brand Indigo (alpha will be dynamic)
     const CONNECTION_DISTANCE = 100;
+    const CONNECTION_DISTANCE_SQ = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
     const MOUSE_DISTANCE = 150;
+    const MOUSE_DISTANCE_SQ = MOUSE_DISTANCE * MOUSE_DISTANCE;
 
     class Particle {
       x: number;
@@ -98,9 +100,11 @@ const FooterParticles: React.FC = () => {
         for (let j = i; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            // Optimization: use distance squared to avoid expensive Math.sqrt
+            const distSq = dx * dx + dy * dy;
 
-            if (distance < CONNECTION_DISTANCE) {
+            if (distSq < CONNECTION_DISTANCE_SQ) {
+                const distance = Math.sqrt(distSq);
                 ctx.beginPath();
                 const opacity = 1 - (distance / CONNECTION_DISTANCE);
                 ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`; // Faint network lines
@@ -114,9 +118,11 @@ const FooterParticles: React.FC = () => {
         // Draw connections to Mouse (Interactive Node)
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        // Optimization: use distance squared to avoid expensive Math.sqrt
+        const distSq = dx * dx + dy * dy;
 
-        if (distance < MOUSE_DISTANCE) {
+        if (distSq < MOUSE_DISTANCE_SQ) {
+            const distance = Math.sqrt(distSq);
             ctx.beginPath();
             const opacity = 1 - (distance / MOUSE_DISTANCE);
             ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`; // Cyan highlight for interaction
