@@ -141,6 +141,7 @@ Podés preguntarme sobre:
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Abrir/Cerrar chat"
         className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black shadow-[0_0_30px_rgba(198,147,32,0.5)] flex items-center justify-center group hover:shadow-[0_0_50px_rgba(198,147,32,0.7)] transition-all duration-300"
       >
         <AnimatePresence mode="wait">
@@ -212,6 +213,7 @@ Podés preguntarme sobre:
                   onClick={() => setMessages([])}
                   className="p-2 rounded-lg hover:bg-black/10 transition-colors"
                   title="Reiniciar conversación"
+                  aria-label="Reiniciar conversación"
                 >
                   <Sparkles size={18} className="text-black" />
                 </button>
@@ -299,6 +301,7 @@ Podés preguntarme sobre:
                 />
                 <button
                   onClick={handleSend}
+                  aria-label="Enviar mensaje"
                   disabled={isLoading || !input.trim()}
                   className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black flex items-center justify-center hover:shadow-[0_0_20px_rgba(198,147,32,0.5)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
                 >

@@ -121,6 +121,7 @@ const Hero = ({ lang, router }: { lang: Language; router: any }) => {
             whileHover={{ scale: 1.08, y: -8 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.push('/portal')}
+            aria-label="Ver Casos de Éxito"
             className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group relative overflow-hidden"
           >
             <div className="liquid-gold-content !py-2.5 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">

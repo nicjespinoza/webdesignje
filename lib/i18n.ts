@@ -12,6 +12,9 @@ const resources = {
         projects: 'Projects',
         about: 'About Me',
         contact: 'Contact Me',
+        themeToggle: 'Toggle Theme',
+        langMenu: 'Change Language',
+        menuToggle: 'Toggle Menu'
       },
       hero: {
         badge: 'AVAILABLE FOR NEW PROJECTS',
@@ -173,6 +176,9 @@ const resources = {
         projects: 'Proyectos',
         about: 'Sobre mí',
         contact: 'Contáctame',
+        themeToggle: 'Cambiar Tema',
+        langMenu: 'Cambiar Idioma',
+        menuToggle: 'Abrir/Cerrar Menú'
       },
       hero: {
         badge: 'DISPONIBLE PARA NUEVOS PROYECTOS',
@@ -334,6 +340,9 @@ const resources = {
         projects: 'Projets',
         about: 'À propos',
         contact: 'Contactez-moi',
+        themeToggle: 'Changer de Thème',
+        langMenu: 'Changer de Langue',
+        menuToggle: 'Basculer le Menu'
       },
       hero: {
         badge: 'DISPONIBLE POUR DE NOUVEAUX PROJETS',
@@ -495,6 +504,9 @@ const resources = {
         projects: '專案',
         about: '關於我',
         contact: '聯繫我',
+        themeToggle: '切換主題',
+        langMenu: '切換語言',
+        menuToggle: '切換選單'
       },
       hero: {
         badge: '可承接新專案',
