@@ -48,10 +48,12 @@ const ParticleBackground: React.FC = () => {
         // Mouse interaction
         const dx = mouseX - this.x;
         const dy = mouseY - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distSq = dx * dx + dy * dy;
         const maxDistance = 150;
+        const maxDistanceSq = 22500; // 150 * 150
 
-        if (distance < maxDistance) {
+        if (distSq < maxDistanceSq) {
+            const distance = Math.sqrt(distSq); // Calculate actual distance only if within bounds
             const forceDirectionX = dx / distance;
             const forceDirectionY = dy / distance;
             const force = (maxDistance - distance) / maxDistance;
