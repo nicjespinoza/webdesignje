@@ -58,6 +58,7 @@ const ChatWidget = () => {
                             </div>
                             <button
                                 onClick={toggleChat}
+                                aria-label="Cerrar chat"
                                 className="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400 hover:text-white"
                             >
                                 <X size={20} />
@@ -138,6 +139,7 @@ const ChatWidget = () => {
                                 />
                                 <button
                                     type="submit"
+                                    aria-label="Enviar mensaje"
                                     disabled={isLoading || !input.trim()}
                                     className="p-2.5 bg-[#C69320] text-black rounded-xl hover:bg-[#FBE18D] transition-all disabled:opacity-30 disabled:cursor-not-allowed group"
                                 >
@@ -157,6 +159,7 @@ const ChatWidget = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleChat}
+                aria-label="Abrir/Cerrar chat"
                 className="pointer-events-auto p-4 rounded-2xl bg-[#020202] border border-[#C69320]/40 shadow-[0_0_20px_rgba(198,147,32,0.3)] text-[#FBE18D] hover:shadow-[0_0_30px_rgba(198,147,32,0.5)] transition-all flex items-center justify-center group overflow-hidden relative"
             >
                 {/* Efecto de brillo líquido */}

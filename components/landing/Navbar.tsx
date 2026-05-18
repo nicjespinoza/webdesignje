@@ -56,6 +56,7 @@ const Navbar = ({
           <div className="relative">
             <button 
               onClick={() => setIsLangOpen(!isLangOpen)}
+              aria-label={t('nav.langMenu')}
               className="text-xs font-bold px-3 py-1.5 rounded border border-white/10 hover:bg-white/5 transition-all flex items-center gap-2 min-w-[140px] justify-between group"
             >
               <div className="flex items-center gap-2">
@@ -106,7 +107,8 @@ const Navbar = ({
           <button 
             onClick={toggleTheme} 
             className="p-2 rounded-full hover:bg-white/5 transition-colors text-slate-300 hover:text-white"
-            title="Toggle Theme"
+            title={t('nav.themeToggle')}
+            aria-label={t('nav.themeToggle')}
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -121,7 +123,7 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button aria-label={t('nav.menuToggle')} className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
