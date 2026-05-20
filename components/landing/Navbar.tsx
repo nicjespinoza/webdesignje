@@ -105,8 +105,9 @@ const Navbar = ({
 
           <button 
             onClick={toggleTheme} 
-            className="p-2 rounded-full hover:bg-white/5 transition-colors text-slate-300 hover:text-white"
+            className="p-2 rounded-full hover:bg-white/5 transition-colors text-slate-300 hover:text-white focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-[#C69320]"
             title="Toggle Theme"
+            aria-label="Toggle Theme"
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -121,7 +122,12 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-[#C69320] rounded"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-label={t('nav.menuToggle')}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -161,7 +167,10 @@ const Navbar = ({
               <div className="h-px bg-white/10 w-full"></div>
 
               <div className="flex gap-4">
-                <button onClick={toggleTheme} className="flex-1 flex items-center justify-center gap-2 text-sm px-4 py-3 border border-white/10 rounded-xl text-slate-300 hover:bg-white/5 transition-all">
+                <button
+                  onClick={toggleTheme}
+                  className="flex-1 flex items-center justify-center gap-2 text-sm px-4 py-3 border border-white/10 rounded-xl text-slate-300 hover:bg-white/5 transition-all focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-[#C69320]"
+                >
                   {isDark ? <Sun size={18} /> : <Moon size={18} />} 
                   <span>{isDark ? 'Light' : 'Dark'}</span>
                 </button>
