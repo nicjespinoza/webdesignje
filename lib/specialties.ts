@@ -2,7 +2,7 @@
 import {
     Heart, Brain, Apple, Droplets, Wind, TestTubes, Bone, Bug, Scissors,
     Baby, Eye, Fingerprint, Ear, HeartPulse, Scan, Smile, Sparkles, Pin,
-    Component, Layers, Zap, Ribbon, Droplet, Stethoscope, Activity, LucideIcon
+    Component, Layers, Zap, Ribbon, Droplet, Activity, LucideIcon
 } from 'lucide-react';
 
 export type SpecialtyCategory =

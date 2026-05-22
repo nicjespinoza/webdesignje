@@ -130,78 +130,47 @@ h3,
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 300vmax;
-  /* Large enough for any aspect ratio */
-  height: 300vmax;
+  width: 300%;
+  height: 300%;
   transform: translate(-50%, -50%);
   background: conic-gradient(from 0deg,
-      transparent 0%,
+      transparent 0,
+      #C69320 10%, #FBE18D 15%, #C69320 20%,
       transparent 25%,
-      #C69320 40%,
-      #FBE18D 50%,
-      #C69320 60%,
+      transparent 55%,
+      #C69320 60%, #FBE18D 65%, #C69320 70%,
       transparent 75%,
       transparent 100%);
-  animation: gold-sweep 8s linear infinite;
-}
-
-.liquid-gold-card:hover::before {
-  animation-play-state: paused;
-  background: linear-gradient(135deg, #C69320 0%, #FBE18D 50%, #C69320 100%);
-  filter: brightness(1.2) saturate(1.2);
+  animation: gold-sweep 12s linear infinite;
+  z-index: 1;
 }
 
 @keyframes gold-sweep {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-/* Internal content to mask the center */
-.liquid-gold-content {
-  position: relative;
-  z-index: 10;
-  background: #050505;
-  border-radius: calc(1.5rem - 1px);
-  width: 100%;
-  height: 100%;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.5s ease;
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 .liquid-gold-card:hover::before {
   animation-play-state: paused;
-  background: conic-gradient(from 0deg,
-      #C69320 0%,
-      #FBE18D 25%,
-      #C69320 50%,
-      #FBE18D 75%,
-      #C69320 100%);
-  filter: brightness(1.2);
+  background: conic-gradient(from 0deg, #C69320, #FBE18D, #C69320, #FBE18D, #C69320);
 }
 
-/* Internal content to mask the center */
+/* Updated Internal content - THE ABSOLUTE MASK */
 .liquid-gold-content {
   position: relative;
   z-index: 10;
-  background: #050505;
+  background: #000 !important;
+  margin: 1.5px; /* Offset from original border to prevent any bleed */
   border-radius: calc(1.5rem - 1px);
-  width: 100%;
-  height: 100%;
-  padding: 2rem;
+  width: calc(100% - 3px);
+  height: calc(100% - 3px);
+  padding: 2.5rem;
   display: flex;
   flex-direction: column;
-  transition: all 0.5s ease;
 }
 
 .liquid-gold-card:hover .liquid-gold-content {
-  background: #020202;
+  background: #000 !important;
 }
 
 /* Restore glass panel visibility basics */

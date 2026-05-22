@@ -1,26 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, Variants } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import {
-  Github, ExternalLink, Menu, X, Sun, Moon, Code2, ChevronDown, ArrowRight,
-  Calendar, Clock, BookOpen, Send, User, Briefcase, Award, Terminal, Layers,
-  Atom, Blocks, Zap, Box, Wind, Hash, FileCode, ClipboardList, ShieldCheck,
-  BarChart3, FileText, FileCog, Activity, Server, DatabaseZap, Flame, Database,
-  Table, Container, Package, Star, Cloud, Smartphone, Globe, Cpu, Brain, Bot,
-  Sparkles, Network, CheckCircle, Search, Linkedin, Twitter, Gem, ArrowRightLeft
-} from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Briefcase, Sparkles } from 'lucide-react';
 import { useTranslation } from "react-i18next";
-import GlobalParticles from '@/components/landing/GlobalParticles';
-import { Project, Language, BlogPost, ContactFormValues } from '@/components/landing/types';
-import Logo from '@/components/medical/ui/Logo';
-import { categories, proficiency, projects, blogPosts, contactSchema, services } from '@/data/constants';
-import { fadeInUp, staggerContainer, scaleIn } from '@/components/landing/animations';
-
-const Hero = ({ lang, router }: { lang: Language; router: any }) => {
+const Hero = ({ router }: { router: { push: (url: string) => void } }) => {
   const { t } = useTranslation();
 
   return (

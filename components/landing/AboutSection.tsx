@@ -6,8 +6,9 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fadeInUp, staggerContainer } from '@/components/landing/animations';
+import { Language } from '@/components/landing/types';
 
-const AboutSection = () => {
+const AboutSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
 
   return (
@@ -20,33 +21,39 @@ const AboutSection = () => {
           variants={fadeInUp}
           className="relative z-10 flex flex-col items-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-6">
-            <User size={14} /> {t('about.badge')}
-          </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white text-center">Sobre <span className="gradient-text">Mí</span></h2>
-          <p className="text-xl text-white mb-6 font-medium text-center max-w-2xl">{t('about.motto')}</p>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white text-center">
+            {(() => {
+              const fullTitle = t('about.title', { lng: lang });
+              if (fullTitle.includes(' ')) {
+                const words = fullTitle.split(' ');
+                const first = words.slice(0, words.length - 1).join(' ');
+                const last = words[words.length - 1];
+                return <>{first} <span className="gradient-text">{last}</span></>;
+              }
+              return <span className="gradient-text">{fullTitle}</span>;
+            })()}
+          </h2>
+          <p className="text-xl text-white mb-6 font-medium text-center max-w-2xl">{t('about.motto', { lng: lang })}</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div
-            className="space-y-6 relative z-10"
-          >
+          <div className="space-y-6 relative z-10">
             <motion.div variants={fadeInUp} className="liquid-gold-card">
-              <div className="liquid-gold-content">
-                <h3 className="text-2xl font-bold mb-4 gradient-text">Joseph Espinoza</h3>
-                <p className="text-slate-300 mb-4 whitespace-pre-line">
-                  {t('about.description_1').split('full-stack').map((part, i, arr) => (
+              <div className="liquid-gold-content !p-8">
+                <h3 className="text-3xl font-bold mb-4 gradient-text">JOSEPH ESPINOZA</h3>
+                <p className="text-slate-300 mb-4 whitespace-pre-line text-lg leading-relaxed">
+                  {t('about.description_1', { lng: lang }).split('Full-Stack').map((part, i, arr) => (
                     <React.Fragment key={i}>
                       {part}
-                      {i < arr.length - 1 && <span className="gradient-text font-bold">full-stack</span>}
+                      {i < arr.length - 1 && <span className="gradient-text font-bold">FULL-STACK</span>}
                     </React.Fragment>
                   ))}
                 </p>
-                <p className="text-slate-300">
-                  {t('about.description_2')}
+                <p className="text-slate-300 text-lg">
+                  {t('about.description_2', { lng: lang })}
                 </p>
-                <p className="text-slate-300 mt-4">
-                  {t('about.description_3')} <span className="gradient-text font-bold">{t('about.performance_quote')}</span>
+                <p className="text-slate-300 mt-4 text-lg">
+                  {t('about.description_3', { lng: lang })} <span className="gradient-text font-bold text-xl">{t('about.performance_quote', { lng: lang })}</span>
                 </p>
               </div>
             </motion.div>
@@ -58,13 +65,13 @@ const AboutSection = () => {
               viewport={{ once: true }}
               variants={staggerContainer}
             >
-              {Array.isArray(t('about.stats', { returnObjects: true })) && (t('about.stats', { returnObjects: true }) as any[]).map((item, index) => (
+              {Array.isArray(t('about.stats', { returnObjects: true, lng: lang })) && (t('about.stats', { returnObjects: true, lng: lang }) as Record<string, string>[]).map((item, index) => (
                 <motion.div
                   key={index}
                   variants={fadeInUp}
                   className="liquid-gold-card"
                 >
-                  <div className="liquid-gold-content !p-4 flex-row items-center gap-4">
+                  <div className="liquid-gold-content !p-4 flex flex-row items-center gap-4 h-full">
                     <div className="bg-[#FBE18D]/10 p-3 rounded-lg text-[#FBE18D] transition-transform duration-300">
                       {index === 0 && <Briefcase size={20} />}
                       {index === 1 && <Terminal size={20} />}
@@ -86,25 +93,27 @@ const AboutSection = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="glass-panel p-4 md:p-8 rounded-2xl">
-              <div className="aspect-square bg-gradient-to-br from-[#C69320]/20 to-[#FBE18D]/20 rounded-xl flex items-center justify-center overflow-hidden">
-                <Image src="/images/Perfil_elegante.png" alt="Joseph Espinoza" width={800} height={800} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" priority />
+            <div className="liquid-gold-card !p-[1.5px] rounded-3xl">
+              <div className="liquid-gold-content !p-4 md:!p-8 rounded-3xl h-full flex items-center justify-center">
+                <div className="aspect-square w-full bg-black rounded-2xl flex items-center justify-center overflow-hidden border border-white/5 shadow-inner">
+                  <Image src="/images/Perfil_elegante.png" alt="Joseph Espinoza" width={600} height={600} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" priority />
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
 
-        <div
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 relative z-10"
-        >
-          {Array.isArray(t('about.kpis', { returnObjects: true })) && (t('about.kpis', { returnObjects: true }) as any[]).map((stat, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 relative z-10">
+          {Array.isArray(t('about.kpis', { returnObjects: true, lng: lang })) && (t('about.kpis', { returnObjects: true, lng: lang }) as Record<string, string>[]).map((stat, index) => (
             <motion.div
               key={index}
               variants={fadeInUp}
-              className="glass-panel p-6 rounded-2xl text-center border border-white/5 hover:border-white/10 transition-all hover:-translate-y-1"
+              className="liquid-gold-card"
             >
-              <div className="text-3xl font-bold mb-2 text-[#FBE18D]">{stat.val}</div>
-              <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">{stat.label}</div>
+              <div className="liquid-gold-content !p-8 text-center h-full">
+                <div className="text-3xl md:text-4xl font-bold mb-2 gradient-text">{stat.val}</div>
+                <div className="text-xs text-slate-400 uppercase tracking-widest font-bold font-sans">{stat.label}</div>
+              </div>
             </motion.div>
           ))}
         </div>

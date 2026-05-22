@@ -17,7 +17,7 @@ export const calculateAge = (dateString: string) => {
             months--;
         }
         return `${years} años, ${months} meses, ${days} días`;
-    } catch (e) {
+    } catch {
         return 'Edad no disponible';
     }
 };

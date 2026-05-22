@@ -1,26 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, Variants } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import React from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import {
-  Github, ExternalLink, Menu, X, Sun, Moon, Code2, ChevronDown, ArrowRight,
-  Calendar, Clock, BookOpen, Send, User, Briefcase, Award, Terminal, Layers,
-  Atom, Blocks, Zap, Box, Wind, Hash, FileCode, ClipboardList, ShieldCheck,
-  BarChart3, FileText, FileCog, Activity, Server, DatabaseZap, Flame, Database,
-  Table, Container, Package, Star, Cloud, Smartphone, Globe, Cpu, Brain, Bot,
-  Sparkles, Network, CheckCircle, Search, Linkedin, Twitter, Gem, ArrowRightLeft
-} from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Layers } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import GlobalParticles from '@/components/landing/GlobalParticles';
-import { Project, Language, BlogPost, ContactFormValues } from '@/components/landing/types';
-import Logo from '@/components/medical/ui/Logo';
-import { categories, proficiency, projects, blogPosts, contactSchema, services } from '@/data/constants';
-import { fadeInUp, staggerContainer, scaleIn } from '@/components/landing/animations';
+import { Language } from '@/components/landing/types';
+import { categories } from '@/data/constants';
+import { fadeInUp, staggerContainer } from '@/components/landing/animations';
 
-const StackSection = () => {
+const StackSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
 
   return (
@@ -29,28 +16,45 @@ const StackSection = () => {
         className="flex flex-col items-center mb-10 relative z-10"
       >
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-3 shadow-[0_0_20px_rgba(198,147,32,0.2)]">
-          <Layers size={14} /> {t('stack.badge')}
+          <Layers size={14} /> {t('stack.badge', { lng: lang })}
         </div>
-        <h2 className="text-4xl md:text-5xl font-black text-center text-white tracking-tight">
-          Infraestructura <span className="gradient-text">de Confianza</span>
+        
+        <h2 className="text-3xl md:text-4xl font-bold text-center">
+          {(() => {
+            const fullTitle = t('stack.title', { lng: lang });
+            if (fullTitle.includes(' ')) {
+              const parts = fullTitle.split(' ');
+              const first = parts[0];
+              const rest = parts.slice(1).join(' ');
+              return <><span className="text-white">{first}</span> <span className="gradient-text">{rest}</span></>;
+            }
+            return <span className="gradient-text">{fullTitle}</span>;
+          })()}
         </h2>
-        <p className="gradient-text-platinum mt-3 max-w-3xl text-center text-lg">
-          {t('stack.subtitle')}
+        
+        <p className="gradient-text-platinum mt-3 max-w-3xl text-center text-lg opacity-80">
+          {t('stack.subtitle', { lng: lang })}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={staggerContainer}
+      >
         {categories.map((category, index) => (
           <motion.div
             key={category.title}
             variants={fadeInUp}
             className="liquid-gold-card"
           >
-            <div className="liquid-gold-content">
+            <div className="liquid-gold-content !p-8 h-full"> 
               <motion.h3 variants={fadeInUp} className={`text-xl font-bold mb-6 font-sans ${index === 2 ? 'text-white' : 'text-slate-200'}`}>
-                {index === 0 && t('stack.categories.frontend')}
-                {index === 1 && t('stack.categories.data')}
-                {index === 2 && t('stack.categories.backend')}
+                {index === 0 && t('stack.categories.frontend', { lng: lang })}
+                {index === 1 && t('stack.categories.data', { lng: lang })}
+                {index === 2 && t('stack.categories.backend', { lng: lang })}
               </motion.h3>
               <div className="space-y-4">
                 {category.items.map((item) => {
@@ -76,7 +80,7 @@ const StackSection = () => {
                     case 'MySQL': logoFileName = 'mysql'; break;
                     case 'Docker': logoFileName = 'docker'; break;
                     case 'npm / pnpm': logoFileName = 'npm'; break;
-                    default: logoFileName = item.name.toLowerCase().replace(/\./g, '').replace(/ /g, '').replace(/\//g, '-');
+                    default: logoFileName = item.name.toLowerCase().replace(/\./g, "").replace(/ /g, "").replace(/\//g, "-");
                   }
                   const logoSrc = `/logos/${logoFileName}.svg`;
 
@@ -109,9 +113,7 @@ const StackSection = () => {
             </div>
           </motion.div>
         ))}
-      </div>
-
-
+      </motion.div>
     </section>
   );
 };

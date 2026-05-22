@@ -1,8 +1,7 @@
 import {
     Atom, Blocks, Zap, Box, Wind, Layers, Hash, FileCode, ClipboardList, ShieldCheck,
     BarChart3, FileText, FileCog, Activity, Server, DatabaseZap, Flame, Database, Table,
-    Container, Package, Code2, Smartphone, Cpu, Brain, Bot, Sparkles, Network,
-    CheckCircle
+    Container, Package, Code2, Smartphone, Cpu
 } from 'lucide-react';
 import { z } from 'zod';
 import { Project, BlogPost } from '@/components/landing/types';
@@ -203,109 +202,105 @@ export const projects: Project[] = [
     {
         id: '1',
         title: 'Historia Clínica AI',
-        description: 'Sistema integral de historias clínicas para múltiples especialidades. Incluye sincronización en tiempo real, visualización 3D interactiva de anatomía y generación dinámica de reportes PDF, programación de citas, facturación, Integración con IA para diagnóstico y tratamiento.',
-        longDescription: "Plataforma SaaS de grado profesional construida para escalar. Permite a las clínicas gestionar datos de pacientes de forma segura con arquitectura HIPAA-compliant. La característica destacada es el modelo humano 3D interactivo que los doctores pueden rotar y anotar para visualizar lesiones o sitios quirúrgicos. El sistema también maneja programación de citas, facturación e inventario.",
+        description: 'Optimice su consulta médica con inteligencia artificial y visualización 3D avanzada.',
+        longDescription: "Plataforma SaaS de grado profesional construida para escalar. Permite a las clínicas gestionar datos de pacientes de forma segura con arquitectura HIPAA-compliant.",
         features: [
-            'Sincronización de datos en tiempo real',
-            'Anatomía 3D interactiva',
-            'Control de acceso basado en roles (RBAC) para Doctores/Personal',
-            'Generación automática de PDF de prescripciones y reportes',
-            'Portal seguro para pacientes'
-
+            'Aumenta la eficiencia en la consulta hasta un 40%',
+            'Mejora la precisión diagnóstica con IA',
+            'Reduce errores en la gestión de expedientes',
+            'Fideliza pacientes con un portal de acceso seguro',
+            'Automatiza la generación de reportes y recetas'
         ],
         techStack: ['React 19', 'Firebase', 'Three.js', 'jsPDF', 'Zod'],
         imageUrl: '/screenshots/historia-clinica.png',
         featured: true,
         githubUrl: '#',
-        demoUrl: '/portal'
+        demoUrl: '/#contact?project=medical'
     },
     {
         id: '2',
-        title: 'POS & Tienda',
-        description: 'Punto de venta en la nube diseñado específicamente para tiendas que deseen tener el control de su inventario en tiempo real, manejo de kardex, reportes de ventas y implementar IA para optimizar sus ventas.',
-        longDescription: "Sistema POS especializado para la industria del calzado. Gestiona inventario complejo con múltiples variantes, maneja sincronización entre sucursales y proporciona análisis detallados de ventas. Integrado con pasarelas de pago locales y generación automática de facturas.",
+        title: 'POS Tienda AI',
+        description: 'Tome el control total de sus ventas e inventario con análisis predictivo.',
+        longDescription: "Sistema POS especializado para la industria del calzado y retail. Gestiona inventario complejo con múltiples variantes y sincronización en tiempo real.",
         features: [
-            'Gestión de inventario multi-variante',
-            'Reportes y análisis de ventas en tiempo real',
-            'Integración con programa de lealtad de clientes',
-            'Optimizado para dispositivos móviles y tablets',
-            'Persistencia offline'
+            'Elimina las pérdidas por errores de inventario',
+            'Maximiza ventas con sugerencias inteligentes de stock',
+            'Acceso a reportes financieros desde cualquier lugar',
+            'Simplifica el proceso de facturación y cobro',
+            'Sincronización instantánea entre sucursales'
         ],
         techStack: ['Next.js', 'Firebase', 'Tailwind CSS', 'Cloud Functions'],
         imageUrl: '/screenshots/pos-zapatos.png',
         githubUrl: '#',
-        demoUrl: '/demos/pos'
+        demoUrl: '/#contact?project=pos'
     },
     {
         id: '3',
-        title: 'Hotel Management',
-        description: 'Plataforma unificada para reservas hoteleras, gestión de habitaciones y servicios al huésped. Incluye un portal de huéspedes premium con diseño glassmorphic.',
-        longDescription: "Un motor de hospitalidad todo-en-uno. Desde la recepción hasta el teléfono del huésped, este sistema optimiza cada interacción. Incluye un motor de reservas, gestión de housekeeping y un dashboard de huéspedes para servicios como room service y reservas de spa.",
+        title: 'Hotel Management System',
+        description: 'Gestión hotelera unificada para una experiencia de huésped de 5 estrellas.',
+        longDescription: "Un motor de hospitalidad todo-en-uno que optimiza desde la recepción hasta el servicio a la habitación.",
         features: [
-            'Calendario de disponibilidad de habitaciones en tiempo real',
-            'Dashboard interactivo para huéspedes',
-            'Flujo automatizado de check-in/check-out',
-            'Análisis de gestión de ingresos',
-            'Soporte multi-idioma'
+            'Optimiza la tasa de ocupación con reservas directas',
+            'Reduce costos operativos mediante automatización',
+            'Mejora la satisfacción del huésped con portales interactivos',
+            'Control total de ingresos y gastos en tiempo real',
+            'Gestión eficiente de servicios y mantenimiento'
         ],
         techStack: ['TypeScript', 'Framer Motion', 'Firebase', 'Stripe', 'Paypal', 'Tailwind CSS'],
         imageUrl: '/screenshots/hotel-management.png',
         githubUrl: '#',
-        demoUrl: '/demos/hotel'
+        demoUrl: '/#contact?project=hotel'
     },
     {
         id: '4',
         title: 'Eve Commerce',
-        description: 'Plataforma de e-commerce avanzada enfocada en tiendas online con una experiencia de compra fluida y elegante.',
-        longDescription: "Una experiencia de e-commerce de lujo. Este proyecto empuja los límites del diseño web con vistas de productos inmersivas, transiciones suaves y un flujo de checkout altamente optimizado. Diseñado para mostrar colecciones de moda con estética premium.",
+        description: 'Eleve su marca de lujo con una experiencia de compra fluida y sofisticada.',
+        longDescription: "Una experiencia de e-commerce de alta gama con enfoque en conversiones y estética premium.",
         features: [
-            'Galería de productos de alto rendimiento',
-            'Transiciones animadas del carrito de compras',
-            'Integración segura con pasarela de pagos',
-            'Colecciones de productos personalizables',
-            'SEO y velocidad optimizados'
+            'Aumenta la tasa de conversión en dispositivos móviles',
+            'Reduce el abandono de carrito con checkout optimizado',
+            'Posicionamiento de marca con diseño de clase mundial',
+            'Carga ultra-rápida para mejorar el SEO y retención',
+            'Escalabilidad total para eventos de alta demanda'
         ],
         techStack: ['Shopify SDK', 'Next.js', 'React 19', 'PostCSS', 'Stripe', 'Paypal', 'Tailwind CSS'],
         imageUrl: '/screenshots/eve-commerce.png',
         githubUrl: '#',
-        demoUrl: '/demos/evecommerce'
+        demoUrl: '/#contact?project=ecommerce'
     },
     {
         id: '5',
-        title: 'Beauty Agenda',
-        description: 'Sistema de agenda inteligente para salones de belleza, barberías y spas. Incluye reservas online, recordatorios automáticos por WhatsApp, CRM de clientes y asistente con IA integrado.',
-        longDescription: "Plataforma todo-en-uno para negocios de belleza y bienestar. Gestiona citas, clientes y pagos desde un solo lugar. El asistente con IA responde preguntas frecuentes, sugiere servicios y optimiza la agenda automáticamente. Incluye recordatorios por WhatsApp, historial de clientes y reportes de rendimiento.",
+        title: 'Beauty Agenda SaaS',
+        description: 'Automatice su agenda y aumente la recurrencia de sus clientes.',
+        longDescription: "Plataforma todo-en-uno para negocios de belleza y bienestar con asistente inteligente integrado.",
         features: [
-            'Agenda visual con drag-and-drop',
-            'Reservas online 24/7 desde cualquier dispositivo',
-            'Recordatorios automáticos por WhatsApp y email',
-            'CRM de clientes con historial de servicios',
-            'Asistente con IA para preguntas frecuentes',
-            'Chat inteligente integrado',
-            'Reportes de ocupación y ingresos',
-            'Gestión de múltiples empleados y sucursales'
+            'Elimina las inasistencias con recordatorios automáticos',
+            'Ahorra horas de trabajo con agenda inteligente 24/7',
+            'Aumenta la frecuencia de visita con CRM integrado',
+            'Optimiza la ocupación de sus especialistas',
+            'Atención al cliente inmediata mediante IA'
         ],
         techStack: ['Next.js 15', 'Firebase', 'Twilio API', 'Zod', 'Tailwind CSS'],
         imageUrl: '/screenshots/beauty-agenda.png',
         githubUrl: '#',
-        demoUrl: '/demos/beauty-agenda'
+        demoUrl: '/#contact?project=beauty'
     },
     {
         id: '6',
         title: 'ScholarAI Nexus',
-        description: 'Plataforma educativa inteligente para la gestión integral de colegios. Utiliza IA para el seguimiento del rendimiento académico, detección temprana de deserción y tutoría personalizada.',
-        longDescription: 'Un ecosistema educativo de próxima generación. ScholarAI Nexus utiliza modelos de lenguaje avanzados para analizar el progreso de cada alumno en tiempo real, generando alertas predictivas sobre dificultades de aprendizaje. Incluye un asistente para profesores que automatiza la creación de exámenes, rúbricas de evaluación y reportes detallados para padres, optimizando el control administrativo y pedagógico.',
+        description: 'Potencie el éxito académico mediante el análisis de datos predictivo.',
+        longDescription: 'Ecosistema educativo de próxima generación para la gestión integral de instituciones.',
         features: [
-            'Detección predictiva de riesgo académico mediante Machine Learning',
-            'Generación automática de material didáctico y evaluaciones con IA',
-            'Dashboard de seguimiento comportamental y de asistencia en tiempo real',
-            'Tutor virtual 24/7 disponible para dudas de alumnos',
-            'Comunicación inteligente y segmentada con padres de familia'
+            'Detecta riesgos de deserción escolar tempranamente',
+            'Reduce la carga administrativa de los docentes',
+            'Mejora la comunicación entre padres y escuela',
+            'Personaliza el aprendizaje para cada estudiante',
+            'Seguridad total de los datos académicos y personales'
         ],
         techStack: ['Next.js 15', 'AI', 'Firebase', 'React', 'Recharts'],
         imageUrl: '/screenshots/scholar-ai.png',
         githubUrl: '#',
-        demoUrl: '/demos/scholar-ai'
+        demoUrl: '/#contact?project=scholar'
     }
 ];
 

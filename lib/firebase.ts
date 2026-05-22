@@ -1,22 +1,18 @@
-// ============================================================
-// Configuración de Firebase
-// Servicios: Auth (autenticación), Firestore (base de datos),
-//            Storage (archivos/imágenes), Functions (backend)
-// Las credenciales se leen de variables de entorno (.env.local)
-//
-// NOTA: La inicialización está envuelta en try-catch para que
-// el build de Next.js no falle cuando no hay .env.local
-// (por ejemplo en CI/CD o primera configuración).
-// En runtime (navegador), las env vars DEBEN estar presentes.
-// ============================================================
-
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
 import { getFunctions, type Functions } from "firebase/functions";
 
-// Configuración usando variables de entorno públicas de Next.js
+const REQUIRED_KEYS = [
+  'NEXT_PUBLIC_FIREBASE_API_KEY',
+  'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN',
+  'NEXT_PUBLIC_FIREBASE_PROJECT_ID',
+  'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET',
+  'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
+  'NEXT_PUBLIC_FIREBASE_APP_ID',
+] as const;
+
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -26,29 +22,34 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Inicializar Firebase de forma segura (resiliente a env vars faltantes)
 let app: FirebaseApp | undefined;
 let auth: Auth;
 let db: Firestore;
 let storage: FirebaseStorage;
 let functions: Functions;
 
+const missingKeys = REQUIRED_KEYS.filter(k => !process.env[k]);
+const isBuild = typeof window === 'undefined' && process.env.NODE_ENV === 'production';
+
 try {
+  if (missingKeys.length > 0 && !isBuild) {
+    console.warn(`Firebase: missing env vars: ${missingKeys.join(', ')}`);
+  }
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   auth = getAuth(app);
   db = getFirestore(app);
   storage = getStorage(app);
   functions = getFunctions(app);
 } catch (error) {
-  // Durante el build estático de Next.js, las env vars pueden no existir.
-  // Esto permite que el build termine correctamente.
-  // En runtime (navegador), Firebase se inicializará correctamente
-  // siempre que .env.local tenga las credenciales.
-  console.warn("Firebase: inicialización omitida (config no disponible)");
-  auth = {} as Auth;
-  db = {} as Firestore;
-  storage = {} as FirebaseStorage;
-  functions = {} as Functions;
+  if (isBuild) {
+    const stub = {} as Auth;
+    auth = stub;
+    db = {} as Firestore;
+    storage = {} as FirebaseStorage;
+    functions = {} as Functions;
+  } else {
+    throw error;
+  }
 }
 
 export { auth, db, storage, functions };

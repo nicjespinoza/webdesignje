@@ -17,6 +17,10 @@
                 "function": "clawStatus"
             },
             {
+                "source": "/api/project-inquiry",
+                "function": "clawChat"
+            },
+            {
                 "source": "**",
                 "destination": "/index.html"
             }
@@ -32,5 +36,12 @@
             "firebase-debug.*.log",
             "*.local"
         ]
+    },
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    },
+    "storage": {
+        "rules": "storage.rules"
     }
 }

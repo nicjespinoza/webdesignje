@@ -26,6 +26,18 @@ const nextConfig: NextConfig = {
         hostname: 'lh3.googleusercontent.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.webdesignje.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
   // ===================================
@@ -34,7 +46,10 @@ const nextConfig: NextConfig = {
   // ===================================
   output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion', 'three'],
   },
 };
 

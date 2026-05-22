@@ -93,14 +93,18 @@ const resources = {
         ]
       },
       projects: {
-        badge: 'Featured Work',
+        badge: 'Portfolio',
         title: 'Featured Projects',
         subtitle: 'Real-world applications that showcase the best practices of modern development.',
-        view_case: 'View Case',
+        view_case: 'Consulta gratis',
+        urgency: {
+          spots: 'Only {{count}} spots available!',
+          audit: 'for free audits this week.',
+        },
         items: [
           {
             title: 'Medical AI History',
-            description: 'Comprehensive medical records system for multiple specialties. Includes real-time synchronization, interactive 3D anatomy visualization and dynamic PDF report generation, appointment scheduling, billing, AI integration for diagnosis and treatment.',
+            description: 'Multi-specialty electronic health record system. Includes real-time synchronization, 3D anatomy visualization and PDF report generation, appointment scheduling, billing, and AI integration.'
           },
           {
             title: 'POS Store AI',
@@ -161,6 +165,12 @@ const resources = {
         project_placeholder: 'Tell me about your project: business type, needed features, estimated timeline...',
         cta: 'Receive Free Quote',
         response_time: 'Response in less than 2 hours'
+      },
+      clients: {
+        badge: 'SUCCESS STORIES',
+        title: 'Featured Clients',
+        subtitle: 'Businesses from various sectors that trust web and premium artificial intelligence solutions to lead the digital market, increase visibility, and grow constantly.',
+        visit: 'Visit'
       }
     },
   },
@@ -169,15 +179,15 @@ const resources = {
       nav: {
         stack: 'Tecnologías',
         services: 'Servicios',
-        ai: 'IA & Agentes',
+        ai: 'IA y Agentes',
         projects: 'Proyectos',
-        about: 'Sobre mí',
-        contact: 'Contáctame',
+        about: 'Sobre Mí',
+        contact: 'Contacto',
       },
       hero: {
         badge: 'DISPONIBLE PARA NUEVOS PROYECTOS',
-        title: 'Automatización inteligente que facilita tu día',
-        subtitle: 'Creo ecosistemas con IA personalizados que integran tu conocimiento operativo para multiplicar tu eficiencia.',
+        title: 'Automatización Inteligente que Facilita tu Día',
+        subtitle: 'Creo ecosistemas de IA personalizados que integran tu conocimiento operativo para multiplicar tu eficiencia.',
         cta: 'Iniciar Proyecto',
         projects: 'Proyectos',
         success: 'Casos de Éxito',
@@ -213,7 +223,7 @@ const resources = {
             features: [
               "Aplicaciones Nativas, Multiplataforma y Web para Máximo Alcance",
               "Interfaces Atractivas que Encantan a sus Usuarios",
-              "Funcionalidad Robusta y Scalable para sus Necesidades",
+              "Funcionalidad Robusta y Escalable para sus Necesidades",
               "Lanzamiento Exitoso y Gestión Simplificada"
             ]
           },
@@ -257,11 +267,15 @@ const resources = {
         badge: 'Portafolio',
         title: 'Proyectos Destacados',
         subtitle: 'Aplicaciones reales que muestran las mejores prácticas del desarrollo moderno.',
-        view_case: 'Ver Caso',
+        view_case: 'Consulta gratis',
+        urgency: {
+          spots: '¡Solo {{count}} cupos disponibles!',
+          audit: 'para auditorías gratuitas esta semana.',
+        },
         items: [
           {
             title: 'Historia Clínica AI',
-            description: 'Sistema integral de historias clínicas para múltiples especialidades. Incluye sincronización en tiempo real, visualización 3D interactiva de anatomía y generación dinámica de reportes PDF, programación de citas, facturación, Integración con IA para diagnóstico y tratamiento.',
+            description: 'Sistema de historias clínicas para múltiples especialidades. Incluye sincronización en tiempo real, visualización 3D de anatomía y generación de reportes PDF, programación de citas, facturación, Integración con IA.',
           },
           {
             title: 'POS Tienda AI',
@@ -286,10 +300,9 @@ const resources = {
         ]
       },
       about: {
-        badge: 'Sobre Mí',
         title: 'Sobre Mí',
         motto: 'Desarrollador apasionado creando experiencias digitales con precisión y creatividad',
-        description_1: 'Desarrollador full-stack especializado en tecnologías web modernas y soluciones potenciadas con IA. Apasionado por crear experiencias de usuario excepcionales y sistemas backend robustos.',
+        description_1: 'Desarrollador Full-Stack especializado en tecnologías web modernas y soluciones potenciadas con IA. Apasionado por crear experiencias de usuario excepcionales y sistemas backend robustos.',
         description_2: 'Más allá del código, soy un arquitecto digital obsesionado con la precisión. Mi viaje comenzó con el deseo de construir sistemas que se sientan vivos.',
         description_3: 'Combino rigor técnico con la mirada de un artista, asegurando que cada píxel tenga un propósito y cada función se ejecute con eficiencia elegante.',
         performance_quote: 'El rendimiento es el máximo lujo.',
@@ -322,6 +335,12 @@ const resources = {
         project_placeholder: 'Cuéntame sobre tu proyecto: tipo de negocio, funcionalidades, timeline...',
         cta: 'Recibir Cotización Gratis',
         response_time: 'Respuesta en menos de 2 horas'
+      },
+      clients: {
+        badge: 'CASOS DE ÉXITO',
+        title: 'Clientes Destacados',
+        subtitle: 'Negocios de diferentes sectores que confían en soluciones web y de inteligencia artificial para liderar su mercado digital, aumentar su visibilidad y crecer de forma constante.',
+        visit: 'Visitar'
       }
     },
   },
@@ -408,17 +427,21 @@ const resources = {
           response_desc: 'Génère des réponses utiles qui aident votre équipe et vos clients',
         },
         metrics: [
-          { title: "NLP Avancé", description: "Service client intelligent qui répond comme un expert dans n'importe quelle langue." },
-          { title: "Agents Autonomes", description: "Assistants qui gèrent vos processus métier sans votre supervision." },
-          { title: "ML Prédictif", description: "Prévisions qui anticipent les tendances et les comportements des clients." },
-          { title: "Deep Learning", description: "Modèles formés avec les informations exclusives de votre propre entreprise." }
+          { title: "Advanced NLP", description: "Intelligent customer service that responds like an expert in any language." },
+          { title: "Autonomous Agents", description: "Assistants that manage your business processes without your supervision." },
+          { title: "Predictive ML", description: "Forecasts that anticipate trends and customer behaviors." },
+          { title: "Deep Learning", description: "Models trained with exclusive information from your own business." }
         ]
       },
       projects: {
         badge: 'Travail Vedette',
         title: 'Projets de Référence',
         subtitle: 'Applications réelles montrant les meilleures pratiques du développement moderne.',
-        view_case: 'Voir le Cas',
+        view_case: 'Plus d\'informations',
+        urgency: {
+          spots: 'Plus que {{count}} places disponibles !',
+          audit: 'pour des audits gratuits cette semaine.',
+        },
         items: [
           {
             title: 'Medical AI History',
@@ -447,7 +470,6 @@ const resources = {
         ]
       },
       about: {
-        badge: 'À Propos',
         title: 'À Propos',
         motto: 'Développeur passionné créant des expériences numériques avec précision et créativité',
         description_1: 'Développeur full-stack spécialisé dans les technologies web modernes et les solutions basées sur l\'IA. Passionné par la création d\'expériences utilisateur exceptionnelles et de systèmes backend robustes.',
@@ -483,6 +505,12 @@ const resources = {
         project_placeholder: 'Parlez-moi de votre projet : type d\'entreprise, fonctionnalités, calendrier...',
         cta: 'Recevoir un Devis Gratuit',
         response_time: 'Réponse en moins de 2 heures'
+      },
+      clients: {
+        badge: 'HISTOIRES DE SUCCÈS',
+        title: 'Clients Vedettes',
+        subtitle: 'Des entreprises de différents secteurs qui font confiance aux solutions web y d\'intelligence artificielle pour mener leur marché numérique.',
+        visit: 'Visiter'
       }
     },
   },
@@ -579,7 +607,11 @@ const resources = {
         badge: '精選作品',
         title: '精選項目',
         subtitle: '展示現代開發最佳實踐的真實應用程序。',
-        view_case: '查看案例',
+        view_case: '更多信息',
+        urgency: {
+          spots: '僅剩 {{count}} 個名額！',
+          audit: '本週免費審計。',
+        },
         items: [
           {
             title: '醫療 AI 病歷',
@@ -608,7 +640,6 @@ const resources = {
         ]
       },
       about: {
-        badge: '關於我',
         title: '關於我',
         motto: '充滿熱情的開發者，以精確和創意打造數位體驗',
         description_1: '專注於現代網頁技術和 AI 解決方案的全棧開發者。熱衷於打造卓越的用戶體驗和強大的後端系統。',
@@ -644,6 +675,12 @@ const resources = {
         project_placeholder: '告訴我您的項目：業務類型、所需功能、預計時間表...',
         cta: '獲取免費報價',
         response_time: '2 小時內回覆'
+      },
+      clients: {
+        badge: '成功案例',
+        title: '精選客戶',
+        subtitle: '來自不同行業的企業信任網頁和人工智慧解決方案，以領先數位市場。',
+        visit: '訪問'
       }
     },
   },

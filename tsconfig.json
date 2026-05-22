@@ -38,6 +38,11 @@
     "**/*.mts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "public",
+    "functions",
+    "out",
+    ".next"
   ]
 }
+

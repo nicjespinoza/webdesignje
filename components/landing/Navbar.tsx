@@ -2,19 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useTranslation } from "react-i18next";
+import Image from 'next/image';
 import { Language } from '@/components/landing/types';
-import Logo from '@/components/medical/ui/Logo';
+import Logo from '@/components/ui/Logo';
 
 const Navbar = ({
   isDark,
-  toggleTheme,
   lang,
   toggleLang
 }: {
   isDark: boolean;
-  toggleTheme: () => void;
   lang: Language;
   toggleLang: (lang: Language) => void;
 }) => {
@@ -37,8 +36,6 @@ const Navbar = ({
     zh: { name: '繁體中文', flagCode: 'cn' }
   };
 
-  const [isLangOpen, setIsLangOpen] = useState(false);
-
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-3 shadow-lg backdrop-blur-md' : 'py-6 bg-transparent'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
@@ -50,71 +47,50 @@ const Navbar = ({
           </div>
         </a>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-6">
-          {/* Language Selector Dropdown */}
-          <div className="relative">
-            <button 
-              onClick={() => setIsLangOpen(!isLangOpen)}
-              className="text-xs font-bold px-3 py-1.5 rounded border border-white/10 hover:bg-white/5 transition-all flex items-center gap-2 min-w-[140px] justify-between group"
-            >
-              <div className="flex items-center gap-2">
-                <img 
-                  src={`https://flagcdn.com/w40/${languageConfig[lang || 'es'].flagCode}.png`} 
-                  alt="" 
-                  className="w-5 h-auto rounded-sm object-cover" 
-                />
-                <span className="group-hover:text-[#FBE18D] transition-colors">{languageConfig[lang || 'es'].name}</span>
-              </div>
-              <ChevronDown size={14} className={`transition-transform duration-300 ${isLangOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            <AnimatePresence>
-              {isLangOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="absolute top-full right-0 mt-2 w-40 glass-panel rounded-xl overflow-hidden border border-white/10 shadow-2xl z-50 bg-[#020202]/90 backdrop-blur-xl"
-                >
-                  <div className="p-1">
-                    {languages.map((l) => (
-                      <button
-                        key={l}
-                        onClick={() => {
-                          toggleLang(l);
-                          setIsLangOpen(false);
-                        }}
-                        className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium rounded-lg hover:bg-[#FBE18D]/10 hover:text-[#FBE18D] transition-colors ${lang === l ? 'bg-[#FBE18D]/10 text-[#FBE18D]' : 'text-slate-300'}`}
-                      >
-                        <img 
-                          src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`} 
-                          alt="" 
-                          className="w-5 h-auto rounded-sm object-cover" 
-                        />
-                        {languageConfig[l].name}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+        {/* Desktop Language Selector Linear */}
+        <div className="hidden md:flex items-center gap-4">
+          <div className="flex items-center gap-1.5 p-1 glass-panel rounded-full border border-white/5 bg-white/5 shadow-inner">
+            {languages.map((l) => (
+              <button
+                key={l}
+                onClick={() => toggleLang(l)}
+                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group ${
+                  lang === l 
+                  ? 'bg-[#C69320] shadow-[0_0_15px_rgba(198,147,32,0.4)]' 
+                  : 'hover:bg-white/10'
+                }`}
+              >
+                <div className="relative">
+                  <Image 
+                    src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`} 
+                    alt={languageConfig[l].name}
+                    width={20}
+                    height={15}
+                    className={`rounded-sm object-cover transition-all ${lang === l ? 'scale-110 shadow-lg' : 'grayscale-[0.3] group-hover:grayscale-0'}`} 
+                  />
+                </div>
+                <span className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${lang === l ? 'text-black' : 'text-slate-400 group-hover:text-white'}`}>
+                  {languageConfig[l].name.split(' ')[0]}
+                </span>
+                
+                {lang === l && (
+                  <motion.div 
+                    layoutId="activeLangIndicator"
+                    className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#FBE18D] rounded-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  />
+                )}
+              </button>
+            ))}
           </div>
 
-          <div className="h-6 w-px bg-white/10"></div>
-
-          <button 
-            onClick={toggleTheme} 
-            className="p-2 rounded-full hover:bg-white/5 transition-colors text-slate-300 hover:text-white"
-            title="Toggle Theme"
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+          <div className="h-6 w-px bg-white/10 mx-2"></div>
 
           <a href="#contact" className="liquid-gold-card !rounded-full !h-auto">
             <div className="liquid-gold-content !py-2 !px-6 !rounded-full">
               <span className="gradient-text font-bold text-sm whitespace-nowrap">
-                {t('nav.contact')}
+                {t('nav.contact', { lng: lang })}
               </span>
             </div>
           </a>
@@ -137,7 +113,7 @@ const Navbar = ({
             className="md:hidden glass-panel border-t border-white/10 overflow-hidden bg-[#020202]/95 backdrop-blur-2xl"
           >
             <div className="flex flex-col p-6 gap-6">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mb-[-10px] px-1">Seleccionar Idioma</p>
+              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mb-[-10px] px-1">{t('Select Language', { lng: lang }) || 'Seleccionar Idioma'}</p>
               <div className="grid grid-cols-2 gap-3">
                 {languages.map((l) => (
                   <button
@@ -148,10 +124,12 @@ const Navbar = ({
                     }}
                     className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
                   >
-                    <img 
+                    <Image 
                       src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`} 
-                      alt="" 
-                      className="w-5 h-auto rounded-sm object-cover" 
+                      alt=""
+                      width={20}
+                      height={15}
+                      className="rounded-sm object-cover" 
                     />
                     {languageConfig[l].name}
                   </button>
@@ -161,16 +139,12 @@ const Navbar = ({
               <div className="h-px bg-white/10 w-full"></div>
 
               <div className="flex gap-4">
-                <button onClick={toggleTheme} className="flex-1 flex items-center justify-center gap-2 text-sm px-4 py-3 border border-white/10 rounded-xl text-slate-300 hover:bg-white/5 transition-all">
-                  {isDark ? <Sun size={18} /> : <Moon size={18} />} 
-                  <span>{isDark ? 'Light' : 'Dark'}</span>
-                </button>
                 <a 
                   href="#contact" 
                   onClick={() => setIsOpen(false)}
-                  className="flex-[1.5] bg-[#C69320] text-black font-bold text-sm px-4 py-3 rounded-xl text-center hover:bg-[#FBE18D] transition-all"
+                  className="w-full bg-[#C69320] text-black font-bold text-sm px-4 py-3 rounded-xl text-center hover:bg-[#FBE18D] transition-all"
                 >
-                  {t('nav.contact')}
+                  {t('nav.contact', { lng: lang })}
                 </a>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import DemoPlaceholder from '@/components/medical/ui/DemoPlaceholder';
+import DemoPlaceholder from '@/components/ui/DemoPlaceholder';
 
 export default function EveCommerceDemoPage() {
     return (

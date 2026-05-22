@@ -1,5 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 
+interface CanvasParticle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  baseSize: number;
+  size: number;
+  pulse: number;
+  pulseSpeed: number;
+  opacity: number;
+  isHovered: boolean;
+}
+
 const ParticleBackground: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -10,9 +23,9 @@ const ParticleBackground: React.FC = () => {
         const ctx = canvas.getContext('2d', { alpha: true });
         if (!ctx) return;
 
-        let particles: Particle[] = [];
+        let particles: CanvasParticle[] = [];
         let animationFrameId: number;
-        let mouse = { x: -2000, y: -2000 };
+        const mouse = { x: -2000, y: -2000 };
 
         const COLORS = {
             gold: '198, 147, 32',
@@ -20,103 +33,78 @@ const ParticleBackground: React.FC = () => {
             platinum: '224, 224, 224'
         };
 
-        class Particle {
-            x: number;
-            y: number;
-            vx: number;
-            vy: number;
-            baseSize: number;
-            size: number;
-            pulse: number;
-            pulseSpeed: number;
-            opacity: number;
-            isHovered: boolean = false;
+        const createParticle = (): CanvasParticle => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            baseSize: Math.random() * 2 + 0.5,
+            size: Math.random() * 2 + 0.5,
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: 0.02 + Math.random() * 0.03,
+            opacity: 0.3 + Math.random() * 0.4,
+            isHovered: false,
+        });
 
-            constructor() {
-                this.x = Math.random() * canvas!.width;
-                this.y = Math.random() * canvas!.height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.baseSize = Math.random() * 2 + 0.5;
-                this.size = this.baseSize;
-                this.pulse = Math.random() * Math.PI * 2;
-                this.pulseSpeed = 0.02 + Math.random() * 0.03;
-                this.opacity = 0.3 + Math.random() * 0.4;
+        const updateParticle = (p: CanvasParticle, others: CanvasParticle[]) => {
+            const dxm = mouse.x - p.x;
+            const dym = mouse.y - p.y;
+            const distMouse = Math.sqrt(dxm * dxm + dym * dym);
+
+            p.isHovered = distMouse < 40;
+            const targetSize = p.isHovered ? p.baseSize * 4 : p.baseSize;
+            p.size += (targetSize - p.size) * 0.1;
+
+            if (p.isHovered) {
+                others.forEach(other => {
+                    if (other === p) return;
+                    const dxo = p.x - other.x;
+                    const dyo = p.y - other.y;
+                    const distOther = Math.sqrt(dxo * dxo + dyo * dyo);
+                    if (distOther < 120) {
+                        other.x += dxo * 0.005;
+                        other.y += dyo * 0.005;
+                    }
+                });
+                p.x += dxm * 0.05;
+                p.y += dym * 0.05;
+            } else {
+                p.x += p.vx;
+                p.y += p.vy;
             }
 
-            update(others: Particle[]) {
-                // Determine if hovered
-                const dxm = mouse.x - this.x;
-                const dym = mouse.y - this.y;
-                const distMouse = Math.sqrt(dxm * dxm + dym * dym);
-                
-                this.isHovered = distMouse < 40;
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            p.pulse += p.pulseSpeed;
+        };
 
-                // Handle size growth / shrink
-                const targetSize = this.isHovered ? this.baseSize * 4 : this.baseSize;
-                this.size += (targetSize - this.size) * 0.1;
+        const drawParticle = (p: CanvasParticle) => {
+            const currentOpacity = (p.opacity + Math.sin(p.pulse) * 0.1) * (p.isHovered ? 1 : 0.8);
+            const glowSize = p.size * 4;
+            const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowSize);
+            gradient.addColorStop(0, `rgba(${COLORS.bright}, ${currentOpacity})`);
+            gradient.addColorStop(1, `rgba(${COLORS.gold}, 0)`);
 
-                if (this.isHovered) {
-                    // Attract others
-                    others.forEach(p => {
-                        if (p === this) return;
-                        const dxo = this.x - p.x;
-                        const dyo = this.y - p.y;
-                        const distOther = Math.sqrt(dxo * dxo + dyo * dyo);
-                        if (distOther < 120) {
-                            p.x += dxo * 0.005;
-                            p.y += dyo * 0.005;
-                        }
-                    });
-                    
-                    // Stick slightly to mouse
-                    this.x += dxm * 0.05;
-                    this.y += dym * 0.05;
-                } else {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                }
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, glowSize, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
 
-                // Bound check
-                if (this.x < 0 || this.x > canvas!.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas!.height) this.vy *= -1;
-
-                this.pulse += this.pulseSpeed;
-            }
-
-            draw() {
-                if (!ctx) return;
-                const currentOpacity = (this.opacity + Math.sin(this.pulse) * 0.1) * (this.isHovered ? 1 : 0.8);
-                
-                // Outer glow
-                const glowSize = this.size * 4;
-                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowSize);
-                gradient.addColorStop(0, `rgba(${COLORS.bright}, ${currentOpacity})`);
-                gradient.addColorStop(1, `rgba(${COLORS.gold}, 0)`);
-                
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, glowSize, 0, Math.PI * 2);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-
-                // Solid center
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.isHovered ? `rgba(${COLORS.platinum}, 1)` : `rgba(${COLORS.platinum}, ${currentOpacity + 0.2})`;
-                ctx.fill();
-            }
-        }
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = p.isHovered ? `rgba(${COLORS.platinum}, 1)` : `rgba(${COLORS.platinum}, ${currentOpacity + 0.2})`;
+            ctx.fill();
+        };
 
         const init = () => {
             particles = [];
             const count = Math.min(60, (canvas.width * canvas.height) / 25000);
             for (let i = 0; i < count; i++) {
-                particles.push(new Particle());
+                particles.push(createParticle());
             }
         };
 
         const drawLines = () => {
-            if (!ctx) return;
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -128,7 +116,7 @@ const ParticleBackground: React.FC = () => {
                         const baseOpacity = (1 - distance / maxDist) * 0.3;
                         const pulseBonus = (0.5 + Math.sin(particles[i].pulse) * 0.5) * 0.2;
                         const hoverBonus = (particles[i].isHovered || particles[j].isHovered) ? 0.3 : 0;
-                        
+
                         ctx.beginPath();
                         ctx.strokeStyle = `rgba(${COLORS.gold}, ${baseOpacity + pulseBonus + hoverBonus})`;
                         ctx.lineWidth = (particles[i].isHovered || particles[j].isHovered) ? 0.8 : 0.4;
@@ -146,24 +134,41 @@ const ParticleBackground: React.FC = () => {
             init();
         };
 
-        const handleMouseMove = (e: MouseEvent) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
+        const handleMouseMove = (e: MouseEvent | TouchEvent) => {
+            if (e.type === 'mousemove') {
+                const mouseEvent = e as MouseEvent;
+                mouse.x = mouseEvent.clientX;
+                mouse.y = mouseEvent.clientY;
+            } else if (e.type === 'touchmove' || e.type === 'touchstart') {
+                const touchEvent = e as TouchEvent;
+                const touch = touchEvent.touches[0];
+                if (touch) {
+                    mouse.x = touch.clientX;
+                    mouse.y = touch.clientY;
+                }
+            }
+        };
+
+        const handleTouchEnd = () => {
+            // Reset mouse position when touch ends to avoid particles sticking to last touch position
+            mouse.x = -2000;
+            mouse.y = -2000;
         };
 
         window.addEventListener('resize', resize);
         window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('touchmove', handleMouseMove);
+        window.addEventListener('touchstart', handleMouseMove);
+        window.addEventListener('touchend', handleTouchEnd);
         resize();
 
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
             particles.forEach(p => {
-                p.update(particles);
-                p.draw();
+                updateParticle(p, particles);
+                drawParticle(p);
             });
             drawLines();
-            
             animationFrameId = requestAnimationFrame(animate);
         };
 
@@ -185,4 +190,4 @@ const ParticleBackground: React.FC = () => {
     );
 };
 
-export default ParticleBackground;
+export default ParticleBackground;

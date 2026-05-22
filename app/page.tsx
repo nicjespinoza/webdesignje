@@ -17,24 +17,23 @@ import FooterSection from "@/components/landing/FooterSection";
 import ParticleBackground from "@/components/ParticleBackground";
 import { Language } from "@/components/landing/types";
 import { motion } from "framer-motion";
-import { fadeInUp, staggerContainer } from "@/components/landing/animations";
+import { fadeInUp } from "@/components/landing/animations";
 
 export default function RootPage() {
   const router = useRouter();
   const { i18n } = useTranslation();
-  const [isDark, setIsDark] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const id = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(id);
   }, []);
 
-  const toggleTheme = () => setIsDark((v) => !v);
+  const lang = !mounted ? "es" : (i18n.language.split('-')[0].toLowerCase() as Language) || "es";
+
   const toggleLang = (langCode: string) => {
     i18n.changeLanguage(langCode.toLowerCase());
   };
-
-  const lang = !mounted ? "es" : (i18n.language.split('-')[0].toLowerCase() as Language) || "es";
 
   return (
     <main className="min-h-screen bg-[#020202] text-white relative overflow-hidden">
@@ -44,8 +43,7 @@ export default function RootPage() {
 
       <div className="relative z-10">
         <Navbar
-          isDark={isDark}
-          toggleTheme={toggleTheme}
+          isDark={true}
           lang={lang}
           toggleLang={(newLang) => toggleLang(newLang)}
         />
@@ -56,7 +54,7 @@ export default function RootPage() {
           animate="visible"
           variants={fadeInUp}
         >
-          <Hero lang={lang} router={router} />
+          <Hero router={router} />
         </motion.div>
 
         {/* 2. ServicesSection (Propuesta de valor) */}
@@ -66,7 +64,7 @@ export default function RootPage() {
           viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
         >
-          <ServicesSection />
+          <ServicesSection lang={lang} />
         </motion.div>
 
         {/* 3. SmartEnterpriseSection (Autoridad tecnológica: IA + RAG) */}
@@ -76,7 +74,7 @@ export default function RootPage() {
           viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
         >
-          <SmartEnterpriseSection />
+          <SmartEnterpriseSection lang={lang} />
         </motion.div>
 
         {/* 4. ProjectsSection (Prueba social) */}
@@ -86,7 +84,7 @@ export default function RootPage() {
           viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
         >
-          <ProjectsSection />
+          <ProjectsSection lang={lang} />
         </motion.div>
 
         {/* 5. StackSection (Especificaciones técnicas) */}
@@ -96,7 +94,7 @@ export default function RootPage() {
           viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
         >
-          <StackSection />
+          <StackSection lang={lang} />
         </motion.div>
 
         {/* Secciones Finales (Cierre y Conversión) */}
@@ -106,7 +104,7 @@ export default function RootPage() {
           viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
         >
-          <AboutSection />
+          <AboutSection lang={lang} />
         </motion.div>
 
         <motion.div
@@ -115,7 +113,7 @@ export default function RootPage() {
           viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
         >
-          <ClientsSection />
+          <ClientsSection lang={lang} />
         </motion.div>
 
         <motion.div
@@ -133,7 +131,7 @@ export default function RootPage() {
           viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
         >
-          <FooterSection />
+          <FooterSection lang={lang} />
         </motion.div>
       </div>
     </main>

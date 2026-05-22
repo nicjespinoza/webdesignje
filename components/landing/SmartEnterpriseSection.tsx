@@ -1,13 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Cpu, Brain, Bot, Sparkles, Network, FileText, Gem, Database, 
-  Search, CheckCircle, Smartphone, Activity 
+  Cpu, Brain, Bot, Sparkles, Network, FileText, Gem
 } from 'lucide-react';
 import { fadeInUp, staggerContainer } from '@/components/landing/animations';
 import { useTranslation } from 'react-i18next';
+import { Language } from '@/components/landing/types';
 
-const SmartEnterpriseSection = () => {
+const SmartEnterpriseSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
   
   // Rock-solid metrics fallback (Spanish default)
@@ -19,7 +19,7 @@ const SmartEnterpriseSection = () => {
   ];
 
   // Extraction with high-reliability
-  const metricsData = t('smart.metrics', { returnObjects: true }) as any;
+  const metricsData = t('smart.metrics', { returnObjects: true, lng: lang }) as Record<string, string>[];
   const metrics = Array.isArray(metricsData) ? metricsData : defaultMetrics;
 
   return (
@@ -35,11 +35,11 @@ const SmartEnterpriseSection = () => {
           className="flex flex-col items-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4 shadow-[0_0_15px_rgba(198,147,32,0.2)] group">
-            <Cpu size={14} className="group-hover:rotate-12 transition-transform" /> {t('smart.badge')}
+            <Cpu size={14} className="group-hover:rotate-12 transition-transform" /> {t('smart.badge', { lng: lang })}
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-center text-white mb-6 leading-tight">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-6">
             {(() => {
-              const fullTitle = t('smart.title');
+              const fullTitle = t('smart.title', { lng: lang });
               if (fullTitle.includes(',')) {
                 const parts = fullTitle.split(',');
                 const first = parts[0];
@@ -50,7 +50,7 @@ const SmartEnterpriseSection = () => {
             })()}
           </h2>
           <p className="gradient-text-platinum mt-2 max-w-3xl text-center text-lg leading-relaxed">
-            {t('smart.subtitle')}
+            {t('smart.subtitle', { lng: lang })}
           </p>
         </motion.div>
         
@@ -62,7 +62,7 @@ const SmartEnterpriseSection = () => {
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24"
         >
-          {metrics.map((skill: any, index: number) => (
+          {metrics.map((skill: Record<string, string>, index: number) => (
             <motion.div
               key={index}
               variants={fadeInUp}
@@ -80,7 +80,7 @@ const SmartEnterpriseSection = () => {
                 
                 <div className="w-full">
                   <div className="flex justify-between mb-2 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-                    <span>{t('smart.efficiency') || 'Eficiencia'}</span>
+                    <span>{t('smart.efficiency', { lng: lang }) || 'Eficiencia'}</span>
                     <span className="text-white">{[95, 88, 92, 85][index]}%</span>
                   </div>
                   <div className="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
@@ -109,14 +109,14 @@ const SmartEnterpriseSection = () => {
           <div className="text-center mb-16">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
               {(() => {
-                const pTitle = t('smart.pipeline.title');
+                const pTitle = t('smart.pipeline.title', { lng: lang });
                 const words = pTitle.split(' ');
                 const first = words[0];
                 const rest = words.slice(1).join(' ');
                 return <>{first} <span className="gradient-text">{rest}</span></>;
               })()}
             </h3>
-            <p className="text-slate-400 max-w-2xl mx-auto">{t('smart.pipeline.subtitle')}</p>
+            <p className="text-slate-400 max-w-2xl mx-auto">{t('smart.pipeline.subtitle', { lng: lang })}</p>
           </div>
 
           <div className="relative py-12">
@@ -124,64 +124,60 @@ const SmartEnterpriseSection = () => {
               {/* Docs */}
               <motion.div variants={fadeInUp} className="flex flex-col items-center group">
                 <div className="relative mb-6">
-                  <div className="absolute -inset-4 bg-blue-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="relative w-24 h-24 bg-gradient-to-br from-blue-500/20 via-blue-600/10 to-transparent border-2 border-blue-500/50 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)] backdrop-blur-md">
-                    <div className="bg-blue-500/30 p-4 rounded-full text-blue-400">
-                      <FileText size={32} className="drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+                  <div className="relative w-24 h-24 bg-gradient-to-br from-blue-500/10 to-transparent border-2 border-blue-500/30 rounded-full flex items-center justify-center backdrop-blur-md">
+                    <div className="bg-blue-500/20 p-4 rounded-full text-blue-400">
+                      <FileText size={32} />
                     </div>
                   </div>
                 </div>
                 <div className="text-center px-4">
-                  <h5 className="font-bold text-blue-400 text-lg mb-2">{t('smart.pipeline.docs')}</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.docs_desc')}</p>
+                  <h5 className="font-bold text-blue-400 text-lg mb-2">{t('smart.pipeline.docs', { lng: lang })}</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.docs_desc', { lng: lang })}</p>
                 </div>
               </motion.div>
 
               {/* Vector */}
               <motion.div variants={fadeInUp} className="flex flex-col items-center group">
                 <div className="relative mb-6">
-                  <div className="absolute -inset-4 bg-purple-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="relative w-24 h-24 bg-gradient-to-br from-purple-500/20 via-purple-600/10 to-transparent border-2 border-purple-500/50 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(168,85,247,0.3)] backdrop-blur-md">
-                    <div className="bg-purple-500/30 p-4 rounded-full text-purple-400">
-                      <Gem size={32} className="drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+                  <div className="relative w-24 h-24 bg-gradient-to-br from-purple-500/10 to-transparent border-2 border-purple-500/30 rounded-full flex items-center justify-center backdrop-blur-md">
+                    <div className="bg-purple-500/20 p-4 rounded-full text-purple-400">
+                      <Gem size={32} />
                     </div>
                   </div>
                 </div>
                 <div className="text-center px-4">
-                  <h5 className="font-bold text-purple-400 text-lg mb-2">{t('smart.pipeline.vector')}</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.vector_desc')}</p>
+                  <h5 className="font-bold text-purple-400 text-lg mb-2">{t('smart.pipeline.vector', { lng: lang })}</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.vector_desc', { lng: lang })}</p>
                 </div>
               </motion.div>
 
               {/* Recovery */}
               <motion.div variants={fadeInUp} className="flex flex-col items-center group">
                 <div className="relative mb-6">
-                  <div className="absolute -inset-4 bg-[#C69320]/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="relative w-24 h-24 bg-gradient-to-br from-[#C69320]/30 via-[#FBE18D]/20 to-transparent border-2 border-[#C69320]/60 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(198,147,32,0.5)] backdrop-blur-md">
-                    <div className="bg-[#C69320]/30 p-4 rounded-full text-[#FBE18D]">
-                      <Brain size={32} className="drop-shadow-[0_0_10px_#C69320]" />
+                  <div className="relative w-24 h-24 bg-gradient-to-br from-[#C69320]/20 to-transparent border-2 border-[#C69320]/40 rounded-full flex items-center justify-center backdrop-blur-md">
+                    <div className="bg-[#C69320]/20 p-4 rounded-full text-[#FBE18D]">
+                      <Brain size={32} />
                     </div>
                   </div>
                 </div>
                 <div className="text-center px-4">
-                  <h5 className="font-bold text-[#FBE18D] text-lg mb-2">{t('smart.pipeline.recovery')}</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.recovery_desc')}</p>
+                  <h5 className="font-bold text-[#FBE18D] text-lg mb-2">{t('smart.pipeline.recovery', { lng: lang })}</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.recovery_desc', { lng: lang })}</p>
                 </div>
               </motion.div>
 
               {/* Response */}
               <motion.div variants={fadeInUp} className="flex flex-col items-center group">
                 <div className="relative mb-6">
-                  <div className="absolute -inset-4 bg-green-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="relative w-24 h-24 bg-gradient-to-br from-green-500/20 via-green-600/10 to-transparent border-2 border-green-500/50 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.3)] backdrop-blur-md">
-                    <div className="bg-green-500/30 p-4 rounded-full text-green-400">
-                      <Sparkles size={32} className="drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
+                  <div className="relative w-24 h-24 bg-gradient-to-br from-green-500/10 to-transparent border-2 border-green-500/30 rounded-full flex items-center justify-center backdrop-blur-md">
+                    <div className="bg-green-500/20 p-4 rounded-full text-green-400">
+                      <Sparkles size={32} />
                     </div>
                   </div>
                 </div>
                 <div className="text-center px-4">
-                  <h5 className="font-bold text-green-400 text-lg mb-2">{t('smart.pipeline.response')}</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.response_desc')}</p>
+                  <h5 className="font-bold text-green-400 text-lg mb-2">{t('smart.pipeline.response', { lng: lang })}</h5>
+                  <p className="text-xs text-slate-400 leading-relaxed">{t('smart.pipeline.response_desc', { lng: lang })}</p>
                 </div>
               </motion.div>
             </div>

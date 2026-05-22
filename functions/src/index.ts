@@ -1,18 +1,22 @@
 import * as functions from "firebase-functions";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import cors from "cors";
+import * as admin from "firebase-admin";
+
+admin.initializeApp();
+const firestore = admin.firestore();
 
 // CORS middleware
 const corsHandler = cors({ origin: true });
 
 // System instructions para Claw (el asistente)
 const SYSTEM_INSTRUCTIONS = `
-Sos "Claw", el asistente virtual de Joseph Espinoza.
+Sos el asistente virtual de Joseph Espinoza.
 Tu objetivo es ayudar a visitantes a encontrar el servicio perfecto para sus necesidades y convertirlos en clientes.
 
 ## TONO Y ESTILO
 - Amigable, profesional, cercano
-- Español nicaragüense natural (usar "vos", "qué onda", "dale", "chévere")
+- Español nicaragüense pero educado sin usar palabras vulgares
 - Directo pero no agresivo
 - Empático con las dudas del cliente
 - Usar emojis moderadamente (👋 💻 🚀 ✨ 🎯)
@@ -27,21 +31,21 @@ Tu objetivo es ayudar a visitantes a encontrar el servicio perfecto para sus nec
 - Experiencia: 5+ años en desarrollo web
 
 **Servicios principales:**
-1. **Landing Page** - $800-1200 USD, 5-7 días hábiles
+1. **Landing Page** 
    - Diseño personalizado y único
    - Hasta 5 secciones
    - Totalmente responsive
    - SEO básico
    - Hosting y dominio incluidos (1 año)
 
-2. **SaaS Completo** - $3,000-5,000 USD, 3-4 semanas
+2. **SaaS Completo** 
    - Arquitectura full-stack completa
    - Autenticación y base de datos
    - Panel de administración
    - Integración con pagos
    - Testing y documentación
 
-3. **Enterprise + IA** - $5,000+ USD, 6-8 semanas
+3. **Enterprise + IA** 
    - Todo lo del plan SaaS
    - Integración de IA (chatbots, RAG, agentes)
    - Machine Learning personalizado
@@ -95,24 +99,25 @@ Podés contactarlo directamente:
 
 **P: ¿Cuánto cuesta una página web?**
 R: "Depende del proyecto, pero te doy un rango:
-- Landing Page simple: $800-1200
-- SaaS con database: $3000-5000
-- Enterprise con IA: $5000+
+- Landing Page simple: $300-500
+- SaaS con database: $600-900
+- Enterprise con IA: $1000+
 
 ¿Qué tipo de proyecto tenés en mente? Así te puedo dar un estimado más preciso. 💡"
 
 **P: ¿Cuánto tarda?**
-R: "Los tiempos varían:
-- Landing Page: 5-7 días hábiles
-- SaaS: 3-4 semanas
-- Enterprise: 6-8 semanas
+R: "Los tiempos varía dependiendo del proyecto, pero te doy un estimado:
+- Landing Page: 10-30 días hábiles
+- SaaS: 6-13 semanas
+- Enterprise: 9-17 semanas
 
 ¿Para cuándo lo necesitás? ⏱️"
 
 **P: ¿Hacés pagos en cuotas?**
-R: "Sí, Joseph trabaja con un esquema de pagos:
-- 50% al iniciar el proyecto
-- 50% al entregar
+R: "Sí, Joseph trabaja con un esquema de pagos de 3 cuotas:
+- 25% al iniciar el proyecto
+- 50% a la entrega del 50% del proyecto
+- 25% al entregar el 100% del proyecto  
 
 En proyectos grandes se pueden acordar hitos intermedios. 💳"
 
@@ -142,7 +147,7 @@ R: "Para arrancar, Joseph necesita:
 
 ## LO QUE NO DEBÉS HACER
 
-❌ No dar precios exactos sin conocer el proyecto a fondo
+❌ No dar precios, siempre recomiendale agendar una reunion con Joseph para dar
 ❌ No comprometer a Joseph sin su aprobación
 ❌ No ser demasiado técnico (usar lenguaje simple)
 ❌ No presionar al cliente para que compre
@@ -153,7 +158,7 @@ R: "Para arrancar, Joseph necesita:
 
 Derivar cuando:
 - El cliente pide una llamada/reunión
-- El proyecto es muy complejo (> $10,000)
+- El proyecto es muy complejo
 - Hay dudas técnicas muy específicas
 - El cliente quiere negociar precios
 - Pide referencias o portfolio específico de su industria
@@ -169,7 +174,7 @@ Derivar cuando:
 ## PROYECTOS DESTACADOS (para mostrar cuando pregunten)
 
 1. **Historia Clínica SaaS** - Sistema médico con 3D interactivo y Firebase
-2. **POS Tienda Zapatos** - Punto de venta con inventario multi-variante
+2. **POS Tienda** - Punto de venta con inventario multi-variante
 3. **Hotel Management** - Plataforma hotelera con dashboard de huéspedes
 4. **Eve Commerce** - E-commerce de moda de alta gama
 5. **Beauty Agenda SaaS** - Agenda inteligente con IA para salones
@@ -270,4 +275,45 @@ export const clawStatus = functions.https.onRequest((req, res) => {
             gemini: apiKey ? "configured" : "not configured",
         });
     });
+});
+
+// ============================================================
+// Callable Function: logAuditFromClient
+// Secure server-side audit sink for privileged users
+// ============================================================
+export const logAuditFromClient = functions.https.onCall(async (request) => {
+    if (!request.auth) {
+        throw new functions.https.HttpsError("unauthenticated", "Authentication required.");
+    }
+
+    if (request.auth.token.email !== "admin@webdesignje.com") {
+        throw new functions.https.HttpsError("permission-denied", "Only admin can write audit logs.");
+    }
+
+    const data = request.data as {
+        action?: unknown;
+        details?: unknown;
+        targetId?: unknown;
+        metadata?: unknown;
+    };
+    const action = typeof data?.action === "string" ? data.action : "";
+    const details = typeof data?.details === "string" ? data.details : "";
+    const targetId = typeof data?.targetId === "string" ? data.targetId : null;
+    const metadata = typeof data?.metadata === "object" && data?.metadata !== null ? data.metadata : {};
+
+    if (!action || !details) {
+        throw new functions.https.HttpsError("invalid-argument", "action and details are required.");
+    }
+
+    await firestore.collection("auditLogs").add({
+        action,
+        details,
+        targetId,
+        metadata,
+        userId: request.auth.uid,
+        userEmail: request.auth.token.email || null,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    return { success: true };
 });

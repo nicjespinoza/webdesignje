@@ -1,47 +1,46 @@
-# 🚀 GUÍA DE SEO COMPLETO - Joseph Espinoza Portfolio
+# 🚀 GUÍA DE SEO COMPLETO - WebDesignJE (Joseph Espinoza)
 
-## ✅ LO QUE YA SE IMPLEMENTÓ
+## ✅ IMPLEMENTADO (Mayo 2026)
 
 ### **1. Metadata Avanzada (app/layout.tsx)**
-- ✅ Title y description optimizados
-- ✅ 50+ keywords estratégicas
+- ✅ Title y description optimizados por región (Nicaragua, Centroamérica, USA)
+- ✅ **50+ keywords segmentadas por mercado** (NI, CA, US)
 - ✅ Open Graph tags (Facebook, LinkedIn)
-- ✅ Twitter Cards
+- ✅ Twitter Cards con imagen OG
 - ✅ Robots configuration
 - ✅ Canonical URLs
-- ✅ Autores y verification
-- ✅ **Structured Data JSON-LD** (Schema.org)
+- ✅ Autores y verification (Google Search Console)
+- ✅ **Hreflang tags** para multi-idioma (es, es-NI, en, en-US, x-default)
+- ✅ **Google Analytics** instalado via @next/third-parties (ID: G-BB7WX61NE7)
 
-### **2. Sitemap.xml Dinámico (app/sitemap.ts)**
-- ✅ Generación automática de todas las rutas
-- ✅ Prioridades configuradas
-- ✅ Frecuencia de cambio
-- ✅ Last modified dates
+### **2. Schema.org Structured Data Mejorado (app/layout.tsx)**
+- ✅ **Person** schema con ubicación Nicaragua
+- ✅ **Organization** schema (WebDesignJE como agencia)
+- ✅ **LocalBusiness** schema con área de servicio (NI, CA, US)
+- ✅ **Service** schema con cobertura multi-país y oferta de servicios
 
-### **3. robots.txt (public/robots.txt)**
-- ✅ Reglas para Googlebot
-- ✅ Allow/deny paths
+### **3. OG Image Personalizada (public/images/og-image.jpg)**
+- ✅ 1200x630px, 63KB, calidad 95%
+- ✅ Diseño dark premium con gradientes morado/azul
+- ✅ Nombre, título, tecnologías y webdesignje.com
+- ✅ Badge "Disponible para proyectos"
+
+### **4. Sitemap.xml Dinámico (app/sitemap.ts)**
+- ✅ Rutas reales únicamente (sin fragmentos #)
+- ✅ Prioridades y frecuencias optimizadas
+- ✅ Incluye: /, /portal, /demos/pos, /demos/hotel, /demos/evecommerce, /auth, /loginadmin
+
+### **5. robots.txt (public/robots.txt)**
+- ✅ Reglas para Googlebot, Bingbot, Yandex, etc.
+- ✅ Bloqueo de bots maliciosos (MJ12bot, AhrefsBot, SemrushBot)
 - ✅ Sitemap reference
-- ✅ Bloqueo de bots maliciosos
 
-### **4. PWA Manifest (public/manifest.json)**
-- ✅ Íconos para todas las plataformas
-- ✅ Shortcuts a secciones principales
-- ✅ Screenshots
-- ✅ Share target
-
-### **5. Structured Data Adicional (app/page.tsx)**
-- ✅ Schema para los 5 proyectos
-- ✅ SoftwareApplication schema
-- ✅ ItemList schema
-
-### **6. Variables de Entorno (.env.local.example)**
-- ✅ Configuración de SEO
-- ✅ Social media URLs
-- ✅ Google Search Console
-- ✅ Analytics
-- ✅ Firebase
-- ✅ API keys
+### **6. Metadata por Página**
+- ✅ **Portal Médico IA**: layout específico con metadata SEO
+- ✅ **Demos**: layout compartido con metadata descriptiva
+- ✅ **Auth**: noindex para evitar páginas de login en Google
+- ✅ **Admin/LoginAdmin**: noindex para áreas administrativas
+- ✅ **Página principal**: metadata global con keywords segmentadas
 
 ---
 
@@ -278,12 +277,15 @@ Si tenés dudas sobre la implementación:
 
 ## ✅ CHECKLIST FINAL
 
-- [x] Metadata avanzada en layout.tsx
-- [x] Sitemap.xml dinámico
+- [x] Metadata avanzada en layout.tsx (segmentada por región)
+- [x] Sitemap.xml dinámico (sin rutas con #)
 - [x] robots.txt configurado
-- [x] PWA manifest.json
-- [x] Structured Data JSON-LD
-- [x] Variables de entorno (.env.local.example)
+- [x] Structured Data JSON-LD (Person + Organization + LocalBusiness + Service)
+- [x] Og Image creada (public/images/og-image.jpg)
+- [x] Google Analytics instalado (@next/third-parties)
+- [x] Hreflang tags implementados (es, es-NI, en, en-US)
+- [x] Metadata por página (portal, demos, auth, admin)
+- [x] Variables de entorno (.env.local) con Firebase y Vercel AI
 - [ ] Crear cuenta en Google Search Console
 - [ ] Verificar sitio en Search Console
 - [ ] Enviar sitemap.xml a Google
