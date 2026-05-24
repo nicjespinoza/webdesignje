@@ -1,0 +1,3 @@
+## 2023-10-27 - Three.js distance squared optimizations
+**Learning:** In Three.js and similar rendering applications, halving `O(n^2)` loops (by doing `j = i + 1`) could cause visual regressions if the logic expects duplicate lines for accumulation/opacity effect or if it's asymmetric. However, replacing `distanceTo()` (which computes `Math.sqrt()`) with `distanceToSquared()` and squaring the threshold yields an easy, completely safe performance win for nested loops (`O(n^2)`) and 60FPS animation loops.
+**Action:** Always replace `distanceTo()` with `distanceToSquared()` in hot loops and pre-calculate the squared threshold.
