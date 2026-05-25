@@ -36,9 +36,9 @@ const FooterSection = ({ lang }: { lang: Language }) => {
         </div>
 
         <div className="flex gap-4">
-          <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={20} /></a>
-          <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
-          <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+          <a href="#" className="text-slate-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded" aria-label={t('nav.github', { lng: lang })} title={t('nav.github', { lng: lang })}><Github size={20} /></a>
+          <a href="#" className="text-slate-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded" aria-label={t('nav.linkedin', { lng: lang })} title={t('nav.linkedin', { lng: lang })}><Linkedin size={20} /></a>
+          <a href="#" className="text-slate-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded" aria-label={t('nav.twitter', { lng: lang })} title={t('nav.twitter', { lng: lang })}><Twitter size={20} /></a>
         </div>
       </div>
     </footer>

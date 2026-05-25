@@ -6,6 +6,11 @@ const resources = {
   en: {
     translation: {
       nav: {
+        openMenu: "Open menu",
+        closeMenu: "Close menu",
+        github: "GitHub Profile",
+        linkedin: "LinkedIn Profile",
+        twitter: "Twitter Profile",
         stack: 'Technologies',
         services: 'Services',
         ai: 'AI & Agents',
@@ -177,6 +182,11 @@ const resources = {
   es: {
     translation: {
       nav: {
+        openMenu: "Abrir menú",
+        closeMenu: "Cerrar menú",
+        github: "Perfil de GitHub",
+        linkedin: "Perfil de LinkedIn",
+        twitter: "Perfil de Twitter",
         stack: 'Tecnologías',
         services: 'Servicios',
         ai: 'IA y Agentes',
@@ -347,6 +357,11 @@ const resources = {
   fr: {
     translation: {
       nav: {
+        openMenu: "Ouvrir le menu",
+        closeMenu: "Fermer le menu",
+        github: "Profil GitHub",
+        linkedin: "Profil LinkedIn",
+        twitter: "Profil Twitter",
         stack: 'Technologies',
         services: 'Services',
         ai: 'IA & Agents',
@@ -517,6 +532,11 @@ const resources = {
   zh: {
     translation: {
       nav: {
+        openMenu: "打開選單",
+        closeMenu: "關閉選單",
+        github: "GitHub 檔案",
+        linkedin: "LinkedIn 檔案",
+        twitter: "Twitter 檔案",
         stack: '技術',
         services: '服務',
         ai: '人工智慧與代理',
