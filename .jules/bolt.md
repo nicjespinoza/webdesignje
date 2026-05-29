@@ -1,0 +1,3 @@
+## 2024-05-29 - O(N^2) Particle Calculation
+**Learning:** In interactive webGL and Canvas components like Scene3D.tsx, FooterParticles.tsx and ParticleBackground.tsx, using Math.sqrt() or object.distanceTo() in high frequency animation loops or double loops creates a substantial performance bottleneck due to the CPU intensity of square root operations compared to simple multiplication.
+**Action:** Replace `distanceTo` and `Math.sqrt` with squared distance thresholds in these critical loops. E.g. instead of `distance < threshold`, use `distanceSq < threshold * threshold`. Hoist `threshold * threshold` outside the loop.

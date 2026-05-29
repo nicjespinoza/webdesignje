@@ -86,12 +86,15 @@ const FooterParticles: React.FC = () => {
         updateParticle(particles[i]);
         drawParticle(particles[i]);
 
+        const connectionDistanceSq = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
         for (let j = i; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            // Optimization: use squared distance to avoid expensive Math.sqrt
+            const distSq = dx * dx + dy * dy;
 
-            if (distance < CONNECTION_DISTANCE) {
+            if (distSq < connectionDistanceSq) {
+                const distance = Math.sqrt(distSq);
                 ctx.beginPath();
                 const opacity = 1 - (distance / CONNECTION_DISTANCE);
                 ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`;
@@ -104,9 +107,12 @@ const FooterParticles: React.FC = () => {
 
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        // Optimization: use squared distance to avoid expensive Math.sqrt
+        const distSqMouse = dx * dx + dy * dy;
+        const mouseDistanceSq = MOUSE_DISTANCE * MOUSE_DISTANCE;
 
-        if (distance < MOUSE_DISTANCE) {
+        if (distSqMouse < mouseDistanceSq) {
+            const distance = Math.sqrt(distSqMouse);
             ctx.beginPath();
             const opacity = 1 - (distance / MOUSE_DISTANCE);
             ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
