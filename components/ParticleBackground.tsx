@@ -105,14 +105,17 @@ const ParticleBackground: React.FC = () => {
         };
 
         const drawLines = () => {
+            // Optimization: use distanceToSquared to avoid expensive Math.sqrt calculation inside loop
+            const maxDistSq = 180 * 180;
+            const maxDist = 180;
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    const maxDist = 180;
+                    const distSq = dx * dx + dy * dy;
 
-                    if (distance < maxDist) {
+                    if (distSq < maxDistSq) {
+                        const distance = Math.sqrt(distSq); // Only calculate sqrt if within threshold
                         const baseOpacity = (1 - distance / maxDist) * 0.3;
                         const pulseBonus = (0.5 + Math.sin(particles[i].pulse) * 0.5) * 0.2;
                         const hoverBonus = (particles[i].isHovered || particles[j].isHovered) ? 0.3 : 0;
