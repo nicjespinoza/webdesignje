@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -188,7 +188,37 @@ const ContactSection = () => {
     preferredContact: 'WhatsApp',
   });
 
-  const [projectType, setProjectType] = useState('');
+  const projectParam = searchParams.get('project');
+  const serviceParam = searchParams.get('service');
+
+  const initialProjectType = useMemo(() => {
+    const projectNames: Record<string, string> = {
+      medical: 'Aplicación web / Dashboard',
+      pos: 'Aplicación web / Dashboard',
+      hotel: 'Aplicación web / Dashboard',
+      ecommerce: 'Tienda online (E-commerce)',
+      beauty: 'Solución con IA / Automatización',
+      scholar: 'Aplicación web / Dashboard',
+    };
+    if (projectParam && projectNames[projectParam]) {
+      return projectNames[projectParam];
+    } else if (serviceParam) {
+      if (serviceParam.includes('ia') || serviceParam.includes('ai') || serviceParam.includes('inteligencia')) {
+        return "Solución con IA / Automatización";
+      } else if (serviceParam.includes('web') || serviceParam.includes('software')) {
+        return "Aplicación web / Dashboard";
+      } else if (serviceParam.includes('tienda') || serviceParam.includes('ecommerce')) {
+        return "Tienda online (E-commerce)";
+      }
+    }
+    return '';
+  }, [projectParam, serviceParam]);
+
+  const [projectType, setProjectType] = useState(initialProjectType);
+
+  React.useEffect(() => {
+    setProjectType(initialProjectType);
+  }, [initialProjectType]);
   const [otherProjectType, setOtherProjectType] = useState('');
   const [currentWebsite, setCurrentWebsite] = useState('');
   const [mainProblem, setMainProblem] = useState('');
@@ -213,31 +243,6 @@ const ContactSection = () => {
     () => PAIN_POINTS[projectType] || [],
     [projectType]
   );
-
-  const projectParam = searchParams.get('project');
-  const serviceParam = searchParams.get('service');
-
-  useEffect(() => {
-    const projectNames: Record<string, string> = {
-      medical: 'Aplicación web / Dashboard',
-      pos: 'Aplicación web / Dashboard',
-      hotel: 'Aplicación web / Dashboard',
-      ecommerce: 'Tienda online (E-commerce)',
-      beauty: 'Solución con IA / Automatización',
-      scholar: 'Aplicación web / Dashboard',
-    };
-    if (projectParam && projectNames[projectParam]) {
-      setProjectType(projectNames[projectParam]);
-    } else if (serviceParam) {
-      if (serviceParam.includes('ia') || serviceParam.includes('ai') || serviceParam.includes('inteligencia')) {
-        setProjectType("Solución con IA / Automatización");
-      } else if (serviceParam.includes('web') || serviceParam.includes('software')) {
-        setProjectType("Aplicación web / Dashboard");
-      } else if (serviceParam.includes('tienda') || serviceParam.includes('ecommerce')) {
-        setProjectType("Tienda online (E-commerce)");
-      }
-    }
-  }, [projectParam, serviceParam]);
 
   const validateStep = (s: number): boolean => {
     const newErrors: Record<string, string> = {};

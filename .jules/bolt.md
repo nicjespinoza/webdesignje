@@ -1,0 +1,3 @@
+## 2026-05-22 - Optimización de Inicialización de Estado y Build Errors
+**Learning:** Aunque calcular el estado inicial directamente en `useState` puede evitar un renderizado adicional, puede causar regresiones si el componente debe reaccionar a cambios en las props o en la URL (como `searchParams`) sin desmontarse. Además, la falta de dependencias como `three-stdlib` puede romper el build de producción si solo están presentes en el entorno local pero no declaradas.
+**Action:** Usar `useMemo` para el estado inicial solo si no se requiere reactividad posterior, o usar `useEffect` para sincronización. Siempre verificar las dependencias instaladas contra el `package.json`.

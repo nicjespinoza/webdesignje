@@ -1,0 +1,3 @@
+## 2026-05-22 - Corrección de Mojibake y Reactividad de Estado
+**Learning:** El uso de secuencias Unicode escapadas en el código fuente (ej. \u00f3) dificulta la lectura y el mantenimiento. Reemplazarlas por caracteres literales UTF-8 es preferible. Además, al mover lógica de sincronización de parámetros de URL de `useEffect` a `useState` inicial, se pierde la reactividad ante cambios en los parámetros sin desmontaje del componente.
+**Action:** Mantener la sincronización con efectos para estados que dependan de factores externos dinámicos como URLs, o utilizar claves (`key`) para forzar el remontaje si es apropiado. Evitar incluir archivos de bloqueo (`pnpm-lock.yaml`) en parches de lógica a menos que sea estrictamente necesario.

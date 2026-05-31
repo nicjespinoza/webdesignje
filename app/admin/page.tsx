@@ -19,7 +19,7 @@ type Status = typeof STATUSES[number];
 
 const STATUS_META: Record<Status, { color: string; bg: string; dot: string; label: string; icon: React.ComponentType<{ className?: string }> }> = {
   'Nuevo': { color: 'from-blue-400 to-blue-600', bg: 'bg-blue-500/10 border-blue-500/25', dot: 'bg-blue-400', label: 'Sin contactar', icon: Inbox },
-  'En Contacto': { color: 'from-amber-400 to-yellow-500', bg: 'bg-amber-500/10 border-amber-500/25', dot: 'bg-amber-400', label: 'En negociaci\u00f3n', icon: MessageSquare },
+  'En Contacto': { color: 'from-amber-400 to-yellow-500', bg: 'bg-amber-500/10 border-amber-500/25', dot: 'bg-amber-400', label: 'En negociación', icon: MessageSquare },
   'Convertido': { color: 'from-emerald-400 to-green-500', bg: 'bg-emerald-500/10 border-emerald-500/25', dot: 'bg-emerald-400', label: 'Cliente cerrado', icon: CheckCircle2 },
   'Archivado': { color: 'from-slate-400 to-slate-600', bg: 'bg-slate-500/10 border-slate-500/25', dot: 'bg-slate-400', label: 'Archivado', icon: ArchiveIcon },
 };
@@ -235,7 +235,7 @@ const AdminDashboardPage = () => {
           <KPICard label="En Contacto" value={inContact} icon={MessageSquare} color="from-amber-400 to-yellow-500" />
           <KPICard label="Convertidos" value={convertedLeads} icon={CheckCircle2} color="from-emerald-400 to-green-500" />
           <KPICard label="Conversion" value={`${conversionRate}%`} icon={TrendingUp} color="from-purple-400 to-purple-600" />
-          <KPICard label="Proyecci\u00f3n" value={`$${(totalProjection / 1000).toFixed(1)}K`} icon={DollarSign} color="from-[#C69320] to-[#FBE18D]" />
+          <KPICard label="Proyección" value={`$${(totalProjection / 1000).toFixed(1)}K`} icon={DollarSign} color="from-[#C69320] to-[#FBE18D]" />
         </div>
 
         {/* ===== TABS ===== */}
@@ -406,7 +406,7 @@ const AdminDashboardPage = () => {
                   {(activeTab === 'leads' ? selectedItem.email : selectedItem.clientEmail) &&
                     <Row icon={Mail} label="Email" value={activeTab === 'leads' ? selectedItem.email : selectedItem.clientEmail} />}
                   {(activeTab === 'leads' ? selectedItem.phone : selectedItem.clientPhone) &&
-                    <Row icon={Phone} label="Tel\u00e9fono" value={activeTab === 'leads' ? selectedItem.phone : selectedItem.clientPhone} />}
+                    <Row icon={Phone} label="Teléfono" value={activeTab === 'leads' ? selectedItem.phone : selectedItem.clientPhone} />}
                   {selectedItem.companyName && <Row icon={Building2} label="Empresa" value={selectedItem.companyName} />}
                   {selectedItem.preferredContact && <Row icon={MessageSquare} label="Contacto Preferido" value={selectedItem.preferredContact} />}
                   {selectedItem.currentWebsite && <Row icon={Globe} label="Sitio Actual" value={selectedItem.currentWebsite} />}
@@ -433,7 +433,7 @@ const AdminDashboardPage = () => {
 
                 {/* Dynamic answers (from old modal) */}
                 {selectedItem.dynamicAnswers && Object.keys(selectedItem.dynamicAnswers).length > 0 && (
-                  <Section title="Respuestas Espec\u00edficas">
+                  <Section title="Respuestas Específicas">
                     {Object.entries(selectedItem.dynamicAnswers).map(([k, v]) => (
                       <Row key={k} icon={Lightbulb} label={k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())} value={String(v)} />
                     ))}
@@ -442,7 +442,7 @@ const AdminDashboardPage = () => {
 
                 {/* Pain Points */}
                 {Array.isArray(selectedItem.painPoints) && selectedItem.painPoints.length > 0 && (
-                  <Section title="Desaf\u00edos a Resolver">
+                  <Section title="Desafíos a Resolver">
                     <div className="flex flex-wrap gap-1.5">
                       {selectedItem.painPoints.map((p, i) => (
                         <span key={i} className="px-2.5 py-1 bg-amber-500/10 text-amber-300 rounded-lg text-[11px] font-medium border border-amber-500/20">{p}</span>
@@ -465,7 +465,7 @@ const AdminDashboardPage = () => {
                   </Section>
                 )}
                 {selectedItem.goals && (
-                  <Section title="Visi\u00f3n de \u00c9xito">
+                  <Section title="Visión de Éxito">
                     <p className="text-sm text-slate-300 leading-relaxed bg-black/30 p-3 rounded-xl border border-white/5">{selectedItem.goals}</p>
                   </Section>
                 )}
@@ -483,7 +483,7 @@ const AdminDashboardPage = () => {
 
                 {/* Features */}
                 {(Array.isArray(selectedItem.keyFeatures) && selectedItem.keyFeatures.length > 0) && (
-                  <Section title="Caracter\u00edsticas de Inter\u00e9s">
+                  <Section title="Características de Interés">
                     <div className="flex flex-wrap gap-1.5">
                       {selectedItem.keyFeatures.map((f, i) => (
                         <span key={i} className="px-2.5 py-1 bg-[#C69320]/10 text-[#FBE18D] rounded-lg text-[11px] font-medium border border-[#C69320]/20">{f}</span>
@@ -503,7 +503,7 @@ const AdminDashboardPage = () => {
 
                 {/* References */}
                 {selectedItem.references && (
-                  <Section title="Referencias / Inspiraci\u00f3n">
+                  <Section title="Referencias / Inspiración">
                     <p className="text-sm text-slate-400 italic leading-relaxed bg-black/30 p-3 rounded-xl border border-white/5">&ldquo;{selectedItem.references}&rdquo;</p>
                   </Section>
                 )}
@@ -554,7 +554,7 @@ const AdminDashboardPage = () => {
               <p className="text-sm text-slate-400 text-center mb-1">
                 {activeTab === 'leads' ? (deleteTarget.fullName || deleteTarget.clientName) : (deleteTarget.clientName || deleteTarget.fullName)}
               </p>
-              <p className="text-xs text-slate-500 text-center mb-6">Esta acci\u00f3n no se puede deshacer.</p>
+              <p className="text-xs text-slate-500 text-center mb-6">Esta acción no se puede deshacer.</p>
               <div className="flex gap-3">
                 <button onClick={() => setDeleteTarget(null)} className="flex-1 px-4 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl transition-colors text-sm font-medium">Cancelar</button>
                 <button onClick={handleDelete} className="flex-1 px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition-colors text-sm font-bold flex items-center justify-center gap-2">
