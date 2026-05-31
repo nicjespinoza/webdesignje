@@ -1,0 +1,3 @@
+## 2026-05-21 - Optimizing Three.js Distance Calculations
+**Learning:** In Three.js and similar rendering applications, nested `forEach` loops running every frame or layout phase (like calculating neural network connections O(n^2)) can become significant performance bottlenecks, especially when using `distanceTo()` which performs an expensive `Math.sqrt()` internally. Halving the iterations (`j = i + 1`) is unsafe if the code expects asymmetric thresholds or duplicate properties.
+**Action:** Replace `distanceTo(v) < threshold` with `distanceToSquared(v) < threshold * threshold` in hot loops. Hoist the `threshold * threshold` calculation outside the loop where possible. Ensure all duplicate components with similar calculations are optimized consistently.
