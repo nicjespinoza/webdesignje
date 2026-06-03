@@ -1,0 +1,3 @@
+## 2024-06-03 - Next.js i18n Dictionary Injection
+**Learning:** When programmatically injecting translations into TypeScript files with multiple language objects (e.g., `lib/i18n.ts`), using blind regex or global string replacement can cause duplicate keys or incorrect injections, which causes Next.js production builds to fail with "An object literal cannot have multiple properties with the same name."
+**Action:** When updating TS dictionaries, first strip existing duplicate keys if any, then find the specific scope block (e.g., `content.find("nav: {")`) and safely inject the translated key into that exact scope. Alternatively, use a proper AST parser instead of regex.
