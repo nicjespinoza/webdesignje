@@ -1,0 +1,3 @@
+## 2026-05-23 - Interactive Menu and Language Selector Accessibility
+**Learning:** Added `aria-label`, `aria-expanded` and `aria-pressed` along with `focus-visible` styling to the language selector buttons and mobile toggle button in the Navbar. This ensures that the components properly announce their selected state (language) or expanded state (menu) to screen readers, and are easily usable via keyboard navigation.
+**Action:** Always include `aria-pressed`, `aria-expanded`, and strong `focus-visible` states when building interactive menus or custom radio/toggle button groups to maintain complete accessibility compliance.
