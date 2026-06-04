@@ -35,11 +35,13 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
   const connections = useMemo(() => {
     const lines: THREE.Vector3[][] = [];
     const threshold = 2.5;
+    const thresholdSq = threshold * threshold;
     particles.forEach((p1, i) => {
       particles.forEach((p2, j) => {
         if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+          // Optimization: use distanceToSquared to avoid expensive Math.sqrt in O(n^2) loop
+          const distSq = p1.distanceToSquared(p2);
+          if (distSq < thresholdSq) {
             lines.push([p1, p2]);
           }
         }
