@@ -153,6 +153,11 @@ const resources = {
           { name: "Advanced AI Engineering for Intelligent Solutions" }
         ]
       },
+            social: {
+        github: 'GitHub profile',
+        linkedin: 'LinkedIn profile',
+        twitter: 'Twitter profile'
+      },
       contact: {
         title: 'Get In',
         title_accent: 'Touch',
@@ -322,6 +327,11 @@ const resources = {
           { name: "Infraestructura Backend Robusta y Escalable en la Nube" },
           { name: "Ingeniería de IA Avanzada para Soluciones Inteligentes" }
         ]
+      },
+            social: {
+        github: 'Perfil de GitHub',
+        linkedin: 'Perfil de LinkedIn',
+        twitter: 'Perfil de Twitter'
       },
       contact: {
         title: 'Ponte en',
@@ -493,6 +503,11 @@ const resources = {
           { name: "Ingénierie IA Avancée pour Solutions Intelligentes" }
         ]
       },
+            social: {
+        github: 'Profil GitHub',
+        linkedin: 'Profil LinkedIn',
+        twitter: 'Profil Twitter'
+      },
       contact: {
         title: 'Contactez',
         title_accent: 'Moi',
@@ -662,6 +677,11 @@ const resources = {
           { name: "健壯且可擴展的雲端後端基礎設施" },
           { name: "用於智能解決方案的高級 AI 工程" }
         ]
+      },
+            social: {
+        github: 'GitHub 個人資料',
+        linkedin: 'LinkedIn 個人資料',
+        twitter: 'Twitter 個人資料'
       },
       contact: {
         title: '與我',
