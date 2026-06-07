@@ -1,0 +1,3 @@
+## 2024-06-07 - Scene3D.tsx distance calculations
+**Learning:** Math.sqrt (via Three.js distanceTo) is slow when called repeatedly, particularly in O(n^2) nested loops (such as generating connections between particles in Scene3D.tsx) or in the animation frame loops (useFrame) that run ~60 times a second.
+**Action:** Replace `distanceTo` with `distanceToSquared` and compare it against the square of the threshold in performance-sensitive paths like inside loops and `useFrame` animations. Remember to hoist the calculation of `threshold * threshold` outside the loop to prevent redundant computation.
