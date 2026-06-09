@@ -1,0 +1,3 @@
+## 2024-05-22 - Replacing Math.sqrt with distanceToSquared
+**Learning:** In 2D Canvas or Three.js applications, replacing distance calculations like `Math.sqrt(...)` or `distanceTo(v) < threshold` with squared distance comparisons (`distSq < threshold * threshold`) inside high-frequency animation loops (`useFrame`) or nested O(n^2) loops (like node connections generation) provides a measurable performance improvement.
+**Action:** When working on performance optimization tasks where calculating node distances using `Math.sqrt` inside animation frames is heavily used, hoist the squared threshold calculation (`threshold * threshold`) outside the loop and use `distanceToSquared` for comparisons to save computation time.
