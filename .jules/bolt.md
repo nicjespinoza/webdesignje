@@ -1,0 +1,3 @@
+## 2024-05-24 - Math.sqrt overhead in 3D Scenes
+**Learning:** O(n²) nested loop calculating line connections based on distance calculation (`distanceTo` computes `Math.sqrt` under the hood) causes huge CPU bottlenecks on the main thread in 3D WebGL scenes when n gets larger.
+**Action:** Always replace `distanceTo(v) < threshold` with `distanceToSquared(v) < threshold * threshold` in hot paths like `useFrame` animation loops and `useMemo` connection generators to eliminate expensive square root calculation overhead. Hoist the threshold multiplication outside the inner loop to save additional processing cycles.
