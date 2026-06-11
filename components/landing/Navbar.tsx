@@ -97,8 +97,14 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        <button
+          className="md:hidden text-slate-300 p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320] rounded-lg"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={t('nav.toggle_menu', { lng: lang })}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+        >
+          {isOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
         </button>
       </div>
 
@@ -111,6 +117,7 @@ const Navbar = ({
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className="md:hidden glass-panel border-t border-white/10 overflow-hidden bg-[#020202]/95 backdrop-blur-2xl"
+            id="mobile-menu"
           >
             <div className="flex flex-col p-6 gap-6">
               <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mb-[-10px] px-1">{t('Select Language', { lng: lang }) || 'Seleccionar Idioma'}</p>

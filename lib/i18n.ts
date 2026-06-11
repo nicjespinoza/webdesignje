@@ -6,6 +6,7 @@ const resources = {
   en: {
     translation: {
       nav: {
+        toggle_menu: 'Toggle Menu',
         stack: 'Technologies',
         services: 'Services',
         ai: 'AI & Agents',
@@ -177,6 +178,7 @@ const resources = {
   es: {
     translation: {
       nav: {
+        toggle_menu: 'Alternar Menú',
         stack: 'Tecnologías',
         services: 'Servicios',
         ai: 'IA y Agentes',
@@ -347,6 +349,7 @@ const resources = {
   fr: {
     translation: {
       nav: {
+        toggle_menu: 'Basculer le Menu',
         stack: 'Technologies',
         services: 'Services',
         ai: 'IA & Agents',
@@ -517,6 +520,7 @@ const resources = {
   zh: {
     translation: {
       nav: {
+        toggle_menu: '切換選單',
         stack: '技術',
         services: '服務',
         ai: '人工智慧與代理',
