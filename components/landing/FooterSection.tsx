@@ -36,9 +36,9 @@ const FooterSection = ({ lang }: { lang: Language }) => {
         </div>
 
         <div className="flex gap-4">
-          <a href="#" className="text-slate-400 hover:text-white transition-colors"><Github size={20} /></a>
-          <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
-          <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+          <a href="#" aria-label="Github" className="text-slate-400 hover:text-white transition-colors"><Github size={20} /></a>
+          <a href="#" aria-label="LinkedIn" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
+          <a href="#" aria-label="Twitter" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
         </div>
       </div>
     </footer>
