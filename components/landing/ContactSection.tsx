@@ -495,6 +495,7 @@ Tono: consultoría premium, profesional, persuasivo.`;
             <button
               key={method}
               type="button"
+              aria-pressed={formData.preferredContact === method}
               onClick={() => setFormData({ ...formData, preferredContact: method })}
               className={`p-3 rounded-xl border text-sm font-medium transition-all ${
                 formData.preferredContact === method
@@ -529,6 +530,7 @@ Tono: consultoría premium, profesional, persuasivo.`;
               <button
                 key={type.id}
                 type="button"
+                aria-pressed={isSelected}
                 onClick={() => {
                   setProjectType(type.id);
                   setDynamicAnswers({});
