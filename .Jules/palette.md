@@ -1,0 +1,3 @@
+## 2024-05-19 - ARIA labels for Language Selector
+**Learning:** In the `Navbar.tsx` language selector, there are buttons that only display an image (flag) and a truncated name text which may not be completely descriptive for screen readers. Icon-only buttons (like the mobile toggle Menu/X) should always have `aria-label` or `aria-expanded` attributes. Also the language buttons could use `aria-label` to provide full language context.
+**Action:** Added `aria-label` and `aria-pressed` to the language selector buttons and `aria-label`, `aria-expanded` to the mobile toggle button to improve accessibility and screen-reader experience.
