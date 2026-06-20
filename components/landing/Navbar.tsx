@@ -54,6 +54,7 @@ const Navbar = ({
               <button
                 key={l}
                 onClick={() => toggleLang(l)}
+                aria-pressed={lang === l}
                 className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group ${
                   lang === l 
                   ? 'bg-[#C69320] shadow-[0_0_15px_rgba(198,147,32,0.4)]' 
@@ -97,7 +98,12 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-label={isOpen ? t('nav.closeMenu', { lng: lang }) || 'Close menu' : t('nav.openMenu', { lng: lang }) || 'Open menu'}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -118,6 +124,7 @@ const Navbar = ({
                 {languages.map((l) => (
                   <button
                     key={l}
+                    aria-pressed={lang === l}
                     onClick={() => {
                       toggleLang(l);
                       setIsOpen(false);
