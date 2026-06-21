@@ -1,0 +1,3 @@
+## 2024-10-18 - Optimized Euclidean Distance Calculations in Animation Loops
+**Learning:** High-frequency rendering loops (`useFrame`, `requestAnimationFrame`) compute thousands of distance checks per second in particle effects and 3D scenes. The repeated `Math.sqrt()` or `distanceTo()` invocations create significant unnecessary CPU overhead.
+**Action:** Always replace basic distance calculations (`Math.sqrt(...)` or `distanceTo(v) < threshold`) with squared distance comparisons (`distSq < threshold * threshold` / `distanceToSquared`) inside animation loops and nested O(n^2) connection checks to instantly eliminate expensive root operations with minimal code change.
