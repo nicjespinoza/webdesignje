@@ -43,7 +43,7 @@ const Navbar = ({
           <Logo isDark={isDark} size={64} />
           <div className="leading-none flex flex-col">
             <span className="text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125 font-sans">Joseph Espinoza</span>
-            <span className="text-xs font-medium tracking-[0.2em] text-slate-300 font-sans lowercase italic opacity-80">Web Design</span>
+            <span className="text-xs font-medium tracking-[0.2em] text-slate-300 font-sans opacity-80">Web Design</span>
           </div>
         </a>
 
@@ -87,7 +87,12 @@ const Navbar = ({
 
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
-          <a href="#contact" className="liquid-gold-card !rounded-full !h-auto">
+          <a 
+            href={`https://wa.me/50586010651?text=${encodeURIComponent("Hola Joseph, estoy visitando tu pagina web y estoy interesad@ en saber mas de tus servicios web")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="liquid-gold-card !rounded-full !h-auto"
+          >
             <div className="liquid-gold-content !py-2 !px-6 !rounded-full">
               <span className="gradient-text font-bold text-sm whitespace-nowrap">
                 {t('nav.contact', { lng: lang })}
@@ -140,7 +145,9 @@ const Navbar = ({
 
               <div className="flex gap-4">
                 <a 
-                  href="#contact" 
+                  href={`https://wa.me/50586010651?text=${encodeURIComponent("Hola Joseph, estoy visitando tu pagina web y estoy interesad@ en saber mas de tus servicios web")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setIsOpen(false)}
                   className="w-full bg-[#C69320] text-black font-bold text-sm px-4 py-3 rounded-xl text-center hover:bg-[#FBE18D] transition-all"
                 >

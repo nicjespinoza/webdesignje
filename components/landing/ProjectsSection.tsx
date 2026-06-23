@@ -43,25 +43,9 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
               return <span className="gradient-text">{fullTitle}</span>;
             })()}
           </h2>
-          <p className="text-slate-400 mt-4 max-w-xl text-center text-lg mb-8">
+          <p className="text-slate-400 mt-4 max-w-xl text-center text-lg">
             {t('projects.subtitle', { lng: lang })}
           </p>
-
-          {/* Urgency Badge */}
-          <div className="flex items-center gap-3 bg-[#C69320]/5 border border-[#C69320]/20 px-6 py-3 rounded-2xl backdrop-blur-md">
-            <div className="relative flex items-center justify-center w-3 h-3">
-              <div className="w-full h-full bg-red-500 rounded-full animate-ping absolute opacity-75" />
-              <div className="w-2 h-2 bg-red-600 rounded-full relative shadow-[0_0_10px_rgba(220,38,38,0.5)]" />
-            </div>
-            <p className="text-xs md:text-sm text-slate-300 font-medium">
-              <span className="text-[#FBE18D] font-bold">
-                {t('projects.urgency.spots', { count: new Date().getHours() > 18 ? 1 : new Date().getHours() > 12 ? 2 : 3, lng: lang })}
-              </span> 
-              <span className="ml-1 opacity-80">
-                {t('projects.urgency.audit', { lng: lang })}
-              </span>
-            </p>
-          </div>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -69,8 +53,17 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
             const itemsData = t('projects.items', { returnObjects: true, lng: lang });
             const items: (Record<string, unknown> | Project)[] = Array.isArray(itemsData) ? (itemsData as Record<string, unknown>[]) : projects;
 
+            interface TranslatedProjectItem {
+              title?: string;
+              description?: string;
+              features?: string[];
+            }
+
             return items.map((item: Record<string, unknown> | Project, index: number) => {
               const projectData = projects[index] || projects[0];
+              const translatedItem = item as TranslatedProjectItem;
+              const itemFeatures = Array.isArray(translatedItem?.features) ? translatedItem.features : projectData.features;
+              
               return (
                 <motion.div
                   key={index}
@@ -79,7 +72,12 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
                   whileInView="visible"
                   viewport={{ once: true }}
                   className="liquid-gold-card cursor-pointer group"
-                  onClick={() => handleProjectClick({ ...projectData, title: (item?.title as string) || projectData.title, description: (item?.description as string) || projectData.description })}
+                  onClick={() => handleProjectClick({ 
+                    ...projectData, 
+                    title: (item?.title as string) || projectData.title, 
+                    description: (item?.description as string) || projectData.description,
+                    features: itemFeatures
+                  })}
                 >
                   <div className="liquid-gold-content p-0">
                     <div className="h-48 relative group overflow-hidden">
@@ -90,7 +88,7 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <ExternalLink className="text-[#FBE18D]" size={32} />
                       </div>
                     </div>
@@ -103,9 +101,11 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
                       </p>
 
                       <div className="mb-6">
-                        <p className="text-[10px] text-[#FBE18D]/70 uppercase tracking-[0.2em] font-bold mb-3">Beneficios clave</p>
+                        <p className="text-[10px] text-[#FBE18D]/70 uppercase tracking-[0.2em] font-bold mb-3">
+                          {t('projects.key_benefits', { lng: lang })}
+                        </p>
                         <ul className="space-y-2">
-                          {Array.isArray(projectData?.features) && projectData.features.map((feature: string, fIdx: number) => (
+                          {Array.isArray(itemFeatures) && itemFeatures.map((feature: string, fIdx: number) => (
                             <li key={fIdx} className="flex items-start gap-2 group/item">
                               <div className="w-1 h-1 rounded-full bg-[#C69320] mt-1.5 flex-shrink-0 group-hover/item:scale-125 transition-transform" />
                               <span className="text-[11px] text-slate-300 leading-tight group-hover/item:text-[#FBE18D] transition-colors">{feature}</span>
@@ -146,6 +146,7 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
         isOpen={!!selectedProject} 
         onClose={() => setSelectedProject(null)} 
         project={selectedProject} 
+        lang={lang}
       />
     </section>
   );

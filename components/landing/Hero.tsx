@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useTranslation } from "react-i18next";
-const Hero = ({ router }: { router: { push: (url: string) => void } }) => {
+const Hero = () => {
   const { t } = useTranslation();
 
   return (
@@ -35,7 +35,7 @@ const Hero = ({ router }: { router: { push: (url: string) => void } }) => {
             stiffness: 50,
             delay: 0.5
           }}
-          className="text-3xl md:text-6xl lg:text-6xl font-extrabold leading-[1.1] mb-10 tracking-tight font-serif relative z-10 gradient-text px-4 pb-2 overflow-visible"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-[1.1] mb-6 tracking-tight font-serif relative z-10 gradient-text px-4 pb-2 overflow-visible whitespace-nowrap"
         >
           {t('hero.title')}
         </motion.h1>
@@ -64,7 +64,7 @@ const Hero = ({ router }: { router: { push: (url: string) => void } }) => {
             damping: 25,
             stiffness: 70
           }}
-          className="gradient-text-platinum font-light text-sm md:text-base lg:text-lg max-w-3xl mb-16 leading-relaxed drop-shadow-lg text-center tracking-wide"
+          className="gradient-text-platinum font-light text-sm md:text-base lg:text-lg max-w-3xl mb-12 leading-relaxed drop-shadow-lg text-center tracking-wide"
         >
           {t('hero.subtitle')}
         </motion.p>
@@ -73,7 +73,7 @@ const Hero = ({ router }: { router: { push: (url: string) => void } }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex flex-wrap justify-center gap-6 md:gap-10 mb-24"
+          className="flex flex-wrap justify-center gap-6 mb-20"
         >
           <motion.a
             initial={{ opacity: 0, scale: 0.1, z: -1000, filter: "blur(60px)", rotateX: 30 }}
@@ -81,41 +81,20 @@ const Hero = ({ router }: { router: { push: (url: string) => void } }) => {
             transition={{ duration: 1.5, delay: 2.8, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
-            href="#projects"
+            href="#contact"
             className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group relative overflow-hidden"
           >
-            <div className="liquid-gold-content !py-2.5 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
-              <Briefcase size={16} className="text-slate-300 group-hover:text-[#C69320] group-hover:scale-110 transition-transform" />
-              <span className="gradient-text-platinum font-bold text-xs whitespace-nowrap tracking-widest group-hover:gradient-text uppercase">
-                {t('hero.projects')}
+            <div className="liquid-gold-content !py-3 !px-8 !rounded-full !flex-row flex items-center gap-2 relative z-10">
+              <span className="gradient-text font-bold text-sm whitespace-nowrap tracking-wider uppercase">
+                {t('hero.cta')}
               </span>
+              <ArrowRight size={16} className="text-[#FBE18D] group-hover:translate-x-1 transition-transform" />
             </div>
             <motion.div
               className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
               style={{ skewX: "-20deg" }}
             />
           </motion.a>
-
-          <motion.button
-            initial={{ opacity: 0, scale: 0.1, z: -1000, filter: "blur(60px)", rotateX: 30 }}
-            animate={{ opacity: 1, scale: 1, z: 0, filter: "blur(0px)", rotateX: 0 }}
-            transition={{ duration: 1.5, delay: 3, type: "spring", damping: 20 }}
-            whileHover={{ scale: 1.08, y: -8 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => router.push('/portal')}
-            className="liquid-gold-card !rounded-full !h-auto !p-[1.5px] group relative overflow-hidden"
-          >
-            <div className="liquid-gold-content !py-2.5 !px-6 !rounded-full !flex-row flex items-center gap-2 relative z-10">
-              <Sparkles size={16} className="text-slate-300 group-hover:text-[#C69320] transition-transform group-hover:rotate-12" />
-              <span className="gradient-text-platinum font-bold text-xs whitespace-nowrap tracking-widest group-hover:gradient-text uppercase">
-                {t('hero.success')}
-              </span>
-            </div>
-            <motion.div
-              className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
-              style={{ skewX: "-20deg" }}
-            />
-          </motion.button>
         </motion.div>
 
         <motion.div
@@ -131,7 +110,7 @@ const Hero = ({ router }: { router: { push: (url: string) => void } }) => {
           className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[9px] md:text-xs text-slate-400 font-mono tracking-[0.3em] uppercase font-bold"
         >
           {[
-            "Next.js", "React.js", "Node.js", "Tailwind CSS", "JavaScript", "AI Agents"
+            "Next.js", "React.js", "Node.js", "Tailwind CSS", "TypeScript", "JavaScript", "AI Agents",
           ].map((tech, i) => (
             <React.Fragment key={tech}>
               <motion.span

@@ -236,20 +236,20 @@ export const projects: Project[] = [
     },
     {
         id: '3',
-        title: 'Hotel Management System',
-        description: 'Gestión hotelera unificada para una experiencia de huésped de 5 estrellas.',
-        longDescription: "Un motor de hospitalidad todo-en-uno que optimiza desde la recepción hasta el servicio a la habitación.",
+        title: 'Sistema de gestión usuario (CRM)',
+        description: 'Plataforma unificada para el control de usuarios, seguimiento de prospectos y automatización de propuestas comerciales.',
+        longDescription: "Un motor de gestión de clientes todo-en-uno que optimiza desde el primer contacto hasta el cierre de propuestas comerciales.",
         features: [
-            'Optimiza la tasa de ocupación con reservas directas',
-            'Reduce costos operativos mediante automatización',
-            'Mejora la satisfacción del huésped con portales interactivos',
-            'Control total de ingresos y gastos en tiempo real',
-            'Gestión eficiente de servicios y mantenimiento'
+            'Embudo de ventas automatizado para maximizar conversión.',
+            'Historial centralizado que reduce tiempos de respuesta.',
+            'Portal interactivo para soporte y estado de proyectos.',
+            'Monitoreo de métricas y ventas en tiempo real.',
+            'Gestión ágil de propuestas hasta el cierre del contrato.'
         ],
         techStack: ['TypeScript', 'Framer Motion', 'Firebase', 'Stripe', 'Paypal', 'Tailwind CSS'],
         imageUrl: '/screenshots/hotel-management.png',
         githubUrl: '#',
-        demoUrl: '/#contact?project=hotel'
+        demoUrl: '/#contact?project=crm'
     },
     {
         id: '4',

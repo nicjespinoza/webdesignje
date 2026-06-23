@@ -3,8 +3,10 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Bot, Loader2, Sparkles, CheckCircle2, Check, ChevronLeft, ChevronRight, User, Mail, Phone, Building2, Target, Calendar, DollarSign, Lightbulb, AlertCircle, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Language, Project } from '@/components/landing/types';
 
 interface DynamicQuestion {
   label: string;
@@ -20,12 +22,11 @@ interface PainPoint {
   benefit: string;
 }
 
-import { Project } from '@/components/landing/types';
-
 interface ProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
   project: Project | null;
+  lang: Language;
 }
 
 const PROJECT_SPECIFIC_QUESTIONS: Record<string, DynamicQuestion[]> = {
@@ -119,10 +120,10 @@ const PAIN_POINTS: Record<string, PainPoint[]> = {
 };
 
 const STEPS = [
-  { id: 'contact', label: 'Contacto', icon: User },
-  { id: 'profile', label: 'Perfil', icon: Building2 },
-  { id: 'goals', label: 'Metas', icon: Target },
-  { id: 'review', label: 'Revisión', icon: CheckCircle2 },
+  { id: 'contact', icon: User },
+  { id: 'profile', icon: Building2 },
+  { id: 'goals', icon: Target },
+  { id: 'review', icon: CheckCircle2 },
 ];
 
 const stepVariants = {
@@ -131,7 +132,8 @@ const stepVariants = {
   exit: { opacity: 0, x: -30 },
 };
 
-const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project }) => {
+const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project, lang }) => {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -150,8 +152,19 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project })
   const prevOpen = useRef(isOpen);
 
   const projectId = project?.id as string;
-  const dynamicQuestions = useMemo(() => PROJECT_SPECIFIC_QUESTIONS[projectId] || [], [projectId]);
-  const painPoints = PAIN_POINTS[projectId] || [];
+
+  const dynamicQuestions = useMemo(() => {
+    const translated = t(`projectModal.questions.${projectId}`, { returnObjects: true, lng: lang });
+    if (Array.isArray(translated) && translated.length > 0) return translated as unknown as DynamicQuestion[];
+    return PROJECT_SPECIFIC_QUESTIONS[projectId] || [];
+  }, [projectId, lang, t]);
+
+  const painPoints = useMemo(() => {
+    const translated = t(`projectModal.painPoints.${projectId}`, { returnObjects: true, lng: lang });
+    if (Array.isArray(translated) && translated.length > 0) return translated as unknown as PainPoint[];
+    return PAIN_POINTS[projectId] || [];
+  }, [projectId, lang, t]);
+
   const features = (project?.features as string[]) || [];
 
   useEffect(() => {
@@ -180,9 +193,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project })
   const validateStep = (s: number): boolean => {
     const newErrors: Record<string, string> = {};
     if (s === 0) {
-      if (!formData.name.trim()) newErrors.name = 'Campo obligatorio';
-      if (!formData.email.trim()) newErrors.email = 'Campo obligatorio';
-      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Correo inválido';
+      if (!formData.name.trim()) newErrors.name = t('projectModal.required_error', { lng: lang });
+      if (!formData.email.trim()) newErrors.email = t('projectModal.required_error', { lng: lang });
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = t('projectModal.invalid_email', { lng: lang });
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -222,6 +235,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project })
         return pp?.label || v;
       });
 
+      // Map dynamic select values back to their display values for Firestore if needed, or save keys
       await addDoc(collection(db, 'project_inquiries'), {
         projectName: project?.title || 'Unknown Project',
         projectId,
@@ -269,6 +283,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project })
         ? `\nPresupuesto estimado: ${goals.budget}.`
         : '';
 
+      const langNames: Record<string, string> = {
+        es: 'Español',
+        en: 'English',
+        fr: 'Français',
+        zh: '中文'
+      };
+      const targetLang = langNames[lang] || 'Español';
+
       const aiPrompt = `Soy un cliente interesado en "${project?.title}".
 
 Perfil de negocio:
@@ -282,7 +304,8 @@ Como experto consultor de WebDesignJE de Joseph Espinoza, redacta un diagnóstic
 3. Destaque los beneficios clave más relevantes para su caso
 4. Incluya un cierre motivador invitando al siguiente paso
 
-Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`;
+Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.
+Por favor, responde únicamente en el idioma: ${targetLang}.`;
 
       const response = await fetch('/api/project-inquiry', {
         method: 'POST',
@@ -296,7 +319,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
         setAiResponse(data.message);
       } else {
         setAiResponse(
-          'Hemos recibido todos los detalles de tu proyecto. Nuestro equipo de consultoría revisará tu perfil y te contactará con una propuesta personalizada en las próximas 24 horas.'
+          t('projectModal.success_desc', { project: project?.title, lng: lang })
         );
       }
 
@@ -314,6 +337,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
       {STEPS.map((s, i) => {
         const isActive = i === step;
         const isDone = i < step || status === 'success';
+        const stepLabel = t(`projectModal.step_${s.id}`, { lng: lang });
         return (
           <div key={s.id} className="flex-1 flex items-center gap-1">
             <div className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-all ${
@@ -328,7 +352,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
               <span className={`text-[10px] font-bold uppercase tracking-wider hidden sm:inline ${
                 isActive ? 'text-[#FBE18D]' : isDone ? 'text-green-400' : 'text-slate-600'
               }`}>
-                {s.label}
+                {stepLabel}
               </span>
             </div>
             {i < STEPS.length - 1 && (
@@ -354,13 +378,13 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
   const renderContactStep = () => (
     <div className="space-y-5">
       <div className="text-center mb-6">
-        <h3 className="text-lg font-bold text-white mb-1">Tu Información de Contacto</h3>
-        <p className="text-slate-400 text-xs">Para enviarte el diagnóstico personalizado y propuesta</p>
+        <h3 className="text-lg font-bold text-white mb-1">{t('projectModal.contact_title', { lng: lang })}</h3>
+        <p className="text-slate-400 text-xs">{t('projectModal.contact_subtitle', { lng: lang })}</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <User size={12} className="text-[#C69320]" /> Nombre Completo *
+            <User size={12} className="text-[#C69320]" /> {t('projectModal.name_label', { lng: lang })}
           </label>
           <input
             required
@@ -375,7 +399,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
         </div>
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Mail size={12} className="text-[#C69320]" /> Correo Electrónico *
+            <Mail size={12} className="text-[#C69320]" /> {t('projectModal.email_label', { lng: lang })}
           </label>
           <input
             required
@@ -390,7 +414,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
         </div>
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Phone size={12} className="text-[#C69320]" /> Teléfono / WhatsApp
+            <Phone size={12} className="text-[#C69320]" /> {t('projectModal.phone_label', { lng: lang })}
           </label>
           <input
             type="tel"
@@ -403,7 +427,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
         </div>
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Building2 size={12} className="text-[#C69320]" /> Empresa / Negocio
+            <Building2 size={12} className="text-[#C69320]" /> {t('projectModal.company_label', { lng: lang })}
           </label>
           <input
             type="text"
@@ -421,13 +445,13 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
   const renderProfileStep = () => (
     <div className="space-y-6">
       <div className="text-center mb-2">
-        <h3 className="text-lg font-bold text-white mb-1">Perfil de tu Negocio</h3>
-        <p className="text-slate-400 text-xs">Cuéntanos más sobre tu operación actual</p>
+        <h3 className="text-lg font-bold text-white mb-1">{t('projectModal.profile_title', { lng: lang })}</h3>
+        <p className="text-slate-400 text-xs">{t('projectModal.profile_subtitle', { lng: lang })}</p>
       </div>
 
       {dynamicQuestions.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {dynamicQuestions.map((q, idx) => (
+          {dynamicQuestions.map((q: DynamicQuestion, idx: number) => (
             <div key={idx} className="space-y-1.5">
               <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider">{q.label}</label>
               {q.type === 'select' ? (
@@ -437,7 +461,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
                   onChange={(e) => setDynamicAnswers({ ...dynamicAnswers, [e.target.name]: e.target.value })}
                   className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white transition-colors outline-none appearance-none text-sm"
                 >
-                  {q.options?.map((opt) => (
+                  {q.options?.map((opt: string) => (
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
@@ -461,11 +485,11 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
           <div className="flex items-center gap-2 mb-3">
             <AlertCircle size={14} className="text-[#C69320]" />
             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-              ¿Cuáles son tus principales desafíos?
+              {t('projectModal.pain_title', { lng: lang })}
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {painPoints.map((pp) => {
+            {painPoints.map((pp: PainPoint) => {
               const isSelected = selectedPainPoints.includes(pp.value);
               return (
                 <div
@@ -498,7 +522,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
           <div className="flex items-center gap-2 mb-3">
             <Sparkles size={14} className="text-[#C69320]" />
             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-              Funcionalidades que más te interesan
+              {t('projectModal.features_title', { lng: lang })}
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -532,19 +556,19 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
   const renderGoalsStep = () => (
     <div className="space-y-5">
       <div className="text-center mb-2">
-        <h3 className="text-lg font-bold text-white mb-1">Metas y Horizonte</h3>
-        <p className="text-slate-400 text-xs">Ayúdanos a entender tu visión para ofrecerte la mejor propuesta</p>
+        <h3 className="text-lg font-bold text-white mb-1">{t('projectModal.goals_title', { lng: lang })}</h3>
+        <p className="text-slate-400 text-xs">{t('projectModal.goals_subtitle', { lng: lang })}</p>
       </div>
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-          <Lightbulb size={12} className="text-[#C69320]" /> ¿Cómo te imaginas el resultado ideal?
+          <Lightbulb size={12} className="text-[#C69320]" /> {t('projectModal.success_vision_label', { lng: lang })}
         </label>
         <textarea
           value={goals.successVision}
           onChange={(e) => setGoals({ ...goals, successVision: e.target.value })}
           rows={3}
-          placeholder="Describe cómo te gustaría que tu negocio opere con esta solución..."
+          placeholder={t('projectModal.success_vision_placeholder', { lng: lang })}
           className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none resize-none text-sm"
         />
       </div>
@@ -552,49 +576,49 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Calendar size={12} className="text-[#C69320]" /> ¿Cuándo te gustaría empezar?
+            <Calendar size={12} className="text-[#C69320]" /> {t('projectModal.timeline_label', { lng: lang })}
           </label>
           <select
             value={goals.timeline}
             onChange={(e) => setGoals({ ...goals, timeline: e.target.value })}
             className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white transition-colors outline-none appearance-none text-sm"
           >
-            <option value="">Selecciona una opción</option>
-            <option value="Inmediato (esta semana)">Inmediato (esta semana)</option>
-            <option value="Este mes">Este mes</option>
-            <option value="En 1-3 meses">En 1-3 meses</option>
-            <option value="En 3-6 meses">En 3-6 meses</option>
-            <option value="Solo estoy explorando">Solo estoy explorando</option>
+            <option value="">{t('projectModal.timeline_placeholder', { lng: lang })}</option>
+            <option value="immediate">{t('projectModal.timeline_options.immediate', { lng: lang })}</option>
+            <option value="month">{t('projectModal.timeline_options.month', { lng: lang })}</option>
+            <option value="1-3">{t('projectModal.timeline_options.months_1_3', { lng: lang })}</option>
+            <option value="3-6">{t('projectModal.timeline_options.months_3_6', { lng: lang })}</option>
+            <option value="exploring">{t('projectModal.timeline_options.exploring', { lng: lang })}</option>
           </select>
         </div>
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <DollarSign size={12} className="text-[#C69320]" /> Presupuesto Estimado
+            <DollarSign size={12} className="text-[#C69320]" /> {t('projectModal.budget_label', { lng: lang })}
           </label>
           <select
             value={goals.budget}
             onChange={(e) => setGoals({ ...goals, budget: e.target.value })}
             className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white transition-colors outline-none appearance-none text-sm"
           >
-            <option value="">Selecciona un rango</option>
-            <option value="Prefiero no decirlo">Prefiero no decirlo</option>
-            <option value="$1,000 - $5,000 USD">$1,000 - $5,000 USD</option>
-            <option value="$5,000 - $15,000 USD">$5,000 - $15,000 USD</option>
-            <option value="$15,000 - $50,000 USD">$15,000 - $50,000 USD</option>
-            <option value="$50,000+ USD">$50,000+ USD</option>
+            <option value="">{t('projectModal.budget_placeholder', { lng: lang })}</option>
+            <option value="undisclosed">{t('projectModal.budget_options.undisclosed', { lng: lang })}</option>
+            <option value="range_1">{t('projectModal.budget_options.range_1', { lng: lang })}</option>
+            <option value="range_2">{t('projectModal.budget_options.range_2', { lng: lang })}</option>
+            <option value="range_3">{t('projectModal.budget_options.range_3', { lng: lang })}</option>
+            <option value="range_4">{t('projectModal.budget_options.range_4', { lng: lang })}</option>
           </select>
         </div>
       </div>
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-          <Clock size={12} className="text-[#C69320]" /> Referencias o Inspiración
+          <Clock size={12} className="text-[#C69320]" /> {t('projectModal.references_label', { lng: lang })}
         </label>
         <input
           type="text"
           value={goals.references}
           onChange={(e) => setGoals({ ...goals, references: e.target.value })}
-          placeholder="¿Hay algún sitio web o plataforma que te guste como referencia? (opcional)"
+          placeholder={t('projectModal.references_placeholder', { lng: lang })}
           className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
         />
       </div>
@@ -607,16 +631,19 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
       return pp?.label || v;
     });
 
+    const displayTimeline = goals.timeline ? t(`projectModal.timeline_options.${goals.timeline === '1-3' ? 'months_1_3' : goals.timeline === '3-6' ? 'months_3_6' : goals.timeline}`, { lng: lang }) : '';
+    const displayBudget = goals.budget ? t(`projectModal.budget_options.${goals.budget}`, { lng: lang }) : '';
+
     return (
       <div className="space-y-5">
         <div className="text-center mb-2">
-          <h3 className="text-lg font-bold text-white mb-1">Revisión Final</h3>
-          <p className="text-slate-400 text-xs">Verifica que todo esté correcto antes de enviar</p>
+          <h3 className="text-lg font-bold text-white mb-1">{t('projectModal.review_title', { lng: lang })}</h3>
+          <p className="text-slate-400 text-xs">{t('projectModal.review_subtitle', { lng: lang })}</p>
         </div>
 
         <div className="bg-[#131B2A] border border-slate-700 rounded-xl divide-y divide-slate-700/50">
           <div className="p-4">
-            <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">Contacto</span>
+            <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.step_contact', { lng: lang })}</span>
             <div className="grid grid-cols-2 gap-2 text-xs text-slate-300">
               <span>Nombre: <span className="text-white">{formData.name}</span></span>
               <span>Email: <span className="text-white">{formData.email}</span></span>
@@ -627,9 +654,9 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
 
           {dynamicQuestions.length > 0 && (
             <div className="p-4">
-              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">Perfil del Negocio</span>
+              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.step_profile', { lng: lang })}</span>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-300">
-                {dynamicQuestions.map((q) => (
+                {dynamicQuestions.map((q: DynamicQuestion) => (
                   <span key={q.name}>{q.label}: <span className="text-white">{dynamicAnswers[q.name] || '—'}</span></span>
                 ))}
               </div>
@@ -638,7 +665,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
 
           {painLabels.length > 0 && (
             <div className="p-4">
-              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">Desafíos a Resolver</span>
+              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.pain_title', { lng: lang })}</span>
               <div className="flex flex-wrap gap-1.5">
                 {painLabels.map((p) => (
                   <span key={p} className="px-2 py-0.5 bg-[#C69320]/10 text-[#FBE18D] rounded text-[10px] border border-[#C69320]/20">{p}</span>
@@ -649,24 +676,24 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
 
           {goals.successVision && (
             <div className="p-4">
-              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">Visión de Éxito</span>
+              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.success_vision_label', { lng: lang })}</span>
               <p className="text-xs text-slate-300">{goals.successVision}</p>
             </div>
           )}
 
           {(goals.timeline || goals.budget) && (
             <div className="p-4">
-              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">Horizonte</span>
+              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.goals_title', { lng: lang })}</span>
               <div className="flex gap-4 text-xs text-slate-300">
-                {goals.timeline && <span>Inicio: <span className="text-white">{goals.timeline}</span></span>}
-                {goals.budget && <span>Presupuesto: <span className="text-white">{goals.budget}</span></span>}
+                {goals.timeline && <span>Inicio: <span className="text-white">{displayTimeline}</span></span>}
+                {goals.budget && <span>Presupuesto: <span className="text-white">{displayBudget}</span></span>}
               </div>
             </div>
           )}
         </div>
 
         <p className="text-center text-[10px] text-slate-500">
-          Al enviar, aceptas que te contactemos para dar seguimiento a tu solicitud.
+          {t('projectModal.review_terms', { lng: lang })}
         </p>
       </div>
     );
@@ -705,10 +732,10 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
           <div className="bg-gradient-to-r from-[#C69320]/20 to-transparent p-5 border-b border-[#C69320]/20 flex justify-between items-start shrink-0">
             <div className="flex-1 min-w-0">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C69320]/10 text-[#FBE18D] text-[10px] uppercase font-bold tracking-widest mb-2 border border-[#C69320]/20">
-                <Bot size={12} /> Diagnóstico Inteligente
+                <Bot size={12} /> {t('projectModal.title', { lng: lang })}
               </div>
               <h2 className="text-xl font-bold text-white truncate pr-2">{(project?.title as string) || ''}</h2>
-              <p className="text-slate-400 text-[11px] mt-0.5">Personalización y consultoría técnica de alto nivel</p>
+              <p className="text-slate-400 text-[11px] mt-0.5">{t('projectModal.subtitle', { lng: lang })}</p>
             </div>
             <button
               onClick={onClose}
@@ -720,7 +747,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
           </div>
 
           {/* Body */}
-          <div className="p-5 overflow-y-auto custom-scrollbar">
+          <div className="p-5 overflow-y-auto custom-scrollbar flex-1">
             {status === 'success' ? (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -731,18 +758,16 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
                   <CheckCircle2 size={32} className="text-green-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-1">¡Diagnóstico Completado!</h3>
+                  <h3 className="text-xl font-bold text-white mb-1">{t('projectModal.success_title', { lng: lang })}</h3>
                   <p className="text-xs text-slate-400 max-w-md">
-                    Hemos recibido toda la información de tu negocio para{' '}
-                    <span className="text-[#FBE18D] font-medium">{(project?.title as string) || ''}</span>.
-                    Nuestro equipo analizará tu caso y te contactará con una propuesta personalizada.
+                    {t('projectModal.success_desc', { project: project?.title, lng: lang })}
                   </p>
                 </div>
 
                 {aiResponse && (
                   <div className="w-full bg-[#131B2A] border border-[#C69320]/20 rounded-xl p-5 text-left relative mt-2 shadow-inner">
                     <div className="absolute -top-3 left-5 bg-[#C69320] text-black text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded flex items-center gap-1 shadow-lg">
-                      <Bot size={13} /> Análisis con IA
+                      <Bot size={13} /> {t('projectModal.ai_analysis', { lng: lang })}
                     </div>
                     <p className="text-slate-300 text-xs whitespace-pre-line leading-relaxed mt-2">
                       {aiResponse}
@@ -755,15 +780,19 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
                     onClick={onClose}
                     className="px-6 py-2.5 bg-white/5 hover:bg-white/10 text-white font-medium rounded-xl transition-colors border border-white/10 text-xs"
                   >
-                    Cerrar
+                    {t('projectModal.close', { lng: lang })}
                   </button>
                   <a
-                    href="https://wa.me/50500000000?text=Hola%20Joseph%2C%20he%20enviado%20mi%20diagn%C3%B3stico%20de%20proyecto"
+                    href={`https://wa.me/50500000000?text=${encodeURIComponent(
+                      lang === 'es'
+                        ? 'Hola Joseph, he enviado mi diagnóstico de proyecto'
+                        : 'Hello Joseph, I have sent my project diagnosis'
+                    )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-6 py-2.5 bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(198,147,32,0.4)] transition-all text-xs"
                   >
-                    Hablar con Asesor
+                    {t('projectModal.talk_advisor', { lng: lang })}
                   </a>
                 </div>
               </motion.div>
@@ -786,7 +815,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
                 </AnimatePresence>
 
                 {/* Navigation Buttons */}
-                <div className="pt-5 mt-5 border-t border-slate-800 flex items-center justify-between">
+                <div className="pt-5 mt-5 border-t border-slate-800 flex items-center justify-between shrink-0">
                   <div>
                     {step > 0 && (
                       <button
@@ -794,7 +823,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
                         onClick={goBack}
                         className="flex items-center gap-1.5 px-4 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 font-medium rounded-xl transition-colors text-xs"
                       >
-                        <ChevronLeft size={14} /> Anterior
+                        <ChevronLeft size={14} /> {t('projectModal.previous', { lng: lang })}
                       </button>
                     )}
                   </div>
@@ -804,7 +833,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
                       onClick={onClose}
                       className="px-4 py-2.5 bg-transparent text-slate-400 hover:text-white font-medium rounded-xl transition-colors text-xs"
                     >
-                      Cancelar
+                      {t('projectModal.cancel', { lng: lang })}
                     </button>
                     {step < STEPS.length - 1 ? (
                       <button
@@ -812,7 +841,7 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
                         onClick={goNext}
                         className="flex items-center gap-1.5 px-6 py-2.5 bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(198,147,32,0.4)] transition-all text-xs"
                       >
-                        Siguiente <ChevronRight size={14} />
+                        {t('projectModal.next', { lng: lang })} <ChevronRight size={14} />
                       </button>
                     ) : (
                       <button
@@ -823,11 +852,11 @@ Tono: consultoría premium de élite, profesional, persuasivo pero no agresivo.`
                       >
                         {status === 'submitting' ? (
                           <>
-                            <Loader2 size={14} className="animate-spin" /> Analizando...
+                            <Loader2 size={14} className="animate-spin" /> {t('projectModal.submitting', { lng: lang })}
                           </>
                         ) : (
                           <>
-                            <Send size={14} /> Enviar Diagnóstico
+                            <Send size={14} /> {t('projectModal.submit', { lng: lang })}
                           </>
                         )}
                       </button>

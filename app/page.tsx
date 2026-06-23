@@ -2,13 +2,11 @@
 
 import "@/lib/i18n";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
-import StackSection from "@/components/landing/StackSection";
 import ServicesSection from "@/components/landing/ServicesSection";
-import SmartEnterpriseSection from "@/components/landing/SmartEnterpriseSection";
+import WhyChooseSection from "@/components/landing/WhyChooseSection";
 import ProjectsSection from "@/components/landing/ProjectsSection";
 import AboutSection from "@/components/landing/AboutSection";
 import ClientsSection from "@/components/landing/ClientsSection";
@@ -20,7 +18,6 @@ import { motion } from "framer-motion";
 import { fadeInUp } from "@/components/landing/animations";
 
 export default function RootPage() {
-  const router = useRouter();
   const { i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
@@ -54,7 +51,7 @@ export default function RootPage() {
           animate="visible"
           variants={fadeInUp}
         >
-          <Hero router={router} />
+          <Hero />
         </motion.div>
 
         {/* 2. ServicesSection (Propuesta de valor) */}
@@ -67,17 +64,7 @@ export default function RootPage() {
           <ServicesSection lang={lang} />
         </motion.div>
 
-        {/* 3. SmartEnterpriseSection (Autoridad tecnológica: IA + RAG) */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
-        >
-          <SmartEnterpriseSection lang={lang} />
-        </motion.div>
-
-        {/* 4. ProjectsSection (Prueba social) */}
+        {/* 3. ProjectsSection (Prueba social) */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -87,26 +74,7 @@ export default function RootPage() {
           <ProjectsSection lang={lang} />
         </motion.div>
 
-        {/* 5. StackSection (Especificaciones técnicas) */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
-        >
-          <StackSection lang={lang} />
-        </motion.div>
-
-        {/* Secciones Finales (Cierre y Conversión) */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
-        >
-          <AboutSection lang={lang} />
-        </motion.div>
-
+        {/* 4. ClientsSection (Social proof) */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -116,13 +84,34 @@ export default function RootPage() {
           <ClientsSection lang={lang} />
         </motion.div>
 
+        {/* 5. WhyChooseSection (Diferenciadores) */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
         >
-          <ContactSection />
+          <WhyChooseSection lang={lang} />
+        </motion.div>
+
+        {/* 6. AboutSection (Confianza personal) */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={fadeInUp}
+        >
+          <AboutSection lang={lang} />
+        </motion.div>
+
+        {/* 7. ContactSection (CTA final) */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={fadeInUp}
+        >
+          <ContactSection lang={lang} />
         </motion.div>
 
         <motion.div

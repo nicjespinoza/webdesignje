@@ -102,21 +102,6 @@ const AboutSection = ({ lang }: { lang: Language }) => {
             </div>
           </motion.div>
         </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 relative z-10">
-          {Array.isArray(t('about.kpis', { returnObjects: true, lng: lang })) && (t('about.kpis', { returnObjects: true, lng: lang }) as Record<string, string>[]).map((stat, index) => (
-            <motion.div
-              key={index}
-              variants={fadeInUp}
-              className="liquid-gold-card"
-            >
-              <div className="liquid-gold-content !p-8 text-center h-full">
-                <div className="text-3xl md:text-4xl font-bold mb-2 gradient-text">{stat.val}</div>
-                <div className="text-xs text-slate-400 uppercase tracking-widest font-bold font-sans">{stat.label}</div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
   );

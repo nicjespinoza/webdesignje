@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import Script from 'next/script';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -221,11 +222,19 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="en" href={`${SITE_URL}/en`} />
         <link rel="alternate" hrefLang="en-US" href={`${SITE_URL}/en`} />
         <link rel="alternate" hrefLang="x-default" href={SITE_URL} />
-        <script
+      </head>
+      <body
+        className={`${inter.variable} font-sans antialiased min-h-screen`}
+        suppressHydrationWarning
+      >
+        <Script
+          id="structured-data"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <script
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -245,11 +254,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body
-        className={`${inter.variable} font-sans antialiased min-h-screen`}
-        suppressHydrationWarning
-      >
         <QueryProvider>
           <ThemeProvider>
             {children}
