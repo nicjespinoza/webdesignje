@@ -32,6 +32,8 @@ const clients: Client[] = [
   { id: 13, name: 'NISA Natural', logo: '/logos/nisa.png', url: 'https://www.nisanatural.com', testimonialKey: 'clients.testimonials.13' },
   { id: 14, name: 'Fiore Logistics', logo: '/logos/fiore.png', url: 'https://www.fiorelogistics.com', testimonialKey: 'clients.testimonials.14' },
   { id: 15, name: 'Kathmar Freight Logistics Services', logo: '/logos/kathmark.png', url: 'https://www.kathmarfreight.com', testimonialKey: 'clients.testimonials.15' },
+  { id: 16, name: 'Vital Care', logo: '/logos/vitalcare.png', url: 'https://www.asvitalcare.com', testimonialKey: 'clients.testimonials.16' },
+
 ];
 
 const ClientsSection = ({ lang }: { lang: Language }) => {
@@ -122,7 +124,7 @@ const ClientsSection = ({ lang }: { lang: Language }) => {
                     </div>
                   )}
 
-                  <div className="inline-flex items-center gap-2 text-xs font-black tracking-widest uppercase text-[#E8B923] hover:text-[#F5D76E] transition-colors group/link mt-auto">
+                  <div className="inline-flex items-center gap-2 text-xs font-black tracking-widest uppercase text-[#FFFFFF] hover:text-[#FFFFFF] transition-colors group/link mt-auto">
                     <span>{t('clients.visit', { lng: lang })}</span>
                     <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
                   </div>

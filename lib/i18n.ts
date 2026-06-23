@@ -324,13 +324,13 @@ const resources = {
         stats: [
           { label: "15+ Projects", subtitle: "Delivered" },
           { label: "100%", subtitle: "Client Satisfaction" },
-          { label: "<2h", subtitle: "Response Time" }
+          { label: "<24h", subtitle: "Response Time" }
         ],
         kpis: [
           { label: 'Average ROI', val: '340%' },
           { label: 'Client Satisfaction', val: '100%' },
           { label: 'Projects Delivered', val: '15+' },
-          { label: 'Response Time', val: '<2h' }
+          { label: 'Response Time', val: '<24h' }
         ],
         proficiency: [
           { name: "Modern & Optimized Frontend Interfaces" },
@@ -371,14 +371,15 @@ const resources = {
           '12': 'Our online sales tripled after the launch. Incredible results.',
           '13': 'Beautiful design that perfectly reflects our brand. Customers love the experience.',
           '14': 'Optimized our operations by 40%. Their response is immediate and the support is incomparable.',
-          '15': 'Robust and reliable solution that elevated our business to the next level.'
+          '15': 'Robust and reliable solution that elevated our business to the next level.',
+          '16': 'My sales have increased considerably in the last 3 months, thanks to the website.',
         }
       },
       whyChoose: {
         title: 'Why Choose Me',
         subtitle: 'I don\'t just deliver projects — I deliver results.',
         reason1: {
-          title: 'Response in <2 hours',
+          title: 'Response in <24 hours',
           desc: 'No weeks of waiting. I respond fast because your time is money.',
         },
         reason2: {
@@ -875,13 +876,13 @@ const resources = {
         stats: [
           { label: "15+ Proyectos", subtitle: "Entregados" },
           { label: "100%", subtitle: "Satisfacción del Cliente" },
-          { label: "<2h", subtitle: "Tiempo de Respuesta" }
+          { label: "<24h", subtitle: "Tiempo de Respuesta" }
         ],
         kpis: [
           { label: 'ROI Promedio', val: '340%' },
           { label: 'Satisfacción', val: '100%' },
           { label: 'Proyectos Entregados', val: '15+' },
-          { label: 'Tiempo de Respuesta', val: '<2h' }
+          { label: 'Tiempo de Respuesta', val: '<24h' }
         ],
         proficiency: [
           { name: "Construcción de Interfaces Frontend Modernas y Optimizadas" },
@@ -922,14 +923,15 @@ const resources = {
           '12': 'Nuestras ventas online se triplicaron después del lanzamiento. Resultados increíbles.',
           '13': 'Diseño hermoso que refleja perfectamente nuestra marca. Los clientes aman la experiencia.',
           '14': 'Optimizó nuestras operaciones un 40%. Su respuesta es inmediata y el soporte es incomparable.',
-          '15': 'Solución robusta y confiable que elevó nuestro negocio al siguiente nivel.'
+          '15': 'Solución robusta y confiable que elevó nuestro negocio al siguiente nivel.',
+          '16': 'Mis ventas han aumentado considerablemente en los ultimos 3 meses, gracias a la pagina web.',
         }
       },
       whyChoose: {
         title: 'Por Qué Elegirme',
-        subtitle: 'No solo entrego proyectos — entrego resultados.',
+        subtitle: 'No solo Entrego Proyectos — Entrego Resultados.',
         reason1: {
-          title: 'Respuesta en <2 horas',
+          title: 'Respuesta en <24 horas',
           desc: 'Sin semanas de espera. Respondo rápido porque tu tiempo es dinero.',
         },
         reason2: {
@@ -1426,13 +1428,13 @@ const resources = {
         stats: [
           { label: "15+ Projets", subtitle: "Livrés" },
           { label: "100%", subtitle: "Satisfaction Client" },
-          { label: "<2h", subtitle: "Temps de Réponse" }
+          { label: "<24h", subtitle: "Temps de Réponse" }
         ],
         kpis: [
           { label: 'ROI Moyen', val: '340%' },
           { label: 'Satisfaction', val: '100%' },
           { label: 'Projets Livrés', val: '15+' },
-          { label: 'Temps de Réponse', val: '<2h' }
+          { label: 'Temps de Réponse', val: '<24h' }
         ],
         proficiency: [
           { name: "Interfaces Frontend Modernes & Évolutives" },
@@ -1473,14 +1475,15 @@ const resources = {
           '12': 'Nos ventes en ligne ont triplé après le lancement. Des résultats incroyables.',
           '13': 'Magnifique design qui reflète parfaitement notre marque. Les clients adorent l\'expérience.',
           '14': 'A optimisé nos opérations de 40%. Leur réponse est immédiate et le support est incomparable.',
-          '15': 'Solution robuste et fiable qui a propulsé notre entreprise au niveau supérieur.'
+          '15': 'Solution robuste et fiable qui a propulsé notre entreprise au niveau supérieur.',
+          '16': 'Mes ventes ont augmenté considérablement au cours des 3 derniers mois, grâce au site web.',
         }
       },
       whyChoose: {
         title: 'Pourquoi Me Choisir',
         subtitle: 'Je ne livre pas seulement des projets — je livre des résultats.',
         reason1: {
-          title: 'Réponse en <2 heures',
+          title: 'Réponse en <24 heures',
           desc: 'Pas de semaines d\'attente. Je réponds vite car votre temps est de l\'argent.',
         },
         reason2: {
@@ -2024,7 +2027,8 @@ const resources = {
           '12': '上線後，我們的線上銷售額翻了三倍。不可思議的成果。',
           '13': '精美的設計完美體現了我們的品牌。客戶非常喜歡這種體驗。',
           '14': '使我們的運營優化了40%。他們的回應迅速，支援無與倫比。',
-          '15': '強大且可靠的解決方案，將我們的業務提升到新的水平。'
+          '15': '強大且可靠的解決方案，將我們的業務提升到新的水平。',
+          '16': '多虧了那個網站，我的銷售額在過去三個月大幅成長。'
         }
       },
       whyChoose: {
