@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimize distance checks inside nested loops and frame loops
+**Learning:** In Three.js and Canvas applications with high frequency loops (like nested loops traversing nodes or particles in `O(N^2)`, or `useFrame` animations), calculating Euclidean distance using `distanceTo` involves an expensive `Math.sqrt` operation. Doing this millions of times per frame will cause performance bottlenecks.
+**Action:** Instead of `distanceTo` against a `threshold`, use `distanceToSquared` against `threshold * threshold`. This simple replacement avoids the square root overhead, dramatically improving rendering performance for particle connections and proximity checks.
