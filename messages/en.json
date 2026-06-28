@@ -18,5 +18,10 @@
     "agenda": "Agenda",
     "chat": "Chat",
     "reports": "Analytics"
+  },
+  "nav": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "selectLanguage": "Select language"
   }
 }
