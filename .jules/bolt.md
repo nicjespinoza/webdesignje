@@ -1,0 +1,3 @@
+## 2024-05-24 - Avoid Math.sqrt in O(N^2) high-frequency animation loops
+**Learning:** In Three.js and Canvas applications, calculating distances between a large number of nodes inside nested loops (O(N^2)) is highly CPU-intensive. Using `Math.sqrt` via `distanceTo` is a common bottleneck.
+**Action:** Replace `distanceTo(v) < threshold` with `distanceToSquared(v) < threshold * threshold` to eliminate the costly square root calculation inside high-frequency loops (like `useFrame` or `useMemo` that recalculates often). Also, avoid modifying the inner loop logic (e.g., changing `j = 0` to `j = i + 1`) without fully understanding the opacity accumulation or rendering logic, as it can cause severe visual regressions in some specific network graph setups.
