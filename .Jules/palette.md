@@ -1,0 +1,3 @@
+## 2024-07-03 - Accessible Mobile Menus
+**Learning:** For interactive toggle buttons that control other UI elements (like the mobile menu), adding `aria-expanded` and `aria-controls` provides essential context for screen readers. Simply adding an `aria-label` is not enough to fully explain the state and purpose of a toggle button. Furthermore, it's critical to ensure that any new ARIA labels are translated correctly to avoid hardcoding a single language.
+**Action:** When adding or fixing accessibility for interactive toggle components, always include `aria-expanded` reflecting the current state, and `aria-controls` pointing to the ID of the controlled element. Always utilize the existing internationalization framework (like `t('key')`) for the `aria-label`.
