@@ -40,8 +40,8 @@ const ClientsSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
 
   return (
-    <section id="clients" className="py-24 relative overflow-hidden bg-transparent">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="clients" className="py-16 md:py-24 relative overflow-hidden bg-transparent">
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
 
         {/* Header Elegante */}
         <motion.div
@@ -49,7 +49,7 @@ const ClientsSection = ({ lang }: { lang: Language }) => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeInUp}
-          className="flex flex-col items-center mb-20 text-center"
+          className="flex flex-col items-center mb-12 md:mb-20 text-center"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320]/20 bg-[#FBE18D]/5 text-[#FBE18D] text-xs font-bold mb-4 tracking-widest uppercase shadow-inner">
             <Star size={14} className="fill-[#F5D76E]" /> {t('clients.badge', { lng: lang })}
@@ -66,7 +66,7 @@ const ClientsSection = ({ lang }: { lang: Language }) => {
               return <span className="gradient-text">{fullTitle}</span>;
             })()}
           </h2>
-          <p className="text-[#E5E7EB] mt-2 max-w-2xl text-lg opacity-80">
+          <p className="text-white mt-2 max-w-2xl text-sm md:text-lg">
             {t('clients.subtitle', { lng: lang })}
           </p>
         </motion.div>
@@ -77,7 +77,7 @@ const ClientsSection = ({ lang }: { lang: Language }) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
         >
           {clients.map((client) => (
             <motion.div
@@ -90,11 +90,11 @@ const ClientsSection = ({ lang }: { lang: Language }) => {
               className="liquid-gold-card group cursor-pointer relative"
               onClick={() => window.open(client.url, '_blank')}
             >
-              <div className="liquid-gold-content !p-8 flex flex-col items-center justify-between h-full">
+              <div className="liquid-gold-content !p-6 md:!p-8 flex flex-col items-center justify-between h-full"> 
                 {/* Logo Container con Fondo Blanco */}
-                <div className="w-36 h-36 flex items-center justify-center mb-6 relative">
+                <div className="w-28 h-28 md:w-36 md:h-36 flex items-center justify-center mb-4 md:mb-6 relative">
                   <div className="absolute inset-0 bg-white rounded-full shadow-lg group-hover:scale-110 transition-transform duration-500" />
-                  <div className="relative w-28 h-28 flex items-center justify-center group-hover:brightness-110 transition-all duration-500">
+                  <div className="relative w-20 h-20 md:w-28 md:h-28 flex items-center justify-center group-hover:brightness-110 transition-all duration-500">
                     <Image
                       src={client.logo}
                       alt={client.name}
@@ -106,13 +106,13 @@ const ClientsSection = ({ lang }: { lang: Language }) => {
                 </div>
 
                 <div className="text-center w-full flex flex-col items-center flex-grow">
-                  <h3 className="text-lg font-bold text-white mb-3 group-hover:gradient-text transition-colors duration-300 min-h-[56px] flex items-center justify-center">
+                  <h3 className="text-sm md:text-lg font-bold text-white mb-2 md:mb-3 group-hover:gradient-text transition-colors duration-300 min-h-[40px] md:min-h-[56px] flex items-center justify-center">
                     {client.name}
                   </h3>
 
                   {/* Testimonial (si existe) */}
                   {client.testimonialKey && (
-                    <div className="mb-4 px-2">
+                    <div className="mb-3 md:mb-4 px-1 md:px-2">
                       <div className="flex items-center justify-center gap-0.5 mb-2">
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} size={10} className="fill-[#FBE18D] text-[#FBE18D]" />

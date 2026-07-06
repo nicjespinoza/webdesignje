@@ -36,8 +36,8 @@ const ServicesSection = ({ lang }: { lang: Language }) => {
   }, [t, lang]); // Re-calculate whenever translation function or language prop changes
 
   return (
-    <section id="services" className="py-16 relative" key={lang}>
-      <div className="container mx-auto px-6">
+    <section id="services" className="py-12 md:py-16 relative" key={lang}>
+      <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -82,7 +82,7 @@ const ServicesSection = ({ lang }: { lang: Language }) => {
               className="liquid-gold-card h-full cursor-pointer group"
               onClick={() => handleServiceClick(service?.title || '')}
             >
-              <div className="liquid-gold-content flex flex-col h-full !p-8">
+              <div className="liquid-gold-content flex flex-col h-full !p-6 md:!p-8">
                 <div className="bg-[#FBE18D]/10 p-4 rounded-2xl text-[#FBE18D] w-fit mb-8 shadow-inner border border-[#C69320]/20 group-hover:scale-110 transition-transform duration-500">
                   {index === 0 && <Code2 size={28} />}
                   {index === 1 && <Smartphone size={28} />}

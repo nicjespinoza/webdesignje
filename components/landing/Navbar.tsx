@@ -37,13 +37,13 @@ const Navbar = ({
   };
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-3 shadow-lg backdrop-blur-md' : 'py-6 bg-transparent'}`}>
-      <div className="container mx-auto px-6 flex justify-between items-center">
-        <a href="#" className="flex items-center gap-3 group">
-          <Logo isDark={isDark} size={64} />
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-2 md:py-3 shadow-lg backdrop-blur-md' : 'py-3 md:py-6 bg-transparent'}`}>
+      <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
+        <a href="#" className="flex items-center gap-2 md:gap-3 group">
+          <Logo isDark={isDark} size={40} />
           <div className="leading-none flex flex-col">
-            <span className="text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125 font-sans">Joseph Espinoza</span>
-            <span className="text-xs font-medium tracking-[0.2em] text-slate-300 font-sans opacity-80">Web Design</span>
+            <span className="text-base md:text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125 font-sans">Joseph Espinoza</span>
+            <span className="text-[9px] md:text-xs font-medium tracking-[0.2em] text-slate-300 font-sans opacity-80">Web Design</span>
           </div>
         </a>
 

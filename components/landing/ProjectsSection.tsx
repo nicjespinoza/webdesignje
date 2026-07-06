@@ -19,8 +19,8 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
   };
 
   return (
-    <section id="projects" className="py-16">
-      <div className="container mx-auto px-6">
+    <section id="projects" className="py-12 md:py-16">
+      <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -43,7 +43,7 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
               return <span className="gradient-text">{fullTitle}</span>;
             })()}
           </h2>
-          <p className="text-slate-400 mt-4 max-w-xl text-center text-lg">
+          <p className="text-white mt-4 max-w-xl text-center text-lg">
             {t('projects.subtitle', { lng: lang })}
           </p>
         </motion.div>
@@ -92,7 +92,7 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
                         <ExternalLink className="text-[#FBE18D]" size={32} />
                       </div>
                     </div>
-                    <div className="p-6">
+                    <div className="p-4 md:p-6">
                       <h3 className="text-xl font-bold mb-3 text-[#FBE18D] transition-colors font-sans">
                         {(item?.title as string) || projectData.title}
                       </h3>

@@ -12,8 +12,8 @@ const AboutSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
 
   return (
-    <section id="about" className="py-16">
-      <div className="container mx-auto px-6">
+    <section id="about" className="py-12 md:py-16">
+      <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -21,7 +21,7 @@ const AboutSection = ({ lang }: { lang: Language }) => {
           variants={fadeInUp}
           className="relative z-10 flex flex-col items-center mb-12"
         >
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white text-center">
+          <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-6 text-white text-center">
             {(() => {
               const fullTitle = t('about.title', { lng: lang });
               if (fullTitle.includes(' ')) {
@@ -40,8 +40,8 @@ const AboutSection = ({ lang }: { lang: Language }) => {
           <div className="space-y-6 relative z-10">
             <motion.div variants={fadeInUp} className="liquid-gold-card">
               <div className="liquid-gold-content !p-8">
-                <h3 className="text-3xl font-bold mb-4 gradient-text">JOSEPH ESPINOZA</h3>
-                <p className="text-slate-300 mb-4 whitespace-pre-line text-lg leading-relaxed">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 gradient-text">JOSEPH ESPINOZA</h3>
+                <p className="text-slate-300 mb-4 whitespace-pre-line text-base md:text-lg leading-relaxed">
                   {t('about.description_1', { lng: lang }).split('Full-Stack').map((part, i, arr) => (
                     <React.Fragment key={i}>
                       {part}
@@ -49,7 +49,7 @@ const AboutSection = ({ lang }: { lang: Language }) => {
                     </React.Fragment>
                   ))}
                 </p>
-                <p className="text-slate-300 text-lg">
+                <p className="text-slate-300 text-base md:text-lg">
                   {t('about.description_2', { lng: lang })}
                 </p>
                 <p className="text-slate-300 mt-4 text-lg">

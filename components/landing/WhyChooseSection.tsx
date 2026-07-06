@@ -32,8 +32,8 @@ const WhyChooseSection = ({ lang }: { lang: Language }) => {
   ];
 
   return (
-    <section className="py-16 relative">
-      <div className="container mx-auto px-6">
+    <section className="py-12 md:py-16 relative">
+      <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -53,7 +53,7 @@ const WhyChooseSection = ({ lang }: { lang: Language }) => {
               return <span className="gradient-text">{fullTitle}</span>;
             })()}
           </h2>
-          <p className="text-slate-400 mt-4 max-w-xl text-center text-lg">
+          <p className="text-white mt-4 max-w-xl text-center text-lg">
             {t('whyChoose.subtitle', { lng: lang })}
           </p>
         </motion.div>
