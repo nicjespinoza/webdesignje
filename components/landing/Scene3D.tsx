@@ -259,6 +259,7 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
   const tempObj = new THREE.Object3D();
   const color = new THREE.Color();
+  const reusableDir = useMemo(() => new THREE.Vector3(), []);
 
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
@@ -292,8 +293,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-      agent.pos.add(dir.multiplyScalar(agent.speed));
+      reusableDir.subVectors(agent.dest, agent.pos).normalize();
+      agent.pos.add(reusableDir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
       if (agent.pos.distanceTo(agent.dest) < 0.3) {
