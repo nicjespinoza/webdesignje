@@ -34,6 +34,22 @@ const AboutSection = ({ lang }: { lang: Language }) => {
             })()}
           </h2>
           <p className="text-xl text-white mb-6 font-medium text-center max-w-2xl">{t('about.motto', { lng: lang })}</p>
+
+          {/* Foto para mobile/tablet - después del lema */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="lg:hidden w-full max-w-sm mx-auto mb-8"
+          >
+            <div className="liquid-gold-card !p-[1.5px] rounded-3xl">
+              <div className="liquid-gold-content !p-3 rounded-3xl h-full flex items-center justify-center">
+                <div className="aspect-square w-full bg-black rounded-2xl flex items-center justify-center overflow-hidden border border-white/5 shadow-inner">
+                  <Image src="/images/Perfil_elegante.png" alt="Joseph Espinoza" width={400} height={400} className="w-full h-full object-cover" priority />
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -87,11 +103,12 @@ const AboutSection = ({ lang }: { lang: Language }) => {
             </motion.div>
           </div>
 
+          {/* Foto para desktop - lado a lado con texto */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative"
+            className="relative hidden lg:block"
           >
             <div className="liquid-gold-card !p-[1.5px] rounded-3xl">
               <div className="liquid-gold-content !p-4 md:!p-8 rounded-3xl h-full flex items-center justify-center">
