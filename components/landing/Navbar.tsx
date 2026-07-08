@@ -102,7 +102,12 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320] rounded-lg"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={t('nav.toggleMenu', { lng: lang }) || 'Toggle menu'}
+          aria-expanded={isOpen}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
