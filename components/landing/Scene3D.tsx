@@ -4,18 +4,8 @@
 // ============================================================
 
 import React, { useRef, useMemo, useState } from 'react';
-import {
-  Canvas,
-  useFrame,
-  useThree,
-} from '@react-three/fiber';
-import {
-  Stars,
-  PerspectiveCamera,
-  PointMaterial,
-  Points,
-  Line,
-} from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Stars, PerspectiveCamera, PointMaterial, Points, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import type { Line2 } from 'three-stdlib';
 import { EffectComposer, Bloom, ChromaticAberration } from '@react-three/postprocessing';
@@ -25,7 +15,7 @@ const fract = (n: number) => n - Math.floor(n);
 const mulberry32 = (seed: number) => {
   let t = seed >>> 0;
   return () => {
-    t += 0x6D2B79F5;
+    t += 0x6d2b79f5;
     let x = t;
     x = Math.imul(x ^ (x >>> 15), x | 1);
     x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
@@ -92,7 +82,7 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
         position: new THREE.Vector3(x, y, z),
         baseSize: layer === 0 ? 0.25 : layer === 1 ? 0.18 : 0.12,
         pulseOffset: rand() * Math.PI * 2,
-        layer
+        layer,
       });
     }
     return temp;
@@ -105,17 +95,18 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
     neurons.forEach((n1, i) => {
       neurons.forEach((n2, j) => {
         if (i !== j) {
-          const dist = n1.position.distanceTo(n2.position);
+          const distSq = n1.position.distanceToSquared(n2.position);
           // Different thresholds per layer
           const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
+          const thresholdSq = threshold * threshold;
 
-          if (dist < threshold) {
+          if (distSq < thresholdSq) {
             // Strength based on layer (core connections stronger)
             const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
             lines.push({
               points: [n1.position, n2.position],
               strength,
-              layer: n1.layer
+              layer: n1.layer,
             });
           }
         }
@@ -124,7 +115,7 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
     return lines;
   }, [neurons]);
 
-  useFrame((state) => {
+  useFrame(state => {
     const t = state.clock.getElapsedTime();
 
     if (groupRef.current) {
@@ -155,10 +146,14 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
   // Colors per layer
   const getNeuronColor = (layer: number) => {
     switch (layer) {
-      case 0: return '#FFEBAA'; // Core - Ultra bright gold
-      case 1: return '#FBE18D'; // Middle - Bright gold
-      case 2: return '#C69320'; // Outer - Primary gold
-      default: return '#FBE18D';
+      case 0:
+        return '#FFEBAA'; // Core - Ultra bright gold
+      case 1:
+        return '#FBE18D'; // Middle - Bright gold
+      case 2:
+        return '#C69320'; // Outer - Primary gold
+      default:
+        return '#FBE18D';
     }
   };
 
@@ -223,7 +218,7 @@ const AnimatedLine = ({
   points,
   color,
   baseOpacity,
-  index
+  index,
 }: {
   points: [THREE.Vector3, THREE.Vector3];
   color: string;
@@ -232,7 +227,7 @@ const AnimatedLine = ({
 }) => {
   const ref = useRef<Line2>(null!);
 
-  useFrame((state) => {
+  useFrame(state => {
     const t = state.clock.getElapsedTime();
     if (ref.current) {
       // Pulsing opacity with phase offset based on index
@@ -281,11 +276,11 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
       speed: seeded() * 0.08 + 0.04,
       phase: seeded() * Math.PI * 2,
       colorOffset: i / count,
-      seed: Math.floor(seeded() * 2 ** 32) >>> 0
+      seed: Math.floor(seeded() * 2 ** 32) >>> 0,
     }));
   }, [radius, count]);
 
-  useFrame((state) => {
+  useFrame(state => {
     const t = state.clock.getElapsedTime();
 
     if (!meshRef.current) return;
@@ -296,15 +291,11 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) {
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);
-        agent.dest.set(
-          (r1 - 0.5) * radius * 2,
-          (r2 - 0.5) * radius * 2,
-          (r3 - 0.5) * radius * 2
-        );
+        agent.dest.set((r1 - 0.5) * radius * 2, (r2 - 0.5) * radius * 2, (r3 - 0.5) * radius * 2);
       }
 
       tempObj.position.copy(agent.pos);
@@ -347,11 +338,11 @@ const EnergyWaves = ({ count }: { count: number }) => {
       speed: rand() * 0.5 + 0.3,
       maxRadius: 4 + rand() * 2,
       opacity: 0,
-      phase: rand() * Math.PI * 2
+      phase: rand() * Math.PI * 2,
     }));
   }, [count]);
 
-  useFrame((state) => {
+  useFrame(state => {
     const t = state.clock.getElapsedTime();
 
     if (!meshRef.current) return;

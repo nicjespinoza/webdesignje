@@ -1,15 +1,6 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react';
-import {
-  Canvas,
-  useFrame,
-} from '@react-three/fiber';
-import {
-  Stars,
-  PerspectiveCamera,
-  PointMaterial,
-  Points,
-  Line,
-} from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Stars, PerspectiveCamera, PointMaterial, Points, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import { EffectComposer, Bloom, ChromaticAberration } from '@react-three/postprocessing';
 
@@ -35,11 +26,12 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
   const connections = useMemo(() => {
     const lines: THREE.Vector3[][] = [];
     const threshold = 2.5;
+    const thresholdSq = threshold * threshold;
     particles.forEach((p1, i) => {
       particles.forEach((p2, j) => {
         if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+          const distSq = p1.distanceToSquared(p2);
+          if (distSq < thresholdSq) {
             lines.push([p1, p2]);
           }
         }
@@ -48,9 +40,7 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
     return lines;
   }, [particles]);
 
-  const [visibleConnections] = useState(() =>
-    connections.filter(() => Math.random() > 0.5)
-  );
+  const [visibleConnections] = useState(() => connections.filter(() => Math.random() > 0.5));
 
   useEffect(() => {
     const s = new Set<string>();
@@ -60,11 +50,16 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
     let changed = false;
     if (s.size !== current.size) changed = true;
     if (!changed) {
-      for (const k of s) { if (!current.has(k)) { changed = true; break; } }
+      for (const k of s) {
+        if (!current.has(k)) {
+          changed = true;
+          break;
+        }
+      }
     }
   }, [connections, visibleConnections]);
 
-  useFrame((state) => {
+  useFrame(state => {
     const t = state.clock.getElapsedTime();
     if (groupRef.current) {
       groupRef.current.rotation.y = t * 0.05;
@@ -75,94 +70,94 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
     particles.forEach((p, i) => {
-        pos[i * 3] = p.x;
-        pos[i * 3 + 1] = p.y;
-        pos[i * 3 + 2] = p.z;
+      pos[i * 3] = p.x;
+      pos[i * 3 + 1] = p.y;
+      pos[i * 3 + 2] = p.z;
     });
     return pos;
   }, [particles, count]);
 
   return (
     <group ref={groupRef}>
-        <Points positions={positions} stride={3} ref={pointsRef}>
-            <PointMaterial
-                transparent
-                color="#22d3ee"
-                size={0.15}
-                sizeAttenuation={true}
-                depthWrite={false}
-                opacity={0.8}
-            />
-        </Points>
+      <Points positions={positions} stride={3} ref={pointsRef}>
+        <PointMaterial
+          transparent
+          color="#22d3ee"
+          size={0.15}
+          sizeAttenuation={true}
+          depthWrite={false}
+          opacity={0.8}
+        />
+      </Points>
 
-        <group ref={linesRef}>
-            {visibleConnections.map((line, index) => (
-                <Line
-                    key={index}
-                    points={line}
-                    color="#4f46e5"
-                    opacity={0.15}
-                    transparent
-                    lineWidth={1}
-                />
-            ))}
-        </group>
+      <group ref={linesRef}>
+        {visibleConnections.map((line, index) => (
+          <Line
+            key={index}
+            points={line}
+            color="#4f46e5"
+            opacity={0.15}
+            transparent
+            lineWidth={1}
+          />
+        ))}
+      </group>
 
-        <DataPulses radius={radius} />
+      <DataPulses radius={radius} />
     </group>
   );
 };
 
 const DataPulses = ({ radius }: { radius: number }) => {
-    const count = 15;
-    const meshRef = useRef<THREE.InstancedMesh>(null!);
-    const tempObj = new THREE.Object3D();
+  const count = 15;
+  const meshRef = useRef<THREE.InstancedMesh>(null!);
+  const tempObj = new THREE.Object3D();
 
-    const [agents] = useState(() =>
-        new Array(count).fill(0).map(() => ({
-            pos: new THREE.Vector3(
-                (Math.random() - 0.5) * radius * 2,
-                (Math.random() - 0.5) * radius * 2,
-                (Math.random() - 0.5) * radius * 2
-            ),
-            dest: new THREE.Vector3(
-                (Math.random() - 0.5) * radius * 2,
-                (Math.random() - 0.5) * radius * 2,
-                (Math.random() - 0.5) * radius * 2
-            ),
-            speed: Math.random() * 0.05 + 0.02
-        }))
-    );
+  const [agents] = useState(() =>
+    new Array(count).fill(0).map(() => ({
+      pos: new THREE.Vector3(
+        (Math.random() - 0.5) * radius * 2,
+        (Math.random() - 0.5) * radius * 2,
+        (Math.random() - 0.5) * radius * 2
+      ),
+      dest: new THREE.Vector3(
+        (Math.random() - 0.5) * radius * 2,
+        (Math.random() - 0.5) * radius * 2,
+        (Math.random() - 0.5) * radius * 2
+      ),
+      speed: Math.random() * 0.05 + 0.02,
+    }))
+  );
 
-    useFrame(() => {
-        if (!meshRef.current) return;
+  useFrame(() => {
+    if (!meshRef.current) return;
 
-        agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-            agent.pos.add(dir.multiplyScalar(agent.speed));
+    agents.forEach((agent, i) => {
+      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+      agent.pos.add(dir.multiplyScalar(agent.speed));
 
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
-                agent.dest.set(
-                    (Math.random() - 0.5) * radius * 2,
-                    (Math.random() - 0.5) * radius * 2,
-                    (Math.random() - 0.5) * radius * 2
-                );
-            }
+      if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
+        agent.dest.set(
+          (Math.random() - 0.5) * radius * 2,
+          (Math.random() - 0.5) * radius * 2,
+          (Math.random() - 0.5) * radius * 2
+        );
+      }
 
-            tempObj.position.copy(agent.pos);
-            tempObj.scale.setScalar(1);
-            tempObj.updateMatrix();
-            meshRef.current.setMatrixAt(i, tempObj.matrix);
-        });
-        meshRef.current.instanceMatrix.needsUpdate = true;
+      tempObj.position.copy(agent.pos);
+      tempObj.scale.setScalar(1);
+      tempObj.updateMatrix();
+      meshRef.current.setMatrixAt(i, tempObj.matrix);
     });
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  });
 
-    return (
-        <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-            <sphereGeometry args={[0.06, 8, 8]} />
-            <meshBasicMaterial color="#fbbf24" />
-        </instancedMesh>
-    );
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+      <sphereGeometry args={[0.06, 8, 8]} />
+      <meshBasicMaterial color="#fbbf24" />
+    </instancedMesh>
+  );
 };
 
 const Scene3D: React.FC = () => {
