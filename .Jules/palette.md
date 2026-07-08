@@ -1,0 +1,3 @@
+## 2024-07-08 - Language Selector ARIA and Focus States
+**Learning:** Language selectors structured as buttons within a linear layout or grid must utilize `aria-pressed` to indicate their selected state rather than just visual cues. Toggle buttons for off-canvas menus need `aria-expanded` and `aria-controls` for screen readers to comprehend the interaction. Missing explicit focus outlines make keyboard navigation on dark/glass backgrounds extremely confusing.
+**Action:** Always include `aria-pressed`, `aria-label`, and high-contrast `focus-visible` utility classes (e.g., `focus-visible:ring-[#C69320]`) on interactive custom UI elements like language toggles and mobile menu buttons.
