@@ -1,0 +1,3 @@
+## 2024-07-01 - O(n^2) Distance calculation optimization in Canvas loops
+**Learning:** Calling `Math.sqrt()` redundantly inside nested particle loops (`O(n^2)`) blocks the main thread in high-frequency rendering contexts (`requestAnimationFrame`), causing rendering stutter. Using standard distance checks `distance < maxDist` necessitates premature evaluation of `Math.sqrt()` even for completely distant nodes.
+**Action:** Replace direct distance comparisons `dist < threshold` with squared distance comparisons `distSq < thresholdSq` inside high-frequency animation loops. Only compute `Math.sqrt(distSq)` *inside* the conditional block when the actual distance value is functionally needed (e.g., for opacity or dynamic line width calculation).
