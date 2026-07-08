@@ -1,0 +1,3 @@
+## 2024-07-04 - Accessible Mobile Menu Toggles
+**Learning:** Icon-only buttons for mobile menus often lack ARIA attributes, making them inaccessible to screen readers. They also need proper `aria-expanded` and `aria-controls` states to inform users of the menu's state and location.
+**Action:** Always verify that mobile toggle buttons have `aria-label`, `aria-expanded`, and `aria-controls` properties linked to the correct menu container. Add visual focus styles to ensure keyboard accessibility. Ensure all user-facing strings are correctly populated in the `react-i18next` dictionary for complete internationalization.
