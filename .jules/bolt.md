@@ -1,0 +1,3 @@
+## 2024-05-28 - Deferred Math.sqrt in O(N²) Loops
+**Learning:** In canvas particle animations running via `requestAnimationFrame` with O(N²) nested loops, unconditionally computing `Math.sqrt(dx*dx + dy*dy)` for every particle pair before a threshold check causes unnecessary CPU overhead. Checking the squared distance (`dx*dx + dy*dy < threshold*threshold`) before taking the square root significantly reduces math operations.
+**Action:** Always compare distance squares (`dx*dx + dy*dy < thresholdSq`) to determine if particles are in range, and only compute `Math.sqrt` inside the `if` block if the exact distance is needed for opacity or interpolation calculations.
