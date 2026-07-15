@@ -1,0 +1,3 @@
+## 2024-07-15 - Prevent garbage collection stutter in ThreeJS components
+**Learning:** Instantiating new objects (e.g., `new THREE.Vector3()`) inside high-frequency animation loops like React Three Fiber's `useFrame` generates significant garbage, causing noticeable frame rate stutters (GC pauses) in performance-sensitive WebGL animations.
+**Action:** Always instantiate reusable objects (like vectors, quaternions, or matrices) outside the `useFrame` loop or within a `useMemo`/initialization block, and mutate them in-place (e.g., `.subVectors()`, `.copy()`) during the animation cycle instead of creating new instances.
