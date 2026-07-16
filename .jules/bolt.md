@@ -1,0 +1,3 @@
+## 2024-05-24 - Instantiating vectors outside useFrame
+**Learning:** Found new THREE.Vector3() inside a useFrame map/forEach loop (`dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize()`). This creates an object inside the main render loop per frame and per agent, leading to rapid memory consumption, frequent garbage collection, and potential stuttering in React Three Fiber components.
+**Action:** Extract reusable object instantiations outside the `useFrame` loop, declaring a persistent instance like `const dir = useMemo(() => new THREE.Vector3(), [])` or simply define it outside the function context and mutate it using `.copy()` or `.subVectors()` during the loop.

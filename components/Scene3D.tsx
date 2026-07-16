@@ -134,11 +134,13 @@ const DataPulses = ({ radius }: { radius: number }) => {
         }))
     );
 
+    const dir = useMemo(() => new THREE.Vector3(), []);
+
     useFrame(() => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+            dir.subVectors(agent.dest, agent.pos).normalize();
             agent.pos.add(dir.multiplyScalar(agent.speed));
 
             if (agent.pos.distanceTo(agent.dest) < 0.5) {
