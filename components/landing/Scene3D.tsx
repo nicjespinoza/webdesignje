@@ -285,6 +285,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
     }));
   }, [radius, count]);
 
+  const dir = useMemo(() => new THREE.Vector3(), []);
+
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
 
@@ -292,7 +294,7 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+      dir.subVectors(agent.dest, agent.pos).normalize();
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
