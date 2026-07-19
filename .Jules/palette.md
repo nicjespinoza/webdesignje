@@ -1,0 +1,3 @@
+## 2025-05-24 - Mobile Menu Toggle Accessibility
+**Learning:** Icon-only mobile menu toggles without explicit `aria-label`, `aria-expanded`, and `aria-controls` create a confusing experience for screen reader users, completely breaking navigational context. Furthermore, omitting explicit focus and hover states (`focus-visible:ring`, `hover:bg-white/10`) hinders keyboard usability.
+**Action:** Always provide explicit, translated ARIA labels and state attributes to icon-only toggle buttons, link them to the menu container via IDs, and add `focus-visible` and hover styles for clear interactive feedback.
