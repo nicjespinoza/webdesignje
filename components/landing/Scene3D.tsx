@@ -285,6 +285,9 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
     }));
   }, [radius, count]);
 
+  // Reusing a single vector to prevent GC pauses on every frame
+  const tempDir = useMemo(() => new THREE.Vector3(), []);
+
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
 
@@ -292,7 +295,7 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+      const dir = tempDir.subVectors(agent.dest, agent.pos).normalize();
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
