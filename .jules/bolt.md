@@ -1,0 +1,3 @@
+## 2026-05-21 - Eliminate garbage collection stutters in Three.js useFrame
+**Learning:** Found code allocating `new THREE.Vector3()` on every frame inside a `useFrame` callback within `@react-three/fiber` components (e.g., `Scene3D.tsx` and `landing/Scene3D.tsx`). This triggers frequent garbage collection cycles leading to noticeable micro-stutters during 3D animations, especially with many instances (like `DataPulses`).
+**Action:** Always instantiate reusable Three.js objects (like `new THREE.Vector3()`) outside of `useFrame` hooks using `useMemo`, and mutate them internally (using methods like `.subVectors()` or `.copy()`) to prevent GC churn and ensure a stable framerate.
