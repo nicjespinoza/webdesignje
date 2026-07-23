@@ -1,0 +1,3 @@
+## 2026-05-21 - Three.js Object Allocation in useFrame
+**Learning:** Found multiple instances where new `THREE.Vector3` objects were being instantiated inside the high-frequency `useFrame` loop in both `components/landing/Scene3D.tsx` and `components/Scene3D.tsx` (e.g., `const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize()`). This creates excessive garbage collection pressure, leading to frame stutters.
+**Action:** When working with Three.js or other high-frequency loops (like `requestAnimationFrame`), always pre-allocate reusable objects (e.g., `const dir = new THREE.Vector3()`) using `useMemo` or outside the loop, and mutate them in-place instead of creating new instances every frame.
