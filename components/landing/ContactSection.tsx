@@ -458,7 +458,7 @@ const ContactSection = ({ lang }: { lang: Language }) => {
               key={method}
               type="button"
               onClick={() => setFormData({ ...formData, preferredContact: method })}
-              className={`p-3 rounded-xl border text-sm font-medium transition-all ${
+              className={`p-3 rounded-xl border text-sm font-medium transition-all focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${
                 formData.preferredContact === method
                   ? 'bg-[#C69320]/20 border-[#FBE18D] text-white'
                   : 'bg-[#131B2A] border-slate-700 text-slate-400 hover:border-slate-500'
@@ -496,7 +496,7 @@ const ContactSection = ({ lang }: { lang: Language }) => {
                   setDynamicAnswers({});
                   setSelectedPainPoints([]);
                 }}
-                className={`flex flex-col items-center justify-center p-4 rounded-2xl border text-center gap-2 transition-all ${
+                className={`flex flex-col items-center justify-center p-4 rounded-2xl border text-center gap-2 transition-all focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${
                   isSelected
                     ? 'bg-gradient-to-b from-[#C69320]/20 to-[#C69320]/5 border-[#FBE18D]'
                     : 'bg-[#131B2A] border-slate-700 hover:border-slate-500'
@@ -919,7 +919,7 @@ const ContactSection = ({ lang }: { lang: Language }) => {
                       <button
                         type="button"
                         onClick={goBack}
-                        className="flex items-center gap-1.5 px-4 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 font-medium rounded-xl transition-colors text-xs"
+                        className="flex items-center gap-1.5 px-4 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 font-medium rounded-xl transition-colors text-xs focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none"
                       >
                         <ChevronLeft size={14} /> {t('projectModal.previous', { defaultValue: 'Anterior', lng: lang })}
                       </button>
@@ -930,7 +930,7 @@ const ContactSection = ({ lang }: { lang: Language }) => {
                       <button
                         type="button"
                         onClick={goNext}
-                        className="flex items-center gap-1.5 px-6 py-2.5 bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(198,147,32,0.4)] transition-all text-xs"
+                        className="flex items-center gap-1.5 px-6 py-2.5 bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(198,147,32,0.4)] transition-all text-xs focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
                       >
                         {t('projectModal.next', { defaultValue: 'Siguiente', lng: lang })} <ChevronRight size={14} />
                       </button>
@@ -939,7 +939,7 @@ const ContactSection = ({ lang }: { lang: Language }) => {
                         type="button"
                         disabled={isSubmitting}
                         onClick={handleSubmit}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(198,147,32,0.4)] transition-all disabled:opacity-70 disabled:hover:shadow-none text-xs"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(198,147,32,0.4)] transition-all disabled:opacity-70 disabled:hover:shadow-none text-xs focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
                       >
                         {isSubmitting ? (
                           <><Loader2 size={14} className="animate-spin" /> {t('projectModal.submitting', { defaultValue: 'Analizando...', lng: lang })}</>
