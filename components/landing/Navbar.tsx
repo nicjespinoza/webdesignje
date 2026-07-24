@@ -54,7 +54,8 @@ const Navbar = ({
               <button
                 key={l}
                 onClick={() => toggleLang(l)}
-                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group ${
+                aria-label={`Change language to ${languageConfig[l].name}`}
+                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${
                   lang === l 
                   ? 'bg-[#C69320] shadow-[0_0_15px_rgba(198,147,32,0.4)]' 
                   : 'hover:bg-white/10'
@@ -102,7 +103,12 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle mobile menu"
+          aria-expanded={isOpen}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -127,7 +133,8 @@ const Navbar = ({
                       toggleLang(l);
                       setIsOpen(false);
                     }}
-                    className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
+                    aria-label={`Change language to ${languageConfig[l].name}`}
+                    className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
                   >
                     <Image 
                       src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`} 
