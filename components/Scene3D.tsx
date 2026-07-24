@@ -116,7 +116,10 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
 const DataPulses = ({ radius }: { radius: number }) => {
     const count = 15;
     const meshRef = useRef<THREE.InstancedMesh>(null!);
-    const tempObj = new THREE.Object3D();
+    // ⚡ Bolt: Cache reusable Three.js objects outside of useFrame loop and
+    // component body to prevent garbage collection stutters
+    const tempObj = useMemo(() => new THREE.Object3D(), []);
+    const dir = useMemo(() => new THREE.Vector3(), []);
 
     const [agents] = useState(() =>
         new Array(count).fill(0).map(() => ({
@@ -138,7 +141,8 @@ const DataPulses = ({ radius }: { radius: number }) => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+            // ⚡ Bolt: Mutate cached vector instead of allocating new vector every frame
+            dir.subVectors(agent.dest, agent.pos).normalize();
             agent.pos.add(dir.multiplyScalar(agent.speed));
 
             if (agent.pos.distanceTo(agent.dest) < 0.5) {
