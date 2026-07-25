@@ -117,6 +117,7 @@ const DataPulses = ({ radius }: { radius: number }) => {
     const count = 15;
     const meshRef = useRef<THREE.InstancedMesh>(null!);
     const tempObj = new THREE.Object3D();
+    const dir = useMemo(() => new THREE.Vector3(), []); // Reusable vector to prevent GC
 
     const [agents] = useState(() =>
         new Array(count).fill(0).map(() => ({
@@ -138,8 +139,8 @@ const DataPulses = ({ radius }: { radius: number }) => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-            agent.pos.add(dir.multiplyScalar(agent.speed));
+            dir.subVectors(agent.dest, agent.pos).normalize();
+            agent.pos.add(dir.multiplyScalar(agent.speed)); // Mutating dir is safe as it's reset in the next iteration
 
             if (agent.pos.distanceTo(agent.dest) < 0.5) {
                 agent.dest.set(

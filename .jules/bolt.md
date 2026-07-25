@@ -1,0 +1,3 @@
+## 2024-07-25 - React Three Fiber Garbage Collection Optimization
+**Learning:** Instantiating new Three.js objects (like `new THREE.Vector3()`) inside high-frequency `useFrame` loops causes severe garbage collection stutters. Furthermore, caching these objects as module-level variables can cause state conflicts when multiple component instances render simultaneously.
+**Action:** Always instantiate reusable Three.js objects using component-level hooks (like `useMemo`) outside of `useFrame` and mutate them internally (e.g., `.subVectors()`, `.copy()`) to prevent garbage collection overhead and state conflicts.
