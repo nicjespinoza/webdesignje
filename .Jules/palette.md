@@ -1,0 +1,3 @@
+## 2026-05-21 - Added accessibility attributes and focus indicators to interactive elements
+**Learning:** Icon-only and custom interactive elements like language selector buttons or menu toggles often lack screen reader compatibility and visible focus states, which hinders keyboard users and individuals relying on assistive tech. The lack of standard HTML button styles requires manual `aria-` assignments.
+**Action:** Always include `aria-label` or `aria-pressed` / `aria-expanded` and explicit `focus-visible` ring utilities (like `focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none`) on custom icon buttons or segmented controls.
