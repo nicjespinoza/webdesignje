@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
 import { Language } from '@/components/landing/types';
 import Logo from '@/components/ui/Logo';
@@ -11,7 +11,7 @@ import Logo from '@/components/ui/Logo';
 const Navbar = ({
   isDark,
   lang,
-  toggleLang
+  toggleLang,
 }: {
   isDark: boolean;
   lang: Language;
@@ -29,52 +29,64 @@ const Navbar = ({
 
   const languages: Language[] = ['es', 'en', 'fr', 'zh'];
 
-  const languageConfig: Record<Language, { name: string, flagCode: string }> = {
+  const languageConfig: Record<Language, { name: string; flagCode: string }> = {
     es: { name: 'Español', flagCode: 'ni' },
     en: { name: 'English', flagCode: 'us' },
     fr: { name: 'Français', flagCode: 'fr' },
-    zh: { name: '繁體中文', flagCode: 'cn' }
+    zh: { name: '繁體中文', flagCode: 'cn' },
   };
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-2 md:py-3 shadow-lg backdrop-blur-md' : 'py-3 md:py-6 bg-transparent'}`}>
+    <nav
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-2 md:py-3 shadow-lg backdrop-blur-md' : 'py-3 md:py-6 bg-transparent'}`}
+    >
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
-        <a href="#" className="flex items-center gap-2 md:gap-3 group">
+        <a
+          href="#"
+          className="flex items-center gap-2 md:gap-3 group focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none rounded-lg"
+        >
           <Logo isDark={isDark} size={40} />
           <div className="leading-none flex flex-col">
-            <span className="text-base md:text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125 font-sans">Joseph Espinoza</span>
-            <span className="text-[9px] md:text-xs font-medium tracking-[0.2em] text-slate-300 font-sans opacity-80">Web Design</span>
+            <span className="text-base md:text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125 font-sans">
+              Joseph Espinoza
+            </span>
+            <span className="text-[9px] md:text-xs font-medium tracking-[0.2em] text-slate-300 font-sans opacity-80">
+              Web Design
+            </span>
           </div>
         </a>
 
         {/* Desktop Language Selector Linear */}
         <div className="hidden md:flex items-center gap-4">
           <div className="flex items-center gap-1.5 p-1 glass-panel rounded-full border border-white/5 bg-white/5 shadow-inner">
-            {languages.map((l) => (
+            {languages.map(l => (
               <button
                 key={l}
                 onClick={() => toggleLang(l)}
-                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group ${
-                  lang === l 
-                  ? 'bg-[#C69320] shadow-[0_0_15px_rgba(198,147,32,0.4)]' 
-                  : 'hover:bg-white/10'
+                aria-pressed={lang === l}
+                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${
+                  lang === l
+                    ? 'bg-[#C69320] shadow-[0_0_15px_rgba(198,147,32,0.4)]'
+                    : 'hover:bg-white/10'
                 }`}
               >
                 <div className="relative">
-                  <Image 
-                    src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`} 
+                  <Image
+                    src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`}
                     alt={languageConfig[l].name}
                     width={20}
                     height={15}
-                    className={`rounded-sm object-cover transition-all ${lang === l ? 'scale-110 shadow-lg' : 'grayscale-[0.3] group-hover:grayscale-0'}`} 
+                    className={`rounded-sm object-cover transition-all ${lang === l ? 'scale-110 shadow-lg' : 'grayscale-[0.3] group-hover:grayscale-0'}`}
                   />
                 </div>
-                <span className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${lang === l ? 'text-black' : 'text-slate-400 group-hover:text-white'}`}>
+                <span
+                  className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${lang === l ? 'text-black' : 'text-slate-400 group-hover:text-white'}`}
+                >
                   {languageConfig[l].name.split(' ')[0]}
                 </span>
-                
+
                 {lang === l && (
-                  <motion.div 
+                  <motion.div
                     layoutId="activeLangIndicator"
                     className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#FBE18D] rounded-full"
                     initial={{ opacity: 0 }}
@@ -87,11 +99,11 @@ const Navbar = ({
 
           <div className="h-6 w-px bg-white/10 mx-2"></div>
 
-          <a 
-            href={`https://wa.me/50586010651?text=${encodeURIComponent("Hola Joseph, estoy visitando tu pagina web y estoy interesad@ en saber mas de tus servicios web")}`}
+          <a
+            href={`https://wa.me/50586010651?text=${encodeURIComponent('Hola Joseph, estoy visitando tu pagina web y estoy interesad@ en saber mas de tus servicios web')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="liquid-gold-card !rounded-full !h-auto"
+            className="liquid-gold-card !rounded-full !h-auto focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none"
           >
             <div className="liquid-gold-content !py-2 !px-6 !rounded-full">
               <span className="gradient-text font-bold text-sm whitespace-nowrap">
@@ -102,7 +114,14 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2 focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none rounded-lg"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-label={
+            isOpen ? t('nav.close_menu', { lng: lang }) : t('nav.open_menu', { lng: lang })
+          }
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -118,23 +137,26 @@ const Navbar = ({
             className="md:hidden glass-panel border-t border-white/10 overflow-hidden bg-[#020202]/95 backdrop-blur-2xl"
           >
             <div className="flex flex-col p-6 gap-6">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mb-[-10px] px-1">{t('Select Language', { lng: lang }) || 'Seleccionar Idioma'}</p>
+              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mb-[-10px] px-1">
+                {t('Select Language', { lng: lang }) || 'Seleccionar Idioma'}
+              </p>
               <div className="grid grid-cols-2 gap-3">
-                {languages.map((l) => (
+                {languages.map(l => (
                   <button
                     key={l}
                     onClick={() => {
                       toggleLang(l);
                       setIsOpen(false);
                     }}
-                    className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
+                    aria-pressed={lang === l}
+                    className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
                   >
-                    <Image 
-                      src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`} 
+                    <Image
+                      src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`}
                       alt=""
                       width={20}
                       height={15}
-                      className="rounded-sm object-cover" 
+                      className="rounded-sm object-cover"
                     />
                     {languageConfig[l].name}
                   </button>
@@ -144,12 +166,12 @@ const Navbar = ({
               <div className="h-px bg-white/10 w-full"></div>
 
               <div className="flex gap-4">
-                <a 
-                  href={`https://wa.me/50586010651?text=${encodeURIComponent("Hola Joseph, estoy visitando tu pagina web y estoy interesad@ en saber mas de tus servicios web")}`}
+                <a
+                  href={`https://wa.me/50586010651?text=${encodeURIComponent('Hola Joseph, estoy visitando tu pagina web y estoy interesad@ en saber mas de tus servicios web')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsOpen(false)}
-                  className="w-full bg-[#C69320] text-black font-bold text-sm px-4 py-3 rounded-xl text-center hover:bg-[#FBE18D] transition-all"
+                  className="w-full bg-[#C69320] text-black font-bold text-sm px-4 py-3 rounded-xl text-center hover:bg-[#FBE18D] transition-all focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none"
                 >
                   {t('nav.contact', { lng: lang })}
                 </a>
