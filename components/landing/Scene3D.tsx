@@ -260,6 +260,9 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const tempObj = new THREE.Object3D();
   const color = new THREE.Color();
 
+  // ⚡ Bolt: Cache Vector3 to prevent garbage collection stutters in useFrame
+  const tempDir = useMemo(() => new THREE.Vector3(), []);
+
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
     return agent.seed / 4294967296;
@@ -292,7 +295,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+      // ⚡ Bolt: Reuse memoized tempDir instead of instantiating new Vector3 per frame
+      const dir = tempDir.subVectors(agent.dest, agent.pos).normalize();
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
