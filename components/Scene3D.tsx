@@ -118,6 +118,9 @@ const DataPulses = ({ radius }: { radius: number }) => {
     const meshRef = useRef<THREE.InstancedMesh>(null!);
     const tempObj = new THREE.Object3D();
 
+    // Cache Vector3 outside of useFrame to prevent garbage collection stutters
+    const cachedDir = useMemo(() => new THREE.Vector3(), []);
+
     const [agents] = useState(() =>
         new Array(count).fill(0).map(() => ({
             pos: new THREE.Vector3(
@@ -138,8 +141,9 @@ const DataPulses = ({ radius }: { radius: number }) => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-            agent.pos.add(dir.multiplyScalar(agent.speed));
+            // Reuse cached vector to avoid new object creation per frame
+            cachedDir.subVectors(agent.dest, agent.pos).normalize();
+            agent.pos.add(cachedDir.multiplyScalar(agent.speed));
 
             if (agent.pos.distanceTo(agent.dest) < 0.5) {
                 agent.dest.set(

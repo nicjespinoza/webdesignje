@@ -1,0 +1,3 @@
+## 2025-01-21 - [Prevent GC stutters in React Three Fiber]
+**Learning:** Instantiating reusable objects like `new THREE.Vector3()` inside `useFrame` loops causes garbage collection stutters. When caching these objects outside `useFrame` to prevent GC, use component-level hooks like `useMemo` instead of module-level variables to avoid state conflicts when multiple instances of the component render simultaneously.
+**Action:** Instantiate reusable Three.js objects using `useMemo` outside of `useFrame` loops, and mutate them internally (e.g., using `.subVectors()` or `.copy()`) instead of creating new instances per frame.
