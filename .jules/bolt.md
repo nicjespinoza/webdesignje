@@ -1,0 +1,3 @@
+## 2025-05-18 - Prevent GC stutters in React Three Fiber useFrame
+**Learning:** Instantiating objects like `new THREE.Vector3()` inside a `useFrame` loop or within a `forEach` loop inside `useFrame` causes significant garbage collection overhead, leading to frame drops and stutters in high-frequency animation loops.
+**Action:** Always instantiate reusable Three.js objects (like `THREE.Vector3`, `THREE.Color`, `THREE.Object3D`) outside of `useFrame` (e.g., using `useMemo`) and mutate them internally (e.g., using `.subVectors()`, `.copy()`, `.set()`) to prevent unnecessary object allocation per frame.
