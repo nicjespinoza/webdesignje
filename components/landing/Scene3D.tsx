@@ -257,8 +257,10 @@ const AnimatedLine = ({
 // Simulates data moving through the network
 const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
-  const color = new THREE.Color();
+  // ⚡ Bolt: Cache Three.js objects outside of useFrame to prevent GC stutters
+  const tempObj = useMemo(() => new THREE.Object3D(), []);
+  const color = useMemo(() => new THREE.Color(), []);
+  const tempDir = useMemo(() => new THREE.Vector3(), []);
 
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
@@ -292,8 +294,9 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-      agent.pos.add(dir.multiplyScalar(agent.speed));
+      // ⚡ Bolt: Re-use cached vector instead of instantiating per-frame
+      tempDir.subVectors(agent.dest, agent.pos).normalize();
+      agent.pos.add(tempDir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
       if (agent.pos.distanceTo(agent.dest) < 0.3) {
