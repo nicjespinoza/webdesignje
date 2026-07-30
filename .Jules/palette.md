@@ -1,0 +1,3 @@
+## 2025-05-27 - Accessible Language Selectors and Mobile Toggles in Next.js
+**Learning:** Adding ARIA properties to translation-backed React components requires ensuring translation strings (`t(...)`) are populated in `i18n.ts` instead of hardcoding text, otherwise the a11y labels won't map correctly on language switch. `aria-pressed` is crucial for language toggles acting like radio buttons, and `aria-expanded` is required for mobile menu toggles to support screen readers properly.
+**Action:** When updating language or menu toggles, proactively add localized strings to the translation files and bind `aria-pressed`, `aria-expanded`, and `aria-controls` with correct state variables (`lang === l`, `isOpen`).
