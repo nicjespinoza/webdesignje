@@ -257,8 +257,13 @@ const AnimatedLine = ({
 // Simulates data moving through the network
 const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
-  const color = new THREE.Color();
+
+  // ⚡ Bolt: Cache reusable objects to prevent garbage collection stutters
+  const { tempObj, color, dir } = useMemo(() => ({
+    tempObj: new THREE.Object3D(),
+    color: new THREE.Color(),
+    dir: new THREE.Vector3()
+  }), []);
 
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
@@ -291,8 +296,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
     if (!meshRef.current) return;
 
     agents.forEach((agent, i) => {
-      // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+      // ⚡ Bolt: Mutate cached object instead of allocating new Vector3 per frame
+      dir.subVectors(agent.dest, agent.pos).normalize();
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
@@ -337,7 +342,9 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 // Energy waves emanating from the core
 const EnergyWaves = ({ count }: { count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
+
+  // ⚡ Bolt: Cache reusable object to prevent garbage collection stutters
+  const tempObj = useMemo(() => new THREE.Object3D(), []);
 
   const waves = useMemo(() => {
     const rand = mulberry32(stableSeedFromNumbers(count, 303));

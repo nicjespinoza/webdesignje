@@ -1,0 +1,3 @@
+## 2026-07-30 - Optimize Three.js Object Allocation in useFrame
+**Learning:** Instantiating reusable Three.js objects (like `new THREE.Vector3()`) directly outside the `useFrame` loop or as module-level variables can cause garbage collection stutters or state conflicts when multiple component instances render simultaneously.
+**Action:** When caching reusable objects to prevent per-frame garbage collection in `@react-three/fiber`, always use component-level hooks like `useMemo` to instantiate the objects, and mutate them internally (e.g., using `.subVectors()` or `.copy()`) within the `useFrame` loop.
