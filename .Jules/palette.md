@@ -1,0 +1,3 @@
+## 2026-06-26 - Improved mobile navigation accessibility
+**Learning:** For mobile hamburger menus that toggle expansion, it's crucial to explicitly manage ARIA attributes (`aria-expanded`, `aria-controls`, `aria-label`) dynamically based on state (`isOpen`) to ensure screen readers can announce the menu's status accurately to visually impaired users. In addition, providing clear focus visibility ensures the toggle is accessible for keyboard navigation.
+**Action:** When implementing custom interactive menus (especially standard UI components like a hamburger icon), always verify `aria-expanded` and focus visibility are properly applied to the triggering button. Ensure ARIA labels are internationalized using `t()` correctly if the UI relies on translation engines.
