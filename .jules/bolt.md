@@ -1,0 +1,3 @@
+## 2024-05-23 - Avoid duplicate line generation regression
+**Learning:** When generating node connections in O(n^2) loops (e.g., `Scene3D.tsx`), halving iterations (`j = i + 1`) can cause critical visual regressions and logic bugs if the rendering logic relies on duplicate line pairs for opacity accumulation, or if threshold/strength calculations are asymmetric (depending only on `n1`).
+**Action:** When replacing basic distance calculations (`Math.sqrt(...)` or `distanceTo(v) < threshold`) with squared distance comparisons (`distSq < threshold * threshold`), keep the original iteration structure `for (let j = 0; j < n; j++)` with `if (i !== j)` unless strictly verified that halving iterations is visually identical.
