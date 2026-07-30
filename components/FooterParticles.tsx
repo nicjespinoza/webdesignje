@@ -57,12 +57,12 @@ const FooterParticles: React.FC = () => {
     };
 
     const resizeCanvas = () => {
-        const parent = canvas.parentElement;
-        if (parent) {
-            canvas.width = parent.clientWidth;
-            canvas.height = parent.clientHeight;
-        }
-        init();
+      const parent = canvas.parentElement;
+      if (parent) {
+        canvas.width = parent.clientWidth;
+        canvas.height = parent.clientHeight;
+      }
+      init();
     };
 
     window.addEventListener('resize', resizeCanvas);
@@ -72,9 +72,9 @@ const FooterParticles: React.FC = () => {
     let mouseY = -1000;
 
     const handleMouseMove = (e: MouseEvent) => {
-        const rect = canvas.getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
-        mouseY = e.clientY - rect.top;
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -87,33 +87,37 @@ const FooterParticles: React.FC = () => {
         drawParticle(particles[i]);
 
         for (let j = i; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distSq = dx * dx + dy * dy;
+          const thresholdSq = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
 
-            if (distance < CONNECTION_DISTANCE) {
-                ctx.beginPath();
-                const opacity = 1 - (distance / CONNECTION_DISTANCE);
-                ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`;
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.stroke();
-            }
+          if (distSq < thresholdSq) {
+            const distance = Math.sqrt(distSq); // Optimization: calculate exact distance only when needed
+            ctx.beginPath();
+            const opacity = 1 - distance / CONNECTION_DISTANCE;
+            ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
         }
 
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distSq = dx * dx + dy * dy;
+        const thresholdSq = MOUSE_DISTANCE * MOUSE_DISTANCE;
 
-        if (distance < MOUSE_DISTANCE) {
-            ctx.beginPath();
-            const opacity = 1 - (distance / MOUSE_DISTANCE);
-            ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
-            ctx.lineWidth = 1;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(mouseX, mouseY);
-            ctx.stroke();
+        if (distSq < thresholdSq) {
+          const distance = Math.sqrt(distSq); // Optimization: calculate exact distance only when needed
+          ctx.beginPath();
+          const opacity = 1 - distance / MOUSE_DISTANCE;
+          ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
+          ctx.lineWidth = 1;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(mouseX, mouseY);
+          ctx.stroke();
         }
       }
 
