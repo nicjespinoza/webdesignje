@@ -11,6 +11,8 @@ const resources = {
         projects: 'Projects',
         about: 'About Me',
         contact: 'Contact Me',
+        open_menu: 'Open menu',
+        close_menu: 'Close menu',
       },
       hero: {
         badge: 'AVAILABLE FOR NEW PROJECTS',
