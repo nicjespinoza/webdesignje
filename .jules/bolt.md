@@ -1,0 +1,3 @@
+## 2023-11-20 - Optimize distance calculations in Three.js animations
+**Learning:** In Three.js and 2D canvas animation loops (`useFrame`), calculating Euclidean distances using `distanceTo` involves expensive `Math.sqrt` calculations under the hood, which can cause significant performance bottlenecks when called thousands of times per frame in O(n²) particle systems.
+**Action:** Always replace `distanceTo(v) < threshold` with squared distance comparisons `distanceToSquared(v) < threshold * threshold` in high-frequency loops and nested iterations (e.g., node connection generation or agent target distance checks).
