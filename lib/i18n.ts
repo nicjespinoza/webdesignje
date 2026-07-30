@@ -6,6 +6,8 @@ const resources = {
   en: {
     translation: {
       nav: {
+        openMenu: 'Open menu',
+        closeMenu: 'Close menu',
         stack: 'Technologies',
         services: 'Services',
         projects: 'Projects',
@@ -559,6 +561,8 @@ const resources = {
   es: {
     translation: {
       nav: {
+        openMenu: 'Abrir menú',
+        closeMenu: 'Cerrar menú',
         stack: 'Tecnologías',
         services: 'Servicios',
         projects: 'Proyectos',
@@ -1111,6 +1115,8 @@ const resources = {
   fr: {
     translation: {
       nav: {
+        openMenu: 'Ouvrir le menu',
+        closeMenu: 'Fermer le menu',
         stack: 'Technologies',
         services: 'Services',
         projects: 'Projets',
@@ -1663,6 +1669,8 @@ const resources = {
   zh: {
     translation: {
       nav: {
+        openMenu: '打開選單',
+        closeMenu: '關閉選單',
         stack: '技術',
         services: '服務',
         projects: '專案',
