@@ -1,0 +1,3 @@
+## 2025-05-18 - Optimize distance calculations in ThreeJS loops
+**Learning:** In Three.js and 2D canvas loops that compute distances between many points (O(n²)), using `distanceTo` or `Math.sqrt` inside the loop can be a major CPU bottleneck, especially when repeated every frame inside `useFrame`. The project utilizes heavy visual loops in elements like `components/Scene3D.tsx` and `components/landing/Scene3D.tsx`.
+**Action:** Replace `distanceTo` with `distanceToSquared` in spatial calculations. By comparing the squared distance against the squared threshold (`threshold * threshold`), we can skip the expensive `Math.sqrt` completely.
