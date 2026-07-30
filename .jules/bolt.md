@@ -1,0 +1,3 @@
+## 2026-06-28 - Avoid squareroot math in High-Frequency Animation Loops
+**Learning:** O(n^2) loop calculating `distanceTo()` is a bottleneck. In 2D Canvas or Three.js applications, replacing distance calculations like `distanceTo()` (which computes `Math.sqrt(...)`) with `distanceToSquared()` avoids computing expensive square root loops, which improves performance and reduces framedrops, especially inside nested loops or `useFrame` animation loops.
+**Action:** Replace `distanceTo` with `distanceToSquared` and compare it against the threshold squared. Avoid changing `j=0` to `j=i+1` for pairs if rendering relies on duplicate pairs (as opacity may be accumulated twice, making visual regressions) - only optimize the mathematical formula.
