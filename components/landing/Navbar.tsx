@@ -54,7 +54,9 @@ const Navbar = ({
               <button
                 key={l}
                 onClick={() => toggleLang(l)}
-                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group ${
+                aria-pressed={lang === l}
+                aria-label={`Select ${languageConfig[l].name} language`}
+                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${
                   lang === l 
                   ? 'bg-[#C69320] shadow-[0_0_15px_rgba(198,147,32,0.4)]' 
                   : 'hover:bg-white/10'
@@ -102,7 +104,13 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2 focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none rounded-lg"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -117,7 +125,7 @@ const Navbar = ({
             transition={{ duration: 0.3 }}
             className="md:hidden glass-panel border-t border-white/10 overflow-hidden bg-[#020202]/95 backdrop-blur-2xl"
           >
-            <div className="flex flex-col p-6 gap-6">
+            <div id="mobile-menu" className="flex flex-col p-6 gap-6">
               <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mb-[-10px] px-1">{t('Select Language', { lng: lang }) || 'Seleccionar Idioma'}</p>
               <div className="grid grid-cols-2 gap-3">
                 {languages.map((l) => (
@@ -127,7 +135,8 @@ const Navbar = ({
                       toggleLang(l);
                       setIsOpen(false);
                     }}
-                    className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
+                    aria-pressed={lang === l}
+                    className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
                   >
                     <Image 
                       src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`} 
