@@ -1,0 +1,3 @@
+## 2024-05-27 - Focus Visible Indicators in Next.js + Tailwind
+**Learning:** For interactive UI elements (like buttons) without explicit background color changes on focus, relying on default browser focus rings is insufficient for accessibility, especially against dark backgrounds or custom themes. Custom focus indicators using `focus-visible` are necessary for keyboard navigation.
+**Action:** When adding accessibility features, use Tailwind's `focus-visible` utility (e.g., `focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none`) to provide clear, visually consistent focus rings that align with the project's primary color palette without disrupting mouse users.
