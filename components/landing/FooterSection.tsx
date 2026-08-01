@@ -9,7 +9,7 @@ const FooterSection = ({}: { lang: Language }) => {
       <div className="container mx-auto px-6 flex flex-col items-center gap-6 relative z-10">
         
         {/* Logo (Only Logo, no text) */}
-        <a href="#" className="hover:scale-105 transition-transform duration-300">
+        <a href="#" className="hover:scale-105 transition-transform duration-300 focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none" aria-label="Volver al inicio">
           <Logo size={72} />
         </a>
 
