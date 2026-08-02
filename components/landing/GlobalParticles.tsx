@@ -164,10 +164,11 @@ const GlobalParticles: React.FC = () => {
                     const dx = p1.x - p2.x;
                     const dy = p1.y - p2.y;
                     const distSq = dx * dx + dy * dy;
+                    // ⚡ Bolt: Fast rejection using squared distance
                     const thresholdSq = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
 
                     if (distSq < thresholdSq) {
-                        const dist = Math.sqrt(distSq);
+                        const dist = Math.sqrt(distSq); // Only compute exact distance if needed
                         const ratio = 1 - (dist / CONNECTION_DISTANCE);
                         const lineOpacity = ratio * 0.2 * (1 - scrollFactor * 0.6);
 
@@ -195,9 +196,10 @@ const GlobalParticles: React.FC = () => {
                 if (!isOver) {
                     const mdx = mouseX - p1.x;
                     const mdy = mouseY - p1.y;
+                    // ⚡ Bolt: Fast rejection using squared distance
                     const mdistSq = mdx * mdx + mdy * mdy;
                     if (mdistSq < MOUSE_RADIUS * MOUSE_RADIUS) {
-                        const mdist = Math.sqrt(mdistSq);
+                        const mdist = Math.sqrt(mdistSq); // Only compute exact distance if needed
                         const mRatio = 1 - (mdist / MOUSE_RADIUS);
                         ctx.beginPath();
                         ctx.strokeStyle = `${COLORS.bright}${mRatio * 0.4})`;

@@ -89,9 +89,11 @@ const FooterParticles: React.FC = () => {
         for (let j = i; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            // ⚡ Bolt: Fast rejection using squared distance
+            const distSq = dx * dx + dy * dy;
 
-            if (distance < CONNECTION_DISTANCE) {
+            if (distSq < CONNECTION_DISTANCE * CONNECTION_DISTANCE) {
+                const distance = Math.sqrt(distSq); // Only compute exact distance if needed
                 ctx.beginPath();
                 const opacity = 1 - (distance / CONNECTION_DISTANCE);
                 ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`;
@@ -104,9 +106,11 @@ const FooterParticles: React.FC = () => {
 
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        // ⚡ Bolt: Fast rejection using squared distance
+        const distSq = dx * dx + dy * dy;
 
-        if (distance < MOUSE_DISTANCE) {
+        if (distSq < MOUSE_DISTANCE * MOUSE_DISTANCE) {
+            const distance = Math.sqrt(distSq); // Only compute exact distance if needed
             ctx.beginPath();
             const opacity = 1 - (distance / MOUSE_DISTANCE);
             ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
