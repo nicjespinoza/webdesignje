@@ -117,6 +117,9 @@ const DataPulses = ({ radius }: { radius: number }) => {
     const count = 15;
     const meshRef = useRef<THREE.InstancedMesh>(null!);
     const tempObj = new THREE.Object3D();
+    // ⚡ Bolt Optimization: Cache a single Vector3 instance outside the render loop
+    // to prevent garbage collection stutters from allocating `count` new objects per frame.
+    const tempDir = useMemo(() => new THREE.Vector3(), []);
 
     const [agents] = useState(() =>
         new Array(count).fill(0).map(() => ({
@@ -138,10 +141,12 @@ const DataPulses = ({ radius }: { radius: number }) => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+            // ⚡ Bolt Optimization: Reuse the cached Vector3 instance
+            const dir = tempDir.subVectors(agent.dest, agent.pos).normalize();
             agent.pos.add(dir.multiplyScalar(agent.speed));
 
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // ⚡ Bolt Optimization: Use squared distance to avoid expensive Math.sqrt calculation
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,

@@ -1,0 +1,3 @@
+## 2024-08-04 - Optimize React Three Fiber Animation Loops
+**Learning:** Creating new objects (like `new THREE.Vector3()`) inside high-frequency loops (like `useFrame`) causes excessive garbage collection and framerate stutters. Expensive mathematical operations like `Math.sqrt` in distance calculations (`distanceTo`) also consume unnecessary CPU cycles during each frame rendering.
+**Action:** Cache reusable objects (e.g., using `useMemo` for component-level instances) and mutate them internally (`.subVectors()`) instead of instantiating new ones per frame. Replace expensive distance calculations with squared distance comparisons (`distanceToSquared`) for faster rejection.

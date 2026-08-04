@@ -259,6 +259,9 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
   const tempObj = new THREE.Object3D();
   const color = new THREE.Color();
+  // ⚡ Bolt Optimization: Cache a single Vector3 instance outside the render loop
+  // to prevent garbage collection stutters from allocating `count` new objects per frame.
+  const tempDir = useMemo(() => new THREE.Vector3(), []);
 
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
@@ -292,11 +295,13 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+      // ⚡ Bolt Optimization: Reuse the cached Vector3 instance
+      const dir = tempDir.subVectors(agent.dest, agent.pos).normalize();
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // ⚡ Bolt Optimization: Use squared distance to avoid expensive Math.sqrt calculation
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) {
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);
