@@ -1,0 +1,3 @@
+## 2026-05-21 - Three.js useFrame Garbage Collection Bottlenecks
+**Learning:** Instantiating objects like `new THREE.Vector3()` inside React Three Fiber's `useFrame` creates severe garbage collection pressure, leading to frame stutters. Additionally, using `distanceTo` instead of `distanceToSquared` in high-frequency loops adds unnecessary CPU overhead due to `Math.sqrt`.
+**Action:** Always memoize reusable Three.js objects (e.g., via `useMemo`) outside the animation loop and mutate them (using `.copy()` or `.subVectors()`). Always use squared distance (`distanceToSquared`) for fast threshold rejections.
