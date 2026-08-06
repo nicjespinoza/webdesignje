@@ -257,8 +257,10 @@ const AnimatedLine = ({
 // Simulates data moving through the network
 const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
-  const color = new THREE.Color();
+  const tempObj = useMemo(() => new THREE.Object3D(), []);
+  const color = useMemo(() => new THREE.Color(), []);
+  // ⚡ Bolt: Cache tempDir to avoid instantiation inside useFrame
+  const tempDir = useMemo(() => new THREE.Vector3(), []);
 
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
@@ -292,11 +294,12 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-      agent.pos.add(dir.multiplyScalar(agent.speed));
+      tempDir.subVectors(agent.dest, agent.pos).normalize();
+      agent.pos.add(tempDir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // ⚡ Bolt: Use distanceToSquared to avoid expensive Math.sqrt calls
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) {
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);
@@ -337,7 +340,7 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 // Energy waves emanating from the core
 const EnergyWaves = ({ count }: { count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
+  const tempObj = useMemo(() => new THREE.Object3D(), []);
 
   const waves = useMemo(() => {
     const rand = mulberry32(stableSeedFromNumbers(count, 303));
