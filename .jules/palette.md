@@ -1,0 +1,3 @@
+## 2024-05-18 - Missing ARIA label for mobile menu toggle button
+**Learning:** Found a common accessibility issue where icon-only buttons (like mobile menu toggles) are missing `aria-label` attributes, making them inaccessible to screen readers. In `components/landing/Navbar.tsx`, the mobile menu toggle button uses Lucide icons (`<Menu />` and `<X />`) but lacks any text or label for screen readers.
+**Action:** Adding an `aria-label` to the mobile toggle button. It will improve accessibility. I'll add `aria-expanded` as well. Also checking the language selector buttons for missing `aria-label`.
