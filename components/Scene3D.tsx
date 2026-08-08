@@ -116,7 +116,8 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
 const DataPulses = ({ radius }: { radius: number }) => {
     const count = 15;
     const meshRef = useRef<THREE.InstancedMesh>(null!);
-    const tempObj = new THREE.Object3D();
+    const tempObj = useMemo(() => new THREE.Object3D(), []);
+    const tempDir = useMemo(() => new THREE.Vector3(), []);
 
     const [agents] = useState(() =>
         new Array(count).fill(0).map(() => ({
@@ -138,10 +139,12 @@ const DataPulses = ({ radius }: { radius: number }) => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-            agent.pos.add(dir.multiplyScalar(agent.speed));
+            // ⚡ Bolt: Cache Vector3 outside loop and reuse to prevent GC stutters
+            tempDir.subVectors(agent.dest, agent.pos).normalize();
+            agent.pos.add(tempDir.multiplyScalar(agent.speed));
 
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // ⚡ Bolt: Use distanceToSquared for fast rejection (0.5^2 = 0.25)
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,
