@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimize Three.js High-Frequency Garbage Collection & Math
+**Learning:** Inside `useFrame` and other high-frequency loops (like `requestAnimationFrame`), creating new object instances (e.g., `new THREE.Vector3()`) or running expensive math operations (like `distanceTo` which uses `Math.sqrt()`) causes memory pressure leading to GC stutters and increased CPU usage.
+**Action:** When working with Three.js loops, always instantiate reusable objects via `useMemo` outside the loop, mutate them directly inside the loop (e.g. `subVectors()`), and replace distance calculations with squared comparisons (e.g. `distanceToSquared() < (threshold * threshold)`) for faster rejection.
