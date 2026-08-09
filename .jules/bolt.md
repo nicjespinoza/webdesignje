@@ -1,0 +1,3 @@
+## 2026-05-22 - Object allocation in React Three Fiber loops
+**Learning:** Instantiating new objects (like `new THREE.Vector3()`) inside `useFrame` creates hundreds of allocations per second (e.g., per agent per frame), causing garbage collection stutters. Module-level caching risks state conflicts when multiple component instances render simultaneously.
+**Action:** Always instantiate reusable Three.js objects outside `useFrame` using component-level hooks (`useMemo`), and mutate them internally (e.g., `.subVectors()`). Replace `Math.sqrt` calculations like `.distanceTo` with squared distance comparisons (`.distanceToSquared`) for fast rejection.
