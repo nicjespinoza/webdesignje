@@ -1,0 +1,3 @@
+## 2025-02-14 - Improve keyboard accessibility in navigation
+**Learning:** Keyboard navigation (tabbing) focus styles are missing or inconsistent across the main navigation elements, making it difficult for keyboard users to track their focus state. Adding explicit `focus-visible` outline classes on interactive elements significantly improves visual feedback for keyboard accessibility without affecting mouse users.
+**Action:** Always ensure all interactive elements (`button`, `a`) have visible focus indicators using Tailwind's `focus-visible:ring-2 focus-visible:ring-[color] focus-visible:outline-none` utility classes to meet WCAG standards.
