@@ -105,11 +105,11 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
     neurons.forEach((n1, i) => {
       neurons.forEach((n2, j) => {
         if (i !== j) {
-          const dist = n1.position.distanceTo(n2.position);
-          // Different thresholds per layer
-          const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
+          const distSq = n1.position.distanceToSquared(n2.position);
+          // Different thresholds per layer (squared for fast rejection)
+          const thresholdSq = n1.layer === 0 ? 4.0 : n1.layer === 1 ? 7.84 : 12.25; // 2.0^2, 2.8^2, 3.5^2
 
-          if (dist < threshold) {
+          if (distSq < thresholdSq) {
             // Strength based on layer (core connections stronger)
             const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
             lines.push({
@@ -257,8 +257,11 @@ const AnimatedLine = ({
 // Simulates data moving through the network
 const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
-  const color = new THREE.Color();
+
+  // Memoize reusable objects to prevent garbage collection stutters in useFrame
+  const tempObj = useMemo(() => new THREE.Object3D(), []);
+  const color = useMemo(() => new THREE.Color(), []);
+  const tempDir = useMemo(() => new THREE.Vector3(), []);
 
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
@@ -291,12 +294,12 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
     if (!meshRef.current) return;
 
     agents.forEach((agent, i) => {
-      // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-      agent.pos.add(dir.multiplyScalar(agent.speed));
+      // Move agent towards destination with easing, reusing vector
+      tempDir.subVectors(agent.dest, agent.pos).normalize();
+      agent.pos.add(tempDir.multiplyScalar(agent.speed));
 
-      // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // If close to destination, pick new destination (fast rejection with squared distance)
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) {
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);

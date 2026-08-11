@@ -1,0 +1,3 @@
+## 2024-08-11 - Math.sqrt Performance Impact in requestAnimationFrame
+**Learning:** In high-frequency render loops (`useFrame` and canvas 2D `requestAnimationFrame`), computing `Math.sqrt` for distance calculations for every particle/node interaction causes significant CPU overhead and dropped frames, especially with O(n²) complexity.
+**Action:** Always use squared distance comparisons (`distanceToSquared` in Three.js or `dx*dx + dy*dy < threshold*threshold` in raw JS) for fast rejection *before* calculating the actual distance (if needed at all). Additionally, instantiate reusable `THREE.Vector3` objects outside of `useFrame` (e.g. `useMemo`) to prevent garbage collection stutters.
