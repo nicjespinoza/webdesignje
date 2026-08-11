@@ -20,6 +20,34 @@ const ParticleBackground: React.FC = () => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
+        const createParticle = (cv: HTMLCanvasElement): CanvasParticle => ({
+            x: Math.random() * cv.width,
+            y: Math.random() * cv.height,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            baseSize: Math.random() * 2 + 0.5,
+            size: Math.random() * 2 + 0.5,
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: 0.02 + Math.random() * 0.03,
+            opacity: 0.3 + Math.random() * 0.4,
+            isHovered: false,
+        });
+
+        // Respect users who asked for reduced motion: render one static frame, no loop.
+        const reduceMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (reduceMq.matches) {
+            const ctx = canvas.getContext('2d', { alpha: true });
+            if (ctx) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                const particles: CanvasParticle[] = [];
+                const count = Math.min(60, (canvas.width * canvas.height) / 25000);
+                for (let i = 0; i < count; i++) particles.push(createParticle(canvas));
+                particles.forEach(p => drawParticleStatic(ctx, p));
+            }
+            return;
+        }
+
         const ctx = canvas.getContext('2d', { alpha: true });
         if (!ctx) return;
 
@@ -32,19 +60,6 @@ const ParticleBackground: React.FC = () => {
             bright: '251, 225, 141',
             platinum: '224, 224, 224'
         };
-
-        const createParticle = (): CanvasParticle => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.4,
-            vy: (Math.random() - 0.5) * 0.4,
-            baseSize: Math.random() * 2 + 0.5,
-            size: Math.random() * 2 + 0.5,
-            pulse: Math.random() * Math.PI * 2,
-            pulseSpeed: 0.02 + Math.random() * 0.03,
-            opacity: 0.3 + Math.random() * 0.4,
-            isHovered: false,
-        });
 
         const updateParticle = (p: CanvasParticle, others: CanvasParticle[]) => {
             const dxm = mouse.x - p.x;
@@ -78,6 +93,14 @@ const ParticleBackground: React.FC = () => {
             p.pulse += p.pulseSpeed;
         };
 
+        const drawParticleStatic = (c: CanvasRenderingContext2D, p: CanvasParticle) => {
+            // No pulse, no glow animation — just a calm dot for reduced-motion users.
+            c.beginPath();
+            c.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            c.fillStyle = `rgba(${COLORS.platinum}, ${p.opacity})`;
+            c.fill();
+        };
+
         const drawParticle = (p: CanvasParticle) => {
             const currentOpacity = (p.opacity + Math.sin(p.pulse) * 0.1) * (p.isHovered ? 1 : 0.8);
             const glowSize = p.size * 4;
@@ -100,7 +123,7 @@ const ParticleBackground: React.FC = () => {
             particles = [];
             const count = Math.min(60, (canvas.width * canvas.height) / 25000);
             for (let i = 0; i < count; i++) {
-                particles.push(createParticle());
+                particles.push(createParticle(canvas));
             }
         };
 
@@ -163,6 +186,11 @@ const ParticleBackground: React.FC = () => {
         resize();
 
         const animate = () => {
+            // Pause the loop when the tab is hidden (save battery / CPU)
+            if (document.hidden) {
+                animationFrameId = requestAnimationFrame(animate);
+                return;
+            }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
                 updateParticle(p, particles);

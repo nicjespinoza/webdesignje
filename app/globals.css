@@ -9,11 +9,9 @@
   --font-headings: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  /* Paleta de marca del portafolio */
-  --color-brand-indigo: #6366f1;
-  --color-brand-purple: #a855f7;
-  --color-brand-cyan: #06b6d4;
-  --color-brand-gold: #FBE18D;
+  /* Paleta de marca del portafolio — Dorado Líquido como primario */
+  --color-brand-gold: #C69320;
+  --color-brand-gold-light: #FBE18D;
   --color-brand-dark: #0f172a;
 }
 
@@ -24,8 +22,8 @@
   --card-foreground: #1a1b1e;
   --popover: #ffffff;
   --popover-foreground: #1a1b1e;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
+  --primary: #C69320;
+  --primary-foreground: #0a0b0d;
   --secondary: #f8fafc;
   --secondary-foreground: #1a1b1e;
   --muted: #f1f5f9;
@@ -36,8 +34,8 @@
   --destructive-foreground: #ffffff;
   --border: #e2e8f0;
   --input: #ffffff;
-  --ring: #2563eb;
-  --radius: 2rem;
+  --ring: #C69320;
+  --radius: 8px;
 }
 
 .dark {
@@ -47,8 +45,8 @@
   --card-foreground: #f8fafc;
   --popover: #14151a;
   --popover-foreground: #f8fafc;
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
+  --primary: #C69320;
+  --primary-foreground: #0a0b0d;
   --secondary: #1a1b1e;
   --secondary-foreground: #f8fafc;
   --muted: #1e1f26;
@@ -59,7 +57,7 @@
   --destructive-foreground: #ffffff;
   --border: #26272e;
   --input: #1a1b1e;
-  --ring: #3b82f6;
+  --ring: #C69320;
 }
 
 @utility shadow-soft {
