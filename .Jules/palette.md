@@ -1,0 +1,3 @@
+## 2024-10-24 - Interactive Element Accessibility Validation
+**Learning:** Adding comprehensive ARIA support requires pairing `aria-controls` on toggles with actual DOM `id`s on the targets (like `mobile-menu`). Otherwise, screen readers announce controls for non-existent containers. Focus rings must also be applied uniformly to both desktop and mobile variants to provide an equitable keyboard experience.
+**Action:** When adding accessibility features to responsive components, systematically verify that both mobile and desktop interactive elements have matching focus states and proper screen reader context, specifically checking for orphaned `aria-controls` properties.
