@@ -1,0 +1,3 @@
+## 2024-08-12 - Three.js garbage collection and distance calculations
+**Learning:** Creating reusable Three.js objects (like `new THREE.Vector3()` or `new THREE.Object3D()`) inside components but outside of `useFrame` can still cause garbage collection issues if not memoized, because React re-evaluates component-level variables on re-render. Additionally, using `distanceTo` invokes `Math.sqrt` which is expensive in high-frequency animation loops or O(n^2) generation logic.
+**Action:** Use `useMemo(() => new THREE.Vector3(), [])` to cache objects at the component level to prevent state conflicts when multiple component instances render, while still avoiding recreation across renders. Replace `distanceTo` with `distanceToSquared` for faster threshold comparisons.
