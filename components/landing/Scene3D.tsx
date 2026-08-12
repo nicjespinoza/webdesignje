@@ -105,11 +105,12 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
     neurons.forEach((n1, i) => {
       neurons.forEach((n2, j) => {
         if (i !== j) {
-          const dist = n1.position.distanceTo(n2.position);
+          // ⚡ Bolt: Use distanceToSquared to avoid expensive Math.sqrt calculation in O(n^2) loop
+          const distSq = n1.position.distanceToSquared(n2.position);
           // Different thresholds per layer
           const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
 
-          if (dist < threshold) {
+          if (distSq < threshold * threshold) {
             // Strength based on layer (core connections stronger)
             const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
             lines.push({
@@ -257,8 +258,10 @@ const AnimatedLine = ({
 // Simulates data moving through the network
 const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
-  const color = new THREE.Color();
+  // ⚡ Bolt: Memoize reusable Three.js objects to avoid recreation on re-renders while preventing state conflicts
+  const tempObj = useMemo(() => new THREE.Object3D(), []);
+  const color = useMemo(() => new THREE.Color(), []);
+  const tempDir = useMemo(() => new THREE.Vector3(), []);
 
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
@@ -292,11 +295,13 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-      agent.pos.add(dir.multiplyScalar(agent.speed));
+      // ⚡ Bolt: Reuse tempDir instead of creating a new Vector3 per frame
+      tempDir.subVectors(agent.dest, agent.pos).normalize();
+      agent.pos.add(tempDir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // ⚡ Bolt: Use distanceToSquared to avoid expensive Math.sqrt calculation
+      if (agent.pos.distanceToSquared(agent.dest) < 0.3 * 0.3) {
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);
@@ -337,7 +342,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 // Energy waves emanating from the core
 const EnergyWaves = ({ count }: { count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
+  // ⚡ Bolt: Memoize reusable Three.js object to avoid recreation on re-renders
+  const tempObj = useMemo(() => new THREE.Object3D(), []);
 
   const waves = useMemo(() => {
     const rand = mulberry32(stableSeedFromNumbers(count, 303));
