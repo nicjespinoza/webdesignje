@@ -39,7 +39,7 @@ const Navbar = ({
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-panel py-2 md:py-3 shadow-lg backdrop-blur-md' : 'py-3 md:py-6 bg-transparent'}`}>
       <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
-        <a href="#" className="flex items-center gap-2 md:gap-3 group">
+        <a href="#" aria-label="Home" className="flex items-center gap-2 md:gap-3 group focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none">
           <Logo isDark={isDark} size={40} />
           <div className="leading-none flex flex-col">
             <span className="text-base md:text-2xl font-bold tracking-tight gradient-text transition hover:brightness-125 font-sans">Joseph Espinoza</span>
@@ -54,7 +54,9 @@ const Navbar = ({
               <button
                 key={l}
                 onClick={() => toggleLang(l)}
-                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group ${
+                aria-label={`Select ${languageConfig[l].name} language`}
+                aria-current={lang === l ? 'true' : undefined}
+                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${
                   lang === l 
                   ? 'bg-[#C69320] shadow-[0_0_15px_rgba(198,147,32,0.4)]' 
                   : 'hover:bg-white/10'
@@ -91,7 +93,7 @@ const Navbar = ({
             href={`https://wa.me/50586010651?text=${encodeURIComponent("Hola Joseph, estoy visitando tu pagina web y estoy interesad@ en saber mas de tus servicios web")}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="liquid-gold-card !rounded-full !h-auto"
+            className="liquid-gold-card !rounded-full !h-auto focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none"
           >
             <div className="liquid-gold-content !py-2 !px-6 !rounded-full">
               <span className="gradient-text font-bold text-sm whitespace-nowrap">
@@ -102,7 +104,13 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2 focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -111,6 +119,7 @@ const Navbar = ({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -127,7 +136,9 @@ const Navbar = ({
                       toggleLang(l);
                       setIsOpen(false);
                     }}
-                    className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
+                    aria-label={`Select ${languageConfig[l].name} language`}
+                    aria-current={lang === l ? 'true' : undefined}
+                    className={`flex items-center bg-white/5 gap-3 px-4 py-3 border border-white/10 rounded-xl text-sm font-medium transition-all focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${lang === l ? 'border-[#C69320] text-[#FBE18D] bg-[#FBE18D]/5' : 'text-slate-300'}`}
                   >
                     <Image 
                       src={`https://flagcdn.com/w40/${languageConfig[l].flagCode}.png`} 
@@ -149,7 +160,7 @@ const Navbar = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsOpen(false)}
-                  className="w-full bg-[#C69320] text-black font-bold text-sm px-4 py-3 rounded-xl text-center hover:bg-[#FBE18D] transition-all"
+                  className="w-full bg-[#C69320] text-black font-bold text-sm px-4 py-3 rounded-xl text-center hover:bg-[#FBE18D] transition-all focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none"
                 >
                   {t('nav.contact', { lng: lang })}
                 </a>
