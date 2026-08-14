@@ -1,0 +1,3 @@
+## 2024-08-14 - Optimize Three.js calculations and object allocations
+**Learning:** In React Three Fiber components, instantiating objects (like `new THREE.Vector3()`) inside `useFrame` loops causes severe garbage collection stutters. Also, `Math.sqrt()` used by `.distanceTo()` is highly expensive in high-frequency loops.
+**Action:** Always instantiate reusable objects outside of `useFrame` using component-level hooks like `useMemo` to prevent state conflicts, and mutate them internally (e.g., using `.subVectors()` or `.copy()`). Replace `.distanceTo()` with `.distanceToSquared()` for fast rejection.
