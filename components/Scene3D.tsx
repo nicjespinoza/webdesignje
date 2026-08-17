@@ -37,9 +37,12 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
     const threshold = 2.5;
     particles.forEach((p1, i) => {
       particles.forEach((p2, j) => {
-        if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+        // OPTIMIZATION: use j > i instead of i !== j to halve iterations and avoid duplicate bidirectional pairs
+        if (j > i) {
+          // OPTIMIZATION: use distanceToSquared to avoid expensive Math.sqrt calls
+          const distSq = p1.distanceToSquared(p2);
+          // OPTIMIZATION: compare squared distance to squared threshold
+          if (distSq < threshold * threshold) {
             lines.push([p1, p2]);
           }
         }
@@ -116,7 +119,9 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
 const DataPulses = ({ radius }: { radius: number }) => {
     const count = 15;
     const meshRef = useRef<THREE.InstancedMesh>(null!);
-    const tempObj = new THREE.Object3D();
+    // OPTIMIZATION: instantiate reusable vectors outside useFrame to prevent garbage collection stutters
+    const tempObj = useMemo(() => new THREE.Object3D(), []);
+    const dir = useMemo(() => new THREE.Vector3(), []);
 
     const [agents] = useState(() =>
         new Array(count).fill(0).map(() => ({
@@ -138,10 +143,12 @@ const DataPulses = ({ radius }: { radius: number }) => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+            // OPTIMIZATION: use reusable vector instead of allocating new THREE.Vector3 per frame
+            dir.subVectors(agent.dest, agent.pos).normalize();
             agent.pos.add(dir.multiplyScalar(agent.speed));
 
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // OPTIMIZATION: use distanceToSquared (0.5^2 = 0.25) to avoid Math.sqrt
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,

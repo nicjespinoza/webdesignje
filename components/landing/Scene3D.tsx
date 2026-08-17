@@ -104,12 +104,15 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
 
     neurons.forEach((n1, i) => {
       neurons.forEach((n2, j) => {
-        if (i !== j) {
-          const dist = n1.position.distanceTo(n2.position);
+        // OPTIMIZATION: use j > i instead of i !== j to halve iterations and avoid duplicate bidirectional pairs
+        if (j > i) {
+          // OPTIMIZATION: use distanceToSquared to avoid expensive Math.sqrt calls
+          const distSq = n1.position.distanceToSquared(n2.position);
           // Different thresholds per layer
           const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
 
-          if (dist < threshold) {
+          // OPTIMIZATION: compare squared distance to squared threshold
+          if (distSq < threshold * threshold) {
             // Strength based on layer (core connections stronger)
             const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
             lines.push({
@@ -257,8 +260,10 @@ const AnimatedLine = ({
 // Simulates data moving through the network
 const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const tempObj = new THREE.Object3D();
-  const color = new THREE.Color();
+  // OPTIMIZATION: instantiate reusable vectors outside useFrame to prevent garbage collection stutters
+  const tempObj = useMemo(() => new THREE.Object3D(), []);
+  const color = useMemo(() => new THREE.Color(), []);
+  const dir = useMemo(() => new THREE.Vector3(), []);
 
   const nextRand = (agent: { seed: number }) => {
     agent.seed = (agent.seed * 1664525 + 1013904223) >>> 0;
@@ -292,11 +297,13 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
 
     agents.forEach((agent, i) => {
       // Move agent towards destination with easing
-      const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+      // OPTIMIZATION: use reusable vector instead of allocating new THREE.Vector3 per frame
+      dir.subVectors(agent.dest, agent.pos).normalize();
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // OPTIMIZATION: use distanceToSquared (0.3^2 = 0.09) to avoid Math.sqrt
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) {
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);
