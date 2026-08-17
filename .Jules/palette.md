@@ -1,0 +1,3 @@
+## 2024-08-17 - Mobile Menu and Language Selector ARIA Enhancements
+**Learning:** Icon-only buttons (like the mobile menu toggle) and visually distinct but unlabelled buttons (like the flag-based language selectors) completely lose their meaning for screen reader users. Adding `aria-label`, `aria-expanded`, and `aria-controls` for toggles, and `aria-pressed` for language selections, significantly improves semantic meaning without altering visual design.
+**Action:** Always ensure icon-only buttons have an `aria-label`. When building custom selectors or toggles, implement `aria-pressed` and `aria-expanded` attributes to properly communicate state to assistive technologies. Use `id` on target containers to pair with `aria-controls`.
