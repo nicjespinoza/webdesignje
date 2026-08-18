@@ -54,7 +54,9 @@ const Navbar = ({
               <button
                 key={l}
                 onClick={() => toggleLang(l)}
-                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group ${
+                aria-label={`Select language: ${l}`}
+                aria-pressed={lang === l}
+                className={`flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all duration-300 relative group focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none ${
                   lang === l 
                   ? 'bg-[#C69320] shadow-[0_0_15px_rgba(198,147,32,0.4)]' 
                   : 'hover:bg-white/10'
@@ -102,7 +104,13 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2 focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none rounded-lg"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -111,6 +119,7 @@ const Navbar = ({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
