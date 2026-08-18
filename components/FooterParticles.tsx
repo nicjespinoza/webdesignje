@@ -82,16 +82,22 @@ const FooterParticles: React.FC = () => {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      const CONNECTION_DISTANCE_SQ = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
+      const MOUSE_DISTANCE_SQ = MOUSE_DISTANCE * MOUSE_DISTANCE;
+
       for (let i = 0; i < particles.length; i++) {
         updateParticle(particles[i]);
         drawParticle(particles[i]);
 
-        for (let j = i; j < particles.length; j++) {
+        // ⚡ Bolt: Change j = i to j = i + 1 to avoid duplicate bidirectional pair checking
+        for (let j = i + 1; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            const distSq = dx * dx + dy * dy;
 
-            if (distance < CONNECTION_DISTANCE) {
+            // ⚡ Bolt: Fast rejection using squared distance
+            if (distSq < CONNECTION_DISTANCE_SQ) {
+                const distance = Math.sqrt(distSq);
                 ctx.beginPath();
                 const opacity = 1 - (distance / CONNECTION_DISTANCE);
                 ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`;
@@ -104,9 +110,11 @@ const FooterParticles: React.FC = () => {
 
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distSq = dx * dx + dy * dy;
 
-        if (distance < MOUSE_DISTANCE) {
+        // ⚡ Bolt: Fast rejection using squared distance
+        if (distSq < MOUSE_DISTANCE_SQ) {
+            const distance = Math.sqrt(distSq);
             ctx.beginPath();
             const opacity = 1 - (distance / MOUSE_DISTANCE);
             ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;

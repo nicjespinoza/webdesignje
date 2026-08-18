@@ -1,0 +1,3 @@
+## 2024-08-18 - Avoid Math.sqrt in high-frequency nested loops
+**Learning:** I found multiple components computing particle distances inside O(N^2) requestAnimationFrame loops using Math.sqrt() directly. This is extremely expensive on the CPU and can cause stuttering when particle counts scale.
+**Action:** Always use squared distances (distSq = dx*dx + dy*dy) and compare against squared thresholds (threshold * threshold) to quickly reject far-off particles before falling back to Math.sqrt() only when the exact distance is strictly needed for visual interpolation (e.g., opacity ratio). Also fix O(N^2) duplicate pair processing by ensuring inner loops start at j = i + 1 instead of j = i.
