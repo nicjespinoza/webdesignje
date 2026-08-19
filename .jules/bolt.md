@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimization of Three.js calculations and GC stutter
+**Learning:** In Three.js and React Three Fiber animations, creating `THREE.Object3D` or `THREE.Vector3` instances inside a `useFrame` loop triggers heavy memory allocation and garbage collection micro-stutters. Also, using `Math.sqrt` inside dense nested O(N^2) loops (e.g. `distanceTo()` or manual distance calc) creates massive CPU overhead.
+**Action:** Always instantiate reusable vectors outside the frame loop (via module scope or component-level `useMemo`), and use squared distance comparisons (`distanceToSquared()` or `dx*dx + dy*dy < threshold*threshold`) to avoid `Math.sqrt` where possible. In nested pair loops, use `j > i` instead of `i !== j` to cut iterations in half.
