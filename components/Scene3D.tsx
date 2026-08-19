@@ -35,11 +35,14 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
   const connections = useMemo(() => {
     const lines: THREE.Vector3[][] = [];
     const threshold = 2.5;
+    const thresholdSq = threshold * threshold;
     particles.forEach((p1, i) => {
       particles.forEach((p2, j) => {
-        if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+        // Optimize: avoid duplicate bidirectional checks and self-checks
+        if (j > i) {
+          // Optimize: use squared distance to avoid expensive Math.sqrt calls
+          const distSq = p1.distanceToSquared(p2);
+          if (distSq < thresholdSq) {
             lines.push([p1, p2]);
           }
         }
@@ -116,7 +119,9 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
 const DataPulses = ({ radius }: { radius: number }) => {
     const count = 15;
     const meshRef = useRef<THREE.InstancedMesh>(null!);
-    const tempObj = new THREE.Object3D();
+    // Optimize: Cache temporary objects in useMemo to prevent GC stuttering when rendering multiple instances
+    const tempObj = useMemo(() => new THREE.Object3D(), []);
+    const tempDir = useMemo(() => new THREE.Vector3(), []);
 
     const [agents] = useState(() =>
         new Array(count).fill(0).map(() => ({
@@ -138,10 +143,12 @@ const DataPulses = ({ radius }: { radius: number }) => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-            agent.pos.add(dir.multiplyScalar(agent.speed));
+            // Optimize: Re-use cached vector instead of instantiating new vectors per frame
+            tempDir.subVectors(agent.dest, agent.pos).normalize();
+            agent.pos.add(tempDir.multiplyScalar(agent.speed));
 
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // Optimize: Use distanceToSquared to avoid Math.sqrt overhead per frame
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,
