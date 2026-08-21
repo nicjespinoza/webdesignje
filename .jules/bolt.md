@@ -1,0 +1,3 @@
+## 2024-05-18 - Avoid Math.sqrt in RequestAnimationFrame Loops
+**Learning:** Math.sqrt() is a comparatively expensive operation when called inside an animation frame (e.g. 60 times a second), especially nested loops evaluating distance points O(N^2). This impacts performance and drops frame rates, particularly on mobile devices where computing resources are lower.
+**Action:** Instead of taking the root of the squared sum (dist = Math.sqrt(dx*dx + dy*dy)), we should compare the sum against the squared threshold directly (dx*dx + dy*dy < threshold * threshold). If we need the real distance, we can evaluate it after making the threshold check.
