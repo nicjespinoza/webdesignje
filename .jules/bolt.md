@@ -1,0 +1,3 @@
+## 2026-08-23 - Optimizing nested loops and distance calculations in Particle components
+**Learning:** High-frequency particle rendering loops frequently use Math.sqrt() for distance calculation and check self-comparisons/duplicate pairs in nested loops. By replacing Math.sqrt with squared distance comparisons, and ensuring nested loops start at j = i + 1, we can dramatically lower CPU overhead and increase frame rate, especially critical on mobile devices or lower-end machines.
+**Action:** When implementing spatial comparisons or physics simulations in high-frequency rendering loops (like Canvas or Three.js), always use squared distance (dx*dx + dy*dy) and ensure O(N^2) loops skip self/duplicate evaluations by setting the inner loop's initializer to j = i + 1.
