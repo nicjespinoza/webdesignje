@@ -1,0 +1,3 @@
+## 2024-08-23 - Improve mobile menu toggle accessibility
+**Learning:** Found that the mobile menu toggle button (`components/landing/Navbar.tsx`) relied solely on icons (`<Menu />` and `<X />`) and lacked proper ARIA attributes (`aria-expanded`, `aria-controls`, `aria-label`) and keyboard focus styling, making it inaccessible to screen readers and keyboard users.
+**Action:** Always ensure icon-only interactive elements have clear `aria-label`s, communicate state (`aria-expanded`), link to their controlled elements (`aria-controls` with matching `id`), and have clear keyboard focus states (`focus-visible`).
