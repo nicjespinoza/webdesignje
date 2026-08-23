@@ -98,12 +98,13 @@ const FooterParticles: React.FC = () => {
         particles[i].draw(ctx, PARTICLE_COLOR);
 
         // Draw connections to other particles (Synapses)
-        for (let j = i; j < particles.length; j++) {
+        for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < CONNECTION_DISTANCE) {
+          if (distSq < CONNECTION_DISTANCE * CONNECTION_DISTANCE) {
+            const distance = Math.sqrt(distSq);
             ctx.beginPath();
             const opacity = 1 - (distance / CONNECTION_DISTANCE);
             ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`; // Faint network lines
@@ -117,9 +118,10 @@ const FooterParticles: React.FC = () => {
         // Draw connections to Mouse (Interactive Node)
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distSq = dx * dx + dy * dy;
 
-        if (distance < MOUSE_DISTANCE) {
+        if (distSq < MOUSE_DISTANCE * MOUSE_DISTANCE) {
+          const distance = Math.sqrt(distSq);
           ctx.beginPath();
           const opacity = 1 - (distance / MOUSE_DISTANCE);
           ctx.strokeStyle = `rgba(251, 225, 141, ${opacity})`; // Gold highlight for interaction
