@@ -103,15 +103,17 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
     const lines: { points: [THREE.Vector3, THREE.Vector3]; strength: number; layer: number }[] = [];
 
     neurons.forEach((n1, i) => {
+      // Optimize: Hoist outer loop variables that only depend on n1
+      const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
+      const thresholdSq = threshold * threshold;
+      const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
+
       neurons.forEach((n2, j) => {
         if (i !== j) {
-          const dist = n1.position.distanceTo(n2.position);
-          // Different thresholds per layer
-          const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
+          // Optimize: use distanceToSquared to avoid expensive Math.sqrt calls
+          const distSq = n1.position.distanceToSquared(n2.position);
 
-          if (dist < threshold) {
-            // Strength based on layer (core connections stronger)
-            const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
+          if (distSq < thresholdSq) {
             lines.push({
               points: [n1.position, n2.position],
               strength,
@@ -295,8 +297,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
       const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
-      // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // If close to destination, pick new destination (0.3 * 0.3 = 0.09)
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) {
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);
