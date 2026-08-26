@@ -1,0 +1,3 @@
+## 2024-08-26 - Aria-controls requires explicit IDs
+**Learning:** When adding ARIA properties like `aria-controls` to interactive toggles (e.g., mobile menus via Framer Motion's `AnimatePresence`), it is critical to ensure the target container possesses the matching DOM `id`. Without it, the control becomes orphaned and negatively impacts screen readers, causing confusion rather than providing structure.
+**Action:** Always verify and append the corresponding `id` property to the target container element (e.g., `<motion.div id="mobile-menu">`) when introducing `aria-controls` on navigation toggles.
