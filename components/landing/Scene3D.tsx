@@ -105,11 +105,12 @@ const NeuralNetwork = ({ count = 120, radius = 4.5 }) => {
     neurons.forEach((n1, i) => {
       neurons.forEach((n2, j) => {
         if (i !== j) {
-          const dist = n1.position.distanceTo(n2.position);
+          // Optimize: use distanceToSquared to avoid expensive Math.sqrt in O(N^2) loop
+          const distSq = n1.position.distanceToSquared(n2.position);
           // Different thresholds per layer
           const threshold = n1.layer === 0 ? 2.0 : n1.layer === 1 ? 2.8 : 3.5;
 
-          if (dist < threshold) {
+          if (distSq < threshold * threshold) {
             // Strength based on layer (core connections stronger)
             const strength = n1.layer === 0 ? 0.6 : n1.layer === 1 ? 0.4 : 0.25;
             lines.push({
@@ -296,7 +297,8 @@ const DataPulses = ({ radius, count }: { radius: number; count: number }) => {
       agent.pos.add(dir.multiplyScalar(agent.speed));
 
       // If close to destination, pick new destination
-      if (agent.pos.distanceTo(agent.dest) < 0.3) {
+      // Optimize: use distanceToSquared to avoid expensive Math.sqrt in animation loop
+      if (agent.pos.distanceToSquared(agent.dest) < 0.09) { // 0.3 * 0.3 = 0.09
         const r1 = nextRand(agent);
         const r2 = nextRand(agent);
         const r3 = nextRand(agent);
