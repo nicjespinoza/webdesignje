@@ -1,0 +1,3 @@
+## 2024-08-28 - Optimizing distance calculation in Three.js animation loops
+**Learning:** In highly nested loops and high-frequency rendering loops (like `useFrame`), `Vector3.distanceTo()` is a bottleneck because it calculates the square root. We can significantly improve performance by comparing the squared distance `Vector3.distanceToSquared()` with the squared threshold.
+**Action:** Replace `distanceTo(other) < threshold` with `distanceToSquared(other) < threshold * threshold` in Three.js and similar 3D computation contexts, especially in `O(N^2)` loops and `requestAnimationFrame`. Also, in nested O(N^2) connection loops between identical array elements, change the check from `i !== j` to `j > i` to avoid duplicate bi-directional checks.
