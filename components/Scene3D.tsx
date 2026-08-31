@@ -37,9 +37,11 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
     const threshold = 2.5;
     particles.forEach((p1, i) => {
       particles.forEach((p2, j) => {
-        if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+        // Skip duplicate bidirectional pairs to halve iterations
+        if (j > i) {
+          // Use distanceToSquared to avoid expensive Math.sqrt
+          const distSq = p1.distanceToSquared(p2);
+          if (distSq < threshold * threshold) {
             lines.push([p1, p2]);
           }
         }
@@ -118,6 +120,8 @@ const DataPulses = ({ radius }: { radius: number }) => {
     const meshRef = useRef<THREE.InstancedMesh>(null!);
     const tempObj = new THREE.Object3D();
 
+    // Cache vector to prevent GC spikes in animation loop
+    const cachedVector = useMemo(() => new THREE.Vector3(), []);
     const [agents] = useState(() =>
         new Array(count).fill(0).map(() => ({
             pos: new THREE.Vector3(
@@ -138,10 +142,10 @@ const DataPulses = ({ radius }: { radius: number }) => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
+            const dir = cachedVector.subVectors(agent.dest, agent.pos).normalize();
             agent.pos.add(dir.multiplyScalar(agent.speed));
 
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) {
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,
