@@ -102,7 +102,11 @@ const Navbar = ({
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-slate-300 p-2" onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className="md:hidden text-slate-300 p-2"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? t('nav.close_menu', { defaultValue: 'Cerrar menú', lng: lang }) : t('nav.open_menu', { defaultValue: 'Abrir menú', lng: lang })}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
