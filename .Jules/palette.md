@@ -1,0 +1,3 @@
+## 2026-09-01 - Add aria-label and aria-expanded to mobile menu toggle
+**Learning:** Adding `aria-expanded` and `aria-controls` to mobile menu toggle buttons significantly improves screen reader navigation by clearly communicating state changes and linking the control to its target container. We must also ensure the target container actually possesses the corresponding ID. Additionally, providing an explicit `aria-label` for icon-only buttons is a fundamental accessibility requirement.
+**Action:** When creating toggle buttons for collapsible menus, always include `aria-label` (e.g., "Toggle menu"), `aria-expanded={isOpen}`, and `aria-controls="menu-id"`, ensuring the menu container has `id="menu-id"`.
