@@ -1,0 +1,3 @@
+## 2026-05-21 - Accessible Icon Buttons in High-Contrast Theme
+**Learning:** Found that some icon-only buttons (like mobile menu toggle and modal close buttons) lacked `aria-label` attributes and focus ring indicators, making them invisible to screen readers and difficult to navigate for keyboard users on the custom dark theme.
+**Action:** Added `aria-label`, `aria-expanded`, and `aria-controls` where appropriate, along with specific Tailwind classes (`focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none`) that match the primary gold theme color to provide consistent and visible keyboard accessibility.
