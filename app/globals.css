@@ -226,6 +226,106 @@ h3,
   border: 2px solid #000000;
 }
 
+/* ============================================================
+   Hero Agente Cyborg (WebDesignJE) — animación de "vida"
+   Imagen: /robot2.jpg (piel sintética estilo Yo, Robot)
+   ============================================================ */
+.hero-agent {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.hero-agent__img {
+  height: 92vh;
+  max-height: 880px;
+  aspect-ratio: 200 / 279;
+  object-fit: contain;
+  filter: drop-shadow(0 0 60px rgba(251, 225, 141, 0.12));
+  transform-origin: 50% 70%;
+  animation: hero-agent-breathe 6s ease-in-out infinite;
+}
+.hero-agent__glow {
+  position: absolute;
+  inset: -12% -8%;
+  background: radial-gradient(closest-side, rgba(251, 225, 141, 0.20), transparent 70%);
+  filter: blur(30px);
+  z-index: -1;
+  animation: hero-agent-glowpulse 6s ease-in-out infinite;
+}
+.hero-agent__eyes {
+  position: absolute;
+  left: 50%;
+  top: 31%;
+  transform: translateX(-50%);
+  width: 46%;
+  height: 9%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(251, 225, 141, 0.55), transparent 75%);
+  mix-blend-mode: screen;
+  animation: hero-agent-eyeglow 4s ease-in-out infinite, hero-agent-blink 5s infinite;
+}
+.hero-agent__lines {
+  position: absolute;
+  left: 50%;
+  top: 74%;
+  transform: translateX(-50%);
+  width: 42%;
+  height: 16%;
+  background: repeating-linear-gradient(90deg, transparent 0 18%, rgba(251, 225, 141, 0.4) 18% 20%, transparent 20% 38%);
+  mix-blend-mode: screen;
+  animation: hero-agent-eyeglow 3s ease-in-out infinite;
+}
+.hero-agent__speaking .hero-agent__img { animation: hero-agent-talk 1.2s ease-in-out infinite; }
+.hero-agent__speaking .hero-agent__glow {
+  animation: hero-agent-glowpulse 1.5s ease-in-out infinite;
+  background: radial-gradient(closest-side, rgba(251, 225, 141, 0.35), transparent 70%);
+}
+
+@keyframes hero-agent-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.015); } }
+@keyframes hero-agent-glowpulse { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.06); opacity: 1; } }
+@keyframes hero-agent-eyeglow { 0%, 100% { opacity: .5; } 50% { opacity: .95; } }
+@keyframes hero-agent-blink {
+  0%, 93%, 100% { transform: translateX(-50%) scaleY(1); }
+  96%, 98% { transform: translateX(-50%) scaleY(0.08); }
+}
+@keyframes hero-agent-talk { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02) translateY(-4px); } }
+
+/* Sin animación si el usuario lo pide */
+@media (prefers-reduced-motion: reduce) {
+  .hero-agent__img,
+  .hero-agent__glow,
+  .hero-agent__eyes,
+  .hero-agent__lines,
+  .hero-agent__speaking .hero-agent__img { animation: none !important; }
+}
+
+/* Botón de voz del hero (accesible, puntero activo) */
+.hero-listen {
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  background: rgba(251, 225, 141, 0.08);
+  border: 1px solid rgba(251, 225, 141, 0.4);
+  color: var(--color-brand-gold-light);
+  font-size: 15px;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.hero-listen:hover { transform: translateY(-2px); }
+.hero-listen.is-active { background: rgba(251, 225, 141, 0.22); }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #FBE18D;
 }

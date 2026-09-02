@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Code2, ExternalLink, FileText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
@@ -13,6 +13,11 @@ import ProjectModal from './ProjectModal';
 const ProjectsSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  // Subtle kage-style parallax: the grid drifts a few px as it crosses the viewport.
+  // Single scroll listener, GPU-composited (transform only). Disabled under reduced motion.
+  const { scrollYProgress } = useScroll();
+  const gridY = useTransform(scrollYProgress, [0, 1], [24, -24]);
 
   const handleProjectClick = (project: Project) => {
     setSelectedProject(project);
@@ -48,7 +53,7 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" style={{ y: gridY }}>
           {(() => {
             const itemsData = t('projects.items', { returnObjects: true, lng: lang });
             const items: (Record<string, unknown> | Project)[] = Array.isArray(itemsData) ? (itemsData as Record<string, unknown>[]) : projects;
@@ -139,7 +144,7 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
               );
             });
           })()}
-        </div>
+        </motion.div>
       </div>
 
       <ProjectModal 

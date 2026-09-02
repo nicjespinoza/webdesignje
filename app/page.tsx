@@ -15,7 +15,7 @@ import FooterSection from "@/components/landing/FooterSection";
 import ParticleBackground from "@/components/ParticleBackground";
 import { Language } from "@/components/landing/types";
 import { motion } from "framer-motion";
-import { fadeInUp } from "@/components/landing/animations";
+import { blurReveal, dissolve } from "@/components/landing/animations";
 
 export default function RootPage() {
   const { i18n } = useTranslation();
@@ -45,11 +45,11 @@ export default function RootPage() {
           toggleLang={(newLang) => toggleLang(newLang)}
         />
 
-        {/* 1. Hero (Captación) - Aparece de inmediato */}
+        {/* 1. Hero (Captación) - Aparece de inmediato con disolución del glow */}
         <motion.div
-          initial="visible"
+          initial="hidden"
           animate="visible"
-          variants={fadeInUp}
+          variants={dissolve}
         >
           <Hero />
         </motion.div>
@@ -59,7 +59,7 @@ export default function RootPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
+          variants={blurReveal}
         >
           <ServicesSection lang={lang} />
         </motion.div>
@@ -69,7 +69,7 @@ export default function RootPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
+          variants={blurReveal}
         >
           <ProjectsSection lang={lang} />
         </motion.div>
@@ -79,7 +79,7 @@ export default function RootPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
+          variants={blurReveal}
         >
           <ClientsSection lang={lang} />
         </motion.div>
@@ -89,7 +89,7 @@ export default function RootPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
+          variants={blurReveal}
         >
           <WhyChooseSection lang={lang} />
         </motion.div>
@@ -99,7 +99,7 @@ export default function RootPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
+          variants={blurReveal}
         >
           <AboutSection lang={lang} />
         </motion.div>
@@ -109,7 +109,7 @@ export default function RootPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
+          variants={blurReveal}
         >
           <ContactSection lang={lang} />
         </motion.div>
@@ -118,7 +118,7 @@ export default function RootPage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
+          variants={blurReveal}
         >
           <FooterSection lang={lang} />
         </motion.div>
