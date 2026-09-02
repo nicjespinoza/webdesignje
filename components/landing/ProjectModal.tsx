@@ -739,7 +739,7 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors shrink-0"
+              className="p-2 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors shrink-0 focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none"
               aria-label="Cerrar"
             >
               <X size={18} />

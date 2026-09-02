@@ -379,7 +379,7 @@ const AdminDashboardPage = () => {
                     {activeTab === 'leads' ? (selectedItem.fullName || selectedItem.clientName) : (selectedItem.clientName || selectedItem.fullName)}
                   </h2>
                 </div>
-                <button onClick={() => setSelectedItem(null)} className="p-2 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors">
+                <button onClick={() => setSelectedItem(null)} className="p-2 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-[#C69320] focus-visible:outline-none" aria-label="Cerrar modal">
                   <X size={18} />
                 </button>
               </div>
