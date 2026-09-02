@@ -35,11 +35,14 @@ const NeuralNetwork = ({ count = 60, radius = 4 }) => {
   const connections = useMemo(() => {
     const lines: THREE.Vector3[][] = [];
     const threshold = 2.5;
+    const thresholdSq = threshold * threshold;
     particles.forEach((p1, i) => {
       particles.forEach((p2, j) => {
-        if (i !== j) {
-          const dist = p1.distanceTo(p2);
-          if (dist < threshold) {
+        // Optimize: use j > i to halve N^2 iterations for symmetric connections
+        if (j > i) {
+          // Optimize: use distanceToSquared to avoid expensive Math.sqrt calculation
+          const distSq = p1.distanceToSquared(p2);
+          if (distSq < thresholdSq) {
             lines.push([p1, p2]);
           }
         }
@@ -134,14 +137,19 @@ const DataPulses = ({ radius }: { radius: number }) => {
         }))
     );
 
+    // Cache the reusable vector outside of useFrame to prevent object allocation/GC spikes per frame
+    const tempDir = useMemo(() => new THREE.Vector3(), []);
+
     useFrame(() => {
         if (!meshRef.current) return;
 
         agents.forEach((agent, i) => {
-            const dir = new THREE.Vector3().subVectors(agent.dest, agent.pos).normalize();
-            agent.pos.add(dir.multiplyScalar(agent.speed));
+            // Optimize: reuse tempDir instead of creating a new THREE.Vector3 each frame
+            tempDir.subVectors(agent.dest, agent.pos).normalize();
+            agent.pos.add(tempDir.multiplyScalar(agent.speed));
 
-            if (agent.pos.distanceTo(agent.dest) < 0.5) {
+            // Optimize: use distanceToSquared to avoid Math.sqrt
+            if (agent.pos.distanceToSquared(agent.dest) < 0.25) { // 0.5 squared
                 agent.dest.set(
                     (Math.random() - 0.5) * radius * 2,
                     (Math.random() - 0.5) * radius * 2,

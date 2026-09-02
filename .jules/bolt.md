@@ -1,0 +1,3 @@
+## 2023-10-27 - Three.js O(N^2) loops & GC Spikes
+**Learning:** Using `i !== j` in N^2 connection loops creates duplicate bidirectional lines (halving efficiency). In `useFrame`, `new THREE.Vector3().subVectors()` creates object churn per agent every frame causing garbage collection spikes. Using `distanceTo` requires an expensive `Math.sqrt`.
+**Action:** Always use `j > i` for symmetric bidirectional loop evaluation. Pre-allocate vectors in `useMemo` for loops or use single cached/mutated instances within `useFrame` via `.subVectors` on existing instances. Use `.distanceToSquared` to compare against `threshold * threshold` to avoid sqrt calculation.
