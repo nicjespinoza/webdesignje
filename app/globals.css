@@ -192,6 +192,15 @@ h3,
   filter: drop-shadow(0 2px 4px rgba(198, 147, 32, 0.3)) !important;
 }
 
+.gradient-text-platinum {
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 40%, #e2e8f0 60%, #94a3b8 100%) !important;
+  background-size: 100% 200% !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
 /* ============================================================
    Animaciones personalizadas
    ============================================================ */

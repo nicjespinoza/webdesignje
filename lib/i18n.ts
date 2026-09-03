@@ -16,7 +16,7 @@ const resources = {
         badge: 'AVAILABLE FOR NEW PROJECTS',
         title: 'Secure the Future of Your Business with Intelligent Technology',
         subtitle: 'I implement modern web infrastructures and automated systems that free up your time and accelerate your productivity.',
-        cta: 'Get a Free Quote',
+        cta: 'Request Tech Diagnostic',
       },
       stack: {
         badge: 'Technologies',
@@ -101,10 +101,10 @@ const resources = {
         },
         items: [
           {
-            title: 'Medical History',
+            title: 'Medical History AI',
             description: 'Multi-specialty electronic health record system. Includes real-time synchronization, 3D anatomy visualization and PDF report generation, appointment scheduling, billing, and AI integration.',
             features: [
-              'Increases consultation efficiency by up to 40%',
+              'Increases consultation efficiency by up to 80%',
               'Improves diagnostic accuracy with AI',
               'Reduces medical records management errors',
               'Retains patients with a secure access portal',
@@ -554,6 +554,9 @@ const resources = {
           mainProblem: "Describe your problem or need"
         }
       },
+      footer: {
+        copyright: "Joseph Espinoza - All rights reserved."
+      },
     },
   },
   es: {
@@ -569,7 +572,7 @@ const resources = {
         badge: 'DISPONIBLE PARA NUEVOS PROYECTOS',
         title: 'Asegura el futuro de tu negocio con tecnología inteligente',
         subtitle: 'Implemento infraestructuras web modernas y sistemas automatizados que liberan tu tiempo y aceleran tu productividad.',
-        cta: 'Cotización Gratis',
+        cta: 'Solicitar Diagnóstico Tecnológico',
       },
       stack: {
         badge: 'Tecnologías',
@@ -654,10 +657,10 @@ const resources = {
         },
         items: [
           {
-            title: 'Historia Clínica',
-            description: 'Sistema de historias clínicas para múltiples especialidades. Incluye sincronización en tiempo real, visualización 3D de anatomía y generación de reportes PDF, programación de citas, facturación, Integración con IA.',
+            title: 'Historia Clínica AI',
+            description: 'Sistema de historias clínicas para múltiples especialidades. Incluye sincronización en tiempo real, visualización 3D de anatomía y generación de reportes PDF, programación de citas, facturación e Integración con IA.',
             features: [
-              'Aumenta la eficiencia en la consulta hasta un 40%',
+              'Aumenta la eficiencia en la consulta hasta un 80%',
               'Mejora la precisión diagnóstica con IA',
               'Reduce errores en la gestión de expedientes',
               'Fideliza pacientes con un portal de acceso seguro',
@@ -1106,6 +1109,9 @@ const resources = {
           mainProblem: "Describe tu problema o necesidad"
         }
       },
+      footer: {
+        copyright: "Joseph Espinoza - Todos los derechos reservados."
+      },
     },
   },
   fr: {
@@ -1121,7 +1127,7 @@ const resources = {
         badge: 'DISPONIBLE POUR DE NOUVEAUX PROJETS',
         title: 'Assurez l\'avenir de votre entreprise grâce à la technologie intelligente',
         subtitle: 'J\'implémente des infrastructures web modernes et des systèmes automatisés qui libèrent votre temps et accélèrent votre productivité.',
-        cta: 'Devis Gratuit',
+        cta: 'Demander un Diagnostic Tech',
       },
       stack: {
         badge: 'Technologies',
@@ -1209,7 +1215,7 @@ const resources = {
             title: 'Medical AI History',
             description: 'Système complet de dossiers médicaux pour plusieurs spécialités. Comprend la synchronisation en temps réel, la visualisation interactive de l\'anatomie en 3D et la génération de rapports PDF dynamiques, la prise de rendez-vous, la facturation, l\'intégration de l\'IA pour le diagnostic et le traitement.',
             features: [
-              'Augmente l\'efficacité des consultations jusqu\'à 40%',
+              'Augmente l\'efficacité des consultations jusqu\'à 80%',
               'Améliore la précision du diagnostic grâce à l\'IA',
               'Réduit les erreurs de gestion des dossiers',
               'Fidélise les patients avec un portail d\'accès sécurisé',
@@ -1658,6 +1664,9 @@ const resources = {
           mainProblem: "Décrivez votre problème ou besoin"
         }
       },
+      footer: {
+        copyright: "Joseph Espinoza - Tous droits réservés."
+      },
     },
   },
   zh: {
@@ -1673,7 +1682,7 @@ const resources = {
         badge: '可承接新專案',
         title: '用智慧科技保障您企業的未來',
         subtitle: '我部署現代化的網路基礎設施與自動化系統，釋放您的時間並加速您的生產力。',
-        cta: '免費報價',
+        cta: '申請技術診斷',
       },
       stack: {
         badge: '技術',
@@ -1761,11 +1770,11 @@ const resources = {
             title: '醫療 AI 病歷',
             description: '適用於多種專科的綜合醫療記錄系統。包括實時同步、交互式 3D 解剖可視化和動態 PDF 報告生成、預約安排、計費、用於診斷和治療的 AI 集成。',
             features: [
-              '提高诊疗效率高达 40%',
-              '利用 AI 提高诊断准确性',
-              '减少病历管理错误',
-              '通过安全访问门户留住患者',
-              '自动生成报告和处方'
+              '提高診療效率高達 80%',
+              '利用 AI 提高診斷準確性',
+              '減少病歷管理錯誤',
+              '通過安全訪問門戶留住患者',
+              '自動生成報告和處方'
             ]
           },
           {
@@ -2209,6 +2218,9 @@ const resources = {
           projectType: "請選擇專案類型",
           mainProblem: "請描述您的問題或需求"
         }
+      },
+      footer: {
+        copyright: "Joseph Espinoza - 版權所有。"
       },
     },
   },

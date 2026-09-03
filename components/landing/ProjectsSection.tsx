@@ -9,6 +9,8 @@ import { projects } from '@/data/constants';
 import { fadeInUp } from '@/components/landing/animations';
 import { Language, Project } from '@/components/landing/types';
 import ProjectModal from './ProjectModal';
+import SectionHeader from '@/components/landing/SectionHeader';
+import GradientTitle from '@/components/landing/GradientTitle';
 
 const ProjectsSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
@@ -19,39 +21,51 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
   const { scrollYProgress } = useScroll();
   const gridY = useTransform(scrollYProgress, [0, 1], [24, -24]);
 
-  const handleProjectClick = (project: Project) => {
-    setSelectedProject(project);
+  const projectMetaByLang: Record<Language, Array<{ categoryBadge: string; metric: string; metricLabel: string }>> = {
+    es: [
+      { categoryBadge: 'HealthTech & IA', metric: '+80%', metricLabel: 'Eficiencia Clínica' },
+      { categoryBadge: 'Retail & POS', metric: '-85%', metricLabel: 'Descuadre Stock' },
+      { categoryBadge: 'B2B CRM & SaaS', metric: '3.2x', metricLabel: 'Velocidad de Cierre' },
+      { categoryBadge: 'Luxury E-Commerce', metric: '+140%', metricLabel: 'Conversión Móvil' },
+      { categoryBadge: 'Booking & WhatsApp IA', metric: '-90%', metricLabel: 'Ausencias / No-Shows' },
+      { categoryBadge: 'EdTech & IA Predictiva', metric: '98%', metricLabel: 'Precisión Predictiva' },
+    ],
+    en: [
+      { categoryBadge: 'HealthTech & AI', metric: '+80%', metricLabel: 'Clinical Efficiency' },
+      { categoryBadge: 'Retail & POS', metric: '-85%', metricLabel: 'Stock Discrepancy' },
+      { categoryBadge: 'B2B CRM & SaaS', metric: '3.2x', metricLabel: 'Deal Closing Speed' },
+      { categoryBadge: 'Luxury E-Commerce', metric: '+140%', metricLabel: 'Mobile Conversion' },
+      { categoryBadge: 'Booking & WhatsApp AI', metric: '-90%', metricLabel: 'No-Shows' },
+      { categoryBadge: 'EdTech & Predictive AI', metric: '98%', metricLabel: 'Predictive Accuracy' },
+    ],
+    fr: [
+      { categoryBadge: 'Santé & IA', metric: '+80%', metricLabel: 'Efficacité Clinique' },
+      { categoryBadge: 'Commerce & POS', metric: '-85%', metricLabel: 'Écarts d\'Inventaire' },
+      { categoryBadge: 'CRM B2B & SaaS', metric: '3.2x', metricLabel: 'Vitesse de Clôture' },
+      { categoryBadge: 'E-Commerce de Luxe', metric: '+140%', metricLabel: 'Conversion Mobile' },
+      { categoryBadge: 'Réservations & IA', metric: '-90%', metricLabel: 'Absences' },
+      { categoryBadge: 'EdTech & IA Prédictive', metric: '98%', metricLabel: 'Précision Prédictive' },
+    ],
+    zh: [
+      { categoryBadge: '智慧醫療與AI', metric: '+80%', metricLabel: '診所運營效率' },
+      { categoryBadge: '零售與POS系統', metric: '-85%', metricLabel: '庫存損耗率' },
+      { categoryBadge: '企業級CRM與SaaS', metric: '3.2x', metricLabel: '成交簽單速度' },
+      { categoryBadge: '頂級電商平台', metric: '+140%', metricLabel: '行動端轉換率' },
+      { categoryBadge: '智慧預約與AI助理', metric: '-90%', metricLabel: '缺席爽約率' },
+      { categoryBadge: '教育科技與預測AI', metric: '98%', metricLabel: '預測模型精準度' },
+    ],
   };
+
+  const currentMetaList = projectMetaByLang[lang] || projectMetaByLang.es;
 
   return (
     <section id="projects" className="py-12 md:py-16">
       <div className="container mx-auto px-4 md:px-6">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-          className="flex flex-col items-center mb-16 relative z-10"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-[#FBE18D] text-xs font-bold mb-4 shadow-[0_0_20px_rgba(198,147,32,0.2)]">
-            <Code2 size={14} /> {t('projects.badge', { lng: lang })}
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-center">
-             {(() => {
-              const fullTitle = t('projects.title', { lng: lang });
-              if (fullTitle.includes(' ')) {
-                const parts = fullTitle.split(' ');
-                const first = parts[0];
-                const rest = parts.slice(1).join(' ');
-                return <><span className="text-white">{first}</span> <span className="gradient-text">{rest}</span></>;
-              }
-              return <span className="gradient-text">{fullTitle}</span>;
-            })()}
-          </h2>
-          <p className="text-white mt-4 max-w-xl text-center text-lg">
-            {t('projects.subtitle', { lng: lang })}
-          </p>
-        </motion.div>
+        <SectionHeader
+          badge={{ icon: <Code2 size={14} />, text: t('projects.badge', { lng: lang }) }}
+          title={<GradientTitle text={t('projects.title', { lng: lang })} />}
+          subtitle={t('projects.subtitle', { lng: lang })}
+        />
 
         <motion.div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" style={{ y: gridY }}>
           {(() => {
@@ -68,6 +82,7 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
               const projectData = projects[index] || projects[0];
               const translatedItem = item as TranslatedProjectItem;
               const itemFeatures = Array.isArray(translatedItem?.features) ? translatedItem.features : projectData.features;
+              const currentMeta = currentMetaList[index] || currentMetaList[0];
               
               return (
                 <motion.div
@@ -77,15 +92,18 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
                   whileInView="visible"
                   viewport={{ once: true }}
                   className="liquid-gold-card cursor-pointer group"
-                  onClick={() => handleProjectClick({ 
+                  onClick={() => setSelectedProject({ 
                     ...projectData, 
                     title: (item?.title as string) || projectData.title, 
                     description: (item?.description as string) || projectData.description,
-                    features: itemFeatures
+                    features: itemFeatures,
+                    categoryBadge: currentMeta.categoryBadge,
+                    metric: currentMeta.metric,
+                    metricLabel: currentMeta.metricLabel
                   })}
                 >
                   <div className="liquid-gold-content p-0">
-                    <div className="h-48 relative group overflow-hidden">
+                    <div className="h-52 relative group overflow-hidden">
                       <Image
                         src={projectData.imageUrl}
                         alt={(item?.title as string) || 'Project'}
@@ -93,6 +111,29 @@ const ProjectsSection = ({ lang }: { lang: Language }) => {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      
+                      {/* Badge de Categoría Superior Dinámico por Idioma */}
+                      {currentMeta?.categoryBadge && (
+                        <div className="absolute top-3 left-3 z-10">
+                          <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-black/75 text-[#FBE18D] border border-[#C69320]/40 backdrop-blur-md shadow-md">
+                            {currentMeta.categoryBadge}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Badge de Impacto / Métrica ROI Inferior Dinámico por Idioma */}
+                      {currentMeta?.metric && (
+                        <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/85 border border-[#C69320]/50 backdrop-blur-md shadow-lg">
+                          <span className="text-xs sm:text-sm font-extrabold bg-gradient-to-r from-[#C69320] to-[#FBE18D] bg-clip-text text-transparent">
+                            {currentMeta.metric}
+                          </span>
+                          <span className="text-[9px] uppercase font-semibold text-slate-300 tracking-tight">
+                            {currentMeta.metricLabel}
+                          </span>
+                        </div>
+                      )}
+
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <ExternalLink className="text-[#FBE18D]" size={32} />
                       </div>

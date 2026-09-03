@@ -2,8 +2,10 @@ import React from 'react';
 import { Github, Facebook, Instagram } from 'lucide-react';
 import { Language } from '@/components/landing/types';
 import Logo from '@/components/ui/Logo';
+import { useTranslation } from 'react-i18next';
 
-const FooterSection = ({}: { lang: Language }) => {
+const FooterSection = ({ lang }: { lang: Language }) => {
+  const { t } = useTranslation();
   return (
     <footer className="py-12 relative z-10 border-t border-white/5 bg-transparent overflow-hidden">
       <div className="container mx-auto px-6 flex flex-col items-center gap-6 relative z-10">
@@ -38,7 +40,7 @@ const FooterSection = ({}: { lang: Language }) => {
 
         {/* Copyright Text */}
         <div className="text-[#FBE18D]/70 text-xs md:text-sm text-center">
-          &copy; {new Date().getFullYear()} Joseph Espinoza - Todos los derechos reservados.
+          &copy; {new Date().getFullYear()} {t('footer.copyright', { lng: lang })}
         </div>
 
       </div>

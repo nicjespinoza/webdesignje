@@ -11,7 +11,7 @@ import {
   LayoutDashboard, LogOut, Star, Inbox, Trash2, AlertTriangle,
   Building2, Phone, Mail, Globe, DollarSign, Calendar, Clock,
   Target, Lightbulb, Users, TrendingUp, X,
-  MessageSquare, Send, CheckCircle2, Search, type LucideIcon
+  MessageSquare, Send, CheckCircle2, Search, Sparkles, Copy, RefreshCw, type LucideIcon
 } from 'lucide-react';
 
 const STATUSES = ['Nuevo', 'En Contacto', 'Convertido', 'Archivado'] as const;
@@ -81,7 +81,66 @@ const AdminDashboardPage = () => {
   const [deleteTarget, setDeleteTarget] = useState<LeadData | null>(null);
   const [selectedItem, setSelectedItem] = useState<LeadData | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+  const [copiedPitch, setCopiedPitch] = useState(false);
   const router = useRouter();
+
+  const handleGenerateAiAnalysis = async (item: LeadData) => {
+    setIsGeneratingAi(true);
+    setAiAnalysis(null);
+    try {
+      const clientName = activeTab === 'leads' ? (item.fullName || 'Cliente') : (item.clientName || 'Cliente');
+      const proj = activeTab === 'projects' ? item.projectName : (item.projectType === 'Otro' ? item.otherProjectType : item.projectType);
+      
+      const prompt = `Analiza este prospecto/lead para Joseph Espinoza (WebDesignJE):
+- Cliente: ${clientName}
+- Empresa: ${item.companyName || 'No especificada'}
+- Tipo de proyecto: ${proj || 'Desarrollo Web / IA'}
+- Presupuesto estimado: ${item.budget || 'A definir'}
+- Problema principal: ${item.mainProblem || 'No especificado'}
+- Desafíos/Dolores: ${item.painPoints?.join(', ') || 'No especificados'}
+- Funcionalidades deseadas: ${item.selectedFeatures?.join(', ') || 'No especificadas'}
+- Plazo: ${item.deadline || item.timeline || 'Flexible'}
+
+Por favor genera en texto conciso y profesional:
+1. 🎯 Diagnóstico & Score del Lead (Alto/Medio/Bajo valor).
+2. 💡 Arquitectura recomendada (Stack sugerido y alcance).
+3. 💬 Pitch de Cierre para WhatsApp/Email (Un mensaje directo, empático y persuasivo listo para enviarle).`;
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setAiAnalysis(data.content || data.message || 'No se pudo generar el análisis.');
+      } else {
+        setAiAnalysis('Error al conectar con el asistente de IA.');
+      }
+    } catch (err) {
+      console.error('Error generating AI analysis:', err);
+      setAiAnalysis('Error al procesar el análisis.');
+    } finally {
+      setIsGeneratingAi(false);
+    }
+  };
+
+  const getSmartWhatsAppUrl = (item: LeadData) => {
+    const name = activeTab === 'leads' ? (item.fullName || 'estimad@') : (item.clientName || 'estimad@');
+    const proj = activeTab === 'projects' ? item.projectName : (item.projectType === 'Otro' ? item.otherProjectType : item.projectType) || 'tu proyecto digital';
+    const problem = item.mainProblem ? ` el desafío que mencionaste sobre "${item.mainProblem.slice(0, 80)}..."` : 'tu requerimiento';
+    const phone = item.phone || item.clientPhone || '';
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+
+    const text = `Hola ${name}, te saluda Joseph Espinoza de WebDesignJE. Estuve revisando los detalles de ${proj} y ${problem}. Tengo lista una propuesta técnica de solución. ¿Tienes 5 minutos para coordinar una breve llamada?`;
+
+    return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
+  };
 
   useEffect(() => {
     let unsubLeads: (() => void) | null = null;
@@ -508,6 +567,56 @@ const AdminDashboardPage = () => {
                   </Section>
                 )}
 
+                {/* AI Sales Copilot Section */}
+                <Section title="Copilot de Ventas & Diagnóstico IA">
+                  <div className="bg-[#121826] border border-[#C69320]/30 rounded-xl p-3.5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-[#FBE18D] flex items-center gap-1.5">
+                        <Sparkles size={14} className="text-[#C69320]" /> Análisis & Pitch Estratégico
+                      </span>
+                      <button
+                        onClick={() => handleGenerateAiAnalysis(selectedItem)}
+                        disabled={isGeneratingAi}
+                        className="px-2.5 py-1 bg-[#C69320]/20 hover:bg-[#C69320]/30 text-[#FBE18D] border border-[#C69320]/40 rounded-lg text-[11px] font-bold flex items-center gap-1 transition-all disabled:opacity-50"
+                      >
+                        {isGeneratingAi ? <RefreshCw size={11} className="animate-spin" /> : <Sparkles size={11} />}
+                        {aiAnalysis ? 'Regenerar' : 'Generar Análisis'}
+                      </button>
+                    </div>
+
+                    {isGeneratingAi && (
+                      <div className="py-4 text-center">
+                        <div className="w-5 h-5 border-2 border-[#C69320] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                        <p className="text-[11px] text-slate-400">Analizando requerimientos y redactando propuesta...</p>
+                      </div>
+                    )}
+
+                    {aiAnalysis && !isGeneratingAi && (
+                      <div className="space-y-2">
+                        <div className="bg-black/40 border border-white/5 p-3 rounded-lg text-xs text-slate-200 whitespace-pre-line leading-relaxed font-sans max-h-60 overflow-y-auto">
+                          {aiAnalysis}
+                        </div>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(aiAnalysis);
+                            setCopiedPitch(true);
+                            setTimeout(() => setCopiedPitch(false), 2000);
+                          }}
+                          className="w-full py-1.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-lg text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors border border-white/5"
+                        >
+                          <Copy size={12} /> {copiedPitch ? '¡Copiado al portapapeles!' : 'Copiar propuesta'}
+                        </button>
+                      </div>
+                    )}
+
+                    {!aiAnalysis && !isGeneratingAi && (
+                      <p className="text-[11px] text-slate-400">
+                        Haz clic en &quot;Generar Análisis&quot; para obtener un diagnóstico del lead, stack recomendado y mensaje de cierre personalizado para WhatsApp.
+                      </p>
+                    )}
+                  </div>
+                </Section>
+
                 {/* Extra details */}
                 {selectedItem.extraDetails && (
                   <Section title="Detalles Extra">
@@ -527,10 +636,10 @@ const AdminDashboardPage = () => {
                     className="flex-1 py-2.5 bg-red-500/5 hover:bg-red-500/10 text-red-400 border border-red-500/10 rounded-xl transition-colors text-xs font-bold flex items-center justify-center gap-2">
                     <Trash2 size={14} /> Eliminar
                   </button>
-                  <a href={`https://wa.me/${selectedItem.phone || selectedItem.clientPhone || ''}?text=Hola%20${encodeURIComponent(activeTab === 'leads' ? (selectedItem.fullName || '') : (selectedItem.clientName || ''))}%2C%20vi%20tu%20solicitud%20en%20WebDesignJE`}
+                  <a href={getSmartWhatsAppUrl(selectedItem)}
                     target="_blank" rel="noopener noreferrer"
                     className="flex-1 py-2.5 bg-gradient-to-r from-[#C69320] to-[#FBE18D] text-black rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-[#C69320]/25 transition-all">
-                    <Send size={14} /> WhatsApp
+                    <Send size={14} /> WhatsApp Personalizado
                   </a>
                 </div>
               </div>

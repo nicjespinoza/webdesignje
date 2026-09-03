@@ -7,6 +7,8 @@ import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { Language } from '@/components/landing/types';
 import { fadeInUp, staggerContainer } from './animations';
+import SectionHeader from '@/components/landing/SectionHeader';
+import GradientTitle from '@/components/landing/GradientTitle';
 
 interface Client {
   id: number;
@@ -42,34 +44,11 @@ const ClientsSection = ({ lang }: { lang: Language }) => {
   return (
     <section id="clients" className="py-16 md:py-24 relative overflow-hidden bg-transparent">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-
-        {/* Header Elegante */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-          className="flex flex-col items-center mb-12 md:mb-20 text-center"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320]/20 bg-[#FBE18D]/5 text-[#FBE18D] text-xs font-bold mb-4 tracking-widest uppercase shadow-inner">
-            <Star size={14} className="fill-[#F5D76E]" /> {t('clients.badge', { lng: lang })}
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-center">
-            {(() => {
-              const fullTitle = t('clients.title', { lng: lang });
-              if (fullTitle.includes(' ')) {
-                const parts = fullTitle.split(' ');
-                const first = parts[0];
-                const rest = parts.slice(1).join(' ');
-                return <><span className="text-white">{first}</span> <span className="gradient-text">{rest}</span></>;
-              }
-              return <span className="gradient-text">{fullTitle}</span>;
-            })()}
-          </h2>
-          <p className="text-white mt-2 max-w-2xl text-sm md:text-lg">
-            {t('clients.subtitle', { lng: lang })}
-          </p>
-        </motion.div>
+        <SectionHeader
+          badge={{ icon: <Star size={14} className="fill-[#F5D76E]" />, text: t('clients.badge', { lng: lang }) }}
+          title={<GradientTitle text={t('clients.title', { lng: lang })} />}
+          subtitle={t('clients.subtitle', { lng: lang })}
+        />
 
         {/* Grid de Clientes */}
         <motion.div

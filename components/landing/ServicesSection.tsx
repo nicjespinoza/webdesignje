@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { services } from '@/data/constants';
 import { fadeInUp, staggerContainer } from '@/components/landing/animations';
 import { Language } from '@/components/landing/types';
+import SectionHeader from '@/components/landing/SectionHeader';
+import GradientTitle from '@/components/landing/GradientTitle';
 
 const ServicesSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
@@ -38,35 +40,11 @@ const ServicesSection = ({ lang }: { lang: Language }) => {
   return (
     <section id="services" className="py-12 md:py-16 relative" key={lang}>
       <div className="container mx-auto px-4 md:px-6">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={fadeInUp}
-          className="flex flex-col items-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C69320] bg-[#FBE18D]/10 text-xs font-bold mb-4 group">
-            <Star size={14} className="text-slate-300 group-hover:text-[#FBE18D]" /> 
-            <span className="gradient-text-platinum group-hover:gradient-text">{t('services.badge', { lng: lang })}</span>
-          </div>
-          
-          <h2 className="text-3xl md:text-4xl font-bold text-center">
-            {(() => {
-              const fullTitle = t('services.title', { lng: lang });
-              const parts = fullTitle.split(' ');
-              if (parts.length > 1) {
-                const first = parts[0];
-                const rest = parts.slice(1).join(' ');
-                return <><span className="text-white">{first}</span> <span className="gradient-text">{rest}</span></>;
-              }
-              return <span className="gradient-text">{fullTitle}</span>;
-            })()}
-          </h2>
-          
-          <p className="gradient-text-platinum mt-4 max-w-3xl text-center opacity-80">
-            {t('services.subtitle', { lng: lang })}
-          </p>
-        </motion.div>
+        <SectionHeader
+          badge={{ icon: <Star size={14} />, text: t('services.badge', { lng: lang }) }}
+          title={<GradientTitle text={t('services.title', { lng: lang })} />}
+          subtitle={t('services.subtitle', { lng: lang })}
+        />
 
         <motion.div 
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"

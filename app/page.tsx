@@ -1,7 +1,8 @@
 "use client";
 
 import "@/lib/i18n";
-import { useState, useEffect } from "react";
+import i18nInstance from "@/lib/i18n";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
@@ -10,7 +11,7 @@ import WhyChooseSection from "@/components/landing/WhyChooseSection";
 import ProjectsSection from "@/components/landing/ProjectsSection";
 import AboutSection from "@/components/landing/AboutSection";
 import ClientsSection from "@/components/landing/ClientsSection";
-import ContactSection from "@/components/landing/ContactSection";
+import ContactSection from "@/components/landing/contact/ContactSection";
 import FooterSection from "@/components/landing/FooterSection";
 import ParticleBackground from "@/components/ParticleBackground";
 import { Language } from "@/components/landing/types";
@@ -19,21 +20,23 @@ import { blurReveal, dissolve } from "@/components/landing/animations";
 
 export default function RootPage() {
   const { i18n } = useTranslation();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const id = setTimeout(() => setMounted(true), 0);
-    return () => clearTimeout(id);
-  }, []);
-
-  const lang = !mounted ? "es" : (i18n.language.split('-')[0].toLowerCase() as Language) || "es";
+  const [lang, setLang] = useState<Language>(() => {
+    const raw = (i18n?.language || i18nInstance?.language || 'es').split('-')[0].toLowerCase();
+    return (raw as Language) || 'es';
+  });
 
   const toggleLang = (langCode: string) => {
-    i18n.changeLanguage(langCode.toLowerCase());
+    const clean = (langCode.split('-')[0].toLowerCase()) as Language;
+    setLang(clean);
+    if (i18n?.changeLanguage) {
+      i18n.changeLanguage(clean);
+    } else if (i18nInstance?.changeLanguage) {
+      i18nInstance.changeLanguage(clean);
+    }
   };
 
   return (
-    <main className="min-h-screen bg-[#020202] text-white relative overflow-hidden">
+        <main className="min-h-screen bg-[#0a0b0d] text-white relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <ParticleBackground />
       </div>
@@ -51,7 +54,7 @@ export default function RootPage() {
           animate="visible"
           variants={dissolve}
         >
-          <Hero />
+          <Hero lang={lang} />
         </motion.div>
 
         {/* 2. ServicesSection (Propuesta de valor) */}

@@ -205,7 +205,7 @@ export const projects: Project[] = [
         description: 'Optimice su consulta médica con inteligencia artificial y visualización 3D avanzada.',
         longDescription: "Plataforma SaaS de grado profesional construida para escalar. Permite a las clínicas gestionar datos de pacientes de forma segura con arquitectura HIPAA-compliant.",
         features: [
-            'Aumenta la eficiencia en la consulta hasta un 40%',
+            'Aumenta la eficiencia en la consulta hasta un 80%',
             'Mejora la precisión diagnóstica con IA',
             'Reduce errores en la gestión de expedientes',
             'Fideliza pacientes con un portal de acceso seguro',
@@ -214,6 +214,9 @@ export const projects: Project[] = [
         techStack: ['React 19', 'Firebase', 'Three.js', 'jsPDF', 'Zod'],
         imageUrl: '/screenshots/historia-clinica.png',
         featured: true,
+        metric: '+80%',
+        metricLabel: 'Eficiencia Clínica',
+        categoryBadge: 'HealthTech & IA',
         githubUrl: '#',
         demoUrl: '/#contact?project=medical'
     },
@@ -231,6 +234,9 @@ export const projects: Project[] = [
         ],
         techStack: ['Next.js', 'Firebase', 'Tailwind CSS', 'Cloud Functions'],
         imageUrl: '/screenshots/pos-zapatos.png',
+        metric: '-85%',
+        metricLabel: 'Descuadre Stock',
+        categoryBadge: 'Retail & POS',
         githubUrl: '#',
         demoUrl: '/#contact?project=pos'
     },
@@ -248,6 +254,9 @@ export const projects: Project[] = [
         ],
         techStack: ['TypeScript', 'Framer Motion', 'Firebase', 'Stripe', 'Paypal', 'Tailwind CSS'],
         imageUrl: '/screenshots/hotel-management.png',
+        metric: '3.2x',
+        metricLabel: 'Velocidad de Cierre',
+        categoryBadge: 'B2B CRM & SaaS',
         githubUrl: '#',
         demoUrl: '/#contact?project=crm'
     },
@@ -265,6 +274,9 @@ export const projects: Project[] = [
         ],
         techStack: ['Shopify SDK', 'Next.js', 'React 19', 'PostCSS', 'Stripe', 'Paypal', 'Tailwind CSS'],
         imageUrl: '/screenshots/eve-commerce.png',
+        metric: '+140%',
+        metricLabel: 'Conversión Móvil',
+        categoryBadge: 'Luxury E-Commerce',
         githubUrl: '#',
         demoUrl: '/#contact?project=ecommerce'
     },
@@ -282,6 +294,9 @@ export const projects: Project[] = [
         ],
         techStack: ['Next.js 15', 'Firebase', 'Twilio API', 'Zod', 'Tailwind CSS'],
         imageUrl: '/screenshots/beauty-agenda.png',
+        metric: '-90%',
+        metricLabel: 'Ausencias / No-Shows',
+        categoryBadge: 'Booking & WhatsApp AI',
         githubUrl: '#',
         demoUrl: '/#contact?project=beauty'
     },
@@ -299,6 +314,9 @@ export const projects: Project[] = [
         ],
         techStack: ['Next.js 15', 'AI', 'Firebase', 'React', 'Recharts'],
         imageUrl: '/screenshots/scholar-ai.png',
+        metric: '98%',
+        metricLabel: 'Precisión Predictiva',
+        categoryBadge: 'EdTech & Predictive AI',
         githubUrl: '#',
         demoUrl: '/#contact?project=scholar'
     }

@@ -1,5 +1,6 @@
 import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 const AI_GATEWAY_TOKEN = process.env.VERCEL_AI_API_KEY;
 
@@ -12,6 +13,14 @@ Tu objetivo es analizar los requerimientos de un cliente potencial para un proye
 
 export async function POST(req: Request) {
   try {
+    const rateLimit = checkRateLimit(req, 15, 60 * 1000);
+    if (!rateLimit.success) {
+      return new Response(
+        JSON.stringify({ error: 'Too many requests. Please try again later.' }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { message } = await req.json();
 
     if (!message) {

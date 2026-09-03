@@ -1,6 +1,7 @@
 import { generateText, type ModelMessage } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { z } from 'zod';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 const openai = createOpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
@@ -41,6 +42,14 @@ Instrucciones clave:
 
 export async function POST(req: Request) {
   try {
+    const rateLimit = checkRateLimit(req, 15, 60 * 1000);
+    if (!rateLimit.success) {
+      return new Response(
+        JSON.stringify({ error: 'Too many requests. Please try again later.' }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const body = await req.json();
     const parsed = chatRequestSchema.safeParse(body);
 

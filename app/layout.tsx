@@ -5,6 +5,7 @@ import "./globals.css";
 import { Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
+import { Toaster } from 'sonner';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -260,6 +261,7 @@ export default function RootLayout({
           </ThemeProvider>
         </QueryProvider>
         <GoogleAnalytics gaId="G-BB7WX61NE7" />
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );

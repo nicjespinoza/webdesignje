@@ -4,6 +4,8 @@ import { Clock, Paintbrush, Headphones, DollarSign } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fadeInUp, staggerContainer } from '@/components/landing/animations';
 import { Language } from '@/components/landing/types';
+import SectionHeader from '@/components/landing/SectionHeader';
+import GradientTitle from '@/components/landing/GradientTitle';
 
 const WhyChooseSection = ({ lang }: { lang: Language }) => {
   const { t } = useTranslation();
@@ -34,29 +36,10 @@ const WhyChooseSection = ({ lang }: { lang: Language }) => {
   return (
     <section className="py-12 md:py-16 relative">
       <div className="container mx-auto px-4 md:px-6">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-          className="flex flex-col items-center mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-center">
-            {(() => {
-              const fullTitle = t('whyChoose.title', { lng: lang });
-              if (fullTitle.includes(' ')) {
-                const parts = fullTitle.split(' ');
-                const first = parts[0];
-                const rest = parts.slice(1).join(' ');
-                return <><span className="text-white">{first}</span> <span className="gradient-text">{rest}</span></>;
-              }
-              return <span className="gradient-text">{fullTitle}</span>;
-            })()}
-          </h2>
-          <p className="text-white mt-4 max-w-xl text-center text-lg">
-            {t('whyChoose.subtitle', { lng: lang })}
-          </p>
-        </motion.div>
+        <SectionHeader
+          title={<GradientTitle text={t('whyChoose.title', { lng: lang })} />}
+          subtitle={t('whyChoose.subtitle', { lng: lang })}
+        />
 
         <motion.div
           className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"

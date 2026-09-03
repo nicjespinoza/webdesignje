@@ -2,7 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useTranslation } from "react-i18next";
-const Hero = () => {
+import { Language } from '@/components/landing/types';
+
+interface HeroProps {
+  lang?: Language;
+}
+
+const Hero = ({ lang = 'es' }: HeroProps) => {
   const { t } = useTranslation();
 
   return (
@@ -33,11 +39,11 @@ const Hero = () => {
             type: "spring",
             damping: 20,
             stiffness: 50,
-            delay: 0.5
+            delay: 0.3
           }}
           className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-[1.15] mb-6 md:mb-8 tracking-tight font-serif relative z-10 gradient-text px-0 md:px-4 pb-2 overflow-visible"
         >
-          {t('hero.title')}
+          {t('hero.title', { lng: lang })}
         </motion.h1>
 
         <motion.p
@@ -59,14 +65,14 @@ const Hero = () => {
           }}
           transition={{
             duration: 1.5,
-            delay: 1.2,
+            delay: 0.6,
             type: "spring",
             damping: 25,
             stiffness: 70
           }}
           className="gradient-text-platinum font-light text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl mb-10 md:mb-14 leading-relaxed md:leading-relaxed drop-shadow-lg text-center tracking-wide px-0 md:px-4"
         >
-          {t('hero.subtitle')}
+          {t('hero.subtitle', { lng: lang })}
         </motion.p>
 
         <motion.div
@@ -78,7 +84,7 @@ const Hero = () => {
           <motion.a
             initial={{ opacity: 0, scale: 0.1, z: -1000, filter: "blur(60px)", rotateX: 30 }}
             animate={{ opacity: 1, scale: 1, z: 0, filter: "blur(0px)", rotateX: 0 }}
-            transition={{ duration: 1.5, delay: 2.8, type: "spring", damping: 20 }}
+            transition={{ duration: 1.5, delay: 0.9, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
             href="#contact"
@@ -86,7 +92,7 @@ const Hero = () => {
           >
             <div className="liquid-gold-content !py-3 md:!py-3.5 !px-7 md:!px-8 !rounded-full !flex-row flex items-center gap-2.5 relative z-10">
               <span className="gradient-text font-bold text-sm md:text-base whitespace-nowrap tracking-wider uppercase">
-                {t('hero.cta')}
+                {t('hero.cta', { lng: lang })}
               </span>
               <ArrowRight size={16} className="text-[#FBE18D] group-hover:translate-x-1 transition-transform" />
             </div>
@@ -104,7 +110,7 @@ const Hero = () => {
             hidden: { opacity: 0 },
             visible: {
               opacity: 1,
-              transition: { staggerChildren: 0.15, delayChildren: 3.2 }
+              transition: { staggerChildren: 0.1, delayChildren: 1.2 }
             }
           }}
           className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[11px] sm:text-xs text-slate-400 font-mono tracking-[0.25em] md:tracking-[0.3em] uppercase font-bold"

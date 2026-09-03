@@ -16,6 +16,9 @@ export interface Project {
   featured?: boolean;
   longDescription?: string;
   features?: string[];
+  metric?: string;
+  metricLabel?: string;
+  categoryBadge?: string;
 }
 
 export interface Skill {
