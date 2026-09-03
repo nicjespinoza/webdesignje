@@ -63,7 +63,7 @@ export default function Step1Profile({
                   setDynamicAnswers({});
                   togglePainPoint('');
                 }}
-                className={`flex flex-col items-center justify-center p-4 rounded-2xl border text-center gap-2 transition-all ${
+                className={`flex flex-col items-center justify-center p-4 rounded-2xl border text-center gap-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320] ${
                   isSelected
                     ? 'bg-gradient-to-b from-[#C69320]/20 to-[#C69320]/5 border-[#FBE18D]'
                     : 'bg-[#14151a] border-slate-700 hover:border-slate-500'
