@@ -84,7 +84,7 @@ export default function Step0Contact({ lang, formData, setFormData, errors }: St
               key={method}
               type="button"
               onClick={() => setFormData({ ...formData, preferredContact: method })}
-              className={`p-3 rounded-xl border text-sm font-medium transition-all ${
+              className={`p-3 rounded-xl border text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C69320] ${
                 formData.preferredContact === method
                   ? 'bg-[#C69320]/20 border-[#FBE18D] text-white'
                   : 'bg-[#14151a] border-slate-700 text-slate-400 hover:border-slate-500'
