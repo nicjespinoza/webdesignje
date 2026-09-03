@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import Script from 'next/script';
 import { Toaster } from 'sonner';
 
 const inter = Inter({
@@ -228,14 +227,11 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased min-h-screen`}
         suppressHydrationWarning
       >
-        <Script
-          id="structured-data"
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <Script
-          id="theme-initializer"
-          strategy="beforeInteractive"
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Bot, Loader2, Sparkles, CheckCircle2, Check, ChevronLeft, ChevronRight, User, Mail, Phone, Building2, Target, Calendar, DollarSign, Lightbulb, AlertCircle, Clock } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { X, Send, CheckCircle2, Check, ChevronLeft, ChevronRight, User, Mail, Phone, Building2, Target, Calendar, DollarSign, Lightbulb, AlertCircle, Clock, Sparkles, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -31,99 +32,99 @@ interface ProjectModalProps {
 
 const PROJECT_SPECIFIC_QUESTIONS: Record<string, DynamicQuestion[]> = {
   '1': [
-    { label: 'Especialidad Médica', name: 'specialty', type: 'text', placeholder: 'Pediatría, Cardiología, Medicina General...' },
+    { label: 'Especialidad Médica', name: 'specialty', type: 'text', placeholder: 'Pediatría, Cardiología...' },
     { label: 'Pacientes por Día', name: 'dailyPatients', type: 'select', options: ['Menos de 10', '10-30', '31-60', 'Más de 60'] },
-    { label: 'Sistema Actual', name: 'currentSystem', type: 'text', placeholder: '¿Usas papel, Excel o algún software?' },
-    { label: 'Ubicación / País', name: 'location', type: 'text', placeholder: 'País o ciudad donde operas' },
+    { label: 'Sistema Actual', name: 'currentSystem', type: 'text', placeholder: 'Papel, Excel, software...' },
+    { label: 'Ubicación', name: 'location', type: 'text', placeholder: 'País o ciudad' },
   ],
   '2': [
-    { label: 'Tipo de Retail', name: 'storeType', type: 'text', placeholder: 'Ropa, Calzado, Electrónica, Abarrotes...' },
-    { label: 'Cantidad de Sucursales', name: 'branches', type: 'select', options: ['1 (Única)', '2-5', '6-10', '+10'] },
-    { label: 'Ventas Mensuales Estimadas', name: 'revenue', type: 'select', options: ['- $5,000/mes', '$5,000 - $20,000', '$20,000 - $50,000', '+ $50,000'] },
-    { label: 'Inventario Aproximado (SKUs)', name: 'skuCount', type: 'select', options: ['Menos de 100', '100-500', '501-2000', '+2000'] },
+    { label: 'Tipo de Retail', name: 'storeType', type: 'text', placeholder: 'Ropa, Calzado, Electrónica...' },
+    { label: 'Sucursales', name: 'branches', type: 'select', options: ['1 (Única)', '2-5', '6-10', '+10'] },
+    { label: 'Ventas Mensuales', name: 'revenue', type: 'select', options: ['- $5,000/mes', '$5,000 - $20,000', '$20,000 - $50,000', '+ $50,000'] },
+    { label: 'Inventario (SKUs)', name: 'skuCount', type: 'select', options: ['Menos de 100', '100-500', '501-2000', '+2000'] },
   ],
   '3': [
     { label: 'Tipo de Alojamiento', name: 'hotelType', type: 'select', options: ['Hotel Boutique', 'Resort', 'Hostal', 'Cadena Hotelera'] },
-    { label: 'Número de Habitaciones', name: 'rooms', type: 'select', options: ['1-20', '21-50', '51-100', '+100'] },
-    { label: 'Ocupación Promedio Actual', name: 'occupancy', type: 'select', options: ['- 30%', '30-50%', '51-70%', '+70%'] },
-    { label: '¿Tienes equipo de recepción?', name: 'hasStaff', type: 'select', options: ['Sí, completo', 'Sí, mínimo', 'No, soy independiente'] },
+    { label: 'Habitaciones', name: 'rooms', type: 'select', options: ['1-20', '21-50', '51-100', '+100'] },
+    { label: 'Ocupación Promedio', name: 'occupancy', type: 'select', options: ['- 30%', '30-50%', '51-70%', '+70%'] },
+    { label: 'Equipo de Recepción', name: 'hasStaff', type: 'select', options: ['Sí, completo', 'Sí, mínimo', 'No, independiente'] },
   ],
   '4': [
-    { label: 'Nicho de Mercado', name: 'niche', type: 'text', placeholder: 'Joyería, Ropa de diseñador, Muebles...' },
-    { label: 'Canal de Ventas Principal', name: 'channel', type: 'select', options: ['Instagram / Redes Sociales', 'MercadoLibre / Amazon', 'Tienda física', 'Ninguno aún'] },
-    { label: 'Ingresos Mensuales Actuales', name: 'income', type: 'select', options: ['Aún no vendo', '- $1,000', '$1,000 - $10,000', '+ $10,000'] },
-    { label: '¿Ya has tenido tienda online?', name: 'previousEcom', type: 'select', options: ['Nunca', 'Sí, pero no funcionó', 'Sí, activa actualmente'] },
+    { label: 'Nicho de Mercado', name: 'niche', type: 'text', placeholder: 'Joyería, Ropa de diseñador...' },
+    { label: 'Canal de Ventas', name: 'channel', type: 'select', options: ['Instagram / Redes', 'MercadoLibre / Amazon', 'Tienda física', 'Ninguno aún'] },
+    { label: 'Ingresos Mensuales', name: 'income', type: 'select', options: ['Aún no vendo', '- $1,000', '$1,000 - $10,000', '+ $10,000'] },
+    { label: 'Experiencia Online', name: 'previousEcom', type: 'select', options: ['Nunca', 'Sí, no funcionó', 'Sí, activa'] },
   ],
   '5': [
     { label: 'Tipo de Negocio', name: 'beautyType', type: 'select', options: ['Salón de Belleza', 'Spa', 'Barbería', 'Clínica Estética'] },
-    { label: 'Especialistas / Staff', name: 'staff', type: 'select', options: ['1 (Independiente)', '2-5', '6-15', '+15'] },
+    { label: 'Especialistas', name: 'staff', type: 'select', options: ['1 (Independiente)', '2-5', '6-15', '+15'] },
     { label: 'Clientes por Semana', name: 'weeklyClients', type: 'select', options: ['- 20', '20-50', '51-100', '+100'] },
-    { label: 'Manejas Citas de Forma', name: 'bookingMethod', type: 'select', options: ['Manual (agenda física)', 'WhatsApp / Llamadas', 'Google Calendar', 'Software básico'] },
+    { label: 'Método de Citas', name: 'bookingMethod', type: 'select', options: ['Manual (agenda)', 'WhatsApp / Llamadas', 'Google Calendar', 'Software básico'] },
   ],
   '6': [
     { label: 'Tipo de Institución', name: 'schoolType', type: 'select', options: ['Colegio / Escuela', 'Universidad', 'Instituto Técnico', 'Academia Online'] },
-    { label: 'Total de Estudiantes', name: 'students', type: 'select', options: ['1-100', '101-500', '501-2000', '+2000'] },
-    { label: 'Nivel Educativo Principal', name: 'level', type: 'select', options: ['Primaria / Secundaria', 'Pregrado', 'Posgrado', 'Mixto'] },
-    { label: 'Tasa de Deserción Anual', name: 'dropoutRate', type: 'select', options: ['- 5%', '5-10%', '10-20%', '+20%', 'No lo sé'] },
+    { label: 'Estudiantes', name: 'students', type: 'select', options: ['1-100', '101-500', '501-2000', '+2000'] },
+    { label: 'Nivel Educativo', name: 'level', type: 'select', options: ['Primaria / Secundaria', 'Pregrado', 'Posgrado', 'Mixto'] },
+    { label: 'Tasa de Deserción', name: 'dropoutRate', type: 'select', options: ['- 5%', '5-10%', '10-20%', '+20%', 'No lo sé'] },
   ],
 };
 
 const PAIN_POINTS: Record<string, PainPoint[]> = {
   '1': [
-    { label: 'Exceso de papeleo administrativo', value: 'paperwork', benefit: 'Reducción de papeleo' },
-    { label: 'Pérdida o desorden de historiales', value: 'lostRecords', benefit: 'Historiales siempre accesibles' },
-    { label: 'Diagnósticos sin apoyo de datos', value: 'noDataDiagnosis', benefit: 'Precisión con IA' },
-    { label: 'Procesos lentos con pacientes', value: 'slowProcess', benefit: 'Flujo ágil de pacientes' },
-    { label: 'Falta de acceso remoto a datos', value: 'noRemote', benefit: 'Acceso desde cualquier lugar' },
-    { label: 'Incumplimiento de normativas', value: 'compliance', benefit: 'Cumplimiento normativo asegurado' },
+    { label: 'Exceso de papeleo', value: 'paperwork', benefit: 'Reducción de papeleo' },
+    { label: 'Pérdida de historiales', value: 'lostRecords', benefit: 'Historiales siempre accesibles' },
+    { label: 'Diagnósticos sin datos', value: 'noDataDiagnosis', benefit: 'Precisión con IA' },
+    { label: 'Procesos lentos', value: 'slowProcess', benefit: 'Flujo ágil' },
+    { label: 'Sin acceso remoto', value: 'noRemote', benefit: 'Acceso desde cualquier lugar' },
+    { label: 'Incumplimiento normativo', value: 'compliance', benefit: 'Cumplimiento asegurado' },
   ],
   '2': [
-    { label: 'Inventario no actualizado en tiempo real', value: 'stockSync', benefit: 'Stock siempre al día' },
-    { label: 'Pérdidas por merma o robo hormiga', value: 'shrinkage', benefit: 'Control de pérdidas' },
-    { label: 'Falta de reportes financieros claros', value: 'noReports', benefit: 'Reportes financieros automáticos' },
-    { label: 'Sucursales desincronizadas entre sí', value: 'branchSync', benefit: 'Sincronización multi-sucursal' },
-    { label: 'Procesos de pago lentos', value: 'slowCheckout', benefit: 'Pagos rápidos y seguros' },
-    { label: 'Sin control eficiente de proveedores', value: 'suppliers', benefit: 'Gestión integrada de proveedores' },
+    { label: 'Stock no actualizado', value: 'stockSync', benefit: 'Stock al día' },
+    { label: 'Merma / robo hormiga', value: 'shrinkage', benefit: 'Control de pérdidas' },
+    { label: 'Sin reportes claros', value: 'noReports', benefit: 'Reportes automáticos' },
+    { label: 'Sucursales desincronizadas', value: 'branchSync', benefit: 'Sincronización total' },
+    { label: 'Pagos lentos', value: 'slowCheckout', benefit: 'Pagos rápidos' },
+    { label: 'Sin control de proveedores', value: 'suppliers', benefit: 'Gestión integrada' },
   ],
   '3': [
-    { label: 'Baja tasa de ocupación recurrente', value: 'lowOccupancy', benefit: 'Maximizar ocupación' },
-    { label: 'Costos operativos mensuales elevados', value: 'highCosts', benefit: 'Reducir costos operativos' },
-    { label: 'Sin portal de huéspedes automatizado', value: 'noGuestPortal', benefit: 'Portal de huéspedes inteligente' },
-    { label: 'No tengo P&L en tiempo real', value: 'noPnl', benefit: 'P&L actualizado al instante' },
-    { label: 'Procesos de mantenimiento ineficientes', value: 'maintenance', benefit: 'Mantenimiento automatizado' },
-    { label: 'Mala integración con OTAs y canales', value: 'otaIntegration', benefit: 'Integración total con OTAs' },
+    { label: 'Baja ocupación', value: 'lowOccupancy', benefit: 'Maximizar ocupación' },
+    { label: 'Costos elevados', value: 'highCosts', benefit: 'Reducir costos' },
+    { label: 'Sin portal de huéspedes', value: 'noGuestPortal', benefit: 'Portal inteligente' },
+    { label: 'Sin P&L en tiempo real', value: 'noPnl', benefit: 'P&L al instante' },
+    { label: 'Mantenimiento ineficiente', value: 'maintenance', benefit: 'Mantenimiento automatizado' },
+    { label: 'Mala integración OTAs', value: 'otaIntegration', benefit: 'Integración total' },
   ],
   '4': [
-    { label: 'Alta tasa de carrito abandonado', value: 'cartAbandon', benefit: 'Recuperación de carritos' },
-    { label: 'Baja conversión desde móvil', value: 'mobileConversion', benefit: 'Conversión móvil optimizada' },
-    { label: 'Marca sin diferenciación digital', value: 'branding', benefit: 'Identidad digital premium' },
-    { label: 'Velocidad de carga muy lenta', value: 'speed', benefit: 'Rendimiento ultrarrápido' },
-    { label: 'Dificultad para escalar ventas', value: 'scalability', benefit: 'Escalabilidad sin límites' },
-    { label: 'Sin automatización de marketing', value: 'marketing', benefit: 'Marketing automatizado con IA' },
+    { label: 'Carrito abandonado', value: 'cartAbandon', benefit: 'Recuperación de carritos' },
+    { label: 'Baja conversión móvil', value: 'mobileConversion', benefit: 'Conversión optimizada' },
+    { label: 'Marca sin diferenciación', value: 'branding', benefit: 'Identidad premium' },
+    { label: 'Carga lenta', value: 'speed', benefit: 'Rendimiento ultrarrápido' },
+    { label: 'Dificultad para escalar', value: 'scalability', benefit: 'Escalabilidad sin límites' },
+    { label: 'Sin marketing automation', value: 'marketing', benefit: 'Marketing automatizado' },
   ],
   '5': [
-    { label: 'No-shows frecuentes que reducen ingresos', value: 'noShows', benefit: 'Reducción drástica de no-shows' },
-    { label: 'Agenda desorganizada y manual', value: 'messySchedule', benefit: 'Agenda inteligente automatizada' },
-    { label: 'Clientes que no regresan', value: 'lowRetention', benefit: 'Fidelización con CRM inteligente' },
-    { label: 'Especialistas con baja ocupación', value: 'lowOccupancy', benefit: 'Máxima ocupación de agenda' },
-    { label: 'Sin recordatorios automáticos', value: 'noReminders', benefit: 'Recordatorios multi-canal' },
-    { label: 'Mala gestión de inventario de productos', value: 'inventory', benefit: 'Inventario sincronizado' },
+    { label: 'No-shows frecuentes', value: 'noShows', benefit: 'Reducción de no-shows' },
+    { label: 'Agenda desorganizada', value: 'messySchedule', benefit: 'Agenda inteligente' },
+    { label: 'Clientes no regresan', value: 'lowRetention', benefit: 'Fidelización con CRM' },
+    { label: 'Baja ocupación especialistas', value: 'lowOccupancy', benefit: 'Máxima ocupación' },
+    { label: 'Sin recordatorios', value: 'noReminders', benefit: 'Recordatorios multi-canal' },
+    { label: 'Mala gestión inventario', value: 'inventory', benefit: 'Inventario sincronizado' },
   ],
   '6': [
-    { label: 'Deserción estudiantil no detectada a tiempo', value: 'dropout', benefit: 'Detección temprana de deserción' },
-    { label: 'Carga administrativa excesiva del personal', value: 'adminLoad', benefit: 'Automatización administrativa' },
-    { label: 'Mala comunicación con padres/apoderados', value: 'communication', benefit: 'Comunicación instantánea con padres' },
-    { label: 'Falta de personalización del aprendizaje', value: 'noPersonalization', benefit: 'Aprendizaje personalizado con IA' },
-    { label: 'Datos académicos con poca seguridad', value: 'dataSecurity', benefit: 'Seguridad de datos de primer nivel' },
-    { label: 'Reportes académicos manuales y lentos', value: 'manualReports', benefit: 'Reportes automatizados en vivo' },
+    { label: 'Deserción no detectada', value: 'dropout', benefit: 'Detección temprana' },
+    { label: 'Carga administrativa', value: 'adminLoad', benefit: 'Automatización' },
+    { label: 'Mala comunicación padres', value: 'communication', benefit: 'Comunicación instantánea' },
+    { label: 'Sin personalización', value: 'noPersonalization', benefit: 'Aprendizaje personalizado' },
+    { label: 'Datos inseguros', value: 'dataSecurity', benefit: 'Seguridad de primer nivel' },
+    { label: 'Reportes manuales', value: 'manualReports', benefit: 'Reportes automatizados' },
   ],
 };
 
 const STEPS = [
-  { id: 'contact', icon: User },
-  { id: 'profile', icon: Building2 },
-  { id: 'goals', icon: Target },
-  { id: 'review', icon: CheckCircle2 },
+  { id: 'contact', label: 'Contacto', icon: User },
+  { id: 'profile', label: 'Perfil', icon: Building2 },
+  { id: 'goals', label: 'Alcance', icon: Target },
+  { id: 'review', label: 'Resumen', icon: CheckCircle2 },
 ];
 
 const stepVariants = {
@@ -135,12 +136,7 @@ const stepVariants = {
 const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project, lang }) => {
   const { t } = useTranslation();
   const [step, setStep] = useState(0);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '' });
   const [dynamicAnswers, setDynamicAnswers] = useState<Record<string, string>>({});
   const [selectedPainPoints, setSelectedPainPoints] = useState<string[]>([]);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
@@ -149,6 +145,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project, l
   const [aiResponse, setAiResponse] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [direction, setDirection] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const prevOpen = useRef(isOpen);
 
   const projectId = project?.id as string;
@@ -167,6 +164,24 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project, l
 
   const features = (project?.features as string[]) || [];
 
+  // Mount check for portal
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Scroll lock
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  // Reset form on open
   useEffect(() => {
     if (isOpen && !prevOpen.current) {
       const id = setTimeout(() => {
@@ -235,7 +250,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project, l
         return pp?.label || v;
       });
 
-      // Map dynamic select values back to their display values for Firestore if needed, or save keys
+      // Save to Firestore
       await addDoc(collection(db, 'project_inquiries'), {
         projectName: project?.title || 'Unknown Project',
         projectId,
@@ -256,6 +271,32 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project, l
         source: 'modal_avanzado',
       });
 
+      // Send email via Resend (non-blocking for UX but we await for status)
+      try {
+        await fetch('/api/send-lead-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectName: project?.title || 'Unknown',
+            projectId,
+            clientName: formData.name,
+            clientEmail: formData.email,
+            clientPhone: formData.phone,
+            companyName: formData.company,
+            businessProfile: dynamicAnswers,
+            painPoints: selectedPainLabels,
+            selectedFeatures,
+            goals: goals.successVision,
+            timeline: goals.timeline,
+            budget: goals.budget,
+            references: goals.references,
+          }),
+        });
+      } catch (emailErr) {
+        console.error('Email dispatch error:', emailErr);
+      }
+
+      // Generate AI response
       const profileDetails = Object.entries(dynamicAnswers)
         .map(([k, v]) => {
           const q = dynamicQuestions.find((dq) => dq.name === k);
@@ -263,40 +304,20 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, project, l
         })
         .join(', ');
 
-      const painText = selectedPainLabels.length > 0
-        ? `\nPrincipales desafíos: ${selectedPainLabels.join(', ')}.`
-        : '';
+      const painText = selectedPainLabels.length > 0 ? `\nPrincipales desafíos: ${selectedPainLabels.join(', ')}.` : '';
+      const featureText = selectedFeatures.length > 0 ? `\nFuncionalidades de interés: ${selectedFeatures.join(', ')}.` : '';
+      const goalsText = goals.successVision ? `\nVisión de éxito: ${goals.successVision}.` : '';
+      const timelineText = goals.timeline ? `\nHorizonte: ${goals.timeline}.` : '';
+      const budgetText = goals.budget ? `\nPresupuesto estimado: ${goals.budget}.` : '';
 
-      const featureText = selectedFeatures.length > 0
-        ? `\nFuncionalidades de interés: ${selectedFeatures.join(', ')}.`
-        : '';
-
-      const goalsText = goals.successVision
-        ? `\nVisión de éxito: ${goals.successVision}.`
-        : '';
-
-      const timelineText = goals.timeline
-        ? `\nHorizonte: ${goals.timeline}.`
-        : '';
-
-      const budgetText = goals.budget
-        ? `\nPresupuesto estimado: ${goals.budget}.`
-        : '';
-
-      const langNames: Record<string, string> = {
-        es: 'Español',
-        en: 'English',
-        fr: 'Français',
-        zh: '中文'
-      };
+      const langNames: Record<string, string> = { es: 'Español', en: 'English', fr: 'Français', zh: '中文' };
       const targetLang = langNames[lang] || 'Español';
 
       const aiPrompt = `Soy un cliente interesado en "${project?.title}".
 
 Perfil de negocio:
 Empresa: ${formData.company || 'Independiente'}
-Contacto: ${formData.name} - ${formData.email}${profileDetails ? '\n' + profileDetails : ''}
-${painText}${featureText}${goalsText}${timelineText}${budgetText}
+Contacto: ${formData.name} - ${formData.email}${profileDetails ? '\n' + profileDetails : ''}${painText}${featureText}${goalsText}${timelineText}${budgetText}
 
 Como experto consultor de WebDesignJE de Joseph Espinoza, redacta un diagnóstico personalizado y persuasivo (máximo 4 párrafos cortos) que:
 1. Reconozca los desafíos específicos del cliente
@@ -318,9 +339,7 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
       if (response.ok && data.success) {
         setAiResponse(data.message);
       } else {
-        setAiResponse(
-          t('projectModal.success_desc', { project: project?.title, lng: lang })
-        );
+        setAiResponse(t('projectModal.success_desc', { project: project?.title, lng: lang }));
       }
 
       setStatus('success');
@@ -329,42 +348,6 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
       setStatus('idle');
     }
   };
-
-  if (!isOpen || !project) return null;
-
-  const renderStepIndicator = () => (
-    <div className="flex items-center gap-1 mb-6 px-1">
-      {STEPS.map((s, i) => {
-        const isActive = i === step;
-        const isDone = i < step || status === 'success';
-        const stepLabel = t(`projectModal.step_${s.id}`, { lng: lang });
-        return (
-          <div key={s.id} className="flex-1 flex items-center gap-1">
-            <div className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-all ${
-              isActive ? 'bg-[#C69320]/10 text-[#FBE18D]' : isDone ? 'text-green-400' : 'text-slate-600'
-            }`}>
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border transition-all ${
-                isDone ? 'bg-green-500/20 border-green-500 text-green-400' :
-                isActive ? 'bg-[#C69320]/20 border-[#C69320]' : 'border-slate-600 bg-slate-800'
-              }`}>
-                {isDone ? <Check size={12} /> : i + 1}
-              </div>
-              <span className={`text-[10px] font-bold uppercase tracking-wider hidden sm:inline ${
-                isActive ? 'text-[#FBE18D]' : isDone ? 'text-green-400' : 'text-slate-600'
-              }`}>
-                {stepLabel}
-              </span>
-            </div>
-            {i < STEPS.length - 1 && (
-              <div className={`flex-1 h-px mx-1 transition-colors ${
-                i < step ? 'bg-green-500/50' : 'bg-slate-700'
-              }`} />
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
 
   const renderError = (field: string) => {
     if (!errors[field]) return null;
@@ -383,7 +366,7 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
             <User size={12} className="text-[#C69320]" /> {t('projectModal.name_label', { lng: lang })}
           </label>
           <input
@@ -393,12 +376,12 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Ej. Juan Pérez"
-            className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
+            className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
           />
           {renderError('name')}
         </div>
         <div className="space-y-1.5">
-          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
             <Mail size={12} className="text-[#C69320]" /> {t('projectModal.email_label', { lng: lang })}
           </label>
           <input
@@ -408,12 +391,12 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="juan@empresa.com"
-            className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
+            className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
           />
           {renderError('email')}
         </div>
         <div className="space-y-1.5">
-          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
             <Phone size={12} className="text-[#C69320]" /> {t('projectModal.phone_label', { lng: lang })}
           </label>
           <input
@@ -422,11 +405,11 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+505 0000 0000"
-            className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
+            className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
             <Building2 size={12} className="text-[#C69320]" /> {t('projectModal.company_label', { lng: lang })}
           </label>
           <input
@@ -435,7 +418,7 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
             value={formData.company}
             onChange={(e) => setFormData({ ...formData, company: e.target.value })}
             placeholder="Nombre de tu empresa"
-            className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
+            className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
           />
         </div>
       </div>
@@ -453,13 +436,13 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {dynamicQuestions.map((q: DynamicQuestion, idx: number) => (
             <div key={idx} className="space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider">{q.label}</label>
+              <label className="text-xs font-medium text-slate-300">{q.label}</label>
               {q.type === 'select' ? (
                 <select
                   name={q.name}
                   value={dynamicAnswers[q.name] || ''}
                   onChange={(e) => setDynamicAnswers({ ...dynamicAnswers, [e.target.name]: e.target.value })}
-                  className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white transition-colors outline-none appearance-none text-sm"
+                  className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white transition-colors outline-none text-sm"
                 >
                   {q.options?.map((opt: string) => (
                     <option key={opt} value={opt}>{opt}</option>
@@ -472,7 +455,7 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
                   value={dynamicAnswers[q.name] || ''}
                   onChange={(e) => setDynamicAnswers({ ...dynamicAnswers, [e.target.name]: e.target.value })}
                   placeholder={q.placeholder}
-                  className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
+                  className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
                 />
               )}
             </div>
@@ -484,33 +467,26 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
         <div>
           <div className="flex items-center gap-2 mb-3">
             <AlertCircle size={14} className="text-[#C69320]" />
-            <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+            <span className="text-xs font-medium text-slate-300 uppercase tracking-wider">
               {t('projectModal.pain_title', { lng: lang })}
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="flex flex-wrap gap-2">
             {painPoints.map((pp: PainPoint) => {
               const isSelected = selectedPainPoints.includes(pp.value);
               return (
-                <div
+                <button
                   key={pp.value}
+                  type="button"
                   onClick={() => togglePainPoint(pp.value)}
-                  className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
+                  className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${
                     isSelected
-                      ? 'bg-[#C69320]/10 border-[#C69320]'
-                      : 'bg-[#131B2A] border-slate-700 hover:border-slate-500'
+                      ? 'bg-[#C69320]/15 border-[#C69320] text-[#FBE18D]'
+                      : 'bg-[#0f172a] border-white/10 text-slate-300 hover:border-[#C69320]/30 hover:text-white'
                   }`}
                 >
-                  <div className={`mt-0.5 w-4 h-4 rounded-sm border flex items-center justify-center shrink-0 transition-colors ${
-                    isSelected ? 'bg-[#C69320] border-[#C69320]' : 'border-slate-500'
-                  }`}>
-                    {isSelected && <Check size={11} className="text-black" />}
-                  </div>
-                  <div>
-                    <span className="text-xs text-white block leading-tight">{pp.label}</span>
-                    <span className="text-[9px] text-[#C69320]/70 mt-0.5 block">{pp.benefit}</span>
-                  </div>
-                </div>
+                  {pp.label}
+                </button>
               );
             })}
           </div>
@@ -521,30 +497,26 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
         <div>
           <div className="flex items-center gap-2 mb-3">
             <Sparkles size={14} className="text-[#C69320]" />
-            <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+            <span className="text-xs font-medium text-slate-300 uppercase tracking-wider">
               {t('projectModal.features_title', { lng: lang })}
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="flex flex-wrap gap-2">
             {features.map((feature, idx) => {
               const isSelected = selectedFeatures.includes(feature);
               return (
-                <div
+                <button
                   key={idx}
+                  type="button"
                   onClick={() => toggleFeature(feature)}
-                  className={`flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
+                  className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${
                     isSelected
-                      ? 'bg-[#C69320]/10 border-[#C69320]'
-                      : 'bg-[#131B2A] border-slate-700 hover:border-slate-500'
+                      ? 'bg-[#C69320]/15 border-[#C69320] text-[#FBE18D]'
+                      : 'bg-[#0f172a] border-white/10 text-slate-300 hover:border-[#C69320]/30 hover:text-white'
                   }`}
                 >
-                  <div className={`w-4 h-4 rounded-sm border flex items-center justify-center shrink-0 transition-colors ${
-                    isSelected ? 'bg-[#C69320] border-[#C69320]' : 'border-slate-500'
-                  }`}>
-                    {isSelected && <Check size={11} className="text-black" />}
-                  </div>
-                  <span className="text-xs text-slate-300">{feature}</span>
-                </div>
+                  {feature}
+                </button>
               );
             })}
           </div>
@@ -561,7 +533,7 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+        <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
           <Lightbulb size={12} className="text-[#C69320]" /> {t('projectModal.success_vision_label', { lng: lang })}
         </label>
         <textarea
@@ -569,19 +541,19 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
           onChange={(e) => setGoals({ ...goals, successVision: e.target.value })}
           rows={3}
           placeholder={t('projectModal.success_vision_placeholder', { lng: lang })}
-          className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none resize-none text-sm"
+          className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none resize-none text-sm"
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
             <Calendar size={12} className="text-[#C69320]" /> {t('projectModal.timeline_label', { lng: lang })}
           </label>
           <select
             value={goals.timeline}
             onChange={(e) => setGoals({ ...goals, timeline: e.target.value })}
-            className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white transition-colors outline-none appearance-none text-sm"
+            className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white transition-colors outline-none text-sm"
           >
             <option value="">{t('projectModal.timeline_placeholder', { lng: lang })}</option>
             <option value="immediate">{t('projectModal.timeline_options.immediate', { lng: lang })}</option>
@@ -592,13 +564,13 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
           </select>
         </div>
         <div className="space-y-1.5">
-          <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
             <DollarSign size={12} className="text-[#C69320]" /> {t('projectModal.budget_label', { lng: lang })}
           </label>
           <select
             value={goals.budget}
             onChange={(e) => setGoals({ ...goals, budget: e.target.value })}
-            className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white transition-colors outline-none appearance-none text-sm"
+            className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white transition-colors outline-none text-sm"
           >
             <option value="">{t('projectModal.budget_placeholder', { lng: lang })}</option>
             <option value="undisclosed">{t('projectModal.budget_options.undisclosed', { lng: lang })}</option>
@@ -611,7 +583,7 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+        <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
           <Clock size={12} className="text-[#C69320]" /> {t('projectModal.references_label', { lng: lang })}
         </label>
         <input
@@ -619,7 +591,7 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
           value={goals.references}
           onChange={(e) => setGoals({ ...goals, references: e.target.value })}
           placeholder={t('projectModal.references_placeholder', { lng: lang })}
-          className="w-full bg-[#131B2A] border border-slate-700 focus:border-[#C69320] rounded-xl px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
+          className="w-full bg-[#0f172a] border border-white/10 focus:border-[#C69320]/50 rounded-lg px-4 py-3 text-white placeholder-slate-500 transition-colors outline-none text-sm"
         />
       </div>
     </div>
@@ -641,23 +613,23 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
           <p className="text-slate-400 text-xs">{t('projectModal.review_subtitle', { lng: lang })}</p>
         </div>
 
-        <div className="bg-[#131B2A] border border-slate-700 rounded-xl divide-y divide-slate-700/50">
+        <div className="bg-[#0f172a] border border-white/10 rounded-xl divide-y divide-white/5">
           <div className="p-4">
-            <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.step_contact', { lng: lang })}</span>
+            <span className="text-[10px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.step_contact', { lng: lang })}</span>
             <div className="grid grid-cols-2 gap-2 text-xs text-slate-300">
-              <span>Nombre: <span className="text-white">{formData.name}</span></span>
-              <span>Email: <span className="text-white">{formData.email}</span></span>
-              <span>Teléfono: <span className="text-white">{formData.phone || '—'}</span></span>
-              <span>Empresa: <span className="text-white">{formData.company || '—'}</span></span>
+              <span>Nombre: <span className="text-white font-medium">{formData.name}</span></span>
+              <span>Email: <span className="text-white font-medium">{formData.email}</span></span>
+              <span>Teléfono: <span className="text-white font-medium">{formData.phone || '—'}</span></span>
+              <span>Empresa: <span className="text-white font-medium">{formData.company || '—'}</span></span>
             </div>
           </div>
 
           {dynamicQuestions.length > 0 && (
             <div className="p-4">
-              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.step_profile', { lng: lang })}</span>
+              <span className="text-[10px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.step_profile', { lng: lang })}</span>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-300">
                 {dynamicQuestions.map((q: DynamicQuestion) => (
-                  <span key={q.name}>{q.label}: <span className="text-white">{dynamicAnswers[q.name] || '—'}</span></span>
+                  <span key={q.name}>{q.label}: <span className="text-white font-medium">{dynamicAnswers[q.name] || '—'}</span></span>
                 ))}
               </div>
             </div>
@@ -665,10 +637,10 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
 
           {painLabels.length > 0 && (
             <div className="p-4">
-              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.pain_title', { lng: lang })}</span>
+              <span className="text-[10px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.pain_title', { lng: lang })}</span>
               <div className="flex flex-wrap gap-1.5">
                 {painLabels.map((p) => (
-                  <span key={p} className="px-2 py-0.5 bg-[#C69320]/10 text-[#FBE18D] rounded text-[10px] border border-[#C69320]/20">{p}</span>
+                  <span key={p} className="px-2.5 py-1 bg-[#C69320]/10 text-[#FBE18D] rounded-lg text-[10px] font-medium border border-[#C69320]/20">{p}</span>
                 ))}
               </div>
             </div>
@@ -676,17 +648,17 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
 
           {goals.successVision && (
             <div className="p-4">
-              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.success_vision_label', { lng: lang })}</span>
-              <p className="text-xs text-slate-300">{goals.successVision}</p>
+              <span className="text-[10px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.success_vision_label', { lng: lang })}</span>
+              <p className="text-xs text-slate-300 leading-relaxed">{goals.successVision}</p>
             </div>
           )}
 
           {(goals.timeline || goals.budget) && (
             <div className="p-4">
-              <span className="text-[9px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.goals_title', { lng: lang })}</span>
+              <span className="text-[10px] text-[#C69320] font-bold uppercase tracking-wider block mb-2">{t('projectModal.goals_title', { lng: lang })}</span>
               <div className="flex gap-4 text-xs text-slate-300">
-                {goals.timeline && <span>Inicio: <span className="text-white">{displayTimeline}</span></span>}
-                {goals.budget && <span>Presupuesto: <span className="text-white">{displayBudget}</span></span>}
+                {goals.timeline && <span>Inicio: <span className="text-white font-medium">{displayTimeline}</span></span>}
+                {goals.budget && <span>Presupuesto: <span className="text-white font-medium">{displayBudget}</span></span>}
               </div>
             </div>
           )}
@@ -701,38 +673,38 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
 
   const renderStepContent = () => {
     switch (step) {
-      case 0:
-        return renderContactStep();
-      case 1:
-        return renderProfileStep();
-      case 2:
-        return renderGoalsStep();
-      case 3:
-        return renderReviewStep();
-      default:
-        return null;
+      case 0: return renderContactStep();
+      case 1: return renderProfileStep();
+      case 2: return renderGoalsStep();
+      case 3: return renderReviewStep();
+      default: return null;
     }
   };
 
-  return (
+  if (!isOpen || !project || !mounted) return null;
+
+  const modalContent = (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md"
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md"
+        onClick={onClose}
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 20 }}
+          exit={{ scale: 0.95, opacity: 0, y: 0 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          onClick={(e) => e.stopPropagation()}
           className="relative w-full max-w-2xl bg-[#0B0F19] border border-[#C69320]/30 rounded-2xl shadow-[0_0_50px_rgba(198,147,32,0.15)] overflow-hidden flex flex-col max-h-[90vh]"
         >
           {/* Header */}
           <div className="bg-gradient-to-r from-[#C69320]/20 to-transparent p-5 border-b border-[#C69320]/20 flex justify-between items-start shrink-0">
             <div className="flex-1 min-w-0">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C69320]/10 text-[#FBE18D] text-[10px] uppercase font-bold tracking-widest mb-2 border border-[#C69320]/20">
-                <Bot size={12} /> {t('projectModal.title', { lng: lang })}
+                <Sparkles size={12} /> {t('projectModal.title', { lng: lang })}
               </div>
               <h2 className="text-xl font-bold text-white truncate pr-2">{(project?.title as string) || ''}</h2>
               <p className="text-slate-400 text-[11px] mt-0.5">{t('projectModal.subtitle', { lng: lang })}</p>
@@ -744,6 +716,40 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
             >
               <X size={18} />
             </button>
+          </div>
+
+          {/* Step Indicator */}
+          <div className="px-5 pt-4 shrink-0">
+            <div className="flex items-center gap-1">
+              {STEPS.map((s, i) => {
+                const isActive = i === step;
+                const isDone = i < step || status === 'success';
+                return (
+                  <div key={s.id} className="flex-1 flex items-center gap-1">
+                    <div className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-all ${
+                      isActive ? 'bg-[#C69320]/10 text-[#FBE18D]' : isDone ? 'text-green-400' : 'text-slate-600'
+                    }`}>
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border transition-all ${
+                        isDone ? 'bg-green-500/20 border-green-500 text-green-400' :
+                        isActive ? 'bg-[#C69320]/20 border-[#C69320]' : 'border-slate-600 bg-slate-800'
+                      }`}>
+                        {isDone ? <Check size={12} /> : i + 1}
+                      </div>
+                      <span className={`text-[10px] font-bold uppercase tracking-wider hidden sm:inline ${
+                        isActive ? 'text-[#FBE18D]' : isDone ? 'text-green-400' : 'text-slate-600'
+                      }`}>
+                        {s.label}
+                      </span>
+                    </div>
+                    {i < STEPS.length - 1 && (
+                      <div className={`flex-1 h-px mx-1 transition-colors ${
+                        i < step ? 'bg-green-500/50' : 'bg-slate-700'
+                      }`} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Body */}
@@ -765,9 +771,9 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
                 </div>
 
                 {aiResponse && (
-                  <div className="w-full bg-[#131B2A] border border-[#C69320]/20 rounded-xl p-5 text-left relative mt-2 shadow-inner">
+                  <div className="w-full bg-[#0f172a] border border-[#C69320]/20 rounded-xl p-5 text-left relative mt-2 shadow-inner">
                     <div className="absolute -top-3 left-5 bg-[#C69320] text-black text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded flex items-center gap-1 shadow-lg">
-                      <Bot size={13} /> {t('projectModal.ai_analysis', { lng: lang })}
+                      <Sparkles size={13} /> {t('projectModal.ai_analysis', { lng: lang })}
                     </div>
                     <p className="text-slate-300 text-xs whitespace-pre-line leading-relaxed mt-2">
                       {aiResponse}
@@ -798,8 +804,6 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
               </motion.div>
             ) : (
               <>
-                {renderStepIndicator()}
-
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
                     key={step}
@@ -870,6 +874,8 @@ Por favor, responde únicamente en el idioma: ${targetLang}.`;
       </motion.div>
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 export default ProjectModal;
