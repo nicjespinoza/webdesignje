@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { checkRateLimit } from '@/lib/rateLimit';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 interface LeadEmailPayload {
   projectName: string;
   projectId: string;
@@ -119,6 +117,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
     }
 
+    // Debug: verificar que la key existe
+    const apiKey = process.env.RESEND_API_KEY;
+    console.log('[Resend] API Key exists:', !!apiKey);
+    console.log('[Resend] API Key length:', apiKey?.length);
+    console.log('[Resend] API Key starts with:', apiKey?.substring(0, 8));
+
+    if (!apiKey) {
+      return NextResponse.json({ error: 'Resend API key not configured' }, { status: 500 });
+    }
+
     const body = (await req.json()) as LeadEmailPayload;
 
     if (!body.clientName || !body.clientEmail || !body.projectName) {
@@ -127,17 +135,19 @@ export async function POST(req: Request) {
 
     const html = buildHtmlContent(body);
 
+    const resend = new Resend(apiKey);
+
     const { data: sent, error } = await resend.emails.send({
-      from: 'WebDesignJE <leads@webdesignje.com>',
-      to: ['nic.jespinoza@gmail.com'],
+      from: 'WebDesignJE <onboarding@resend.dev>',
+      to: ['webdesignjeev@gmail.com'],
       replyTo: body.clientEmail,
-      subject: `Nuevo Lead: ${body.projectName} — ${body.clientName}`,
+      subject: `[Lead] ${body.projectName} — ${body.clientName}`,
       html,
     });
 
     if (error) {
-      console.error('Resend error:', error);
-      return NextResponse.json({ error: 'Email send failed' }, { status: 500 });
+      console.error('Resend error:', JSON.stringify(error, null, 2));
+      return NextResponse.json({ error: 'Email send failed', details: error }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, id: sent?.id });
