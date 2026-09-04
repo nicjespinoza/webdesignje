@@ -86,13 +86,16 @@ const FooterParticles: React.FC = () => {
         updateParticle(particles[i]);
         drawParticle(particles[i]);
 
-        for (let j = i; j < particles.length; j++) {
+        // ⚡ Bolt: optimized O(N^2) loop by starting at i + 1
+        for (let j = i + 1; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            // ⚡ Bolt: optimized distance calc using squared distance
+            const distSq = dx * dx + dy * dy;
 
-            if (distance < CONNECTION_DISTANCE) {
+            if (distSq < CONNECTION_DISTANCE * CONNECTION_DISTANCE) {
                 ctx.beginPath();
+                const distance = Math.sqrt(distSq); // Only calc sqrt when needed for drawing opacity
                 const opacity = 1 - (distance / CONNECTION_DISTANCE);
                 ctx.strokeStyle = `${LINE_COLOR} ${opacity * 0.5})`;
                 ctx.lineWidth = 0.5;
@@ -104,10 +107,12 @@ const FooterParticles: React.FC = () => {
 
         const dx = mouseX - particles[i].x;
         const dy = mouseY - particles[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        // ⚡ Bolt: optimized mouse distance calc using squared distance
+        const distSq = dx * dx + dy * dy;
 
-        if (distance < MOUSE_DISTANCE) {
+        if (distSq < MOUSE_DISTANCE * MOUSE_DISTANCE) {
             ctx.beginPath();
+            const distance = Math.sqrt(distSq);
             const opacity = 1 - (distance / MOUSE_DISTANCE);
             ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
             ctx.lineWidth = 1;
