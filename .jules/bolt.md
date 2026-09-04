@@ -1,0 +1,3 @@
+## 2024-09-04 - Optimize Particle Distance Calculations
+**Learning:** Found multiple `ParticleBackground` components executing O(N^2) loops inside `requestAnimationFrame` using expensive `Math.sqrt()` for distance calculations. Since they only check if `distance < threshold`, squareroot is unnecesary. Squaring the threshold (`distSq < threshold * threshold`) is significantly faster. Also, nested loops can be optimized by starting inner loop at `j = i + 1` instead of `j = i`.
+**Action:** Replace `Math.sqrt(dx*dx + dy*dy) < threshold` with `(dx*dx + dy*dy) < threshold*threshold` inside high-frequency animation loops and adjust inner loops to `j = i + 1`.
