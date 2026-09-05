@@ -1,0 +1,3 @@
+## 2025-02-20 - Fast Rejection Distance Calculation in Canvas Animations
+**Learning:** High-frequency loops (`requestAnimationFrame`) suffer massive CPU bottlenecks when executing hundreds of unnecessary `Math.sqrt` calculations per frame for particles far outside the interaction radius. Inner connection loops in O(N^2) also suffer when initialized with `let j = i` due to self-comparisons.
+**Action:** Always implement squared distance fast rejection (`dx*dx + dy*dy < thresholdSq`) before computing `Math.sqrt` in canvas animations. Avoid self-comparisons (`j=i` -> `j=i+1`) in nested O(N^2) connection loops.
