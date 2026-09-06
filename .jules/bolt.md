@@ -1,0 +1,3 @@
+## 2023-11-20 - Math.sqrt vs Squared Distances in Animation Loops
+**Learning:** In canvas-based applications running at 60FPS via `requestAnimationFrame` with multiple nested loops computing forces between particles, calculating distance precisely with `Math.sqrt()` inside every iteration can consume considerable CPU cycles, resulting in microstuttering or janky frames.
+**Action:** Always prefer to compare squared distances (`dx * dx + dy * dy < thresholdSq`) instead of taking the square root first (`Math.sqrt(dx * dx + dy * dy) < threshold`). Only ever calculate `Math.sqrt` inside the fast-rejection `if` block if the distance itself is specifically required to compute other ratios like opacity or forces.
